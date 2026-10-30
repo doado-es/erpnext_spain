@@ -2,3 +2,4 @@ ERPNext Spain
 Nif
 Aeat
 ES Verifactu
+ES Contabilidad

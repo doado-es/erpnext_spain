@@ -55,8 +55,13 @@ Gastos (Expense)          Ingresos (Income)
 
 - Formato de plan de ERPNext (`name`, `country_code: "es"`, `tree`), el mismo que acepta `create_charts(company, custom_chart=…)` **[verificado v16]**.
 - `root_type` solo en las raíces; los hijos lo heredan.
-- **Todas las hojas con `account_number`** del PGC. Los números son únicos por compañía (ERPNext lo valida), así que los nodos de grupo duplicados por la partición (p. ej. "43 Clientes" en Activo y "Anticipos y envases de clientes" en Pasivo) van **sin número**.
-- Nivel de las hojas: el más detallado que defina el PGC (3 o 4 dígitos, p. ej. 4300). Las compañías amplían a 8 dígitos si quieren.
+- **Todas las hojas con `account_number`** del PGC. Los números son únicos por compañía (ERPNext lo valida), así que los grupos y subgrupos partidos entre ramas van **sin número**, una copia en cada rama con la rama entre paréntesis en el nombre (ERPNext exige nombres únicos por compañía): p. ej. "Clientes (Activo)" con 430–436 y "Clientes (Pasivo)" con 437–438.
+- **Nivel de las hojas: 4 dígitos (decisión del 30/10/2026, opción B).** Cada cuenta de 3 dígitos sin subcuentas en el PGC pasa a grupo y recibe una subcuenta `xxx0` con el mismo nombre, que es donde se contabiliza (570 → 5700, 572 → 5720, 700 → 7000…). Las subcuentas oficiales de 4 y 5 dígitos se mantienen. Las compañías amplían a 8 dígitos si quieren (p. ej. 5721 para un segundo banco).
+- **Fuente**: cuadro de cuentas (4ª parte) del texto consolidado del BOE (BOE-A-2007-19884 y BOE-A-2007-19966), extraído con `extract_boe.py` a `source/boe_pgc_*.json` sin tocar el texto. El generador `generate.py` aplica la partición, la opción B, los `account_type` y estas correcciones:
+  - Erratas tipográficas del BOE ("deterioroy", "donacionesy", "activosy", "carácterísticas", "alargo", "acorto", "Gastor").
+  - PGC PYMES: las cuentas 232, 233, 237 y 239 aparecen en el BOE como "Propiedad industrial" (error presente también en el texto de 2007). Se usan los nombres del PGC Normal, que coinciden con la 5ª parte del PGC PYMES.
+  - PGC Normal: el nombre oficial de la 5993 (138 caracteres) no cabe en el nombre del documento Account de ERPNext ("número - nombre - abreviatura", máximo 140); se abrevia. El generador falla si un nombre no cabe con una abreviatura de compañía de hasta 12 caracteres; la acción del §2 rechaza abreviaturas más largas.
+  - Los JSON los genera el generador; un test comprueba que los commiteados coinciden con su salida.
 - `account_type` según la tabla del §3.
 - `account_category` (v16) solo si se necesita para funciones de ERPNext como ratios; los estados PGC no dependen de él (spec 04).
 - Opcional en el JSON: `disable_default_financial_report_template: true`. Solo tiene efecto si algún día el plan se contribuye a la carpeta `verified` de ERPNext **[verificado v16]**: `get_chart` solo lee planes de ERPNext, no de apps.
@@ -105,12 +110,12 @@ Interfaz: botón en Company (solo si se cumplen las precondiciones) con vista pr
 | `default_bank_account` | 5720 | |
 | `default_income_account` | 7000 / 7050 | Según actividad; configurable. |
 | `default_expense_account` | 6000 / 6290 | Según actividad. |
-| `exchange_gain_loss_account` | 668 / 768 | ERPNext usa una sola cuenta para ganancias y pérdidas; decidir cuál y cómo se presenta (la PyG la muestra neta). |
+| `exchange_gain_loss_account` | 6680 / 7680 | ERPNext usa una sola cuenta para ganancias y pérdidas; decidir cuál y cómo se presenta (la PyG la muestra neta). |
 | `unrealized_exchange_gain_loss_account` | ídem | |
 | `round_off_account`, `write_off_account` | A decidir | |
-| `accumulated_depreciation_account` | 2810 | |
+| `accumulated_depreciation_account` | 2819 | La 2810 no existe en el PGC (la 281 se desglosa en 2811–2819). Propuesta: la 2819 (otro inmovilizado material) como genérica en Company; cada Asset Category usa su 281x. **Pendiente de revisión contable.** |
 | `depreciation_expense_account` | 6810 | |
-| `disposal_account` | 671 / 771 | Una sola cuenta en ERPNext; mismo problema que diferencias de cambio. |
+| `disposal_account` | 6710 / 7710 | Una sola cuenta en ERPNext; mismo problema que diferencias de cambio. |
 | `capital_work_in_progress_account` | 23x | |
 | `asset_received_but_not_billed` | 523 | |
 | `default_provisional_account` | 4009 | Servicios recibidos sin factura. |
@@ -122,7 +127,7 @@ Interfaz: botón en Company (solo si se cumplen las precondiciones) con vista pr
 | Cuenta de gasto de los artículos de existencias (Item Defaults / Item Group) | 600 (mercaderías), 601 (materias primas), 602 (otros aprovisionamientos) | Inventario administrativo: la compra va a gasto. |
 | Cuenta de cierre del ejercicio (en el Period Closing Voucher) | 1290 | |
 
-`account_type` en el plan: `Receivable` en 430–436 y 4380; `Payable` en 400–405, 410 y 4070; `Tax` en 472, 473, 4751 y 477; `Bank` en 572; `Cash` en 570; `Fixed Asset` en 20–21; `Accumulated Depreciation` en 280–281; `Depreciation` en 680–681; `Capital Work in Progress` en 23; Con inventario administrativo (A3): `Stock` en las hojas de 30–36, `Stock Adjustment` en 610–612 y `Cost of Goods Sold` en 600, solo para cumplir la lista de tipos obligatorios del importador; `Stock Received But Not Billed` no se usa. El importador de ERPNext considera obligatorios Cost of Goods Sold, Depreciation, Fixed Asset, Payable, Receivable, Stock Adjustment, Bank, Cash y Stock **[verificado v16]**; el plan debe incluirlos aunque no se use el importador.
+`account_type` en el plan: `Receivable` en 430–436 y 4380; `Payable` en 400–405, 410 y 4070, salvo las subcuentas de facturas pendientes de recibir o de formalizar (4009, 4039, 4109, 4309, 4339…), que no llevan tipo porque ERPNext exigiría un tercero en cada apunte; `Tax` en 472, 473, 4751 y 477; `Bank` en 572; `Cash` en 570; `Fixed Asset` en 20–21; `Accumulated Depreciation` en 280–281; `Depreciation` en 680–681; `Capital Work in Progress` en 23; Con inventario administrativo (A3): `Stock` en las hojas de 30–36, `Stock Adjustment` en 610–612 y `Cost of Goods Sold` en 600, solo para cumplir la lista de tipos obligatorios del importador; `Stock Received But Not Billed` no se usa. El importador de ERPNext considera obligatorios Cost of Goods Sold, Depreciation, Fixed Asset, Payable, Receivable, Stock Adjustment, Bank, Cash y Stock **[verificado v16]**; el plan debe incluirlos aunque no se use el importador.
 
 ## 4. Validación de cuentas en compañías PGC
 
@@ -162,4 +167,5 @@ Si se decide incluir:
 
 - Revisión contable completa del reparto (§1) y de las cuentas por defecto (§3).
 - ~~Decisión A3~~: cerrada, inventario administrativo. Queda verificar en bench el comportamiento de compras y ventas de artículos de stock con `enable_perpetual_inventory = 0`.
-- Que `unset_existing_data` no deje referencias en otros doctypes de v16 que enlacen cuentas de la compañía (p. ej. Item Defaults); si las deja, la acción debe limpiarlas o fallar con un mensaje claro.
+- `unset_existing_data` **no borra los Item Tax Template ni las Tax Rule** de la compañía **[verificado v16.51]**: el asistente de configuración crea para España el Item Tax Template "Spain Tax", que bloquea el borrado de la cuenta de IVA. La acción los borra antes (`es_contabilidad/pgc.py`, `clear_company_chart`); se vuelven a crear con los datos iniciales (spec 09 §3). Queda por comprobar si hay otros doctypes que enlacen cuentas de la compañía (p. ej. Item Defaults de artículos ya creados); si los hay, la acción debe limpiarlos o fallar con un mensaje claro.
+- 406 (envases y embalajes a devolver a proveedores, saldo deudor): asignada a Activo; revisión contable.
