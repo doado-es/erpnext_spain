@@ -85,7 +85,7 @@ Fase 0: el inventario del código base ya está hecho. Lo que existe y cumple se
 |---|---|---|
 | A1 | ¿Subcuentas contables por cliente/proveedor (430xxxxx / 400xxxxx)? | Opción por compañía, desactivada por defecto (spec 02 §6). |
 | A2 | ~~Correlatividad por fechas~~ | Cerrada: con la numeración al emitir del código base la correlatividad queda garantizada por construcción (spec 05 §3). |
-| A3 | ¿Inventario permanente de ERPNext o administrativo del PGC (600/610 al cierre)? | Decisión contable previa a la spec 02; condiciona `account_type` de las cuentas de existencias y compras. |
+| A3 | ~~¿Inventario permanente de ERPNext o administrativo del PGC?~~ | **Cerrada (30/10/2026): inventario administrativo.** Las compras van a gasto (grupo 60) y las existencias se regularizan al cierre (30x contra 61x/71x) con un asiento propio; las compañías PGC trabajan con `enable_perpetual_inventory = 0` (spec 02 §2–§3, spec 04 §7). |
 | A4 | ¿Qué modelo de cuentas anuales primero? | PYMES (el más frecuente), luego Abreviado y Normal. |
 | A5 | IGIC / IPSI (Canarias, Ceuta, Melilla). | Fuera de alcance en esta versión. |
 | A6 | Verifactu vs SII. | No es una elección de producto sino de cada compañía: `es_sii_enabled` para obligadas y adheridas, `es_verifactu_enabled` para el resto; las dos casillas son excluyentes y lo garantiza la validación de Company (spec 14 §1). Orden de desarrollo: según la cartera de clientes. |

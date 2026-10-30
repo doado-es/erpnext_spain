@@ -14,6 +14,7 @@ Balance y Pérdidas y Ganancias en los modelos oficiales (Normal, Abreviado y PY
 4. Informe de sumas y saldos por niveles.
 5. Libro diario con numeración por ejercicio.
 6. Asiento de traspaso de los grupos 8 y 9.
+7. Asiento de regularización de existencias (inventario administrativo, decisión A3).
 
 Fuera de alcance por ahora: Estado de cambios en el patrimonio neto, Estado de flujos de efectivo, memoria y depósito en el Registro Mercantil.
 
@@ -90,6 +91,16 @@ Script Report `ES Journal Book` (título traducido: "Libro diario PGC"):
 
 El Period Closing Voucher de ERPNext solo lleva las cuentas de resultados a la cuenta de cierre. Las cuentas de los grupos 8 y 9 (gastos e ingresos imputados al patrimonio neto) se traspasan a sus cuentas del subgrupo 13 con un **Journal Entry nativo** generado por una acción de cierre de la app (con dimensiones, R9). Tabla de correspondencias 8x/9x → 13x en el mapeo, revisada por el contable.
 
+## 7. Regularización de existencias (inventario administrativo)
+
+Con la decisión A3 las compañías PGC no usan el inventario permanente: las compras se contabilizan en el grupo 60 y las cuentas 30–36 conservan el saldo del cierre anterior hasta que se regularizan.
+
+- Acción de cierre de la app, por compañía y fecha de cierre, que genera un **Journal Entry nativo** (con dimensiones, R9): se da de baja la existencia inicial (61x/71x a 30x) y se da de alta la final (30x a 61x/71x). Equivale a asentar solo la diferencia en 61x/71x; se registran las dos partidas por claridad en el libro diario.
+- **Valor de la existencia final**: la valoración del Stock Ledger a la fecha de cierre (informe Stock Balance), que ERPNext calcula aunque el inventario permanente esté desactivado **[verificar en bench]**. El usuario puede revisar y corregir el importe antes de validar (p. ej. por deterioro o recuento físico).
+- **Correspondencia grupo de artículos → cuenta**: mercaderías 300/610, materias primas 310/611, otros aprovisionamientos 320/612, productos en curso 330/710, semiterminados 340/711, terminados 350/712, subproductos y residuos 360/713. Se configura por Item Group; **revisión contable**.
+- Va antes del Period Closing Voucher, para que la variación entre en el resultado del ejercicio.
+- Los deterioros de existencias (39x/69x/79x) quedan fuera de esta acción; se asientan a mano.
+
 ## Criterios de aceptación
 
 Con una compañía PYMES de prueba y asientos que tocan todas las ramas, incluidas cuentas con saldo contrario a su naturaleza:
@@ -102,6 +113,7 @@ Con una compañía PYMES de prueba y asientos que tocan todas las ramas, incluid
 6. El generador produce los mismos JSON si se ejecuta dos veces (determinista); el CI falla si los JSON commiteados no coinciden con la salida del generador.
 7. Sumas y saldos: debe = haber en todos los niveles; los saldos del nivel 3 suman el nivel 1.
 8. Tras `bench migrate` en un sitio con la app, las seis plantillas existen.
+9. Regularización de existencias: con existencia inicial 1.000 € en 300 y valoración final de 1.500 €, el asiento deja 1.500 € en 300 y un saldo acreedor de 500 € en 610; ejecutarla dos veces para la misma fecha da error.
 
 ## Pendiente de verificar o decidir
 
