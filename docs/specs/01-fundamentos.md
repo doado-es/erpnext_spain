@@ -105,17 +105,17 @@ Los nombres de módulo nuevos son una propuesta; lo obligatorio es el prefijo.
 
 Se sigue el esquema del código base: **`ES Settings`** (Single) para lo global de cada funcionalidad, en secciones, y la pestaña **"Spain Compliance"** de Company (`es_tab`, ya existente) para lo de cada empresa, con una sección por funcionalidad. Los campos de abajo van en una sección "Contabilidad y fiscalidad" de esa pestaña (fieldnames finales en inglés con `es_`, maestro §3):
 
-| Campo | Tipo | Uso |
-|---|---|---|
-| `pgc_aplicado` | Check, solo lectura | Lo marca la acción "Aplicar plan PGC" (spec 02). Activa lo que depende del plan contable (specs 02–06, 08, 09, 13). |
-| `numeracion_fiscal` | Check | Numeración al emitir y series por tipo de factura (spec 05 §1), con Verifactu o sin él. |
-| `modelo_plan` | Select: Normal / PYMES, solo lectura | Plan aplicado. |
-| `modelo_cuentas_anuales` | Select: Normal / Abreviado / PYMES | Plantillas de estados por defecto. |
-| `regimen_iva` | Select: General / Criterio de caja / Recargo de equivalencia / Simplificado | Registro fiscal y modelos. |
-| `periodicidad_303` | Select: Trimestral / Mensual | Modelos. |
-| `prorrata_general` | Percent, vacío = 100 % | Registro fiscal. |
-| `exigir_clasificacion_fiscal` | Check | Spec 03. |
-| `version_datos_iniciales` | Int, solo lectura | Versión de los registros de arranque de la compañía (spec 09 S5). |
+| Campo | Fieldname | Tipo | Uso |
+|---|---|---|---|
+| `pgc_aplicado` | `es_pgc_applied` | Check, solo lectura | Lo marca la acción "Aplicar plan PGC" (spec 02). Activa lo que depende del plan contable (specs 02–06, 08, 09, 13). |
+| `numeracion_fiscal` | `es_fiscal_numbering` | Check | Numeración al emitir y series por tipo de factura (spec 05 §1), con Verifactu o sin él. |
+| `modelo_plan` | `es_chart_model` | Select: Normal / PYMES, solo lectura | Plan aplicado. |
+| `modelo_cuentas_anuales` | `es_annual_accounts_model` | Select: Normal / Abreviado / PYMES | Plantillas de estados por defecto. |
+| `regimen_iva` | `es_vat_regime` | Select: General / Criterio de caja / Recargo de equivalencia / Simplificado | Registro fiscal y modelos. |
+| `periodicidad_303` | `es_vat_return_frequency` | Select: Trimestral / Mensual | Modelos. |
+| `prorrata_general` | `es_general_prorata` | Percent, vacío = 100 % | Registro fiscal. |
+| `exigir_clasificacion_fiscal` | `es_require_tax_classification` | Check | Spec 03. |
+| `version_datos_iniciales` | `es_initial_data_version` | Int, solo lectura | Versión de los registros de arranque de la compañía (spec 09 S5). |
 
 Las funcionalidades con conexión a terceros mantienen su propia activación por empresa, como ya hace Verifactu (`es_verifactu_enabled`): SII (`es_sii_enabled`, excluyente con Verifactu, spec 14 §1), factura electrónica, SEPA, conexión bancaria.
 

@@ -23,7 +23,9 @@ COMPANY_VERIFACTU_SECTION_FIELD = {
 	"fieldname": "es_seccion_verifactu",
 	"label": "VeriFactu",
 	"fieldtype": "Section Break",
-	"insert_after": "es_seccion_general",
+	# Tras la sección «Contabilidad y fiscalidad» del módulo base
+	# (erpnext_spain/erpnext_spain/setup.py), que va antes de VeriFactu.
+	"insert_after": "es_initial_data_version",
 }
 
 COMPANY_VERIFACTU_ENABLED_FIELD = {
@@ -346,28 +348,7 @@ def setup_custom_fields() -> None:
 
 
 def cleanup_custom_fields() -> None:
-	"""Contrapartida de limpieza en before_uninstall (doc 12 §12), con el mismo
-	guard de colisión de nif/setup.py: si algún campo nuestro existe en un
-	doctype que NO declaramos (otra app), la desinstalación se detiene con
-	remedio en lugar de borrar campos ajenos."""
-	doctypes_by_field: dict[str, list[str]] = {}
-	for doctype, fields in FIELDS_PER_DOCTYPE.items():
-		for field in fields:
-			doctypes_by_field.setdefault(field, []).append(doctype)
+	"""Contrapartida de limpieza en before_uninstall (R3)."""
+	from erpnext_spain.utils.custom_fields import cleanup_custom_fields as _cleanup
 
-	for field, doctypes in doctypes_by_field.items():
-		foreign = frappe.get_all(
-			"Custom Field",
-			filters={"fieldname": field, "dt": ("not in", doctypes)},
-			pluck="name",
-		)
-		if foreign:
-			frappe.throw(
-				f"No se puede eliminar el Custom Field {field} de"
-				f" {', '.join(doctypes)}: existe un campo con el mismo nombre en"
-				" otro doctype (¿otra app?). Elimínelo a mano y reintente la"
-				" desinstalación."
-			)
-
-	for doctype, fields in FIELDS_PER_DOCTYPE.items():
-		frappe.db.delete("Custom Field", {"fieldname": ("in", fields), "dt": doctype})
+	_cleanup(FIELDS_PER_DOCTYPE)

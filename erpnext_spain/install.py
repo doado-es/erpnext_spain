@@ -1,4 +1,4 @@
-# Instalación/desinstalación de Spain Compliance.
+# Ciclo de instalación de ERPNext Spain (spec 01 §4).
 #
 # La app ya estaba instalada en el site cuando se añadió este wiring, por lo
 # que la creación de Custom Fields, la siembra del catálogo y el materializado
@@ -24,10 +24,21 @@ PERFORMANCE_INDEXES = [
 ]
 
 
+# Apps opcionales (R11): app → función que crea los custom fields que dependen
+# de ella. Se ejecuta al instalar/migrar si la app ya está instalada y, vía
+# after_app_install, si se instala después. Vacío hasta que una spec lo use
+# (p. ej. HRMS).
+OPTIONAL_APP_SETUP: dict[str, str] = {}
+
+SPAIN = "Spain"
+
+
 def after_install() -> None:
 	setup_custom_fields()
 	seed_catalogs()
 	setup_printing()
+	setup_optional_apps()
+	warn_if_system_country_is_not_spain()
 
 
 def after_migrate() -> None:
@@ -35,25 +46,79 @@ def after_migrate() -> None:
 	seed_catalogs()
 	ensure_performance_indexes()
 	setup_printing()
+	setup_optional_apps()
+	sync_report_templates()
+
+
+def after_app_install(app_name: str) -> None:
+	"""Hook de Frappe tras instalar cualquier app en el sitio (R11)."""
+	if app_name in OPTIONAL_APP_SETUP:
+		frappe.get_attr(OPTIONAL_APP_SETUP[app_name])()
 
 
 def before_uninstall() -> None:
-	# VeriFactu primero: sus campos viven bajo el tab que limpia nif/setup.
-	from erpnext_spain.es_verifactu.setup import cleanup_custom_fields
-
-	cleanup_custom_fields()
-
+	# Orden inverso al de creación: VeriFactu y el módulo base cuelgan de la
+	# pestaña que crea y limpia nif/setup.
+	from erpnext_spain.erpnext_spain.setup import cleanup_custom_fields as _cleanup_base
+	from erpnext_spain.es_verifactu.setup import cleanup_custom_fields as _cleanup_verifactu
 	from erpnext_spain.nif.setup import cleanup_custom_fields as _cleanup_nif
 
+	_cleanup_verifactu()
+	_cleanup_base()
 	_cleanup_nif()
 
 
 def setup_custom_fields() -> None:
-	from erpnext_spain.nif.setup import setup_custom_fields as _setup_nif
+	# El orden importa: la pestaña (nif) antes que sus secciones, y la sección
+	# del módulo base antes que la de VeriFactu, que se inserta detrás.
+	from erpnext_spain.erpnext_spain.setup import setup_custom_fields as _setup_base
 	from erpnext_spain.es_verifactu.setup import setup_custom_fields as _setup_verifactu
+	from erpnext_spain.nif.setup import setup_custom_fields as _setup_nif
 
 	_setup_nif()
+	_setup_base()
 	_setup_verifactu()
+
+
+def setup_optional_apps() -> None:
+	installed = set(frappe.get_installed_apps())
+	for app_name, method in OPTIONAL_APP_SETUP.items():
+		if app_name in installed:
+			frappe.get_attr(method)()
+
+
+def sync_report_templates() -> None:
+	"""Inserta las Financial Report Template de las apps que aún no existan
+	(spec 01 §4, spec 04). API pública de ERPNext v16; solo crea las que faltan,
+	no modifica las existentes. Efecto lateral conocido: también vuelve a crear
+	las plantillas estándar de ERPNext que un usuario haya borrado."""
+	from erpnext.accounts.doctype.financial_report_template.financial_report_template import (
+		sync_financial_report_templates,
+	)
+
+	sync_financial_report_templates()
+
+
+def warn_if_system_country_is_not_spain() -> None:
+	"""Requisito de instalación (spec 01): algunos regional overrides de ERPNext
+	se resuelven por el país del sistema cuando ERPNext no fija la compañía
+	(spec 06 §3). Solo avisa; no bloquea la instalación."""
+	country = frappe.db.get_single_value("System Settings", "country")
+	if country == SPAIN:
+		return
+	if not country:
+		message = (
+			"ERPNext Spain: el país del sistema aún no está configurado. Elija España"
+			" en el asistente de configuración (o en System Settings → Country);"
+			" algunas funciones fiscales solo se ejecutan con país España."
+		)
+	else:
+		message = (
+			f"ERPNext Spain: el país del sistema es «{country}». Cámbielo a España en"
+			" System Settings → Country; algunas funciones fiscales (p. ej. los"
+			" asientos de autorrepercusión del IVA) solo se ejecutan con país España."
+		)
+	print(message)
 
 
 def setup_printing() -> None:

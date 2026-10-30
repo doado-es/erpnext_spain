@@ -95,6 +95,9 @@ jinja = {
 after_install = "erpnext_spain.install.after_install"
 after_migrate = "erpnext_spain.install.after_migrate"
 before_uninstall = "erpnext_spain.install.before_uninstall"
+# R11: crea los custom fields que dependen de apps opcionales (p. ej. HRMS)
+# cuando estas se instalan después que ERPNext Spain.
+after_app_install = "erpnext_spain.install.after_app_install"
 
 # Scheduler Events
 # ----------------
