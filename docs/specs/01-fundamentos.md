@@ -49,7 +49,7 @@ En sitios de desarrollo: desinstalar la app antigua e instalar `erpnext_spain` d
 ## 2. Metadatos y dependencias
 
 - `hooks.py`: `required_apps = ["frappe/erpnext"]` (ya está así en el código base).
-- Dependencias Python del código base que se mantienen: `python-stdnum` (NIF), `zeep` (SOAP AEAT), `segno` (QR). `requires-python >= 3.14`.
+- Dependencias Python del código base que se mantienen: `python-stdnum` (NIF), `zeep` (SOAP AEAT), `segno` (QR). `requires-python >= 3.14`. `zeep` queda limitado a `<4.3.3` hasta la corrección definitiva de H7 (§8).
 - `pyproject.toml`:
 
   ```toml
@@ -156,7 +156,7 @@ El código base no tiene CI (solo pre-commit con ruff, eslint, prettier y pyupgr
 
 ## 8. Correcciones del código base
 
-Del inventario (hallazgos H1–H5). Van antes que cualquier funcionalidad nueva.
+Del inventario (hallazgos H1–H5) y de la primera ejecución de los tests tras el renombrado (H7–H8; H6 es una corrección al TODO del código base, sin cambio de código). Van antes que cualquier funcionalidad nueva.
 
 | Id | Corrección |
 |---|---|
@@ -165,6 +165,8 @@ Del inventario (hallazgos H1–H5). Van antes que cualquier funcionalidad nueva.
 | H3 | Clave privada del certificado: hoy `ES AEAT Credential` la escribe sin cifrar en `private/files/<empresa>-<propósito>-key.pem`. Pasa a un directorio propio del sitio fuera de `private/files` (excluido de las copias de ficheros públicos y privados), con permisos `0600`, o a un temporal `0600` por envío. Test que compruebe los permisos. |
 | H4 | CI (§7). |
 | H5 | `frappe.get_cached_value` en las salidas tempranas; `rectify` solo `POST`; dependencias `>=16.50.0`; borrar en `before_uninstall` el Property Setter del formato de impresión predeterminado; corregir el §4 de la guía técnica del repo, que aún recomienda fixtures. |
+| H7 | **`zeep` ≥ 4.3.3 no carga el WSDL de la AEAT** (detectado al ejecutar los tests tras el renombrado). Desde 4.3.3, `Settings(forbid_external=True)` también bloquea los imports transitivos por http(s), y el WSDL de Verifactu importa `xmldsig-core-schema.xsd` de w3.org: falla `test_contrato_wsdl` y, con la misma configuración, el cliente real de `aeat/client.py`. Paliativo aplicado (§2): `zeep>=4.3,<4.3.3`. Corrección definitiva, junto con el CI (H4): incluir en la app los XSD externos que importa el WSDL y resolverlos en local, sin relajar `forbid_external`, y quitar el límite superior. |
+| H8 | **Tests que dependen del estado del sitio** (detectado en el mismo paso). Los tests de Verifactu necesitan el cliente "Palmer Productions Ltd." y el artículo "SKU010" de los datos de demostración de ERPNext, la identidad SIF rellena en `ES Settings`, los índices que crea `after_migrate` y usan la primera compañía del sitio (`aeat/tests/helpers.test_company`). En un CI limpio fallan. Corrección, junto con H4: cada clase crea sus propios datos (compañía española, cliente, artículo, identidad SIF) y no depende de la compañía real del sitio. |
 
 ## Criterios de aceptación
 
