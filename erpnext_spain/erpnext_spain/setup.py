@@ -58,7 +58,8 @@ COMPANY_FIELDS = [
 		"insert_after": "es_initial_data_version",
 		"description": (
 			"Los borradores de factura de venta no consumen número; al validar reciben el"
-			" siguiente número de la serie de su tipo de factura. Independiente de VeriFactu."
+			" siguiente número de la serie de su tipo de factura. Todavía sin efecto: hoy la"
+			" numeración al emitir solo se aplica con VeriFactu activado."
 		),
 	},
 	{

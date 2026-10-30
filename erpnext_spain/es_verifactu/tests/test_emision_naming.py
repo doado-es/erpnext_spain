@@ -89,7 +89,9 @@ class TestEmisionNaming(IntegrationTestCase):
 		)
 		frappe.db.delete("ES Invoice Series", {"parent": self.company})
 		frappe.db.delete("ES Verifactu Notification Role", {"parent": self.company})
-		for credential in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
+		for credential in frappe.get_all(
+			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
+		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
 
 	# --- helpers -----------------------------------------------------------
@@ -124,9 +126,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		doc.set("es_invoice_series", [])
 		if with_series:
 			doc.append("es_invoice_series", {"series": series, "invoice_type": invoice_type})
-		url = write_private_p12(
-			f"es_test_emision_{frappe.generate_hash(length=8)}.p12", self.p12
-		)
+		url = write_private_p12(f"es_test_emision_{frappe.generate_hash(length=8)}.p12", self.p12)
 		frappe.get_doc(
 			{
 				"doctype": "ES AEAT Credential",
@@ -162,9 +162,7 @@ class TestEmisionNaming(IntegrationTestCase):
 				"posting_date": posting_date or "2026-08-31",
 				"set_posting_time": 1,
 				"due_date": add_days(nowdate(), 30),
-				"items": [
-					{"item_code": ITEM, "qty": 1, "rate": 100} for _ in range(n_items)
-				],
+				"items": [{"item_code": ITEM, "qty": 1, "rate": 100} for _ in range(n_items)],
 				**(
 					{
 						"taxes": [
@@ -189,7 +187,11 @@ class TestEmisionNaming(IntegrationTestCase):
 	def test_draft_sequential_own_pattern(self):
 		"""Compañía CON serie de borradores: nombre según el patrón, contador
 		SECUENCIAL propio — la serie fiscal del naming_series jamás se toca."""
-		frappe.db.set_value("Company", self.company, "es_draft_series", DRAFT_SERIES)
+		frappe.db.set_value(
+			"Company",
+			self.company,
+			{"es_verifactu_enabled": 1, "es_draft_series": DRAFT_SERIES, "tax_id": VALID_NIF},
+		)
 		fiscal_before = self._current_series(NAMING_SERIES_PREFIX)
 
 		a = self._draft_invoice()
@@ -218,12 +220,33 @@ class TestEmisionNaming(IntegrationTestCase):
 		a = self._draft_invoice()
 		self.assertRegex(a.name, DRAFT_FALLBACK_REGEX)
 
-	def test_inactive_company_also_names_drafts(self):
-		"""Política UNIFORME: sin VeriFactu el borrador TAMBIÉN lleva nombre
-		temporal (un solo código); nunca el número fiscal del naming_series."""
+	def test_inactive_company_uses_naming_series(self):
+		"""H1 (spec 01 §8): sin numeración al emitir, el borrador NO lleva nombre
+		temporal; Frappe aplica la naming_series como en ERPNext estándar."""
+		a = self._draft_invoice()
+		self.assertTrue(a.name.startswith("ACC-SINV-"), a.name)
+		self.assertFalse(emission._is_draft(a.name, None))
+
+	def test_draft_released_when_verifactu_deactivated(self):
+		"""Un borrador con nombre temporal que se valida después de desactivar
+		VeriFactu recibe el número de su naming_series (no se queda con el
+		nombre temporal)."""
+		frappe.db.set_value(
+			"Company", self.company, {"es_verifactu_enabled": 1, "es_draft_series": None, "tax_id": VALID_NIF}
+		)
 		a = self._draft_invoice()
 		self.assertRegex(a.name, DRAFT_FALLBACK_REGEX)
-		self.assertFalse(a.name.startswith("ACC-SINV"))
+		frappe.db.set_value("Company", self.company, "es_verifactu_enabled", 0)
+		a.reload()
+		a.submit()
+		self.assertTrue(a.name.startswith("ACC-SINV-"), a.name)
+		self.assertTrue(frappe.db.exists("Sales Invoice", a.name))
+		self.assertTrue(frappe.get_all("GL Entry", filters={"voucher_no": a.name}, pluck="name"))
+
+	def test_no_class_extension_hooks(self):
+		"""H2 (spec 01 §8): ninguna extensión ni sustitución de clases (R2)."""
+		self.assertFalse(frappe.get_hooks("extend_doctype_class", app_name="erpnext_spain"))
+		self.assertFalse(frappe.get_hooks("override_doctype_class", app_name="erpnext_spain"))
 
 	# --- submit: renombre quirúrgico (spec 04 §4) ---------------------------
 
@@ -243,9 +266,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		self.assertEqual(series_after - series_before, 1)
 
 		# persistido con el nombre fiscal:
-		self.assertEqual(
-			frappe.db.get_value("Sales Invoice", a.name, "docstatus"), 1
-		)
+		self.assertEqual(frappe.db.get_value("Sales Invoice", a.name, "docstatus"), 1)
 
 	def test_children_intact_after_rename(self):
 		"""LA regresión crítica del v1: tras el renombre, items y taxes
@@ -266,17 +287,11 @@ class TestEmisionNaming(IntegrationTestCase):
 			self.assertEqual(child.parent, final)
 
 		# en DB: mismas cantidades bajo el nombre final...
-		self.assertEqual(
-			frappe.db.count("Sales Invoice Item", {"parent": final}), counts["items"]
-		)
-		self.assertEqual(
-			frappe.db.count("Sales Taxes and Charges", {"parent": final}), counts["taxes"]
-		)
+		self.assertEqual(frappe.db.count("Sales Invoice Item", {"parent": final}), counts["items"])
+		self.assertEqual(frappe.db.count("Sales Taxes and Charges", {"parent": final}), counts["taxes"])
 		# ...y NADA huerfano bajo el borrador:
 		self.assertEqual(frappe.db.count("Sales Invoice Item", {"parent": draft_name}), 0)
-		self.assertEqual(
-			frappe.db.count("Sales Taxes and Charges", {"parent": draft_name}), 0
-		)
+		self.assertEqual(frappe.db.count("Sales Taxes and Charges", {"parent": draft_name}), 0)
 
 	def test_gl_entries_with_final_name(self):
 		"""El core (on_submit) corre DESPUÉS del renombre: los asientos
@@ -318,9 +333,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		# el contador volvió al valor previo:
 		self.assertEqual(self._current_series("SIF1-"), series_before)
 		# y la factura volvió a ser borrador con su nombre temporal:
-		self.assertEqual(
-			frappe.db.get_value("Sales Invoice", draft_name, "docstatus"), 0
-		)
+		self.assertEqual(frappe.db.get_value("Sales Invoice", draft_name, "docstatus"), 0)
 
 		# el siguiente submit de una factura NUEVA recibe EL MISMO número:
 		frappe.delete_doc("Sales Invoice", draft_name, ignore_permissions=True)
@@ -340,9 +353,7 @@ class TestEmisionNaming(IntegrationTestCase):
 
 		self.assertEqual(si.name, "OLD-INV-001")
 		self.assertEqual(frappe.db.get_value("Sales Invoice", "OLD-INV-001", "docstatus"), 1)
-		self.assertTrue(
-			frappe.get_all("GL Entry", filters={"voucher_no": "OLD-INV-001"}, pluck="name")
-		)
+		self.assertTrue(frappe.get_all("GL Entry", filters={"voucher_no": "OLD-INV-001"}, pluck="name"))
 
 	def test_operative_mode_snapshot(self):
 		"""El modo operativo se congela POR FACTURA al emitir (spec 04
@@ -377,9 +388,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		a.submit()
 
 		self.assertEqual(str(a.posting_date), nowdate())
-		self.assertEqual(
-			str(frappe.db.get_value("Sales Invoice", a.name, "posting_date")), nowdate()
-		)
+		self.assertEqual(str(frappe.db.get_value("Sales Invoice", a.name, "posting_date")), nowdate())
 
 	# --- guards de la compuerta en el submit ---------------------------------
 
@@ -425,16 +434,17 @@ class TestEmisionNaming(IntegrationTestCase):
 		self.assertEqual(self._current_series("SIF1-"), series_before)
 
 	def test_inactive_company_submit_untouched(self):
-		"""Sin VeriFactu, el submit prosigue UNTOUCHED: ni renombre ni
-		campos es_ — solo el nombre temporal uniforme del borrador."""
+		"""Sin VeriFactu, el submit prosigue UNTOUCHED: ni renombre ni campos
+		es_; la factura conserva el número de su naming_series (H1)."""
 		# setUp deja la compañía sin activar
 		a = self._draft_invoice()
 		name = a.name
+		self.assertTrue(name.startswith("ACC-SINV-"), name)
 
 		a.submit()
 
 		self.assertEqual(a.docstatus, 1)
-		self.assertEqual(a.name, name)  # ni renombrado ni renombrable
+		self.assertEqual(a.name, name)
 		self.assertIsNone(frappe.db.get_value("Sales Invoice", name, "es_verifactu_mode"))
 		self.assertTrue(frappe.get_all("GL Entry", filters={"voucher_no": name}, pluck="name"))
 

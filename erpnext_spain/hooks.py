@@ -35,20 +35,19 @@ doc_events = {
 	# commit); before_cancel genera el RegistroAnulación (gateado por el
 	# SNAPSHOT de modo de la factura).
 	"Sales Invoice": {
+		# Nombre temporal del borrador solo en compañías que numeran al emitir
+		# (H1); como doc_event y no como extensión de la clase (H2).
+		"autoname": "erpnext_spain.es_verifactu.invoice.autoname",
 		"validate": "erpnext_spain.es_verifactu.emission.validate",
-		"before_submit": "erpnext_spain.es_verifactu.emission.before_submit",
+		"before_submit": [
+			"erpnext_spain.es_verifactu.invoice.release_draft_name",
+			"erpnext_spain.es_verifactu.emission.before_submit",
+		],
 		"on_submit": "erpnext_spain.es_verifactu.emission.on_submit",
 		"before_cancel": "erpnext_spain.es_verifactu.emission.before_cancel",
 	},
 }
 
-# Extensiones de clase (mixins PRIMERO en el MRO — frappe/model/
-# base_document.py _get_extended_class): naming de borradores de Sales
-# Invoice (spec 04 §4). Adición pura: el controlador core no define
-# autoname.
-extend_doctype_class = {
-	"Sales Invoice": ["erpnext_spain.es_verifactu.invoice.SalesInvoiceVerifactuMixin"],
-}
 
 # Desk JS por DocType
 # ------------------

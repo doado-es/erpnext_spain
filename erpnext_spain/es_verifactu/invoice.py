@@ -1,55 +1,86 @@
-# Mixin de Sales Invoice para el NAMING de borradores VeriFactu (spec 04 §4).
+# Nombre de los borradores de Sales Invoice (spec 04 §4 del código base;
+# correcciones H1 y H2 de la spec 01 §8).
 #
-# Se inyecta con el hook `extend_doctype_class`: frappe compone las
-# extensiones ANTES del controlador en el MRO (frappe/model/base_document.py
-# _get_extended_class), así que el método vive aquí y el SalesInvoice core
-# sigue mandando para todo lo demás. El controlador core NO define
-# `autoname` (nombra por naming_series), de modo que esta clase es una
-# ADICIÓN PURA: no sombrea nada.
+# Con la numeración al emitir, el borrador recibe un nombre temporal y el número
+# fiscal solo se consume al validar (emission.before_submit renombra a la serie
+# del tipo de factura). Esa numeración solo se aplica en las compañías que la
+# tienen activa; en las demás el autoname no asigna nombre y Frappe sigue con la
+# naming_series de la factura, como en ERPNext estándar (R7).
 #
-# Política UNIFORME (spec 04 §4): TODAS las compañías —con VeriFactu activo
-# o no— nombran sus borradores con un nombre temporal; el número fiscal solo
-# se consume al emitir (el before_submit de emisión.py renombra a la serie
-# mapeada). Un solo código, ninguna bifurcación por compañía.
-#
-# interacción con naming.py (verificada contra fuente v16):
-# - set_new_name limpia doc.name salvo import/migración (flags.in_import,
-#   naming.py:158) y solo llama run_method("autoname") si el nombre sigue
-#   vacío (naming.py:188-189): con nombre explícito este mixin ni corre.
-# - el guard `if self.name` cubre además invocaciones programáticas
-#   directas al método (defensa total, coste cero).
+# Se engancha como doc_event «autoname» y no como extensión de la clase (H2,
+# R2): set_new_name llama a doc.run_method("autoname") si el documento aún no
+# tiene nombre, y run_method ejecuta los doc_events aunque el controlador no
+# defina el método [verificado en Frappe v16, model/naming.py].
 
 from __future__ import annotations
 
+import re
 import time
 
 import frappe
+from frappe.model.document import Document
 from frappe.model.naming import make_autoname
+
+from erpnext_spain.utils.gating import is_feature_enabled
 
 # Prefijo del nombre temporal cuando la compañía no tiene patrón configurado.
 DRAFT_PREFIX = "BORRADOR-"
 
 
-class SalesInvoiceVerifactuMixin:
-	"""Naming de borradores de Sales Invoice (lote 4b, spec 04 §4)."""
+def uses_draft_naming(company: str | None) -> bool:
+	"""¿Numera la compañía al emitir? Hoy, solo con VeriFactu activo. La spec 05
+	§1 lo extenderá a es_fiscal_numbering, independiente de VeriFactu, cuando el
+	renombrado a la serie fiscal deje de depender de VeriFactu."""
+	return is_feature_enabled(company, "es_verifactu_enabled")
 
-	def autoname(self):
-		# Nombre explícito (import/migración/migración de datos): se respeta.
-		if self.name:
-			return
 
-		pattern = None
-		if self.get("company"):
-			pattern = frappe.db.get_value("Company", self.company, "es_draft_series")
+def autoname(doc: Document, method: str | None = None) -> None:
+	"""doc_event autoname de Sales Invoice: nombre temporal del borrador."""
+	# Nombre explícito (importación, migración): se respeta.
+	if doc.name or not uses_draft_naming(doc.get("company")):
+		return
 
-		if pattern:
-			# Patrón propio de la compañía (p. ej. «BORRADOR-.#####»):
-			# contador SECUENCIAL propio, jamás compartido con series
-			# fiscales (la compuerta de activación valida la no colisión).
-			self.name = make_autoname(pattern)
-			return
+	pattern = frappe.get_cached_value("Company", doc.company, "es_draft_series")
+	if pattern:
+		# Patrón propio de la compañía (p. ej. «BORRADOR-.#####»): contador
+		# secuencial propio, nunca compartido con las series fiscales (la
+		# activación de VeriFactu valida que no colisionen).
+		doc.name = make_autoname(pattern)
+		return
 
-		# Fallback estable y ordenable: epoch (orden temporal) + hash
-		# (desambiguación dentro del mismo segundo). No depende de ninguna
-		# configuración y no colisiona con series fiscales.
-		self.name = f"{DRAFT_PREFIX}{int(time.time())}-{frappe.generate_hash(length=8)}"
+	# Fallback estable y ordenable: epoch + hash, sin depender de configuración.
+	doc.name = f"{DRAFT_PREFIX}{int(time.time())}-{frappe.generate_hash(length=8)}"
+
+
+def is_draft_name(name: str | None, draft_pattern: str | None) -> bool:
+	"""¿El nombre es un nombre temporal nuestro? El literal «BORRADOR-» cubre el
+	fallback; el prefijo del patrón de la compañía, su serie propia."""
+	if not name:
+		return False
+	if name.startswith(DRAFT_PREFIX):
+		return True
+	if draft_pattern:
+		prefix = re.split(r"[.#]", draft_pattern, maxsplit=1)[0]
+		if prefix and name.startswith(prefix):
+			return True
+	return False
+
+
+def release_draft_name(doc: Document, method: str | None = None) -> None:
+	"""doc_event before_submit: si un borrador con nombre temporal se valida en una
+	compañía que ya no numera al emitir (p. ej. se desactivó VeriFactu con
+	borradores pendientes), recibe el número de su naming_series. Sin esto se
+	quedaría con el nombre temporal para siempre (H1)."""
+	if uses_draft_naming(doc.company):
+		return
+	pattern = frappe.get_cached_value("Company", doc.company, "es_draft_series")
+	if not is_draft_name(doc.name, pattern):
+		return
+	series = doc.get("naming_series")
+	if not series:
+		field = frappe.get_meta("Sales Invoice").get_field("naming_series")
+		series = field.default or (field.options or "").split("\n")[0]
+	new_name = make_autoname(series, doc=doc)
+	frappe.rename_doc("Sales Invoice", doc.name, new_name, force=True, show_alert=False, rebuild_search=False)
+	doc.name = new_name
+	doc.set_parent_in_children()

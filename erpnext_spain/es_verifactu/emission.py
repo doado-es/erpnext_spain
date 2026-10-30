@@ -64,7 +64,8 @@ from frappe.model.naming import make_autoname
 
 from erpnext_spain.aeat.utils import format_aeat_datetime
 from erpnext_spain.nif import validator
-from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX
+from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX, is_draft_name
+from erpnext_spain.utils.gating import is_feature_enabled
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.locks import acquire_chain_lock, release_chain_lock
 
@@ -119,7 +120,7 @@ def before_submit(doc: Document, method: str | None = None) -> None:
 	company = doc.company
 
 	# --- early exit: una lectura indexada ---------------------------------
-	if not frappe.db.get_value("Company", company, "es_verifactu_enabled"):
+	if not is_feature_enabled(company, "es_verifactu_enabled"):
 		return
 
 	# --- credencial (empresa, VeriFactu) habilitada, con remedio ---------
@@ -287,7 +288,7 @@ def on_submit(doc: Document, method: str | None = None) -> None:
 		company = doc.company
 
 		# --- early exit: una lectura indexada -------------------------------
-		if not frappe.db.get_value("Company", company, "es_verifactu_enabled"):
+		if not is_feature_enabled(company, "es_verifactu_enabled"):
 			return
 
 		# --- RegistroAlta encadenado (DENTRO del cerrojo, spec 04 §5/§12) ---
@@ -441,7 +442,7 @@ def validate(doc: Document, method: str | None = None) -> None:
 	company = doc.company
 
 	# --- early exit: una lectura indexada ---------------------------------
-	if not frappe.db.get_value("Company", company, "es_verifactu_enabled"):
+	if not is_feature_enabled(company, "es_verifactu_enabled"):
 		return
 
 	_block_amendment(doc)
@@ -831,19 +832,8 @@ def _rectified_invoices(doc: Document) -> list[dict] | None:
 
 
 def _is_draft(name: str | None, draft_pattern: str | None) -> bool:
-	"""¿El nombre actual es un borrador NUESTRO? El literal «BORRADOR-»
-	cubre el fallback del mixin; el prefijo del patrón de borradores de la
-	compañía cubre su serie propia (p. ej. «PREV-.#####»). Cualquier otro
-	nombre (import/migración con nombre explícito, amended) NO se toca."""
-	if not name:
-		return False
-	if name.startswith(DRAFT_PREFIX):
-		return True
-	if draft_pattern:
-		prefix = re.split(r"[.#]", draft_pattern, 1)[0]
-		if prefix and name.startswith(prefix):
-			return True
-	return False
+	"""¿El nombre actual es un borrador NUESTRO? Ver invoice.is_draft_name."""
+	return is_draft_name(name, draft_pattern)
 
 
 def _fiscal_series(company: str, invoice_type: str | None) -> str:
