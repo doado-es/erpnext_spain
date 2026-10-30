@@ -1,0 +1,4115 @@
+# Spanish translations for ERPNext Spain.
+# Copyright (C) 2026 doado
+# This file is distributed under the same license as the ERPNext Spain project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ERPNext Spain 16\n"
+"Report-Msgid-Bugs-To: info@doado.es\n"
+"POT-Creation-Date: 2026-10-30 23:17+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es-ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#. ERPNext Spain
+msgid "ES Settings"
+msgstr "Configuración de España"
+
+#. ERPNext Spain
+msgid "ES AEAT Credential"
+msgstr "Credencial AEAT"
+
+#. ERPNext Spain
+msgid "ES AEAT Response"
+msgstr "Respuesta AEAT"
+
+#. ERPNext Spain
+msgid "ES AEAT Response Line"
+msgstr "Línea de respuesta AEAT"
+
+#. ERPNext Spain
+msgid "ES Invoice Type"
+msgstr "Tipo de factura"
+
+#. ERPNext Spain
+msgid "ES Invoice Series"
+msgstr "Serie de facturación"
+
+#. ERPNext Spain
+msgid "ES Verifactu Billing Record"
+msgstr "Registro de facturación VeriFactu"
+
+#. ERPNext Spain
+msgid "ES Verifactu Notification Role"
+msgstr "Rol de notificación VeriFactu"
+
+#. ERPNext Spain
+msgid "ES Verifactu Aeat Query"
+msgstr "Consulta a la AEAT (VeriFactu)"
+
+#. ERPNext Spain
+msgid "ES Verifactu Aeat Query Line"
+msgstr "Línea de consulta a la AEAT"
+
+#. ERPNext Spain
+msgid "ES NIF Checkup"
+msgstr "Comprobación de NIF"
+
+#. ERPNext Spain
+msgid "Rectifiable Invoices"
+msgstr "Facturas rectificables"
+
+#. ERPNext Spain
+msgid "ES Verifactu"
+msgstr "VeriFactu"
+
+#. ERPNext Spain
+msgid "ES Contabilidad"
+msgstr "Contabilidad (España)"
+
+#. ERPNext Spain
+msgid "ERPNext Spain"
+msgstr "ERPNext España"
+
+#. ERPNext Spain
+msgid "Nif"
+msgstr "NIF"
+
+#. ERPNext Spain
+msgid "Aeat"
+msgstr "AEAT"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Balance Sheet"
+msgstr "Balance"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "General Ledger"
+msgstr "Libro mayor"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Ledger"
+msgstr "Libro mayor"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Trial Balance"
+msgstr "Balance de sumas y saldos"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Trial Balance for Party"
+msgstr "Balance de sumas y saldos por tercero"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Chart of Accounts"
+msgstr "Plan de cuentas"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Cost Center"
+msgstr "Centro de coste"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Cost Centers"
+msgstr "Centros de coste"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Payment Entry"
+msgstr "Cobro o pago"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Payable"
+msgstr "A pagar"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Receivable"
+msgstr "A cobrar"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts Receivable"
+msgstr "Cuentas a cobrar"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts Payable"
+msgstr "Cuentas a pagar"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts Receivable Summary"
+msgstr "Resumen de cuentas a cobrar"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts Payable Summary"
+msgstr "Resumen de cuentas a pagar"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Liability"
+msgstr "Pasivo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Equity"
+msgstr "Patrimonio neto"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Root Type"
+msgstr "Tipo de raíz"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Depreciation"
+msgstr "Amortización"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accumulated Depreciation"
+msgstr "Amortización acumulada"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Depreciation Entry"
+msgstr "Asiento de amortización"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Write Off"
+msgstr "Cancelación de saldo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Write Off Amount"
+msgstr "Importe cancelado"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Write Off Account"
+msgstr "Cuenta de cancelación de saldos"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Round Off"
+msgstr "Redondeo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Round Off Account"
+msgstr "Cuenta de redondeo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Outstanding Amount"
+msgstr "Importe pendiente"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Due Date"
+msgstr "Fecha de vencimiento"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Total Debit"
+msgstr "Total debe"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Total Credit"
+msgstr "Total haber"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Debit Amount"
+msgstr "Importe al debe"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Credit Amount"
+msgstr "Importe al haber"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Debit To"
+msgstr "Cuenta de cargo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Credit To"
+msgstr "Cuenta de abono"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Opening (Dr)"
+msgstr "Saldo inicial (debe)"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Opening (Cr)"
+msgstr "Saldo inicial (haber)"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Closing (Dr)"
+msgstr "Saldo final (debe)"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Closing (Cr)"
+msgstr "Saldo final (haber)"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Opening Balance"
+msgstr "Saldo inicial"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Closing Balance"
+msgstr "Saldo final"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Paid Amount"
+msgstr "Importe pagado"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Party Type"
+msgstr "Tipo de tercero"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Fiscal Year"
+msgstr "Ejercicio fiscal"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounting Period"
+msgstr "Periodo contable"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Period Closing Voucher"
+msgstr "Cierre del ejercicio"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Exchange Gain/Loss"
+msgstr "Diferencias de cambio"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Posting Date"
+msgstr "Fecha contable"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Mode of Payment"
+msgstr "Forma de pago"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Payment Terms"
+msgstr "Condiciones de pago"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Overdue"
+msgstr "Vencido"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Return"
+msgstr "Devolución"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Return Against"
+msgstr "Rectifica a"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Credit Note"
+msgstr "Factura rectificativa"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Debit Note"
+msgstr "Rectificativa de compra"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Is Return (Credit Note)"
+msgstr "Es rectificativa (abono)"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Reverse Journal Entry"
+msgstr "Asiento de anulación"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Bank Reconciliation Tool"
+msgstr "Conciliación bancaria"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Cash Flow"
+msgstr "Estado de flujos de efectivo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Cost of Goods Sold"
+msgstr "Coste de las ventas"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Fixed Asset"
+msgstr "Inmovilizado"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Tax ID"
+msgstr "NIF"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Tax Withholding Category"
+msgstr "Categoría de retención"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Invoice"
+msgstr "Factura"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Sales Invoice"
+msgstr "Factura de venta"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Purchase Invoice"
+msgstr "Factura de compra"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Delivery Note"
+msgstr "Albarán"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Purchase Receipt"
+msgstr "Albarán de compra"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Item"
+msgstr "Artículo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Items"
+msgstr "Artículos"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Item Group"
+msgstr "Grupo de artículos"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Item Code"
+msgstr "Código de artículo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Item Name"
+msgstr "Nombre del artículo"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Customer Group"
+msgstr "Grupo de clientes"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Stock"
+msgstr "Existencias"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Stock Ledger"
+msgstr "Libro de existencias"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Stock Balance"
+msgstr "Saldo de existencias"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Stock Entry"
+msgstr "Movimiento de existencias"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts Manager"
+msgstr "Responsable de contabilidad"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts User"
+msgstr "Usuario de contabilidad"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Accounts Settings"
+msgstr "Configuración contable"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Opening Invoice Creation Tool"
+msgstr "Creación de facturas de apertura"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Cheque/Reference No"
+msgstr "Cheque o n.º de referencia"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Valuation and Total"
+msgstr "Valoración y total"
+
+#. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
+msgid "Add"
+msgstr "Añadir"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "AI Agents"
+msgstr "Agentes de IA"
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Add Aggregate"
+msgstr "Añadir agregado"
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Add Group By"
+msgstr "Añadir agrupación"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "Agent Instructions"
+msgstr "Instrucciones para agentes"
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Aggregate"
+msgstr "Agregado"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/print_format_builder/print_format_builder.bundle.js)
+msgid "Back to the editor"
+msgstr "Volver al editor"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/print_format_builder/utils.js)
+msgid "Background image loaded from a web address"
+msgstr "Imagen de fondo cargada desde una dirección web"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/data_import_value_mapping/data_import_value_mapping.json)
+msgid "Can Create"
+msgstr "Puede crear"
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Clear Grouping"
+msgstr "Quitar agrupación"
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Clear grouping"
+msgstr "Quitar agrupación"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+#, python-brace-format
+msgid "Clients sign in with OAuth: they open this site's login and ask you to allow access. Configure this in {0}."
+msgstr "Los clientes inician sesión con OAuth: abren el inicio de sesión de este sitio y le piden que les dé acceso. Configúrelo en {0}."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+#, python-brace-format
+msgid "Connect MCP clients to {0}."
+msgstr "Conecte clientes MCP a {0}."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/data_import_value_mapping/data_import_value_mapping.json)
+msgid "Create a record named after the file's value when the import runs."
+msgstr "Crear un registro con el nombre del valor del archivo al ejecutar la importación."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "Enable MCP"
+msgstr "Activar MCP"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+#, python-brace-format
+msgid "For more information, see {0}."
+msgstr "Para más información, consulte {0}."
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+#, python-brace-format
+msgid "Grouped by {0}"
+msgstr "Agrupado por {0}"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+msgid "Install it:"
+msgstr "Instálelo:"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "MCP Settings"
+msgstr "Configuración de MCP"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "Name shown to AI clients. Defaults to the site's host name."
+msgstr "Nombre que ven los clientes de IA. Por defecto, el nombre del host del sitio."
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupByTable.vue)
+msgid "No records"
+msgstr "No hay registros"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/data_import/data_import.py)
+#, python-brace-format
+msgid "None of the columns in your file match {0}. Check that it is the right file; if it is, map its columns to {0} fields in the next step."
+msgstr "Ninguna de las columnas del archivo coincide con {0}. Compruebe que es el archivo correcto; si lo es, asigne sus columnas a campos de {0} en el siguiente paso."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/print_format_builder/utils.js)
+msgid "Not made in the Print Format Editor"
+msgstr "No creado en el editor de formatos de impresión"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/print_format_builder/components/PrintSettingsPanel.vue)
+msgid "Page background"
+msgstr "Fondo de página"
+
+#. Falta en frappe/locale/es.po (frappe/printing/page/print/print.js)
+msgid "Paper Size"
+msgstr "Tamaño de papel"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/print_format_builder/components/PrintSettingsPanel.vue)
+msgid "Paper size"
+msgstr "Tamaño de papel"
+
+#. Falta en frappe/locale/es.po (frappe/templates/emails/two_factor_setup.html)
+#, python-brace-format
+msgid "Please click on the following link and follow the instructions on the page. {0}"
+msgstr "Haga clic en el siguiente enlace y siga las instrucciones de la página. {0}"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/printing/doctype/print_format/print_format.json)
+msgid "Print Format Editor"
+msgstr "Editor de formatos de impresión"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/frappe/views/reports/query_report.js)
+msgid "Report generation failed"
+msgstr "Error al generar el informe"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/frappe/views/reports/query_report.js)
+#, python-brace-format
+msgid "Report generation failed {0}"
+msgstr "Error al generar el informe {0}"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/prepared_report/prepared_report.py)
+#, python-brace-format
+msgid "Report {0} failed to generate."
+msgstr "No se pudo generar el informe {0}."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/prepared_report/prepared_report.py)
+#, python-brace-format
+msgid "Report {0} is ready."
+msgstr "El informe {0} está listo."
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Select field"
+msgstr "Seleccionar campo"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "Server Name"
+msgstr "Nombre del servidor"
+
+#. Falta en frappe/locale/es.po (frappe/printing/page/print/print.js)
+msgid "Set as Default Format"
+msgstr "Establecer como formato predeterminado"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/frappe/views/reports/query_report.js)
+msgid "Set the filters and generate a new one."
+msgstr "Ajuste los filtros y genere uno nuevo."
+
+#. Falta en frappe/locale/es.po (ui/src/components/GroupBy/GroupBy.vue)
+msgid "Show totals"
+msgstr "Mostrar totales"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+msgid "Sign in to this site:"
+msgstr "Inicie sesión en este sitio:"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/frappe/views/reports/query_report.js)
+msgid "Something went wrong. Contact your System Manager."
+msgstr "Algo ha fallado. Póngase en contacto con su administrador del sistema."
+
+#. Falta en frappe/locale/es.po (frappe/printing/page/print/print.js)
+msgid "Standard is used when no default is set"
+msgstr "Se usa el estándar cuando no hay uno predeterminado"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "Tell AI agents what this site is for and how your team uses it. Agents receive this text when they connect."
+msgstr "Explique a los agentes de IA para qué sirve este sitio y cómo lo usa su equipo. Los agentes reciben este texto al conectarse."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/printing/doctype/print_format/print_format_list.js)
+msgid "The Print Format Editor is visual. HTML is hand-written."
+msgstr "El editor de formatos de impresión es visual. El HTML se escribe a mano."
+
+#. Falta en frappe/locale/es.po (frappe/utils/typst_emitter.py)
+#, python-brace-format
+msgid "The Typst renderer cannot embed this background image: {0}"
+msgstr "El motor Typst no puede incrustar esta imagen de fondo: {0}"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+msgid "Then use it:"
+msgstr "Después, úselo:"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/frappe/views/reports/query_report.js)
+msgid "This is a background report"
+msgstr "Es un informe en segundo plano"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/public/js/frappe/views/reports/query_report.js)
+msgid "View Details"
+msgstr "Ver detalles"
+
+#. Falta en frappe/locale/es.po (frappe/core/doctype/user/user.py)
+#, python-brace-format
+msgid "Your password was changed by {0}"
+msgstr "{0} ha cambiado su contraseña"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/printing/doctype/print_format/print_format.py)
+msgid "applied the editor draft"
+msgstr "aplicó el borrador del editor"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.json)
+msgid "frappectl"
+msgstr "frappectl"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/system_settings/system_settings.js)
+msgid "frappectl is a command-line client for Frappe sites, built for people and AI agents."
+msgstr "frappectl es un cliente de línea de comandos para sitios Frappe, pensado para personas y agentes de IA."
+
+#. Falta en frappe/locale/es.po
+#. (frappe/core/doctype/prepared_report/prepared_report.py)
+#, python-brace-format
+msgctxt "Prepared Report Notification"
+msgid "{0} Error: {1}"
+msgstr "Error de {0}: {1}"
+
+#. Falta en frappe/locale/es.po
+#. (frappe/printing/page/print_format_builder_beta/print_format_builder_beta.js)
+#, python-brace-format
+msgid "{0} is rendered from an HTML file and cannot be edited in the Print Format Editor."
+msgstr "{0} se genera desde un archivo HTML y no se puede editar en el editor de formatos de impresión."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/email_digest/email_digest.json)
+msgid "  "
+msgstr "  "
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/lost_quotations/lost_quotations.py)
+#, python-format
+msgid "% of Lost Quotations"
+msgstr "% de presupuestos perdidos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+msgid "'Days Since Last Order' must be greater than zero"
+msgstr "«Días desde el último pedido» debe ser mayor que cero"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(A) Balance Qty"
+msgstr "(A) Cantidad en saldo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(B) Expected Balance Qty"
+msgstr "(B) Cantidad en saldo esperada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(C) Change in Stock Value"
+msgstr "(C) Variación del valor de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(D) Expected Change in Stock Value"
+msgstr "(D) Variación esperada del valor de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(E) Valuation Rate"
+msgstr "(E) Coste de valoración"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(F) Expected Valuation Rate"
+msgstr "(F) Coste de valoración esperado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(G) Balance Stock Value"
+msgstr "(G) Valor de las existencias en saldo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "(H) Expected Balance Stock Value"
+msgstr "(H) Valor esperado de las existencias en saldo"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.js)
+msgid "1 raw material"
+msgstr "1 materia prima"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/dunning_letter_text/dunning_letter_text.json)
+#, python-brace-format, python-format
+msgid ""
+"<h4>Body Text and Closing Text Example</h4>\n"
+"\n"
+"<div>We have noticed that the following payments, totaling {{ currency }} {{ total_outstanding }}, are overdue:</div>\n"
+"<ul>\n"
+"{% for row in overdue_payments %}\n"
+"<li>Invoice {{ row.sales_invoice }}: {{ currency }} {{ row.outstanding }}, due on {{ row.due_date }}.</li>\n"
+"{% endfor %}\n"
+"</ul>\n"
+"<div>Please pay the amount due immediately to avoid any further dunning cost.</div>\n"
+"\n"
+"<h4>How to get fieldnames</h4>\n"
+"\n"
+"<p>The fieldnames you can use in your template are the fields in the document. You can find out the fields of any documents via Setup &gt; Customize Form View and selecting Dunning or Overdue Payment for the payment rows</p>\n"
+"\n"
+"<h4>Templating</h4>\n"
+"\n"
+"<p>Templates are compiled using the Jinja Templating Language. To learn more about Jinja, <a class=\"strong\" href=\"http://jinja.pocoo.org/docs/dev/templates/\">read this documentation.</a></p>"
+msgstr ""
+"<h4>Ejemplo de texto principal y texto de cierre</h4>\n"
+"\n"
+"<div>Hemos observado que los siguientes pagos, por un total de {{ currency }} {{ total_outstanding }}, están vencidos:</div>\n"
+"<ul>\n"
+"{% for row in overdue_payments %}\n"
+"<li>Factura {{ row.sales_invoice }}: {{ currency }} {{ row.outstanding }}, vencida el {{ row.due_date }}.</li>\n"
+"{% endfor %}\n"
+"</ul>\n"
+"<div>Le rogamos que abone el importe pendiente de inmediato para evitar nuevos gastos de reclamación.</div>\n"
+"\n"
+"<h4>Cómo obtener los nombres de campo</h4>\n"
+"\n"
+"<p>Los nombres de campo que puede usar en la plantilla son los campos del documento. Puede consultar los campos de cualquier documento en Configuración &gt; Personalizar formulario, seleccionando Reclamación de pago o Pago vencido para las filas de pagos</p>\n"
+"\n"
+"<h4>Plantillas</h4>\n"
+"\n"
+"<p>Las plantillas se compilan con el lenguaje de plantillas Jinja. Para saber más sobre Jinja, <a class=\"strong\" href=\"http://jinja.pocoo.org/docs/dev/templates/\">lea esta documentación.</a></p>"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard_standing/supplier_scorecard_standing.json)
+msgid "A band of scores, and what happens to suppliers in it."
+msgstr "Un tramo de puntuaciones y lo que ocurre con los proveedores que quedan en él."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_account/bank_account.json)
+msgid "A bank account of yours or of a customer or supplier."
+msgstr "Una cuenta bancaria suya, de un cliente o de un proveedor."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/bank/bank.json)
+msgid "A bank you or your customers and suppliers hold accounts with."
+msgstr "Un banco en el que usted, sus clientes o sus proveedores tienen cuentas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_order/payment_order.json)
+msgid "A batch of payments to send to your bank."
+msgstr "Una remesa de pagos para enviar al banco."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/purchase_invoice/purchase_invoice.json)
+msgid "A bill from a supplier for what you bought."
+msgstr "Una factura de un proveedor por lo que ha comprado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.json)
+msgid "A bill to a customer for what you sold."
+msgstr "Una factura a un cliente por lo que ha vendido."
+
+#. Falta en erpnext/locale/es.po (erpnext/setup/doctype/branch/branch.json)
+msgid "A branch of your company."
+msgstr "Una sucursal de su empresa."
+
+#. Falta en erpnext/locale/es.po (erpnext/setup/doctype/brand/brand.json)
+msgid "A brand your items are sold under."
+msgstr "Una marca con la que se venden sus artículos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/lower_deduction_certificate/lower_deduction_certificate.json)
+msgid "A certificate that lets you withhold less tax from a supplier."
+msgstr "Un certificado que permite practicar una retención menor a un proveedor."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/communication/doctype/communication_medium/communication_medium.json)
+msgid "A channel customers reach you on, like a phone line."
+msgstr "Un canal por el que le contactan los clientes, como una línea de teléfono."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/share_type/share_type.json)
+msgid "A class of shares, like equity or preference."
+msgstr "Una clase de acciones, como ordinarias o preferentes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/coupon_code/coupon_code.json)
+msgid "A code customers enter to get a discount from a pricing rule."
+msgstr "Un código que introducen los clientes para obtener el descuento de una regla de precios."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/edi/doctype/common_code/common_code.json)
+msgid "A code from a code list and what it maps to."
+msgstr "Un código de una lista de códigos y su correspondencia."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier/supplier.json)
+msgid "A company or person you buy goods or services from."
+msgstr "Una empresa o persona a la que compra bienes o servicios."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/customer/customer.json)
+msgid "A company or person you sell goods or services to."
+msgstr "Una empresa o persona a la que vende bienes o servicios."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/manufacturer/manufacturer.json)
+msgid "A company that makes the items you buy or sell."
+msgstr "Una empresa que fabrica los artículos que usted compra o vende."
+
+#. Falta en erpnext/locale/es.po (erpnext/crm/doctype/prospect/prospect.json)
+msgid "A company you are trying to win as a customer, with its leads."
+msgstr "Una empresa que intenta conseguir como cliente, con sus contactos potenciales."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/warranty_claim/warranty_claim.json)
+msgid "A customer's claim to repair or replace an item under warranty."
+msgstr "La reclamación de un cliente para reparar o sustituir un artículo en garantía."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/sales_order/sales_order.json)
+msgid "A customer's confirmed order."
+msgstr "El pedido confirmado de un cliente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/accounting_period/accounting_period.json)
+msgid "A date range you can close so no one posts into it."
+msgstr "Un rango de fechas que puede cerrar para que nadie contabilice en él."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/department/department.json)
+msgid "A department of your company."
+msgstr "Un departamento de su empresa."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/journal_entry/journal_entry.json)
+msgid "A direct entry in your books, for anything without its own form."
+msgstr "Un asiento directo en sus libros, para todo lo que no tiene formulario propio."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/sales_partner/sales_partner.json)
+msgid "A distributor, dealer or reseller who sells for you on commission."
+msgstr "Un distribuidor, concesionario o revendedor que vende para usted a comisión."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_account_subtype/bank_account_subtype.json)
+msgid "A finer grouping of bank accounts, like savings or current."
+msgstr "Una subdivisión de las cuentas bancarias, como de ahorro o corriente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/tax_withholding_group/tax_withholding_group.json)
+msgid "A group of tax withholding categories that apply together."
+msgstr "Un grupo de categorías de retención que se aplican juntas."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/batch/batch.json)
+msgid "A group of units of an item made or received together."
+msgstr "Un grupo de unidades de un artículo fabricadas o recibidas juntas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_account_type/bank_account_type.json)
+msgid "A grouping of bank accounts, like checking or credit card."
+msgstr "Una agrupación de cuentas bancarias, como corriente o de tarjeta de crédito."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/telephony/doctype/telephony_call_type/telephony_call_type.json)
+msgid "A grouping of calls, like sales or support."
+msgstr "Una agrupación de llamadas, como ventas o soporte."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_parameter_group/quality_inspection_parameter_group.json)
+msgid "A grouping of inspection parameters."
+msgstr "Una agrupación de parámetros de inspección."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/issue_type/issue_type.json)
+msgid "A grouping of issues, like billing or technical."
+msgstr "Una agrupación de incidencias, como facturación o técnicas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project_type/project_type.json)
+msgid "A grouping of projects, like internal or external."
+msgstr "Una agrupación de proyectos, como internos o externos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/task_type/task_type.json)
+msgid "A grouping of tasks, like bug or feature."
+msgstr "Una agrupación de tareas, como error o funcionalidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/uom_category/uom_category.json)
+msgid "A grouping of units, like weight or length."
+msgstr "Una agrupación de unidades, como peso o longitud."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/warehouse_type/warehouse_type.json)
+msgid "A grouping of warehouses, like transit or store."
+msgstr "Una agrupación de almacenes, como de tránsito o tienda."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_guarantee/bank_guarantee.json)
+msgid "A guarantee a bank gives on your behalf, or on a customer's or supplier's."
+msgstr "Una garantía que da un banco en su nombre o en el de un cliente o proveedor."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/designation/designation.json)
+msgid "A job title, like manager or accountant."
+msgstr "Un puesto de trabajo, como gerente o contable."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry_type/stock_entry_type.json)
+msgid "A kind of stock entry, like material transfer or manufacture."
+msgstr "Un tipo de movimiento de existencias, como traspaso de material o fabricación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/activity_type/activity_type.json)
+msgid "A kind of work you track time against, like design or support."
+msgstr "Un tipo de trabajo al que imputa tiempo, como diseño o soporte."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/workstation_type/workstation_type.json)
+msgid "A kind of workstation, with its costs."
+msgstr "Un tipo de puesto de trabajo, con sus costes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/account/account.json)
+msgid "A ledger in your chart of accounts that entries are posted to."
+msgstr "Una cuenta del plan de cuentas en la que se contabilizan los asientos."
+
+#. Falta en erpnext/locale/es.po (erpnext/setup/doctype/company/company.json)
+msgid "A legal entity with its own books, like your business or a subsidiary."
+msgstr "Una entidad jurídica con su propia contabilidad, como su empresa o una filial."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_transaction/bank_transaction.json)
+msgid "A line from your bank statement, ready to be matched with a payment."
+msgstr "Una línea del extracto bancario, lista para casarla con un pago."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/workstation/workstation.json)
+msgid "A machine or place where operations are done."
+msgstr "Una máquina o lugar en el que se realizan operaciones."
+
+#. Falta en erpnext/locale/es.po (erpnext/crm/doctype/campaign/campaign.json)
+msgid "A marketing campaign, to see which leads and sales it brought in."
+msgstr "Una campaña de marketing, para ver qué contactos y ventas ha generado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/crm/doctype/appointment/appointment.json)
+msgid "A meeting booked with a lead or customer."
+msgstr "Una reunión concertada con un contacto potencial o un cliente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_meeting/quality_meeting.json)
+msgid "A meeting to review quality, with its agenda and minutes."
+msgstr "Una reunión de revisión de calidad, con su orden del día y su acta."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/shipment_parcel_template/shipment_parcel_template.json)
+msgid "A parcel size you ship often."
+msgstr "Un tamaño de paquete que envía a menudo."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.json)
+msgid "A parcel you send through a carrier."
+msgstr "Un paquete que envía a través de un transportista."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/cost_center/cost_center.json)
+msgid "A part of your business you track income and expenses for, like a branch or product line."
+msgstr "Una parte de su negocio de la que sigue ingresos y gastos, como una sucursal o una línea de producto."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_review/quality_review.json)
+msgid "A periodic check of how a quality goal is going."
+msgstr "Una revisión periódica de cómo va un objetivo de calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/shareholder/shareholder.json)
+msgid "A person or company that owns shares in your company."
+msgstr "Una persona o empresa que tiene acciones de su empresa."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/telephony/doctype/call_log/call_log.json)
+msgid "A phone call made or received."
+msgstr "Una llamada realizada o recibida."
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.json)
+msgid "A piece of work to be done, often part of a project."
+msgstr "Un trabajo que hay que hacer, a menudo dentro de un proyecto."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project/project.json)
+msgid "A piece of work with tasks, time and costs."
+msgstr "Un trabajo con tareas, tiempo y costes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/warehouse/warehouse.json)
+msgid "A place where you keep stock."
+msgstr "Un lugar donde guarda existencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/location/location.json)
+msgid "A place where your assets are kept."
+msgstr "Un lugar donde se guardan sus activos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/crm/doctype/opportunity/opportunity.json)
+msgid "A potential sale to a lead or customer."
+msgstr "Una venta posible a un contacto potencial o a un cliente."
+
+#. Falta en erpnext/locale/es.po (erpnext/support/doctype/issue/issue.json)
+msgid "A problem or question raised by a customer."
+msgstr "Un problema o consulta planteado por un cliente."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.json)
+msgid "A product or service you buy, sell or keep in stock."
+msgstr "Un producto o servicio que compra, vende o tiene en existencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project_update/project_update.json)
+msgid "A progress update collected from the project team."
+msgstr "Una actualización del avance recogida del equipo del proyecto."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/item_attribute/item_attribute.json)
+msgid "A property item variants differ by, like size or colour."
+msgstr "Una propiedad en la que se diferencian las variantes de un artículo, como la talla o el color."
+
+#. Falta en erpnext/locale/es.po (erpnext/edi/doctype/code_list/code_list.json)
+msgid "A published list of codes, like units or tax categories, used in e-invoicing."
+msgstr "Una lista publicada de códigos, como unidades o categorías fiscales, que se usa en la factura electrónica."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_maintenance_log/asset_maintenance_log.json)
+msgid "A record of maintenance done on an asset."
+msgstr "Un registro del mantenimiento realizado a un activo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/share_transfer/share_transfer.json)
+msgid "A record of shares issued, bought back or moved between shareholders."
+msgstr "Un registro de acciones emitidas, recompradas o transmitidas entre accionistas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/territory/territory.json)
+msgid "A region you sell in, to group customers and set targets."
+msgstr "Una zona en la que vende, para agrupar clientes y fijar objetivos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/email_digest/email_digest.json)
+msgid "A regular email summing up how the business is doing."
+msgstr "Un correo periódico que resume cómo va el negocio."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/dunning/dunning.json)
+msgid "A reminder to a customer about an overdue invoice."
+msgstr "Un recordatorio a un cliente sobre una factura vencida."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_repair/asset_repair.json)
+msgid "A repair made to an asset, and what it cost."
+msgstr "Una reparación hecha a un activo y lo que costó."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.json)
+msgid "A request to buy, transfer or make items."
+msgstr "Una solicitud para comprar, traspasar o fabricar artículos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_invoice/pos_invoice.json)
+msgid "A sale made at the point of sale."
+msgstr "Una venta realizada en el punto de venta."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/journal_entry_template/journal_entry_template.json)
+msgid "A saved set of accounts to start journal entries from."
+msgstr "Un conjunto guardado de cuentas para empezar asientos a partir de él."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/finance_book/finance_book.json)
+msgid "A separate set of books, for example to depreciate assets under another rule."
+msgstr "Un juego de libros independiente, por ejemplo para amortizar activos con otro criterio."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/crm/doctype/email_campaign/email_campaign.json)
+msgid "A series of emails sent to leads or contacts on a schedule."
+msgstr "Una serie de correos enviados a contactos según un calendario."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/promotional_scheme/promotional_scheme.json)
+msgid "A set of discounts and free items, like buy two get one free."
+msgstr "Un conjunto de descuentos y artículos gratuitos, como «compre dos y llévese tres»."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/price_list/price_list.json)
+msgid "A set of item prices for buying, selling or both."
+msgstr "Un conjunto de precios de artículos para compra, venta o ambas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_terms_template/payment_terms_template.json)
+msgid "A set of payment terms to apply to invoices and orders."
+msgstr "Un conjunto de condiciones de pago para aplicar a facturas y pedidos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project_template/project_template.json)
+msgid "A set of tasks to start new projects from."
+msgstr "Un conjunto de tareas para empezar proyectos nuevos a partir de él."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/serial_no/serial_no.json)
+msgid "A single unit of an item, tracked by its own number."
+msgstr "Una unidad individual de un artículo, identificada por su propio número."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/operation/operation.json)
+msgid "A step in making an item, like cutting or assembly."
+msgstr "Un paso en la fabricación de un artículo, como el corte o el montaje."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/crm/doctype/sales_stage/sales_stage.json)
+msgid "A step in your sales process, like qualification or negotiation."
+msgstr "Una etapa de su proceso de venta, como la cualificación o la negociación."
+
+#. Falta en erpnext/locale/es.po (erpnext/setup/doctype/uom/uom.json)
+msgid "A unit you measure items in, like kg or box."
+msgstr "Una unidad en la que mide los artículos, como kg o caja."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard_variable/supplier_scorecard_variable.json)
+msgid "A value a scorecard criterion is calculated from."
+msgstr "Un valor a partir del cual se calcula un criterio de la evaluación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_trip/delivery_trip.json)
+msgid "A vehicle's route to deliver to several customers."
+msgstr "La ruta de un vehículo para entregar a varios clientes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/plant_floor/plant_floor.json)
+msgid "A view of your workstations and what each is doing."
+msgstr "Una vista de sus puestos de trabajo y lo que hace cada uno."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_visit/maintenance_visit.json)
+msgid "A visit to service or repair what a customer bought."
+msgstr "Una visita para revisar o reparar lo que compró un cliente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/mode_of_payment/mode_of_payment.json)
+msgid "A way you pay or get paid, like cash, bank transfer or card."
+msgstr "Una forma de pagar o cobrar, como efectivo, transferencia o tarjeta."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.py)
+#, python-brace-format
+msgid "A {0} cannot be made from a {1} Blanket Order"
+msgstr "No se puede crear un {0} a partir de un pedido abierto de {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/period_closing_voucher/period_closing_voucher.json)
+msgid "Accepted Stock Value Difference"
+msgstr "Diferencia del valor de existencias aceptado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/sales_partner_transaction_summary/sales_partner_transaction_summary.js)
+msgid "Account for Return Entries"
+msgstr "Cuenta para los asientos de devolución"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_account/bank_account.py)
+#, python-brace-format
+msgid "Account {0} must be a non-group account of type Bank"
+msgstr "La cuenta {0} debe ser una cuenta de detalle de tipo Banco"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Account {0} must be a non-group account of type Stock"
+msgstr "La cuenta {0} debe ser una cuenta de detalle de tipo Existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry_type/stock_entry_type.py)
+#, python-brace-format
+msgid "Add to Transit cannot be enabled on the standard Stock Entry Type {0}. Create a separate Stock Entry Type for transit transfers."
+msgstr "No se puede activar «Añadir a tránsito» en el tipo de movimiento de existencias estándar {0}. Cree un tipo de movimiento aparte para los traspasos en tránsito."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pricing_rule/utils.py)
+#, python-brace-format
+msgid "Additional Discount has been removed as Pricing Rule {0} is no longer applicable"
+msgstr "Se ha quitado el descuento adicional porque la regla de precios {0} ya no es aplicable"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_invoice_item/pos_invoice_item.json)
+msgid "Additional Discount per Stock Unit"
+msgstr "Descuento adicional por unidad de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/landed_cost_voucher/landed_cost_voucher.json)
+msgid "Adds freight, duty and other charges to the cost of received items."
+msgstr "Añade fletes, aranceles y otros gastos al coste de los artículos recibidos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "Adjusted By"
+msgstr "Ajustado por"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Adjustment Date"
+msgstr "Fecha del ajuste"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reconciliation/stock_reconciliation.json)
+msgid "Adjustment Entry"
+msgstr "Asiento de ajuste"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Adjustment Time"
+msgstr "Hora del ajuste"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/report/asset_depreciations_and_balances/asset_depreciations_and_balances.py)
+msgid "Adjustment during the period"
+msgstr "Ajuste durante el periodo"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+#, python-brace-format
+msgid "After the adjustment, Item {0} in Warehouse {1} would hold a qty of {2} worth {3}, instead of {4} worth {5}."
+msgstr "Tras el ajuste, el artículo {0} en el almacén {1} tendría una cantidad de {2} con un valor de {3}, en lugar de {4} con un valor de {5}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "All Differences"
+msgstr "Todas las diferencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "All Entries"
+msgstr "Todos los asientos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.js)
+msgid "All Stock Ledger Entries and Serial and Batch Bundles of the selected vouchers will be cancelled and reposting will be queued. Continue?"
+msgstr "Se cancelarán todos los movimientos del libro de existencias y los lotes de serie y lote de los comprobantes seleccionados, y se pondrá en cola su reprocesamiento. ¿Desea continuar?"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_note/delivery_note.py)
+msgid "All items have already been delivered"
+msgstr "Ya se han entregado todos los artículos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.json)
+msgid "An agreement to buy or sell an item at a fixed price over a period."
+msgstr "Un acuerdo para comprar o vender un artículo a precio fijo durante un periodo."
+
+#. Falta en erpnext/locale/es.po (erpnext/crm/doctype/contract/contract.json)
+msgid "An agreement with a customer, supplier or employee."
+msgstr "Un acuerdo con un cliente, proveedor o empleado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/accounting_dimension/accounting_dimension.json)
+msgid "An extra way to tag entries, like branch or region, beyond cost centers."
+msgstr "Una forma adicional de etiquetar los asientos, como sucursal o región, además de los centros de coste."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/inventory_dimension/inventory_dimension.json)
+msgid "An extra way to tag stock, like a rack or bin."
+msgstr "Una forma adicional de etiquetar las existencias, como una estantería o un hueco."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/item_alternative/item_alternative.json)
+msgid "An item you can use in place of another."
+msgstr "Un artículo que puede usar en lugar de otro."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.json)
+msgid "An order for a subcontractor to make items from your materials."
+msgstr "Una orden a un subcontratista para fabricar artículos con sus materiales."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order/work_order.json)
+msgid "An order to make a quantity of an item."
+msgstr "Una orden para fabricar una cantidad de un artículo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_inward_order/subcontracting_inward_order.json)
+msgid "An order to make items for a customer from materials they send."
+msgstr "Una orden para fabricar artículos para un cliente con los materiales que envía."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/purchase_order/purchase_order.json)
+msgid "An order you place with a supplier."
+msgstr "Un pedido que hace a un proveedor."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/tax_rule/tax_rule.json)
+msgid "Applies a tax template automatically when its conditions match."
+msgstr "Aplica automáticamente una plantilla de impuestos cuando se cumplen sus condiciones."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_request/payment_request.json)
+msgid "Ask a customer to pay, by email with a payment link."
+msgstr "Pida a un cliente que pague, por correo con un enlace de pago."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/request_for_quotation/request_for_quotation.json)
+msgid "Ask suppliers for prices on the items you need."
+msgstr "Pida precios a los proveedores de los artículos que necesita."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/report/sales_partners_commission/sales_partners_commission.py)
+msgid "Average Commission Rate"
+msgstr "Comisión media"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_update_log/bom_update_log.py)
+#, python-brace-format
+msgid "BOM {0} is the BOM of an operation in {1}, which track semi-finished goods. Amend those BOMs to use the new BOM so their operation materials are fetched again."
+msgstr "La lista de materiales {0} es la de una operación de {1}, que sigue productos semiterminados. Modifique esas listas de materiales para que usen la nueva y se vuelvan a obtener los materiales de sus operaciones."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_bom/subcontracting_bom.py)
+#, python-brace-format
+msgid "BOM {0} must be active and submitted."
+msgstr "La lista de materiales {0} debe estar activa y validada."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+msgid "Backdated Entry Before Adjustment Entry"
+msgstr "Asiento con fecha anterior al asiento de ajuste"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_request/payment_request.py)
+#, python-brace-format
+msgid "Bank Account {0} does not belong to Company {1}"
+msgstr "La cuenta bancaria {0} no pertenece a la empresa {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_request/payment_request.py)
+#, python-brace-format
+msgid "Bank Account {0} does not belong to {1} {2}"
+msgstr "La cuenta bancaria {0} no pertenece a {1} {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_order/payment_order.py)
+#, python-brace-format
+msgid "Bank Account {0} is missing or disabled"
+msgstr "La cuenta bancaria {0} no existe o está desactivada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_order/payment_order.py)
+#, python-brace-format
+msgid "Bank Account {0} must be a company account belonging to {1}"
+msgstr "La cuenta bancaria {0} debe ser una cuenta de la empresa {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order/work_order.py)
+msgid "Batch Size cannot be negative."
+msgstr "El tamaño del lote no puede ser negativo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/item_price/item_price.py)
+#, python-brace-format
+msgid "Batch {0} does not belong to Item {1}"
+msgstr "El lote {0} no pertenece al artículo {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/subscription/subscription.json)
+msgid "Bills a customer or supplier for the same things on a schedule."
+msgstr "Factura a un cliente o proveedor los mismos conceptos según un calendario."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.py)
+#, python-brace-format
+msgid "Blanket Order {0} is a {1} order and cannot be used on a {2}"
+msgstr "El pedido abierto {0} es un pedido de {1} y no se puede usar en un {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.py)
+#, python-brace-format
+msgid "Blanket Order {0} is for {1}, not {2}"
+msgstr "El pedido abierto {0} es para {1}, no para {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.py)
+#, python-brace-format
+msgid "Blanket Order {0} is in {1}, not {2}"
+msgstr "El pedido abierto {0} está en {1}, no en {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/process_deferred_accounting/process_deferred_accounting.json)
+msgid "Books deferred revenue or expense for a period."
+msgstr "Contabiliza ingresos o gastos diferidos de un periodo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger/stock_ledger.js)
+msgid "Brands"
+msgstr "Marcas"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/bank_statement_import/bank_statement_import.json)
+msgid "Bring in a bank statement to match its lines against your books."
+msgstr "Importe un extracto bancario para casar sus líneas con su contabilidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/chart_of_accounts_importer/chart_of_accounts_importer.json)
+msgid "Bring in your chart of accounts from a spreadsheet."
+msgstr "Importe su plan de cuentas desde una hoja de cálculo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_creator/bom_creator.json)
+msgid "Build a multi-level BOM in one place."
+msgstr "Construya una lista de materiales de varios niveles en un solo lugar."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "C - D"
+msgstr "C - D"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/telephony/doctype/call_log/call_log.py)
+#, python-brace-format
+msgid "Call Type {0} is not submitted."
+msgstr "El tipo de llamada {0} no está validado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_visit/maintenance_visit.py)
+#, python-brace-format
+msgid "Cancel Maintenance Visits {0} before cancelling this Maintenance Visit"
+msgstr "Cancele las visitas de mantenimiento {0} antes de cancelar esta visita de mantenimiento"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.js)
+msgid "Cancel Stock Ledger Entries"
+msgstr "Cancelar movimientos del libro de existencias"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+msgid "Cancelled transactions cannot be deleted when Immutable Ledger is enabled."
+msgstr "Las transacciones canceladas no se pueden borrar con el libro inalterable activado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_receipt/subcontracting_receipt.py)
+msgid "Cannot Combine Orders"
+msgstr "No se pueden combinar los pedidos"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "Cannot activate BOM {0} because sub-assembly BOMs {1} are not active"
+msgstr "No se puede activar la lista de materiales {0} porque las listas de submontaje {1} no están activas"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+#, python-brace-format
+msgid "Cannot add an open task under completed Parent Task {0}."
+msgstr "No se puede añadir una tarea abierta bajo la tarea principal completada {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/lower_deduction_certificate/lower_deduction_certificate.py)
+#, python-brace-format
+msgid "Cannot change {0} of a certificate that is used in Tax Withholding Entries"
+msgstr "No se puede cambiar {0} de un certificado que se usa en movimientos de retención"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+#, python-brace-format
+msgid "Cannot create Intercompany {0}. All items in the source {1} have already been fully ordered. Please check the existing linked {2}s."
+msgstr "No se puede crear {0} entre empresas del grupo. Todos los artículos del {1} de origen ya se han pedido por completo. Revise los {2} vinculados existentes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.py)
+#, python-brace-format
+msgid "Cannot create a Subcontracting Order against Purchase Order {0} because it is {1}."
+msgstr "No se puede crear una orden de subcontratación para el pedido de compra {0} porque está {1}."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Cannot create recurring document: no exchange rate found for {0} to {1} on {2}. Please create a Currency Exchange record."
+msgstr "No se puede crear el documento periódico: no hay tipo de cambio de {0} a {1} para el {2}. Cree un registro de tipo de cambio."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/lower_deduction_certificate/lower_deduction_certificate.py)
+msgid "Cannot delete a certificate that is used in Tax Withholding Entries"
+msgstr "No se puede borrar un certificado que se usa en movimientos de retención"
+
+#. Falta en erpnext/locale/es.po (erpnext/public/js/utils/barcode_scanner.js)
+#, python-brace-format
+msgid "Cannot find {0} for Item {1}"
+msgstr "No se encuentra {0} para el artículo {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.py)
+#, python-brace-format
+msgid "Cannot generate the closing balance of Stock Closing Entry {0} while Repost Item Valuation entries dated on or before {1} are pending. Try again once they are completed."
+msgstr "No se puede generar el saldo de cierre del cierre de existencias {0} mientras haya revaloraciones de artículos pendientes con fecha igual o anterior al {1}. Vuelva a intentarlo cuando terminen."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/timesheet/timesheet.py)
+#, python-brace-format
+msgid "Cannot log time against cancelled Tasks: {0}"
+msgstr "No se puede imputar tiempo a tareas canceladas: {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+#, python-brace-format
+msgid "Cannot plan {0} {1} of Item {2} against Sales Order {3}. Only {4} {1} is left to plan."
+msgstr "No se pueden planificar {0} {1} del artículo {2} para el pedido de venta {3}. Solo quedan {4} {1} por planificar."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.py)
+#, python-brace-format
+msgid "Cannot regenerate Stock Closing Entry {0} because the later Stock Closing Entry {1} is built on it. Cancel {1} first."
+msgstr "No se puede regenerar el cierre de existencias {0} porque el cierre posterior {1} se basa en él. Cancele primero {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/repost_item_valuation/repost_item_valuation.py)
+#, python-brace-format
+msgid "Cannot repost item valuation from {0} because {1} {2} falls in the closed Accounting Period {3}"
+msgstr "No se puede revalorar el artículo desde {0} porque {1} {2} está en el periodo contable cerrado {3}"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/project/project.py)
+msgid "Cannot set Project to Completed"
+msgstr "No se puede marcar el proyecto como completado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/purchase_order/purchase_order.py)
+#, python-brace-format
+msgid "Cannot set the status of a Purchase Order to {0}."
+msgstr "No se puede poner el estado de un pedido de compra en {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.py)
+#, python-brace-format
+msgid "Cannot set the status of a Subcontracting Order to {0}."
+msgstr "No se puede poner el estado de una orden de subcontratación en {0}."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Cannot update items of Purchase Order {0} because it is {1}."
+msgstr "No se pueden actualizar los artículos del pedido de compra {0} porque está {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/lower_deduction_certificate/lower_deduction_certificate.py)
+msgid "Certificate Limit must be greater than 0"
+msgstr "El límite del certificado debe ser mayor que 0"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pricing_rule/pricing_rule.json)
+msgid "Changes a price or gives a discount when its conditions are met."
+msgstr "Cambia un precio o aplica un descuento cuando se cumplen sus condiciones."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_value_adjustment/asset_value_adjustment.json)
+msgid "Changes an asset's value outside its depreciation."
+msgstr "Cambia el valor de un activo al margen de su amortización."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_shift_allocation/asset_shift_allocation.json)
+msgid "Changes how many shifts an asset works, which changes its depreciation."
+msgstr "Cambia cuántos turnos trabaja un activo, lo que cambia su amortización."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/warranty_claim/warranty_claim.py)
+msgid "Check Serial No"
+msgstr "Comprobar número de serie"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection/quality_inspection.json)
+msgid "Checks an item against its quality parameters."
+msgstr "Comprueba un artículo frente a sus parámetros de calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/landed_cost_voucher/landed_cost_voucher.py)
+#, python-brace-format
+msgid "Claimed amount {0} for Vendor Invoice {1} exceeds its unclaimed amount {2}"
+msgstr "El importe reclamado {0} de la factura de proveedor {1} supera su importe pendiente de reclamar {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_closing_entry/pos_closing_entry.json)
+msgid "Closes a POS shift and totals what was collected."
+msgstr "Cierra un turno del punto de venta y totaliza lo cobrado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/period_closing_voucher/period_closing_voucher.json)
+msgid "Closes a fiscal year by moving its profit or loss to equity."
+msgstr "Cierra un ejercicio fiscal llevando su resultado al patrimonio neto."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.json)
+msgid "Closes stock balances for a period so reports run faster."
+msgstr "Cierra los saldos de existencias de un periodo para que los informes sean más rápidos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/ledger_merge/ledger_merge.json)
+msgid "Combine two or more accounts into one."
+msgstr "Fusionar dos o más cuentas en una."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Company cannot be changed for Warehouse {0} as it has child warehouses"
+msgstr "No se puede cambiar la empresa del almacén {0} porque tiene almacenes dependientes"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Company cannot be changed for Warehouse {0} as it has stock transactions"
+msgstr "No se puede cambiar la empresa del almacén {0} porque tiene movimientos de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/cost_center/cost_center.py)
+msgid "Company cannot be changed for an existing Cost Center"
+msgstr "No se puede cambiar la empresa de un centro de coste existente"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/south_africa_vat_settings/south_africa_vat_settings.py)
+#, python-brace-format
+msgid "Company cannot be changed, create South Africa VAT Settings for {0} instead"
+msgstr "No se puede cambiar la empresa; cree en su lugar la configuración del IVA de Sudáfrica para {0}"
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/utils.py)
+#, python-brace-format
+msgid "Company {0} does not exist or has no abbreviation"
+msgstr "La empresa {0} no existe o no tiene abreviatura"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_request/payment_request.py)
+#, python-brace-format
+msgid "Company {0} does not match the company {1} of {2} {3}"
+msgstr "La empresa {0} no coincide con la empresa {1} de {2} {3}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/uae_vat_settings/uae_vat_settings.py)
+#, python-brace-format
+msgid "Company {0} is not in United Arab Emirates."
+msgstr "La empresa {0} no está en los Emiratos Árabes Unidos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "Continue to Transfer"
+msgstr "Continuar con el traspaso"
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+msgid "Conversion Rate must be greater than zero."
+msgstr "El factor de conversión debe ser mayor que cero."
+
+#. Falta en erpnext/locale/es.po (erpnext/utilities/bulk_transaction.py)
+msgid "Could not be created from:"
+msgstr "No se pudo crear a partir de:"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Currency must be {0} to match {1} {2}"
+msgstr "La moneda debe ser {0} para coincidir con {1} {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/price_list/price_list.py)
+#, python-brace-format
+msgid "Currency of Price List {0} cannot be changed because it has {1} Item Prices in {2}. Create a new Price List for {3} instead."
+msgstr "No se puede cambiar la moneda de la lista de precios {0} porque tiene {1} precios de artículos en {2}. Cree en su lugar una lista de precios nueva para {3}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/opening_invoice_creation_tool_item/opening_invoice_creation_tool_item.json)
+msgid "Currency of the outstanding amount. Defaults to the Company currency."
+msgstr "Moneda del importe pendiente. Por defecto, la moneda de la empresa."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_update_log/bom_update_log.py)
+msgid "Current BOM and New BOM must have the same company and currency"
+msgstr "La lista de materiales actual y la nueva deben tener la misma empresa y moneda"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_visit/maintenance_visit.py)
+#, python-brace-format
+msgid "Customer {0} does not match the customer of Maintenance Schedule {1}"
+msgstr "El cliente {0} no coincide con el cliente del programa de mantenimiento {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_trip/delivery_trip.py)
+msgid "Customers can be notified only for a submitted Delivery Trip"
+msgstr "Solo se puede avisar a los clientes de una ruta de entrega validada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "Days Since Last {0}"
+msgstr "Días desde el último {0}"
+
+#. Falta en erpnext/locale/es.po (erpnext/edi/doctype/code_list/code_list.py)
+#, python-brace-format
+msgid "Default Common Code {0} does not belong to Code List {1}"
+msgstr "El código común predeterminado {0} no pertenece a la lista de códigos {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Default In-Transit Warehouse {0} must be a Transit ledger warehouse of Company {1}"
+msgstr "El almacén de tránsito predeterminado {0} debe ser un almacén de tránsito de la empresa {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/price_list/price_list.py)
+#, python-brace-format
+msgid "Default Price List {0} is not applicable for {1}"
+msgstr "La lista de precios predeterminada {0} no es aplicable a {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Defaults to the company's Stock Adjustment Account"
+msgstr "Por defecto, la cuenta de ajustes de existencias de la empresa"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/transaction_deletion_record/transaction_deletion_record.json)
+msgid "Deletes a company's transactions, keeping its masters."
+msgstr "Borra las transacciones de una empresa y conserva sus datos maestros."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_note/delivery_note.py)
+#, python-brace-format
+msgid "Delivery Note {0} is cancelled"
+msgstr "El albarán {0} está cancelado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+#, python-brace-format
+msgid "Delivery Note {0} is closed and cannot be invoiced"
+msgstr "El albarán {0} está cerrado y no se puede facturar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_trip/delivery_trip.py)
+#, python-brace-format
+msgid "Delivery Notes are already on another Delivery Trip: {0}"
+msgstr "Los albaranes ya están en otra ruta de entrega: {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_trip/delivery_trip.py)
+#, python-brace-format
+msgid "Delivery Notes {0} do not belong to Company {1}"
+msgstr "Los albaranes {0} no pertenecen a la empresa {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reconciliation/stock_reconciliation.py)
+#, python-brace-format
+msgid "Difference Account {0} cannot be a Stock account"
+msgstr "La cuenta de diferencias {0} no puede ser una cuenta de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/period_closing_voucher/period_closing_voucher.json)
+msgid "Difference between the Stock Asset accounts balance and the Stock Balance value accepted while submitting"
+msgstr "Diferencia aceptada al validar entre el saldo de las cuentas de existencias y el valor del saldo de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.py)
+msgid "Different Customer"
+msgstr "Cliente distinto"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pricing_rule/utils.py)
+msgid "Discount Removed"
+msgstr "Descuento eliminado"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+msgid "Discounts Cannot Be Combined"
+msgstr "Los descuentos no se pueden combinar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_settings/delivery_settings.py)
+#, python-brace-format
+msgid "Dispatch Attachment {0} must be a Print Format for Delivery Note"
+msgstr "El adjunto de envío {0} debe ser un formato de impresión de albarán"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Do you want to continue?"
+msgstr "¿Desea continuar?"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/downtime_entry/downtime_entry.py)
+#, python-brace-format
+msgid "Downtime overlaps with {0} for workstation {1}"
+msgstr "La parada se solapa con {0} en el puesto de trabajo {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "E - F"
+msgstr "E - F"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.json)
+msgid "Each operation produces its own output item and puts it in stock, for example Cut Sheet, then Painted Sheet, then the final Box."
+msgstr "Cada operación produce su propio artículo y lo pone en existencias; por ejemplo, chapa cortada, luego chapa pintada y, por último, la caja."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/process_statement_of_accounts/process_statement_of_accounts.json)
+msgid "Emails customers their statements on a schedule."
+msgstr "Envía por correo a los clientes sus extractos según un calendario."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.py)
+msgid "Enable Automatically Create New Batch when entering Opening Stock for a batched item."
+msgstr "Active «Crear lote nuevo automáticamente» al registrar existencias iniciales de un artículo con lotes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.py)
+#, python-brace-format
+msgid "Every day from {0} to {1} is a holiday for Sales Person {2}."
+msgstr "Todos los días del {0} al {1} son festivos para el vendedor {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection/quality_inspection.py)
+#, python-brace-format
+msgid "Every row of Item {0} in {1} {2} already has a Quality Inspection"
+msgstr "Todas las filas del artículo {0} en {1} {2} ya tienen una inspección de calidad"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+msgid "Excess Return"
+msgstr "Devolución en exceso"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+msgid "Exchange Rate Not Found"
+msgstr "No se encuentra el tipo de cambio"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "Expected Value Based On"
+msgstr "Valor esperado basado en"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_feedback/quality_feedback.json)
+msgid "Feedback on your quality from a customer or employee."
+msgstr "Opinión de un cliente o empleado sobre su calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+msgid "Finished Good Quantity Exceeded"
+msgstr "Se ha superado la cantidad de producto terminado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "First Difference per Item-Warehouse"
+msgstr "Primera diferencia por artículo y almacén"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Fix Differences"
+msgstr "Corregir diferencias"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+msgid "Fix These Steps"
+msgstr "Corrija estos pasos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+#, python-brace-format
+msgid "For Warehouse {0} must be a non-group warehouse under {1}."
+msgstr "Para el almacén, {0} debe ser un almacén de detalle bajo {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "G - H"
+msgstr "G - H"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/account_category/account_category.json)
+msgid "Groups accounts into the lines your financial statements show."
+msgstr "Agrupa las cuentas en las líneas que muestran sus estados financieros."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_category/asset_category.json)
+msgid "Groups assets that share accounts and depreciation rules."
+msgstr "Agrupa los activos que comparten cuentas y reglas de amortización."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/customer_group/customer_group.json)
+msgid "Groups customers, for pricing and reporting."
+msgstr "Agrupa los clientes, para precios e informes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/item_group/item_group.json)
+msgid "Groups items, for pricing, defaults and reporting."
+msgstr "Agrupa los artículos, para precios, valores por defecto e informes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/supplier_group/supplier_group.json)
+msgid "Groups suppliers, for terms and reporting."
+msgstr "Agrupa los proveedores, para condiciones e informes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/service_level_agreement/service_level_agreement.json)
+msgid "How fast issues must be answered and resolved."
+msgstr "En cuánto tiempo hay que responder y resolver las incidencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_settings/stock_settings.json)
+msgid "How items, warehouses and stock transactions work."
+msgstr "Cómo funcionan los artículos, los almacenes y los movimientos de existencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/crm/doctype/crm_settings/crm_settings.json)
+msgid "How leads, opportunities and appointments work."
+msgstr "Cómo funcionan los contactos potenciales, las oportunidades y las citas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/item_lead_time/item_lead_time.json)
+msgid "How long it takes to get or make an item."
+msgstr "Cuánto se tarda en conseguir o fabricar un artículo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/uom_conversion_factor/uom_conversion_factor.json)
+msgid "How many of one unit make another, like 1000 g in a kg."
+msgstr "Cuántas unidades de una forman otra, como 1000 g en un kg."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/budget/budget.json)
+msgid "How much a cost center or project may spend over a fiscal year."
+msgstr "Cuánto puede gastar un centro de coste o un proyecto en un ejercicio fiscal."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_shift_factor/asset_shift_factor.json)
+msgid "How much faster an asset depreciates on a given shift."
+msgstr "Cuánto más rápido se amortiza un activo en un turno determinado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/master_production_schedule/master_production_schedule.json)
+msgid "How much of each item to make, and when."
+msgstr "Cuánto fabricar de cada artículo y cuándo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/sales_forecast/sales_forecast.json)
+msgid "How much you expect to sell, to plan production."
+msgstr "Cuánto espera vender, para planificar la producción."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/selling_settings/selling_settings.json)
+msgid "How quotations, sales orders and pricing work."
+msgstr "Cómo funcionan los presupuestos, los pedidos de venta y los precios."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/issue_priority/issue_priority.json)
+msgid "How urgent an issue is."
+msgstr "Lo urgente que es una incidencia."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Ignore Differences Below"
+msgstr "Ignorar diferencias inferiores a"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+msgid "Immutable Ledger Enabled"
+msgstr "Libro inalterable activado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_request/payment_request.py)
+msgid "Invalid Company"
+msgstr "Empresa no válida"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/sales_order/sales_order.py)
+msgid "Invalid Item Selection"
+msgstr "Selección de artículo no válida"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+msgid "Invalid Parent Task"
+msgstr "Tarea principal no válida"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+msgid "Invalid Project"
+msgstr "Proyecto no válido"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+msgid "Invalid UOM"
+msgstr "Unidad de medida no válida"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/dashboard/item_dashboard.py)
+msgid "Invalid sort order"
+msgstr "Orden de clasificación no válido"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/inventory_dimension/inventory_dimension.py)
+#, python-brace-format
+msgid "Inventory Dimension {0} cannot be deleted as stock transactions exist against it"
+msgstr "No se puede borrar la dimensión de inventario {0} porque tiene movimientos de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/report/sales_partners_commission/sales_partners_commission.py)
+msgid "Invoiced Amount (Excl. Tax)"
+msgstr "Importe facturado (sin impuestos)"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "It has no stock transactions by then."
+msgstr "No tiene movimientos de existencias hasta esa fecha."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+#, python-brace-format
+msgid "Item {0} in Warehouse {1} cannot be adjusted on {2}: {3}"
+msgstr "El artículo {0} del almacén {1} no se puede ajustar el {2}: {3}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+#, python-brace-format
+msgid "Item {0} in Warehouse {1} was adjusted by {2} on {3}, so no stock transaction dated before it can be posted or cancelled. Post it on or after that date, or cancel the Adjustment Entry first."
+msgstr "El artículo {0} del almacén {1} se ajustó en {2} el {3}, así que no se puede contabilizar ni cancelar ningún movimiento de existencias con fecha anterior. Contabilícelo en esa fecha o después, o cancele primero el asiento de ajuste."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Item {0} is missing from this disassembly. Get the items again."
+msgstr "Falta el artículo {0} en este desmontaje. Vuelva a obtener los artículos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reservation_entry/stock_reservation_entry.py)
+#, python-brace-format
+msgid "Item {0} is not a row of {1} {2}."
+msgstr "El artículo {0} no es una fila de {1} {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/putaway_rule/putaway_rule.py)
+#, python-brace-format
+msgid "Item {0} is not a stock item."
+msgstr "El artículo {0} no es un artículo de existencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Item {0} is not part of the BOM {1} and cannot be added to this disassembly."
+msgstr "El artículo {0} no forma parte de la lista de materiales {1} y no se puede añadir a este desmontaje."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Item {0} quantity ({1} in stock UOM) does not match the BOM quantity {2}."
+msgstr "La cantidad del artículo {0} ({1} en la unidad de existencias) no coincide con la cantidad de la lista de materiales {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Item {0}: cannot return {1} to the store, Work Order {2} has only {3} of it left unconsumed."
+msgstr "Artículo {0}: no se pueden devolver {1} al almacén; a la orden de fabricación {2} solo le quedan {3} sin consumir."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_receipt/subcontracting_receipt.json)
+msgid "Items received from a subcontractor."
+msgstr "Artículos recibidos de un subcontratista."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/purchase_receipt/purchase_receipt.json)
+msgid "Items received from a supplier."
+msgstr "Artículos recibidos de un proveedor."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_note/delivery_note.json)
+msgid "Items shipped to a customer."
+msgstr "Artículos enviados a un cliente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.py)
+#, python-brace-format
+msgid "Items {0} are not Customer Provided Items"
+msgstr "Los artículos {0} no son artículos suministrados por el cliente"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+#, python-brace-format
+msgid "Its difference on {0} is not before the adjustment date."
+msgstr "Su diferencia del {0} no es anterior a la fecha del ajuste."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+msgid "Its stock qty and value are already right on this date."
+msgstr "Su cantidad y valor de existencias ya son correctos en esta fecha."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+msgid "Its stock should be negative on this date, which cannot be counted in."
+msgstr "Sus existencias deberían ser negativas en esta fecha, y eso no se puede recontar."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+msgid "Job Card Required"
+msgstr "Se requiere tarjeta de trabajo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Job Card {0} has no completed quantity yet. Click Start Job when the work begins, then click Complete Job and enter the quantity made. After that you can submit it."
+msgstr "La tarjeta de trabajo {0} aún no tiene cantidad completada. Pulse «Iniciar trabajo» al empezar y, después, «Completar trabajo» e introduzca la cantidad fabricada. Entonces podrá validarla."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/workstation/workstation.py)
+#, python-brace-format
+msgid "Job Card {0} is not for workstation {1}"
+msgstr "La tarjeta de trabajo {0} no es del puesto de trabajo {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/workstation/workstation.py)
+#, python-brace-format
+msgid "Job Card {0} is not open"
+msgstr "La tarjeta de trabajo {0} no está abierta"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+msgid "Job Not Done Yet"
+msgstr "El trabajo aún no está hecho"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.js)
+msgid "Last Step"
+msgstr "Último paso"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/utilities/doctype/video_settings/video_settings.json)
+msgid "Last YouTube Update"
+msgstr "Última actualización de YouTube"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "Last {0} Amount"
+msgstr "Importe del último {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "Last {0} Date"
+msgstr "Fecha del último {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Make Adjustment Entry"
+msgstr "Crear asiento de ajuste"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.js)
+msgid "Makes"
+msgstr "Fabrica"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order/work_order.py)
+#, python-brace-format
+msgid "Manufactured Qty ({0}) cannot be less than the Disassembled Qty ({1}) of Work Order {2}. Cancel the disassembly first."
+msgstr "La cantidad fabricada ({0}) no puede ser menor que la cantidad desmontada ({1}) de la orden de fabricación {2}. Cancele primero el desmontaje."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/process_payment_reconciliation/process_payment_reconciliation.json)
+msgid "Matches payments to invoices in the background."
+msgstr "Casa pagos con facturas en segundo plano."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.py)
+#, python-brace-format
+msgid "Material Request {0} is stopped"
+msgstr "La solicitud de material {0} está detenida"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/accounts_settings/accounts_settings.json)
+msgid "Merge rows with the same account head in the ledger for Journal Entries and Payment Entries only."
+msgstr "Agrupar en el libro mayor las filas con la misma cuenta, solo para asientos y registros de pago."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+msgid "Missing Disassembly Item"
+msgstr "Falta un artículo del desmontaje"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/mode_of_payment/mode_of_payment.py)
+#, python-brace-format
+msgid "Mode of Payment {0} is disabled."
+msgstr "La forma de pago {0} está desactivada."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_entry/payment_entry.json)
+msgid "Money you received or paid, matched against invoices."
+msgstr "Dinero cobrado o pagado, casado con facturas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "Move Materials"
+msgstr "Mover materiales"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Move the raw materials to the Work In Progress warehouse {0} first. Click Move Materials on Job Card {1} and submit the Stock Entry it opens. Then click Start Job."
+msgstr "Mueva primero las materias primas al almacén de trabajo en curso {0}. Pulse «Mover materiales» en la tarjeta de trabajo {1} y valide el movimiento de existencias que se abre. Después pulse «Iniciar trabajo»."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_movement/asset_movement.json)
+msgid "Moves an asset to another location or person."
+msgstr "Traslada un activo a otra ubicación o persona."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.json)
+msgid "Moves, receives, issues or manufactures stock."
+msgstr "Traslada, recibe, entrega o fabrica existencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/opening_invoice_creation_tool/opening_invoice_creation_tool.py)
+#, python-brace-format
+msgid "Multiple {0} records match {1}. Please select the Party ID."
+msgstr "Varios registros de {0} coinciden con {1}. Seleccione el identificador del tercero."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/opening_invoice_creation_tool_item/opening_invoice_creation_tool_item.json)
+msgid "Must be positive. If the unit rate would change the opening amount through rounding, the invoice uses quantity 1 and records this quantity in the description."
+msgstr "Debe ser positiva. Si el precio unitario alterase el importe de apertura por redondeo, la factura usa cantidad 1 y anota esta cantidad en la descripción."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_update_log/bom_update_log.py)
+#, python-brace-format
+msgid "New BOM {0} must be submitted and active"
+msgstr "La nueva lista de materiales {0} debe estar validada y activa"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_note/delivery_note.py)
+msgid "No Credit Note was created because the returned items were not invoiced"
+msgstr "No se ha creado ninguna factura rectificativa porque los artículos devueltos no se habían facturado"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/trends.py)
+msgid "No Customer Group"
+msgstr "Sin grupo de clientes"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.py)
+#, python-brace-format
+msgid "No active Subcontracting BOM found for Finished Good {0}. Please select the Service Item manually for these rows."
+msgstr "No hay ninguna lista de materiales de subcontratación activa para el producto terminado {0}. Seleccione a mano el artículo de servicio de estas filas."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.js)
+msgid "No raw materials"
+msgstr "Sin materias primas"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "Not Enough Stock"
+msgstr "No hay existencias suficientes"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_trip/delivery_trip.py)
+#, python-brace-format
+msgid "Not permitted to view Contact {0}"
+msgstr "No tiene permiso para ver el contacto {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/sales_forecast/sales_forecast.py)
+msgid "Number of periods must be greater than zero"
+msgstr "El número de periodos debe ser mayor que cero"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "Number of {0}s"
+msgstr "Número de {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/item_attribute/item_attribute.py)
+#, python-brace-format
+msgid "Numeric Values cannot be changed for Attribute {0} as it is used in variants"
+msgstr "No se pueden cambiar los valores numéricos del atributo {0} porque se usa en variantes"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_note/delivery_note.py)
+msgid "Only a submitted Delivery Note can be closed or reopened"
+msgstr "Solo se puede cerrar o reabrir un albarán validado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/purchase_order/purchase_order.py)
+msgid "Only a submitted Purchase Order can be held, closed or re-opened."
+msgstr "Solo se puede retener, cerrar o reabrir un pedido de compra validado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/purchase_receipt/purchase_receipt.py)
+msgid "Only a submitted Purchase Receipt can be closed or reopened"
+msgstr "Solo se puede cerrar o reabrir un albarán de compra validado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/repost_item_valuation/repost_item_valuation.py)
+msgid "Only a submitted Repost Item Valuation with status Failed can be restarted"
+msgstr "Solo se puede reiniciar una revaloración de artículos validada con estado Fallido"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_inward_order/subcontracting_inward_order.py)
+msgid "Only a submitted Subcontracting Inward Order can be closed or re-opened."
+msgstr "Solo se puede cerrar o reabrir una orden de subcontratación recibida validada."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.py)
+msgid "Only a submitted Subcontracting Order can be closed or re-opened."
+msgstr "Solo se puede cerrar o reabrir una orden de subcontratación validada."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order/work_order.py)
+msgid "Only a submitted Work Order can be closed, stopped or resumed"
+msgstr "Solo se puede cerrar, detener o reanudar una orden de fabricación validada"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "Only one step can be the Last Step, but it is ticked on steps {0}."
+msgstr "Solo un paso puede ser el último, pero está marcado en los pasos {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/sales_forecast/sales_forecast.py)
+#, python-brace-format
+msgid "Only stock items can be forecast: {0}"
+msgstr "Solo se pueden prever artículos de existencias: {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/repost_item_valuation/repost_item_valuation.json)
+msgid "Only works for Purchase Receipt, Purchase Invoice with Update Stock and Stock Entry with no row that has both a Source and Target Warehouse"
+msgstr "Solo funciona con albaranes de compra, facturas de compra con «Actualizar existencias» y movimientos de existencias sin ninguna fila que tenga almacén de origen y de destino a la vez"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_opening_entry/pos_opening_entry.json)
+msgid "Opens a POS shift with the cash in the drawer."
+msgstr "Abre un turno del punto de venta con el efectivo de la caja."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Operation {0} has already completed {1}, more than the {2} that operation {3} would have. Cancel the Job Cards of operation {0} first."
+msgstr "La operación {0} ya ha completado {1}, más de los {2} que tendría la operación {3}. Cancele primero las tarjetas de trabajo de la operación {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/opening_invoice_creation_tool/opening_invoice_creation_tool.py)
+#, python-brace-format
+msgid "Original Quantity: {0}"
+msgstr "Cantidad original: {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_operation/bom_operation.json)
+msgid "Output Item"
+msgstr "Artículo resultante"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_operation/bom_operation.json)
+msgid "Output Item BOM"
+msgstr "Lista de materiales del artículo resultante"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.js)
+msgid "Output Item not set"
+msgstr "No se ha indicado el artículo resultante"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_operation/bom_operation.json)
+msgid "Output Qty"
+msgstr "Cantidad resultante"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/packing_slip/packing_slip.py)
+#, python-brace-format
+msgid "Packing Slip cannot be cancelled as Delivery Note {0} is already submitted."
+msgstr "No se puede cancelar la lista de embalaje porque el albarán {0} ya está validado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/cost_center/cost_center.py)
+msgid "Parent Cost Center must belong to the same Company"
+msgstr "El centro de coste superior debe pertenecer a la misma empresa"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+#, python-brace-format
+msgid "Parent Task {0} is not in Project {1}. Pick a group task of the same project."
+msgstr "La tarea principal {0} no está en el proyecto {1}. Elija una tarea de grupo del mismo proyecto."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Parent Warehouse {0} must be a group warehouse of Company {1}"
+msgstr "El almacén superior {0} debe ser un almacén de grupo de la empresa {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/sales_forecast/sales_forecast.py)
+#, python-brace-format
+msgid "Parent Warehouse {0} must be a group warehouse of company {1}"
+msgstr "El almacén superior {0} debe ser un almacén de grupo de la empresa {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Pending Qty {0} cannot be more than the {1} left after the Total Completed Qty"
+msgstr "La cantidad pendiente {0} no puede ser mayor que los {1} que quedan tras la cantidad total completada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "Pending Repost"
+msgstr "Reprocesamiento pendiente"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_operation/bom_operation.json)
+msgid "Pick a BOM to copy its raw materials into this step. Leave it empty to add the raw materials yourself with Add Raw Materials."
+msgstr "Elija una lista de materiales para copiar sus materias primas en este paso. Déjelo vacío para añadirlas usted con «Añadir materias primas»."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/tax_category/tax_category.json)
+msgid "Picks the right tax template for a customer, supplier or address."
+msgstr "Elige la plantilla de impuestos adecuada para un cliente, proveedor o dirección."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+msgid "Pickup Date cannot be before today"
+msgstr "La fecha de recogida no puede ser anterior a hoy"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/erpnext_integrations/doctype/plaid_settings/plaid_settings.py)
+#, python-brace-format
+msgid "Plaid transaction {0} could not be imported"
+msgstr "No se pudo importar la transacción de Plaid {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.json)
+msgid "Planned visits to service what a customer bought."
+msgstr "Visitas planificadas para revisar lo que compró un cliente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.json)
+msgid "Plans the work orders and materials needed for your demand."
+msgstr "Planifica las órdenes de fabricación y los materiales que necesita su demanda."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.py)
+#, python-brace-format
+msgid "Please delete Item Lead Time {0}, before merging {1} into {2}"
+msgstr "Borre el plazo de entrega del artículo {0} antes de fusionar {1} en {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/loyalty_point_entry/loyalty_point_entry.json)
+msgid "Points a customer earned or spent under a loyalty program."
+msgstr "Puntos que un cliente ha ganado o gastado en un programa de fidelización."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pricing_rule/pricing_rule.py)
+#, python-brace-format
+msgid "Price List {0} cannot be used in {1}"
+msgstr "La lista de precios {0} no se puede usar en {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/price_list/price_list.py)
+#, python-brace-format
+msgid "Price List {0} is not applicable for country {1}"
+msgstr "La lista de precios {0} no es aplicable al país {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/price_list/price_list.py)
+#, python-brace-format
+msgid "Price List {0} is the default in {1}, so it must stay applicable for {2}"
+msgstr "La lista de precios {0} es la predeterminada en {1}, así que debe seguir siendo aplicable a {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/item_price_stock/item_price_stock.py)
+msgid "Price UOM"
+msgstr "Unidad de medida del precio"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_quotation/supplier_quotation.json)
+msgid "Prices a supplier offered you."
+msgstr "Precios que le ha ofrecido un proveedor."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/quotation/quotation.json)
+msgid "Prices you offer a customer or lead."
+msgstr "Precios que ofrece a un cliente o contacto potencial."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_request/payment_request.py)
+#, python-brace-format
+msgid "Print Format {0} is not valid for {1}"
+msgstr "El formato de impresión {0} no es válido para {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.json)
+msgid "Produce an Item at Each Operation"
+msgstr "Producir un artículo en cada operación"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+#, python-brace-format
+msgid "Production Plan {0} is {1}"
+msgstr "El plan de producción {0} está {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+#, python-format
+msgid "Progress % for a task must be between 0 and 100."
+msgstr "El % de avance de una tarea debe estar entre 0 y 100."
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/project/project.py)
+#, python-brace-format
+msgid "Project Template {0} is disabled"
+msgstr "La plantilla de proyecto {0} está desactivada"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/project/project.py)
+#, python-brace-format
+msgid "Project {0} is only {1} complete. Complete or cancel its tasks first."
+msgstr "El proyecto {0} solo está completado al {1}. Complete o cancele antes sus tareas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_receipt/subcontracting_receipt.py)
+#, python-brace-format
+msgid "Purchase Orders {0} have different currencies, taxes or discounts, so they cannot share one Purchase Receipt. Make one Subcontracting Receipt for each Purchase Order."
+msgstr "Los pedidos de compra {0} tienen monedas, impuestos o descuentos distintos, así que no pueden compartir un albarán de compra. Haga una recepción de subcontratación por cada pedido de compra."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_receipt/subcontracting_receipt.py)
+#, python-brace-format
+msgid "Purchase Receipt {0} is already made against Subcontracting Receipt {1}"
+msgstr "Ya existe el albarán de compra {0} para la recepción de subcontratación {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/purchase_invoice/purchase_invoice.py)
+#, python-brace-format
+msgid "Purchase Receipt {0} is closed and cannot be invoiced"
+msgstr "El albarán de compra {0} está cerrado y no se puede facturar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection/quality_inspection.py)
+#, python-brace-format
+msgid "Quality Inspection {0} is used by {1} {2}. Cancel {2} first."
+msgstr "La inspección de calidad {0} la usa {1} {2}. Cancele primero {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/invoice_discounting/invoice_discounting.json)
+msgid "Raise money against unpaid sales invoices."
+msgstr "Obtenga financiación con facturas de venta pendientes de cobro."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/lower_deduction_certificate/lower_deduction_certificate.py)
+msgid "Rate must be at least 0 and less than 100"
+msgstr "El tipo debe ser como mínimo 0 y menor que 100"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard/supplier_scorecard.json)
+msgid "Rates a supplier over time on criteria you choose."
+msgstr "Puntúa a un proveedor a lo largo del tiempo con los criterios que elija."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/tax_withholding_category/tax_withholding_category.json)
+msgid "Rates and thresholds for tax withheld on payments, like TDS."
+msgstr "Tipos y umbrales de las retenciones practicadas sobre pagos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+msgid "Raw Materials Not Moved"
+msgstr "Materias primas sin mover"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/repost_accounting_ledger/repost_accounting_ledger.json)
+msgid "Rebuilds the ledger entries of transactions that were posted wrongly."
+msgstr "Rehace los asientos contables de transacciones que se contabilizaron mal."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/repost_payment_ledger/repost_payment_ledger.json)
+msgid "Rebuilds the payment ledger so outstanding amounts are right again."
+msgstr "Rehace el libro de pagos para que los importes pendientes vuelvan a ser correctos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/repost_item_valuation/repost_item_valuation.py)
+msgid "Recalculate Valuation Rate is only allowed for a Purchase Receipt, a Purchase Invoice with Update Stock or a Stock Entry with no row that has both a Source and Target Warehouse"
+msgstr "Recalcular el coste de valoración solo se permite en albaranes de compra, facturas de compra con «Actualizar existencias» o movimientos de existencias sin ninguna fila que tenga almacén de origen y de destino a la vez"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/repost_item_valuation/repost_item_valuation.json)
+msgid "Recalculates stock values after a backdated change."
+msgstr "Recalcula el valor de las existencias tras un cambio con fecha anterior."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/landed_cost_voucher/landed_cost_voucher.py)
+#, python-brace-format
+msgid "Receipt Document Type {0} is not supported"
+msgstr "El tipo de documento de recepción {0} no está admitido"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "Record Output"
+msgstr "Registrar producción"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_update_tool/bom_update_tool.json)
+msgid "Replace a BOM everywhere it is used, or update the cost of all BOMs."
+msgstr "Sustituya una lista de materiales en todos los sitios donde se usa, o actualice el coste de todas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Repost Item Valuation will be made for:"
+msgstr "Se hará la revaloración de artículos para:"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+#, python-brace-format
+msgid "Repost {0} is already pending."
+msgstr "El reprocesamiento {0} ya está pendiente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Reposting could not be queued for:"
+msgstr "No se pudo poner en cola el reprocesamiento para:"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Reposting has been queued for:"
+msgstr "Se ha puesto en cola el reprocesamiento para:"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/repost_item_valuation/repost_item_valuation.py)
+#, python-brace-format
+msgid "Reposting will start within the timeslot configured in {0}"
+msgstr "El reprocesamiento empezará en la franja horaria configurada en {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "Request Missing Materials"
+msgstr "Solicitar materiales que faltan"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/item_shortage_report/item_shortage_report.py)
+msgid "Requested Quantity"
+msgstr "Cantidad solicitada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/authorization_rule/authorization_rule.json)
+msgid "Requires approval for transactions above a limit."
+msgstr "Exige aprobación para las transacciones que superan un límite."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/item_shortage_report/item_shortage_report.py)
+msgid "Reserved Quantity for Production Plan"
+msgstr "Cantidad reservada para el plan de producción"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/item_shortage_report/item_shortage_report.py)
+msgid "Reserved Quantity for Subcontracting"
+msgstr "Cantidad reservada para subcontratación"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/exchange_rate_revaluation/exchange_rate_revaluation.json)
+msgid "Restates foreign currency balances at today's exchange rate."
+msgstr "Revalora los saldos en moneda extranjera al tipo de cambio de hoy."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/loyalty_program/loyalty_program.json)
+msgid "Rewards customers with points they can spend on later purchases."
+msgstr "Premia a los clientes con puntos que pueden gastar en compras posteriores."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_creator/bom_creator.py)
+msgid "Routing Required"
+msgstr "Se requiere ruta de fabricación"
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "Routing {0} is disabled"
+msgstr "La ruta de fabricación {0} está desactivada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/controllers/sales_and_purchase_return.py)
+#, python-brace-format
+msgid "Row # {0}: Cannot return {1}, only {2} {3} of its component {4} is left to return"
+msgstr "Fila #{0}: no se puede devolver {1}; de su componente {4} solo quedan {2} {3} por devolver"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_template/quality_inspection_template.py)
+#, python-brace-format
+msgid "Row #{0}: Acceptance Criteria Formula is required for parameter {1}"
+msgstr "Fila #{0}: la fórmula del criterio de aceptación es obligatoria para el parámetro {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_template/quality_inspection_template.py)
+#, python-brace-format
+msgid "Row #{0}: Acceptance Criteria Value is required for parameter {1}"
+msgstr "Fila #{0}: el valor del criterio de aceptación es obligatorio para el parámetro {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/south_africa_vat_settings/south_africa_vat_settings.py)
+#, python-brace-format
+msgid "Row #{0}: Account is mandatory"
+msgstr "Fila #{0}: la cuenta es obligatoria"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/south_africa_vat_settings/south_africa_vat_settings.py)
+#, python-brace-format
+msgid "Row #{0}: Account {1} is a group account"
+msgstr "Fila #{0}: la cuenta {1} es una cuenta de grupo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/south_africa_vat_settings/south_africa_vat_settings.py)
+#, python-brace-format
+msgid "Row #{0}: Account {1} is added more than once"
+msgstr "Fila #{0}: la cuenta {1} está añadida más de una vez"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/workstation_operating_component/workstation_operating_component.py)
+#, python-brace-format
+msgid "Row #{0}: Account {1} must be an Expense ledger account of company {2}"
+msgstr "Fila #{0}: la cuenta {1} debe ser una cuenta de gasto de detalle de la empresa {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Row #{0}: Cannot change the UOM or conversion factor of Item {1} after part of it was received or delivered."
+msgstr "Fila #{0}: no se puede cambiar la unidad de medida ni el factor de conversión del artículo {1} después de haber recibido o entregado una parte."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/serial_and_batch_bundle/serial_and_batch_bundle.py)
+#, python-brace-format
+msgid "Row #{0}: Cannot return {1} of Batch {2}, only {3} was delivered and not returned yet."
+msgstr "Fila #{0}: no se pueden devolver {1} del lote {2}; solo se entregaron {3} y aún no se han devuelto."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Row #{0}: Cannot set quantity less than delivered and reserved quantity. Unreserve stock before reducing the quantity."
+msgstr "Fila #{0}: no se puede poner una cantidad menor que la entregada y reservada. Anule la reserva de existencias antes de reducir la cantidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/workstation_operating_component/workstation_operating_component.py)
+#, python-brace-format
+msgid "Row #{0}: Company {1} already has an expense account"
+msgstr "Fila #{0}: la empresa {1} ya tiene una cuenta de gasto"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_trip/delivery_trip.py)
+#, python-brace-format
+msgid "Row #{0}: Contact {1} does not belong to Customer {2}"
+msgstr "Fila #{0}: el contacto {1} no pertenece al cliente {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.py)
+#, python-brace-format
+msgid "Row #{0}: Default Inventory Account {1} must be a Stock account that is not a group."
+msgstr "Fila #{0}: la cuenta de inventario predeterminada {1} debe ser una cuenta de existencias de detalle."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/sales_forecast/sales_forecast.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Date {1} cannot be before From Date {2}"
+msgstr "Fila #{0}: la fecha de entrega {1} no puede ser anterior a la fecha de inicio {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/installation_note/installation_note.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Note Item does not belong to Delivery Note {1}"
+msgstr "Fila #{0}: la línea de albarán no pertenece al albarán {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Note {1} belongs to Customer {2}"
+msgstr "Fila #{0}: el albarán {1} es del cliente {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Note {1} is added more than once"
+msgstr "Fila #{0}: el albarán {1} está añadido más de una vez"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Note {1} is already in Shipment {2}"
+msgstr "Fila #{0}: el albarán {1} ya está en el envío {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Note {1} must be submitted"
+msgstr "Fila #{0}: el albarán {1} debe estar validado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+#, python-brace-format
+msgid "Row #{0}: Delivery Note {1} was created from Sales Invoice {2}, which already bills it"
+msgstr "Fila #{0}: el albarán {1} se creó desde la factura de venta {2}, que ya lo factura"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/sales_forecast/sales_forecast.py)
+#, python-brace-format
+msgid "Row #{0}: Demand Qty is mandatory"
+msgstr "Fila #{0}: la cantidad demandada es obligatoria"
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Due Date must match the Payment Schedule."
+msgstr "Fila #{0}: la fecha de vencimiento debe coincidir con el calendario de pagos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/installation_note/installation_note.py)
+#, python-brace-format
+msgid "Row #{0}: Installation can only be recorded against a submitted Delivery Note"
+msgstr "Fila #{0}: la instalación solo se puede registrar contra un albarán validado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_creator/bom_creator.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} cannot be used inside its own sub-assembly"
+msgstr "Fila #{0}: el artículo {1} no se puede usar dentro de su propio submontaje"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} does not match item {2} sent by {3}."
+msgstr "Fila #{0}: el artículo {1} no coincide con el artículo {2} enviado por {3}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_visit/maintenance_visit.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} does not match the item of its schedule row"
+msgstr "Fila #{0}: el artículo {1} no coincide con el de su fila de programación"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_creator/bom_creator.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} has Operation {2}. Set a Routing to create BOMs with operations."
+msgstr "Fila #{0}: el artículo {1} tiene la operación {2}. Indique una ruta de fabricación para crear listas de materiales con operaciones."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} is not an alternative of Item {2}"
+msgstr "Fila #{0}: el artículo {1} no es alternativo del artículo {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} is transferred more than the {2} picked in {3}."
+msgstr "Fila #{0}: el artículo {1} se traspasa en mayor cantidad que los {2} preparados en {3}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} must be a stock item with Supply Raw Materials for Purchase enabled for a Subcontracting Material Request"
+msgstr "Fila #{0}: para una solicitud de material de subcontratación, el artículo {1} debe ser de existencias y tener activado «Suministrar materias primas para la compra»"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} must be taken from {2}, where {3} sent it."
+msgstr "Fila #{0}: el artículo {1} se debe tomar de {2}, donde lo envió {3}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: Item {1} was picked from {2}, not {3}."
+msgstr "Fila #{0}: el artículo {1} se preparó desde {2}, no desde {3}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_template/quality_inspection_template.py)
+#, python-brace-format
+msgid "Row #{0}: Minimum Value cannot be greater than Maximum Value for parameter {1}"
+msgstr "Fila #{0}: el valor mínimo no puede ser mayor que el máximo para el parámetro {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_review/quality_review.py)
+#, python-brace-format
+msgid "Row #{0}: Objective {1} is not part of Quality Goal {2}"
+msgstr "Fila #{0}: el objetivo {1} no forma parte de la meta de calidad {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Outstanding must be positive and cannot exceed the unpaid invoice or installment amount."
+msgstr "Fila #{0}: el pendiente debe ser positivo y no puede superar el importe impagado de la factura o del plazo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_template/quality_inspection_template.py)
+#, python-brace-format
+msgid "Row #{0}: Parameter {1} is added more than once"
+msgstr "Fila #{0}: el parámetro {1} está añadido más de una vez"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_feedback_template/quality_feedback_template.py)
+#, python-brace-format
+msgid "Row #{0}: Parameter {1} is already added"
+msgstr "Fila #{0}: el parámetro {1} ya está añadido"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_feedback/quality_feedback.py)
+#, python-brace-format
+msgid "Row #{0}: Parameter {1} is not part of Quality Feedback Template {2}"
+msgstr "Fila #{0}: el parámetro {1} no forma parte de la plantilla de opinión de calidad {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "Row #{0}: Parcel count must be at least 1"
+msgstr "Fila #{0}: el número de bultos debe ser al menos 1"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "Row #{0}: Parcel {1} cannot be negative"
+msgstr "Fila #{0}: el bulto {1} no puede ser negativo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_creator/bom_creator.py)
+#, python-brace-format
+msgid "Row #{0}: Parent Row No points to item {1}, not {2}"
+msgstr "Fila #{0}: el número de fila superior apunta al artículo {1}, no al {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Payment Schedule is already included in this Dunning."
+msgstr "Fila #{0}: el calendario de pagos ya está incluido en esta reclamación."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Payment Schedule must belong to the selected Sales Invoice."
+msgstr "Fila #{0}: el calendario de pagos debe pertenecer a la factura de venta seleccionada."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Payment must be overdue on the Dunning Posting Date."
+msgstr "Fila #{0}: el pago debe estar vencido en la fecha de la reclamación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/opening_invoice_creation_tool/opening_invoice_creation_tool.py)
+#, python-brace-format
+msgid "Row #{0}: Quantity must be a positive number"
+msgstr "Fila #{0}: la cantidad debe ser un número positivo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.py)
+#, python-brace-format
+msgid "Row #{0}: Rate {1} differs from the rate {2} agreed in Blanket Order {3}"
+msgstr "Fila #{0}: el precio {1} es distinto del precio {2} acordado en el pedido abierto {3}"
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Sales Invoice {1} must have the same {2} as this Dunning."
+msgstr "Fila #{0}: la factura de venta {1} debe tener el mismo {2} que esta reclamación."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: Select an accessible, submitted Sales Invoice."
+msgstr "Fila #{0}: seleccione una factura de venta validada a la que tenga acceso."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+#, python-brace-format
+msgid "Row #{0}: Since 'Produce an Item at Each Operation' is enabled, the BOM {1} cannot be used for Sub Assembly Items"
+msgstr "Fila #{0}: como está activado «Producir un artículo en cada operación», la lista de materiales {1} no se puede usar para artículos de submontaje"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/delivery_note/delivery_note.py)
+#, python-brace-format
+msgid "Row #{0}: Target Warehouse must be {1}, as on Delivery Note {2}"
+msgstr "Fila #{0}: el almacén de destino debe ser {1}, como en el albarán {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/stock_controller.py)
+#, python-brace-format
+msgid "Row #{0}: The batch {1} is disabled."
+msgstr "Fila #{0}: el lote {1} está desactivado."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Row #{0}: Unreserve stock before changing the UOM or conversion factor of Item {1}."
+msgstr "Fila #{0}: anule la reserva de existencias antes de cambiar la unidad de medida o el factor de conversión del artículo {1}."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Row #{0}: Unreserve stock before deleting item {1}."
+msgstr "Fila #{0}: anule la reserva de existencias antes de borrar el artículo {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: Work Order {1} does not allow alternative items"
+msgstr "Fila #{0}: la orden de fabricación {1} no admite artículos alternativos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/controllers/subcontracting_inward_controller.py)
+#, python-brace-format
+msgid "Row #{0}: Work Order {1} reserved Item {2} after this return. Cancel the Work Order first."
+msgstr "Fila #{0}: la orden de fabricación {1} reservó el artículo {2} después de esta devolución. Cancele primero la orden de fabricación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reconciliation/stock_reconciliation.py)
+#, python-brace-format
+msgid "Row #{0}: select the serial and batch numbers for the new quantity of Item {1}"
+msgstr "Fila #{0}: seleccione los números de serie y lote para la nueva cantidad del artículo {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/buying_controller.py)
+#, python-brace-format
+msgid "Row #{0}: {1} assets of {2} are linked to {3}, which keeps only {4} after this return. Delete the extra draft assets first."
+msgstr "Fila #{0}: hay {1} activos de {2} vinculados a {3}, que tras esta devolución solo conserva {4}. Borre antes los activos en borrador sobrantes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Row #{0}: {1} is received but is neither the finished good nor a secondary item. Set its Secondary Item Type or remove the row."
+msgstr "Fila #{0}: se recibe {1}, que no es ni el producto terminado ni un artículo secundario. Indique su tipo de artículo secundario o quite la fila."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/doctype/dunning/dunning.py)
+#, python-brace-format
+msgid "Row #{0}: {1} must match the Payment Schedule."
+msgstr "Fila #{0}: {1} debe coincidir con el calendario de pagos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_order/payment_order.py)
+#, python-brace-format
+msgid "Row #{0}: {1} {2} belongs to Company {3}, not {4}"
+msgstr "Fila #{0}: {1} {2} pertenece a la empresa {3}, no a {4}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/edi/doctype/common_code/common_code.py)
+#, python-brace-format
+msgid "Row {0} has no value in the code column {1}"
+msgstr "La fila {0} no tiene valor en la columna de código {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/request_for_quotation/request_for_quotation.py)
+#, python-brace-format
+msgid "Row {0} is not part of Request for Quotation {1}."
+msgstr "La fila {0} no forma parte de la solicitud de presupuesto {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/landed_cost_voucher/landed_cost_voucher.py)
+#, python-brace-format
+msgid "Row {0}: Account {1} cannot be used for landed cost charges"
+msgstr "Fila {0}: la cuenta {1} no se puede usar para gastos de importación"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/mode_of_payment/mode_of_payment.py)
+#, python-brace-format
+msgid "Row {0}: Account {1} is disabled."
+msgstr "Fila {0}: la cuenta {1} está desactivada."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/mode_of_payment/mode_of_payment.py)
+#, python-brace-format
+msgid "Row {0}: Account {1} must be a ledger account of type Bank, Cash or Receivable."
+msgstr "Fila {0}: la cuenta {1} debe ser una cuenta de detalle de tipo Banco, Caja o Cuenta a cobrar."
+
+#. Falta en erpnext/locale/es.po (erpnext/accounts/party.py)
+#, python-brace-format
+msgid "Row {0}: Account {1} must be a {2} account"
+msgstr "Fila {0}: la cuenta {1} debe ser una cuenta de {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/timesheet_detail/timesheet_detail.py)
+#, python-brace-format
+msgid "Row {0}: Activity Type {1} is disabled"
+msgstr "Fila {0}: el tipo de actividad {1} está desactivado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/landed_cost_voucher/landed_cost_voucher.py)
+#, python-brace-format
+msgid "Row {0}: Applicable Charges for Item {1} cannot be negative"
+msgstr "Fila {0}: los gastos aplicables al artículo {1} no pueden ser negativos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/landed_cost_voucher/landed_cost_voucher.py)
+#, python-brace-format
+msgid "Row {0}: Applicable Charges for Item {1} cannot be positive"
+msgstr "Fila {0}: los gastos aplicables al artículo {1} no pueden ser positivos"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.py)
+#, python-brace-format
+msgid "Row {0}: Conversion Factor must be greater than zero."
+msgstr "Fila {0}: el factor de conversión debe ser mayor que cero."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Row {0}: Employee {1} is already working at this time on another Job Card"
+msgstr "Fila {0}: el empleado {1} ya está trabajando a esta hora en otra tarjeta de trabajo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Row {0}: Employee {1} is already working from {2} to {3} on Job Card {4}"
+msgstr "Fila {0}: el empleado {1} ya está trabajando de {2} a {3} en la tarjeta de trabajo {4}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.py)
+#, python-brace-format
+msgid "Row {0}: Item {1} is not the Finished Good of Purchase Order {2}."
+msgstr "Fila {0}: el artículo {1} no es el producto terminado del pedido de compra {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.py)
+#, python-brace-format
+msgid "Row {0}: Number of visits can not be more than the {1} days between Start and End Date"
+msgstr "Fila {0}: el número de visitas no puede ser mayor que los {1} días entre la fecha de inicio y la de fin"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/controllers/subcontracting_controller.py)
+#, python-brace-format
+msgid "Row {0}: Please select an active and submitted BOM for Item {1}."
+msgstr "Fila {0}: seleccione una lista de materiales activa y validada para el artículo {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+#, python-brace-format
+msgid "Row {0}: Select the time log of Timesheet {1} that this amount bills"
+msgstr "Fila {0}: seleccione el registro de tiempo de la hoja de horas {1} que factura este importe"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.py)
+#, python-brace-format
+msgid "Row {0}: Service Item {1} and its rate must match Purchase Order {2}."
+msgstr "Fila {0}: el artículo de servicio {1} y su precio deben coincidir con el pedido de compra {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project_template/project_template.py)
+#, python-brace-format
+msgid "Row {0}: Task {1} ends after its parent task {2}"
+msgstr "Fila {0}: la tarea {1} termina después de su tarea principal {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project_template/project_template.py)
+#, python-brace-format
+msgid "Row {0}: Task {1} is not a Template Task"
+msgstr "Fila {0}: la tarea {1} no es una tarea de plantilla"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+#, python-brace-format
+msgid "Row {0}: The same time log of Timesheet {1} is added more than once"
+msgstr "Fila {0}: el mismo registro de tiempo de la hoja de horas {1} está añadido más de una vez"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+#, python-brace-format
+msgid "Row {0}: Timesheet {1} has no unbilled billable time logs"
+msgstr "Fila {0}: la hoja de horas {1} no tiene registros de tiempo facturables sin facturar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/packing_slip/packing_slip.py)
+#, python-brace-format
+msgid "Row {0}: Total packed qty cannot be greater than {1} for the Item {2}."
+msgstr "Fila {0}: la cantidad total embalada no puede ser mayor que {1} para el artículo {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.py)
+#, python-brace-format
+msgid "Row {0}: {1} {2} visits need an End Date of {3}. Change the End Date or the Number of Visits."
+msgstr "Fila {0}: {1} visitas de {2} necesitan una fecha de fin {3}. Cambie la fecha de fin o el número de visitas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reconciliation/stock_reconciliation.py)
+#, python-brace-format
+msgid "Rows {0}: the items already have stock transactions in these warehouses, use the purpose Stock Reconciliation instead of Opening Stock"
+msgstr "Filas {0}: los artículos ya tienen movimientos de existencias en estos almacenes; use el propósito Regularización de existencias en lugar de Existencias iniciales"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/master_production_schedule/master_production_schedule.py)
+#, python-brace-format
+msgid "Sales Forecast {0} already has Master Production Schedule {1}"
+msgstr "La previsión de ventas {0} ya tiene el programa maestro de producción {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/sales_analytics/sales_analytics.py)
+msgid "Sales Invoice (due)"
+msgstr "Factura de venta (vencida)"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reservation_entry/stock_reservation_entry.py)
+#, python-brace-format
+msgid "Sales Order Item {0} does not belong to {1}"
+msgstr "La línea de pedido de venta {0} no pertenece a {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+msgid "Sales Order Qty Exceeded"
+msgstr "Se ha superado la cantidad del pedido de venta"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "Save and Submit"
+msgstr "Guardar y validar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+msgid "Save the Production Plan before creating Material Requests"
+msgstr "Guarde el plan de producción antes de crear solicitudes de material"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/project/project.py)
+msgid "Save the Project before duplicating it"
+msgstr "Guarde el proyecto antes de duplicarlo"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+msgid "Schedule Conflict"
+msgstr "Conflicto de programación"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_visit/maintenance_visit.py)
+#, python-brace-format
+msgid "Schedule rows {0} do not belong to Maintenance Schedule {1}"
+msgstr "Las filas de programación {0} no pertenecen al programa de mantenimiento {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_visit/maintenance_visit.py)
+msgid "Select a submitted Maintenance Schedule for the scheduled visits"
+msgstr "Seleccione un programa de mantenimiento validado para las visitas programadas"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/sales_order/sales_order.py)
+#, python-brace-format
+msgid "Select a valid Sales Order row for Item {0}."
+msgstr "Seleccione una fila válida del pedido de venta para el artículo {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/item_variant_details/item_variant_details.py)
+msgid "Select either Items or Item Groups, not both"
+msgstr "Seleccione artículos o grupos de artículos, no ambos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.py)
+msgid "Select the differences to fix."
+msgstr "Seleccione las diferencias que quiere corregir."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/incorrect_stock_value_report/incorrect_stock_value_report.py)
+msgid "Select the stock Account to compare with the stock value"
+msgstr "Seleccione la cuenta de existencias que se compara con el valor de las existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/product_bundle/product_bundle.json)
+msgid "Sells several items together as one item."
+msgstr "Vende varios artículos juntos como un solo artículo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Send materials for Job Card {0} to the supplier from its Subcontracting Order."
+msgstr "Envíe al proveedor los materiales de la tarjeta de trabajo {0} desde su orden de subcontratación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.py)
+#, python-brace-format
+msgid "Serial No {0} is still in stock in Warehouse {1}"
+msgstr "El número de serie {0} sigue en existencias en el almacén {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/warranty_claim/warranty_claim.py)
+#, python-brace-format
+msgid "Serial No {0} is still in stock in Warehouse {1} and was not delivered to a customer."
+msgstr "El número de serie {0} sigue en existencias en el almacén {1} y no se ha entregado a ningún cliente."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/support/doctype/warranty_claim/warranty_claim.py)
+#, python-brace-format
+msgid "Serial No {0} was delivered to Customer {1}, not to {2}."
+msgstr "El número de serie {0} se entregó al cliente {1}, no a {2}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/maintenance/doctype/maintenance_schedule/maintenance_schedule.py)
+#, python-brace-format
+msgid "Serial No {0} was sold to Customer {1}, not {2}"
+msgstr "El número de serie {0} se vendió al cliente {1}, no a {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.py)
+msgid "Serial Number Series is mandatory when entering Opening Stock for a serialized item."
+msgstr "La serie de números de serie es obligatoria al registrar existencias iniciales de un artículo con número de serie."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/serial_and_batch_bundle/serial_and_batch_bundle.py)
+#, python-brace-format
+msgid "Serial and Batch Bundle {0} is not posted by {1} {2}. A bundle is submitted with the transaction it belongs to."
+msgstr "El lote de serie y lote {0} no lo contabiliza {1} {2}. Un lote se valida con la transacción a la que pertenece."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.py)
+msgid "Service Item Not Set"
+msgstr "No se ha indicado el artículo de servicio"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reconciliation/stock_reconciliation.json)
+msgid "Sets stock quantities and values to what is actually in your warehouses."
+msgstr "Ajusta las cantidades y valores de existencias a lo que realmente hay en sus almacenes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_profile/pos_profile.json)
+msgid "Settings for a point of sale, like its warehouse, price list and payment methods."
+msgstr "Configuración de un punto de venta, como su almacén, lista de precios y formas de pago."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/report/procurement_tracker/procurement_tracker.js)
+msgid "Show Completed Orders"
+msgstr "Mostrar pedidos completados"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "Show Differences Settled by Adjustment Entries"
+msgstr "Mostrar diferencias liquidadas con asientos de ajuste"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_invoice_merge_log/pos_invoice_merge_log.json)
+msgid "Shows which POS invoices were merged into a sales invoice."
+msgstr "Muestra qué facturas del punto de venta se agruparon en una factura de venta."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/import_supplier_invoice/import_supplier_invoice.py)
+#, python-brace-format
+msgid "Signed file {0} is not supported, import the XML file instead"
+msgstr "El archivo firmado {0} no está admitido; importe en su lugar el archivo XML"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+#, python-brace-format
+msgid "Since you are reposting transactions from the previous fiscal year {0}, the closing balances of that fiscal year can change. The reposting might also take time to complete."
+msgstr "Como está reprocesando transacciones del ejercicio anterior {0}, los saldos de cierre de ese ejercicio pueden cambiar. El reprocesamiento también puede tardar en terminar."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+msgid "Some of its serial nos or batches should be short of stock on this date."
+msgstr "Algunos de sus números de serie o lotes deberían tener falta de existencias en esta fecha."
+
+#. Falta en erpnext/locale/es.po (erpnext/crm/doctype/lead/lead.json)
+msgid "Someone who might buy from you."
+msgstr "Alguien que podría comprarle."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/sales_person/sales_person.json)
+msgid "Someone who sells for you, with targets and commission."
+msgstr "Alguien que vende para usted, con objetivos y comisión."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard_criteria/supplier_scorecard_criteria.json)
+msgid "Something a supplier is scored on, like on-time delivery."
+msgstr "Algo por lo que se puntúa a un proveedor, como la puntualidad en las entregas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_parameter/quality_inspection_parameter.json)
+msgid "Something an item is checked for, like weight or colour."
+msgstr "Algo que se comprueba en un artículo, como el peso o el color."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/non_conformance/non_conformance.json)
+msgid "Something that did not meet your quality standard."
+msgstr "Algo que no cumplió su estándar de calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_goal/quality_goal.json)
+msgid "Something you measure and improve on a schedule, like on-time delivery."
+msgstr "Algo que mide y mejora según un calendario, como la puntualidad en las entregas."
+
+#. Falta en erpnext/locale/es.po (erpnext/assets/doctype/asset/asset.json)
+msgid "Something your business owns and uses over time, like a machine or a laptop."
+msgstr "Algo que su empresa posee y usa a lo largo del tiempo, como una máquina o un portátil."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/cost_center_allocation/cost_center_allocation.json)
+msgid "Splits one cost center's amounts across others by percentage."
+msgstr "Reparte por porcentaje los importes de un centro de coste entre otros."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/monthly_distribution/monthly_distribution.json)
+msgid "Spreads a yearly budget or target across months for seasonal businesses."
+msgstr "Reparte un presupuesto u objetivo anual entre los meses, para negocios estacionales."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry_type/stock_entry_type.py)
+#, python-brace-format
+msgid "Standard Stock Entry Type {0} cannot be deleted"
+msgstr "No se puede borrar el tipo de movimiento de existencias estándar {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/report/uae_vat_201/uae_vat_201.py)
+msgid "Standard rated supplies with no VAT Emirate"
+msgstr "Entregas a tipo general sin emirato de IVA"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/terms_and_conditions/terms_and_conditions.json)
+msgid "Standard terms to add to quotes, orders and invoices."
+msgstr "Condiciones estándar para añadir a presupuestos, pedidos y facturas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection/quality_inspection.py)
+msgid "Status Cancelled can only be set by cancelling the Quality Inspection"
+msgstr "El estado Cancelado solo se puede poner cancelando la inspección de calidad"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_inward_order/subcontracting_inward_order.py)
+#, python-brace-format
+msgid "Status {0} cannot be set manually."
+msgstr "El estado {0} no se puede poner a mano."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "Step {0} ({1})"
+msgstr "Paso {0} ({1})"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.py)
+msgid "Stock Closing Entry Failed"
+msgstr "Error en el cierre de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.py)
+#, python-brace-format
+msgid "Stock Closing Entry {0} must be submitted to generate the closing balance"
+msgstr "El cierre de existencias {0} debe estar validado para generar el saldo de cierre"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.json)
+msgid "Stock Ledger Entries of Cancelled Vouchers"
+msgstr "Movimientos del libro de existencias de comprobantes cancelados"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.py)
+msgid "Stock Ledger Entries of the selected vouchers have been cancelled and reposting has been queued."
+msgstr "Se han cancelado los movimientos del libro de existencias de los comprobantes seleccionados y se ha puesto en cola su reprocesamiento."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.py)
+msgid "Stock Reposting Ongoing"
+msgstr "Reprocesamiento de existencias en curso"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reservation_entry/stock_reservation_entry.py)
+#, python-brace-format
+msgid "Stock Reservation Entry {0} is already used by Work Order {1}. Close the Work Order to release the unused stock."
+msgstr "La reserva de existencias {0} ya la usa la orden de fabricación {1}. Cierre la orden de fabricación para liberar las existencias no usadas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.json)
+msgid "Stock Valuation Comparison"
+msgstr "Comparación de la valoración de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.py)
+msgid "Stock Value Difference"
+msgstr "Diferencia de valor de existencias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reservation_entry/stock_reservation_entry.json)
+msgid "Stock set aside for a sales order or production."
+msgstr "Existencias apartadas para un pedido de venta o para producción."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+msgid "Subcontracted Job Card"
+msgstr "Tarjeta de trabajo subcontratada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order_item/work_order_item.json)
+msgid "Subcontracted Qty"
+msgstr "Cantidad subcontratada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Submit Job Card {0} before making its Manufacture entry"
+msgstr "Valide la tarjeta de trabajo {0} antes de hacer su movimiento de fabricación"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_receipt/subcontracting_receipt.py)
+#, python-brace-format
+msgid "Submit Subcontracting Receipt {0} before making a Purchase Receipt"
+msgstr "Valide la recepción de subcontratación {0} antes de hacer un albarán de compra"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/import_supplier_invoice/import_supplier_invoice.py)
+#, python-brace-format
+msgid "Supplier Invoice {0} is already imported in Purchase Invoice {1}"
+msgstr "La factura de proveedor {0} ya está importada en la factura de compra {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard/supplier_scorecard.py)
+msgid "Supplier Scorecard refresh failed"
+msgstr "Error al actualizar la evaluación de proveedores"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard/supplier_scorecard.py)
+#, python-brace-format
+msgid "Supplier Scorecard standing of {0}: {1}"
+msgstr "Posición de {0} en la evaluación de proveedores: {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard_period/supplier_scorecard_period.py)
+#, python-brace-format
+msgid "Supplier Scorecard {0} already has a submitted period overlapping {1} to {2}"
+msgstr "La evaluación de proveedores {0} ya tiene un periodo validado que se solapa con el del {1} al {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+#, python-brace-format
+msgid "Task {0} has child tasks in another project. Move them out of this group first."
+msgstr "La tarea {0} tiene subtareas en otro proyecto. Sáquelas antes de este grupo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/item_tax_template/item_tax_template.json)
+msgid "Tax rates for items that are taxed differently from the rest."
+msgstr "Tipos impositivos de los artículos que tributan distinto que el resto."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_invoice_item/pos_invoice_item.json)
+msgid "Tax-exclusive additional discount carried from a source document, per stock unit."
+msgstr "Descuento adicional sin impuestos heredado de un documento de origen, por unidad de existencias."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/item/item.py)
+msgid "Templates cannot be merged"
+msgstr "Las plantillas no se pueden fusionar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard/supplier_scorecard.py)
+#, python-brace-format
+msgid "The Supplier Scorecard standing of {0} is now {1}."
+msgstr "La posición de {0} en la evaluación de proveedores es ahora {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/south_africa_vat_settings/south_africa_vat_settings.json)
+msgid "The VAT accounts to report in the South Africa VAT audit report."
+msgstr "Las cuentas de IVA que se declaran en el informe de auditoría del IVA de Sudáfrica."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/taxes_and_totals.py)
+msgid "The cash or non-trade discount cannot be combined with discounts carried from other documents."
+msgstr "El descuento por pronto pago o no comercial no se puede combinar con descuentos heredados de otros documentos."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "The cash or non-trade discount cannot be combined with the discount of {0}."
+msgstr "El descuento por pronto pago o no comercial no se puede combinar con el descuento de {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/period_closing_voucher/period_closing_voucher.js)
+#, python-brace-format
+msgid "The closing balance {0} of the Stock Asset accounts differs from the closing value {1} of the Stock Balance report by {2}, which is within the allowed {3}% tolerance. Submit the Period Closing Voucher with this difference?"
+msgstr "El saldo de cierre {0} de las cuentas de existencias difiere en {2} del valor de cierre {1} del informe de saldo de existencias, dentro de la tolerancia permitida del {3} %. ¿Validar el cierre del periodo con esta diferencia?"
+
+#. Falta en erpnext/locale/es.po (erpnext/regional/report/irs_1099/irs_1099.py)
+#, python-brace-format
+msgid "The company {0} is not in the United States. IRS 1099 is only available for companies in the United States."
+msgstr "La empresa {0} no está en Estados Unidos. El IRS 1099 solo está disponible para empresas de Estados Unidos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/packing_slip/packing_slip.json)
+msgid "The contents and weight of each package in a delivery."
+msgstr "El contenido y el peso de cada bulto de una entrega."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/supplier_scorecard_criteria/supplier_scorecard_criteria.py)
+#, python-brace-format
+msgid "The criteria formula fails when every variable is {0}. Check its syntax and guard divisions by a variable, for example: {1}"
+msgstr "La fórmula del criterio falla cuando todas las variables valen {0}. Revise su sintaxis y proteja las divisiones por una variable, por ejemplo: {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "The finished good rows receive {0}, which is more than the Finished Good Quantity {1}. Set Finished Good Quantity to {0} and get the items again, or reduce the finished good rows."
+msgstr "Las filas de producto terminado reciben {0}, más que la cantidad de producto terminado {1}. Ponga {0} como cantidad de producto terminado y vuelva a obtener los artículos, o reduzca las filas de producto terminado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/doctype/selling_settings/selling_settings.json)
+msgid "The frequency at which project progress and company transaction details will be updated. Set it to daily or monthly if you post a lot of transactions. Daily refreshes nightly; Monthly refreshes on the 1st of each month."
+msgstr "La frecuencia con la que se actualizan el avance de los proyectos y los datos de transacciones de la empresa. Póngala diaria o mensual si contabiliza muchas transacciones. La diaria se actualiza cada noche; la mensual, el día 1 de cada mes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/holiday_list/holiday_list.json)
+msgid "The holidays and weekly offs of a company or employee."
+msgstr "Los festivos y días libres semanales de una empresa o un empleado."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/pick_list/pick_list.json)
+msgid "The items and quantities to pick from the warehouse."
+msgstr "Los artículos y cantidades que hay que preparar en el almacén."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_bom/subcontracting_bom.json)
+msgid "The materials a subcontractor uses to make an item for you."
+msgstr "Los materiales que usa un subcontratista para fabricarle un artículo."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.json)
+msgid "The materials and operations it takes to make an item."
+msgstr "Los materiales y operaciones necesarios para fabricar un artículo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/routing/routing.json)
+msgid "The order of operations to make an item."
+msgstr "El orden de las operaciones para fabricar un artículo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/quality_inspection_template/quality_inspection_template.json)
+msgid "The parameters to check an item for."
+msgstr "Los parámetros que se comprueban en un artículo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_maintenance_team/asset_maintenance_team.json)
+msgid "The people responsible for maintaining assets."
+msgstr "Las personas responsables del mantenimiento de los activos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/item_price/item_price.json)
+msgid "The price of an item in a price list."
+msgstr "El precio de un artículo en una lista de precios."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_update_log/bom_update_log.json)
+msgid "The progress of a BOM replacement or cost update."
+msgstr "El avance de una sustitución de listas de materiales o de una actualización de costes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_feedback_template/quality_feedback_template.json)
+msgid "The questions to ask when collecting quality feedback."
+msgstr "Las preguntas que se hacen al recoger opiniones sobre la calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/setup/doctype/currency_exchange/currency_exchange.json)
+msgid "The rate to convert one currency into another."
+msgstr "El tipo para convertir una moneda en otra."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/bulk_transaction/doctype/bulk_transaction_log/bulk_transaction_log.json)
+msgid "The result of creating or submitting many documents at once."
+msgstr "El resultado de crear o validar muchos documentos a la vez."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/financial_report_template/financial_report_template.json)
+msgid "The rows and formulas of a custom financial statement."
+msgstr "Las filas y fórmulas de un estado financiero personalizado."
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/valuation_adjustment.py)
+#, python-brace-format
+msgid "The rows of Item {0} in Warehouse {1} are not the stock it should hold on this date. Make the Adjustment Entry again from the Stock Valuation Comparison report."
+msgstr "Las filas del artículo {0} en el almacén {1} no corresponden a las existencias que debería tener en esta fecha. Vuelva a hacer el asiento de ajuste desde el informe de comparación de la valoración de existencias."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/serial_and_batch_bundle/serial_and_batch_bundle.json)
+msgid "The serial numbers and batches moved in a transaction."
+msgstr "Los números de serie y lotes que se mueven en una transacción."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_procedure/quality_procedure.json)
+msgid "The steps of a process you follow to keep quality in check."
+msgstr "Los pasos del proceso que sigue para controlar la calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "The stock qty and value of the selected items are set right on this date, without reposting. Stock and accounting reports before it keep the old values, and no stock transaction can be posted before it for these items afterwards."
+msgstr "La cantidad y el valor de existencias de los artículos seleccionados se fijan en esta fecha, sin reprocesar. Los informes de existencias y contables anteriores conservan los valores antiguos y, en adelante, no se podrá contabilizar ningún movimiento de existencias anterior a esa fecha para estos artículos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/customs_tariff_number/customs_tariff_number.json)
+msgid "The tariff code an item is declared under at customs."
+msgstr "El código arancelario con el que se declara un artículo en aduana."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/purchase_taxes_and_charges_template/purchase_taxes_and_charges_template.json)
+msgid "The taxes and charges, like shipping or insurance, to add to purchases."
+msgstr "Los impuestos y gastos, como transporte o seguro, que se añaden a las compras."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_taxes_and_charges_template/sales_taxes_and_charges_template.json)
+msgid "The taxes and charges, like shipping or insurance, to add to sales."
+msgstr "Los impuestos y gastos, como transporte o seguro, que se añaden a las ventas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/material_request/material_request.py)
+#, python-brace-format
+msgid "The total Work Order quantity {0} in Material Request {1} cannot be greater than allowed requested quantity {2} for Item {3}"
+msgstr "La cantidad total de órdenes de fabricación {0} en la solicitud de material {1} no puede ser mayor que la cantidad solicitada permitida {2} para el artículo {3}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_maintenance/asset_maintenance.json)
+msgid "The upkeep tasks an asset needs, and who does them."
+msgstr "Las tareas de mantenimiento que necesita un activo y quién las hace."
+
+#. Falta en erpnext/locale/es.po (erpnext/edi/doctype/code_list/code_list.py)
+#, python-brace-format
+msgid "The uploaded genericode file has no {0} element."
+msgstr "El archivo genericode subido no tiene ningún elemento {0}."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/item_variant.py)
+#, python-brace-format
+msgid "The value {0} cannot be removed as it is assigned to an existing Item {1}."
+msgstr "No se puede quitar el valor {0} porque está asignado al artículo existente {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/dunning_type/dunning_type.json)
+msgid "The wording and fee for a kind of payment reminder."
+msgstr "El texto y el recargo de un tipo de recordatorio de pago."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.json)
+msgid "The work done for one operation of a work order."
+msgstr "El trabajo hecho en una operación de una orden de fabricación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/fiscal_year/fiscal_year.json)
+msgid "The year your books are kept and closed for."
+msgstr "El año por el que se llevan y cierran sus libros."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "There are no differences to fix."
+msgstr "No hay diferencias que corregir."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/item_variant_details/item_variant_details.py)
+msgid "There are no item variants for the selected filters"
+msgstr "No hay variantes de artículos para los filtros seleccionados"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/sales_invoice/sales_invoice.py)
+msgid "There are no overdue payments to include in this Dunning."
+msgstr "No hay pagos vencidos que incluir en esta reclamación."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "These already have a pending repost and are left out:"
+msgstr "Estos ya tienen un reprocesamiento pendiente y se dejan fuera:"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+msgid "These cannot be settled by an Adjustment Entry and need a repost:"
+msgstr "Estos no se pueden liquidar con un asiento de ajuste y necesitan reprocesamiento:"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "These raw materials are short in their source warehouse, so the transfer cannot be submitted yet."
+msgstr "Faltan estas materias primas en su almacén de origen, así que aún no se puede validar el traspaso."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+#, python-brace-format
+msgid "This makes a Stock Entry that puts {0} made in this Job Card into {1}."
+msgstr "Esto crea un movimiento de existencias que pone {0} fabricados en esta tarjeta de trabajo en {1}."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "Tick Last Step on the step that makes {0}. Its Output Item must be {0}."
+msgstr "Marque «Último paso» en el paso que fabrica {0}. Su artículo resultante debe ser {0}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/bom_operation/bom_operation.json)
+msgid "Tick this on the step that makes this BOM's own item. The other steps make in-between items."
+msgstr "Márquelo en el paso que fabrica el artículo de esta lista de materiales. Los demás pasos fabrican artículos intermedios."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/downtime_entry/downtime_entry.json)
+msgid "Time a workstation stood idle, and why."
+msgstr "Tiempo que un puesto de trabajo estuvo parado, y por qué."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/timesheet/timesheet.json)
+msgid "Time spent on tasks and activities, to bill or cost."
+msgstr "Tiempo dedicado a tareas y actividades, para facturarlo o imputarlo a costes."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_closing_entry/stock_closing_entry.py)
+msgid "To Date cannot be a future date"
+msgstr "La fecha final no puede ser futura"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "To Move"
+msgstr "Por mover"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/downtime_entry/downtime_entry.py)
+msgid "To Time must be after From Time"
+msgstr "La hora final debe ser posterior a la hora inicial"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/project/project.json)
+msgid "Total Consumed Material Cost"
+msgstr "Coste total del material consumido"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/lost_quotations/lost_quotations.py)
+msgid "Total Lost Quotations"
+msgstr "Total de presupuestos perdidos"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/lost_quotations/lost_quotations.py)
+msgid "Total Lost Value"
+msgstr "Valor total perdido"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "Total {0} Considered"
+msgstr "Total de {0} considerados"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "Total {0} Value"
+msgstr "Valor total de {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Transaction not allowed against closed Work Order {0}"
+msgstr "No se permiten transacciones contra la orden de fabricación cerrada {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+#, python-brace-format
+msgid "Transfer materials for Work Order {0} from its Job Cards."
+msgstr "Traspase los materiales de la orden de fabricación {0} desde sus tarjetas de trabajo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_capitalization/asset_capitalization.json)
+msgid "Turns stock items or services into an asset, or one asset into another."
+msgstr "Convierte artículos de existencias o servicios en un activo, o un activo en otro."
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/accounts_controller.py)
+#, python-brace-format
+msgid "Unable to find exchange rate from {0} to {1} on {2}"
+msgstr "No se encuentra el tipo de cambio de {0} a {1} para el {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/import_supplier_invoice/import_supplier_invoice.py)
+msgid "Unable to import a signed file"
+msgstr "No se puede importar un archivo firmado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/regional/doctype/import_supplier_invoice/import_supplier_invoice.py)
+#, python-brace-format
+msgid "Unable to read file {0}"
+msgstr "No se puede leer el archivo {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.py)
+msgid "Uncancelled Serial and Batch Bundle"
+msgstr "Lote de serie y lote no cancelado"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/unreconcile_payment/unreconcile_payment.json)
+msgid "Undo a payment's match against invoices."
+msgstr "Deshacer la conciliación de un pago con facturas."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/bulk_transaction/doctype/bulk_transaction_log/bulk_transaction_log.py)
+#, python-brace-format
+msgid "Unsupported filter operator {0}"
+msgstr "Operador de filtro no admitido: {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_entry/stock_entry.py)
+msgid "Unvalued Output"
+msgstr "Producción sin valorar"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/selling/report/inactive_customers/inactive_customers.py)
+#, python-brace-format
+msgid "User {0} has no read or select permission on {1}"
+msgstr "El usuario {0} no tiene permiso de lectura ni de selección sobre {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/report/asset_depreciations_and_balances/asset_depreciations_and_balances.py)
+msgid "Value of Assets Consumed in Capitalization"
+msgstr "Valor de los activos consumidos en la activación"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+msgid "Value of goods must be greater than 0"
+msgstr "El valor de las mercancías debe ser mayor que 0"
+
+#. Falta en erpnext/locale/es.po (erpnext/controllers/item_variant.py)
+#, python-brace-format
+msgid "Value {0} for Attribute {1} must be a number for Item {2}"
+msgstr "El valor {0} del atributo {1} debe ser un número para el artículo {2}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/warehouse_type/warehouse_type.py)
+#, python-brace-format
+msgid "Warehouse Type {0} is required by the system and cannot be deleted"
+msgstr "El sistema necesita el tipo de almacén {0} y no se puede borrar"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Warehouse {0} can not be converted to group as it is an Item's default warehouse"
+msgstr "El almacén {0} no se puede convertir en grupo porque es el almacén predeterminado de un artículo"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Warehouse {0} can not be converted to group as quantity exists for Item {1}"
+msgstr "El almacén {0} no se puede convertir en grupo porque tiene cantidad del artículo {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/warehouse/warehouse.py)
+#, python-brace-format
+msgid "Warehouse {0} cannot be disabled as stock exists for Item {1}"
+msgstr "El almacén {0} no se puede desactivar porque tiene existencias del artículo {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/plant_floor/plant_floor.py)
+#, python-brace-format
+msgid "Warehouse {0} is a group warehouse"
+msgstr "El almacén {0} es un almacén de grupo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/putaway_rule/putaway_rule.py)
+#, python-brace-format
+msgid "Warehouse {0} must be an enabled warehouse that is not a group."
+msgstr "El almacén {0} debe ser un almacén activo y de detalle."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/subscription_plan/subscription_plan.json)
+msgid "What a subscription bills for, and at what price."
+msgstr "Lo que factura una suscripción y a qué precio."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/projects/doctype/activity_cost/activity_cost.json)
+msgid "What an employee costs and bills per hour for an activity."
+msgstr "Lo que cuesta y factura por hora un empleado en una actividad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/quality_management/doctype/quality_action/quality_action.json)
+msgid "What you did to fix or prevent a quality problem."
+msgstr "Lo que hizo para corregir o evitar un problema de calidad."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/assets/doctype/asset_depreciation_schedule/asset_depreciation_schedule.json)
+msgid "When an asset depreciates, and by how much."
+msgstr "Cuándo se amortiza un activo y en qué cuantía."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/payment_term/payment_term.json)
+#, python-format
+msgid "When part of an invoice is due, like 50% in 30 days."
+msgstr "Cuándo vence una parte de una factura, como el 50 % a 30 días."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/cheque_print_template/cheque_print_template.json)
+msgid "Where each detail goes when you print on your bank's cheque."
+msgstr "Dónde va cada dato al imprimir en el cheque de su banco."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/putaway_rule/putaway_rule.json)
+msgid "Which warehouse received items go to."
+msgstr "A qué almacén van los artículos recibidos."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/buying/doctype/buying_settings/buying_settings.json)
+msgid "While making a Purchase Receipt or Purchase Invoice from a Purchase Order, use the exchange rate on its posting date rather than inheriting it from the Purchase Order."
+msgstr "Al crear un albarán o una factura de compra desde un pedido de compra, usar el tipo de cambio de su fecha contable en lugar de heredar el del pedido."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/telephony/doctype/incoming_call_settings/incoming_call_settings.json)
+msgid "Who answers incoming calls, and when."
+msgstr "Quién atiende las llamadas entrantes, y cuándo."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order/work_order.py)
+#, python-brace-format
+msgid "Work Order status cannot be set to {0}"
+msgstr "El estado de la orden de fabricación no se puede poner en {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/work_order/work_order.py)
+#, python-brace-format
+msgid "Work Order {0} is already Closed"
+msgstr "La orden de fabricación {0} ya está cerrada"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/shipping_rule/shipping_rule.json)
+msgid "Works out the shipping charge on a sale or purchase."
+msgstr "Calcula el gasto de envío de una venta o compra."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "Workstation Type {0} has no enabled Workstation"
+msgstr "El tipo de puesto de trabajo {0} no tiene ningún puesto activo"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_profile/pos_profile.py)
+msgid "Write Off Account must be a Profit and Loss account"
+msgstr "La cuenta de cancelación de saldos debe ser una cuenta de pérdidas y ganancias"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.py)
+#, python-brace-format
+msgid "You are not permitted to access Company {0}"
+msgstr "No tiene permiso para acceder a la empresa {0}"
+
+#. Falta en erpnext/locale/es.po (erpnext/setup/doctype/employee/employee.py)
+#, python-brace-format
+msgid "You are not permitted to link or update User {0}"
+msgstr "No tiene permiso para vincular ni actualizar el usuario {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_ledger_entries_of_cancelled_vouchers/stock_ledger_entries_of_cancelled_vouchers.py)
+#, python-brace-format
+msgid "You are not permitted to repair the Stock Ledger Entries of {0} {1}"
+msgstr "No tiene permiso para reparar los movimientos del libro de existencias de {0} {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/templates/pages/projects.py)
+msgid "You are not permitted to view the timesheets of this project."
+msgstr "No tiene permiso para ver las hojas de horas de este proyecto."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/telephony/doctype/voice_call_settings/voice_call_settings.json)
+msgid "Your calling preferences, like when you take calls."
+msgstr "Sus preferencias de llamadas, como cuándo atiende."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+#, python-brace-format
+msgid "from {0}"
+msgstr "desde {0}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.js)
+msgid "the target warehouse"
+msgstr "el almacén de destino"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/accounts/doctype/pos_profile/pos_profile.py)
+#, python-brace-format
+msgid "{0} cannot be a group"
+msgstr "{0} no puede ser un grupo"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/serial_no/serial_no.py)
+#, python-brace-format
+msgid "{0} cannot be changed for Serial No."
+msgstr "{0} no se puede cambiar para el número de serie."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "{0} has no raw materials. Click Add Raw Materials for this step in the Steps section, or select a BOM for its output item {1}."
+msgstr "{0} no tiene materias primas. Pulse «Añadir materias primas» en este paso de la sección Pasos, o seleccione una lista de materiales para su artículo resultante {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/report/stock_valuation_comparison/stock_valuation_comparison.js)
+#, python-brace-format
+msgid "{0} in {1}"
+msgstr "{0} en {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/blanket_order/blanket_order.py)
+#, python-brace-format
+msgid "{0} is mandatory for a {1} Blanket Order"
+msgstr "{0} es obligatorio en un pedido abierto de {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "{0} is required for the {1} party"
+msgstr "{0} es obligatorio para el tercero {1}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/production_plan/production_plan.py)
+#, python-brace-format
+msgid "{0} must be a group warehouse of company {1}."
+msgstr "{0} debe ser un almacén de grupo de la empresa {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/shipment_parcel_template/shipment_parcel_template.py)
+#, python-brace-format
+msgid "{0} must be greater than 0"
+msgstr "{0} debe ser mayor que 0"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/subcontracting/doctype/subcontracting_order/subcontracting_order.py)
+#, python-brace-format
+msgid "{0} must be the same as in Purchase Order {1}."
+msgstr "{0} debe ser igual que en el pedido de compra {1}."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.js)
+#, python-brace-format
+msgid "{0} raw materials"
+msgstr "{0} materias primas"
+
+#. Falta en erpnext/locale/es.po (erpnext/projects/doctype/task/task.py)
+#, python-brace-format
+msgid "{0} was moved after the task it depends on. {1}"
+msgstr "{0} se movió después de la tarea de la que depende. {1}"
+
+#. Falta en erpnext/locale/es.po (erpnext/buying/doctype/supplier/supplier.py)
+#, python-brace-format
+msgid "{0} {1} is not linked to Supplier {2}"
+msgstr "{0} {1} no está vinculado al proveedor {2}"
+
+#. Falta en erpnext/locale/es.po (erpnext/stock/doctype/shipment/shipment.py)
+#, python-brace-format
+msgid "{0} {1} is not linked to {2} {3}"
+msgstr "{0} {1} no está vinculado a {2} {3}"
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/stock/doctype/stock_reservation_entry/stock_reservation_entry.py)
+#, python-brace-format
+msgid "{0} {1} must be submitted to reserve stock against it."
+msgstr "{0} {1} debe estar validado para reservar existencias contra él."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "{0}: choose the Output Item, that is the item this step makes."
+msgstr "{0}: elija el artículo resultante, es decir, el artículo que fabrica este paso."
+
+#. Falta en erpnext/locale/es.po (erpnext/manufacturing/doctype/bom/bom.py)
+#, python-brace-format
+msgid "{0}: this is the Last Step, so its Output Item must be {1}."
+msgstr "{0}: es el último paso, así que su artículo resultante debe ser {1}."
+
+#. Falta en erpnext/locale/es.po
+#. (erpnext/manufacturing/doctype/job_card/job_card.py)
+#, python-brace-format
+msgid "{0}: {1} moved out of {2}"
+msgstr "{0}: {1} salió de {2}"
+
