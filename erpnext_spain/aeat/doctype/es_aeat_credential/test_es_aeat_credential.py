@@ -44,9 +44,7 @@ class TestESAEATCredential(IntegrationTestCase):
 		frappe.set_user("Administrator")
 		# Los tests de la clase comparten transacción: cada test arranca sin
 		# credenciales (delete_doc dispara on_trash → limpia los PEM de disco).
-		for name in frappe.get_all(
-			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
-		):
+		for name in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
 			frappe.delete_doc("ES AEAT Credential", name, ignore_permissions=True)
 
 	def _new_credential(self, **overrides) -> object:
@@ -81,10 +79,13 @@ class TestESAEATCredential(IntegrationTestCase):
 
 		# Nombre determinista claveado por (empresa, propósito)
 		self.assertEqual(doc.name, f"{frappe.scrub(self.company)}-verifactu")
-		# PEM en private/files, no accesibles por URL pública
+		# PEM fuera de private/files, con permisos 0600 (H3)
 		for path in pem_paths(self.company, "VeriFactu"):
 			self.assertTrue(os.path.exists(path), path)
-			self.assertIn("private", path)
+			self.assertIn(os.path.join("private", "es_keys"), path)
+			self.assertNotIn(os.path.join("private", "files"), path)
+			self.assertEqual(os.stat(path).st_mode & 0o777, 0o600, path)
+		self.assertEqual(os.stat(os.path.dirname(path)).st_mode & 0o777, 0o700)
 		# Vigencia parseada del certificado (fechas UTC del p12)
 		self.assertEqual(frappe.utils.getdate(doc.valid_from), desde.date())
 		self.assertEqual(frappe.utils.getdate(doc.valid_until), hasta.date())
@@ -188,9 +189,7 @@ class TestESAEATCredential(IntegrationTestCase):
 		from frappe.utils import get_bench_path
 
 		doc = self._new_credential()
-		files_root = os.path.join(
-			get_bench_path(), "sites", frappe.local.site, "private", "files"
-		)
+		files_root = os.path.join(get_bench_path(), "sites", frappe.local.site, "private", "es_keys")
 		cert, key = pem_paths(self.company, "VeriFactu")
 		for path in (cert, key):
 			self.assertTrue(os.path.isabs(path), path)

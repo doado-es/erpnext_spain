@@ -4,8 +4,10 @@
 # Credencial AEAT por (empresa, propósito) — spec 13 §2.
 #
 # Extracción PFX/P12 (contenedor PKCS#12)→PEM al validar (patrón de la
-# referencia): los PEM viven en private/files con nombres claveados por
-# (company, purpose) y solo son accesibles server-side. PFX y P12 son el
+# referencia): los PEM viven en sites/<sitio>/private/es_keys (H3, spec 01 §8):
+# fuera de private/files, así que no entran en las copias de ficheros de
+# `bench backup --with-files`, con el directorio en 0700 y los ficheros en 0600,
+# nombres claveados por (company, purpose) y solo accesibles server-side. PFX y P12 son el
 # MISMO contenedor PKCS#12 (estructura ASN.1 idéntica, extensión distinta) —
 # el PFX es el que entregan habitualmente las CA españolas (FNMT, Camerfirma),
 # y cryptography.load_pkcs12 lo lee sin distinción. Se CONSERVA el password
@@ -32,8 +34,30 @@ def pem_names(company: str, purpose: str) -> tuple[str, str]:
 	return f"{base}-cert.pem", f"{base}-key.pem"
 
 
+KEYS_DIR = ("private", "es_keys")
+
+
+def keys_dir() -> str:
+	"""Directorio de los PEM, creado con permisos 0700 si no existe."""
+	path = absolute_site_path(*KEYS_DIR)
+	os.makedirs(path, mode=0o700, exist_ok=True)
+	os.chmod(path, 0o700)
+	return path
+
+
+def write_secret(path: str, content: bytes) -> None:
+	"""Escribe un fichero con permisos 0600 desde su creación (sin ventana en la
+	que otro usuario del sistema pueda leerlo)."""
+	fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+	try:
+		os.write(fd, content)
+	finally:
+		os.close(fd)
+	os.chmod(path, 0o600)
+
+
 def pem_paths(company: str, purpose: str) -> tuple[str, str]:
-	"""Rutas absolutas (site) de los PEM de la credencial (private/files).
+	"""Rutas absolutas (site) de los PEM de la credencial (private/es_keys).
 
 	Ancladas al bench real vía absolute_site_path (get_bench_path):
 	INDEPENDIENTES del CWD del proceso — los workers corren con CWDs mixtos
@@ -42,8 +66,8 @@ def pem_paths(company: str, purpose: str) -> tuple[str, str]:
 	"""
 	cert, key = pem_names(company, purpose)
 	return (
-		absolute_site_path("private", "files", cert),
-		absolute_site_path("private", "files", key),
+		absolute_site_path(*KEYS_DIR, cert),
+		absolute_site_path(*KEYS_DIR, key),
 	)
 
 
@@ -77,9 +101,7 @@ class ESAEATCredential(Document):
 		docname y los PEM están claveados por él. Cambiarlo dejaría nombres y
 		claves inconsistentes — para otro par se crea otra credencial."""
 		if not self.is_new():
-			previous = frappe.db.get_value(
-				self.doctype, self.name, ["company", "purpose"], as_dict=True
-			)
+			previous = frappe.db.get_value(self.doctype, self.name, ["company", "purpose"], as_dict=True)
 			if (previous.company, previous.purpose) != (self.company, self.purpose):
 				frappe.throw(
 					"No se puede cambiar la compañía o el propósito de una credencial"
@@ -136,11 +158,10 @@ class ESAEATCredential(Document):
 		cert_pem = certificate.public_bytes(Encoding.PEM)
 		key_pem = p12.key.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption())
 
+		keys_dir()
 		cert_path, key_path = pem_paths(self.company, self.purpose)
-		with open(cert_path, "wb") as f:
-			f.write(cert_pem)
-		with open(key_path, "wb") as f:
-			f.write(key_pem)
+		write_secret(cert_path, cert_pem)
+		write_secret(key_path, key_pem)
 
 		self.valid_from = certificate.not_valid_before_utc.date()
 		self.valid_until = certificate.not_valid_after_utc.date()
