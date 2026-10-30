@@ -1,7 +1,7 @@
 {
 	"name": "PGC PYMES (RD 1515/2007)",
 	"country_code": "es",
-	"version": 1,
+	"version": 2,
 	"source": "https://www.boe.es/buscar/act.php?id=BOE-A-2007-19966",
 	"boe_last_update": "30/01/2021",
 	"tree": {
@@ -746,12 +746,6 @@
 			},
 			"Acreedores y deudores por operaciones comerciales (Activo)": {
 				"Proveedores (Activo)": {
-					"Envases y embalajes a devolver a proveedores": {
-						"account_number": "406",
-						"Envases y embalajes a devolver a proveedores": {
-							"account_number": "4060"
-						}
-					},
 					"Anticipos a proveedores": {
 						"account_number": "407",
 						"Anticipos a proveedores": {
@@ -850,6 +844,12 @@
 						"Clientes de dudoso cobro": {
 							"account_number": "4360",
 							"account_type": "Receivable"
+						}
+					},
+					"Envases y embalajes a devolver por clientes": {
+						"account_number": "437",
+						"Envases y embalajes a devolver por clientes": {
+							"account_number": "4370"
 						}
 					}
 				},
@@ -1160,12 +1160,6 @@
 							"account_number": "5540"
 						}
 					},
-					"Partidas pendientes de aplicación": {
-						"account_number": "555",
-						"Partidas pendientes de aplicación": {
-							"account_number": "5550"
-						}
-					},
 					"Socios por desembolsos exigidos": {
 						"account_number": "558",
 						"Socios por desembolsos exigidos sobre acciones o participaciones ordinarias": {
@@ -1175,13 +1169,9 @@
 							"account_number": "5585"
 						}
 					},
-					"Derivados financieros a corto plazo": {
-						"account_number": "559",
+					"Derivados financieros a corto plazo (Activo)": {
 						"Activos por derivados financieros a corto plazo": {
 							"account_number": "5590"
-						},
-						"Pasivos por derivados financieros a corto plazo": {
-							"account_number": "5595"
 						}
 					}
 				},
@@ -1320,6 +1310,18 @@
 		"Pasivo": {
 			"root_type": "Liability",
 			"Financiación básica (Pasivo)": {
+				"Capital (Pasivo)": {
+					"Socios por desembolsos no exigidos (Pasivo)": {
+						"Socios por desembolsos no exigidos, capital pendiente de inscripción": {
+							"account_number": "1034"
+						}
+					},
+					"Socios por aportaciones no dinerarias pendientes (Pasivo)": {
+						"Socios por aportaciones no dinerarias pendientes, capital pendiente de inscripción": {
+							"account_number": "1044"
+						}
+					}
+				},
 				"Provisiones": {
 					"account_number": "14",
 					"Provisión para impuestos": {
@@ -1514,6 +1516,45 @@
 							"account_number": "1850"
 						}
 					}
+				},
+				"Situaciones transitorias de financiación": {
+					"account_number": "19",
+					"Acciones o participaciones emitidas": {
+						"account_number": "190",
+						"Acciones o participaciones emitidas": {
+							"account_number": "1900"
+						}
+					},
+					"Suscriptores de acciones": {
+						"account_number": "192",
+						"Suscriptores de acciones": {
+							"account_number": "1920"
+						}
+					},
+					"Capital emitido pendiente de inscripción": {
+						"account_number": "194",
+						"Capital emitido pendiente de inscripción": {
+							"account_number": "1940"
+						}
+					},
+					"Acciones o participaciones emitidas consideradas como pasivos financieros": {
+						"account_number": "195",
+						"Acciones o participaciones emitidas consideradas como pasivos financieros": {
+							"account_number": "1950"
+						}
+					},
+					"Suscriptores de acciones consideradas como pasivos financieros": {
+						"account_number": "197",
+						"Suscriptores de acciones consideradas como pasivos financieros": {
+							"account_number": "1970"
+						}
+					},
+					"Acciones o participaciones emitidas consideradas como pasivos financieros pendientes de inscripción": {
+						"account_number": "199",
+						"Acciones o participaciones emitidas consideradas como pasivos financieros pendientes de inscripción": {
+							"account_number": "1990"
+						}
+					}
 				}
 			},
 			"Acreedores y deudores por operaciones comerciales (Pasivo)": {
@@ -1574,6 +1615,12 @@
 							"account_number": "4050",
 							"account_type": "Payable"
 						}
+					},
+					"Envases y embalajes a devolver a proveedores": {
+						"account_number": "406",
+						"Envases y embalajes a devolver a proveedores": {
+							"account_number": "4060"
+						}
 					}
 				},
 				"Acreedores varios": {
@@ -1606,12 +1653,6 @@
 					}
 				},
 				"Clientes (Pasivo)": {
-					"Envases y embalajes a devolver por clientes": {
-						"account_number": "437",
-						"Envases y embalajes a devolver por clientes": {
-							"account_number": "4370"
-						}
-					},
 					"Anticipos de clientes": {
 						"account_number": "438",
 						"Anticipos de clientes": {
@@ -1873,6 +1914,12 @@
 					}
 				},
 				"Otras cuentas no bancarias (Pasivo)": {
+					"Partidas pendientes de aplicación": {
+						"account_number": "555",
+						"Partidas pendientes de aplicación": {
+							"account_number": "5550"
+						}
+					},
 					"Desembolsos exigidos sobre participaciones en el patrimonio neto": {
 						"account_number": "556",
 						"Desembolsos exigidos sobre participaciones, empresas del grupo": {
@@ -1886,6 +1933,11 @@
 						},
 						"Desembolsos exigidos sobre participaciones de otras empresas": {
 							"account_number": "5566"
+						}
+					},
+					"Derivados financieros a corto plazo (Pasivo)": {
+						"Pasivos por derivados financieros a corto plazo": {
+							"account_number": "5595"
 						}
 					}
 				},
@@ -1914,8 +1966,7 @@
 		"Patrimonio neto": {
 			"root_type": "Equity",
 			"Financiación básica (Patrimonio neto)": {
-				"Capital": {
-					"account_number": "10",
+				"Capital (Patrimonio neto)": {
 					"Capital social": {
 						"account_number": "100",
 						"Capital social": {
@@ -1934,22 +1985,14 @@
 							"account_number": "1020"
 						}
 					},
-					"Socios por desembolsos no exigidos": {
-						"account_number": "103",
+					"Socios por desembolsos no exigidos (Patrimonio neto)": {
 						"Socios por desembolsos no exigidos, capital social": {
 							"account_number": "1030"
-						},
-						"Socios por desembolsos no exigidos, capital pendiente de inscripción": {
-							"account_number": "1034"
 						}
 					},
-					"Socios por aportaciones no dinerarias pendientes": {
-						"account_number": "104",
+					"Socios por aportaciones no dinerarias pendientes (Patrimonio neto)": {
 						"Socios por aportaciones no dinerarias pendientes, capital social": {
 							"account_number": "1040"
-						},
-						"Socios por aportaciones no dinerarias pendientes, capital pendiente de inscripción": {
-							"account_number": "1044"
 						}
 					},
 					"Acciones o participaciones propias en situaciones especiales": {
@@ -2061,45 +2104,6 @@
 						},
 						"Ingresos fiscales por deducciones y bonificaciones a distribuir en varios ejercicios": {
 							"account_number": "1371"
-						}
-					}
-				},
-				"Situaciones transitorias de financiación": {
-					"account_number": "19",
-					"Acciones o participaciones emitidas": {
-						"account_number": "190",
-						"Acciones o participaciones emitidas": {
-							"account_number": "1900"
-						}
-					},
-					"Suscriptores de acciones": {
-						"account_number": "192",
-						"Suscriptores de acciones": {
-							"account_number": "1920"
-						}
-					},
-					"Capital emitido pendiente de inscripción": {
-						"account_number": "194",
-						"Capital emitido pendiente de inscripción": {
-							"account_number": "1940"
-						}
-					},
-					"Acciones o participaciones emitidas consideradas como pasivos financieros": {
-						"account_number": "195",
-						"Acciones o participaciones emitidas consideradas como pasivos financieros": {
-							"account_number": "1950"
-						}
-					},
-					"Suscriptores de acciones consideradas como pasivos financieros": {
-						"account_number": "197",
-						"Suscriptores de acciones consideradas como pasivos financieros": {
-							"account_number": "1970"
-						}
-					},
-					"Acciones o participaciones emitidas consideradas como pasivos financieros pendientes de inscripción": {
-						"account_number": "199",
-						"Acciones o participaciones emitidas consideradas como pasivos financieros pendientes de inscripción": {
-							"account_number": "1990"
 						}
 					}
 				}

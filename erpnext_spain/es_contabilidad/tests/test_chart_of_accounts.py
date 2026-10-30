@@ -100,6 +100,12 @@ class TestChartFiles(unittest.TestCase):
 		"""Casos señalados en la spec 02 §1."""
 		cases = {
 			"4070": "Asset",
+			"4060": "Liability",
+			"4370": "Asset",
+			"1034": "Liability",
+			"1900": "Liability",
+			"5550": "Liability",
+			"5595": "Liability",
 			"4380": "Liability",
 			"4300": "Asset",
 			"4000": "Liability",

@@ -46,6 +46,8 @@ Fichero versionado `es_contabilidad/statements/epigrafe_mapping.csv`, revisado p
 | `lado` | Solo en `tipo = signo`: `deudor` / `acreedor` |
 | `invertir_signo` | 0/1 |
 | `formula` | Solo en `tipo = formula`: combinación de códigos |
+| `segun_signo` | Solo en `tipo = signo`: prefijos de `incluir` que solo cuentan con saldo del `lado` de la fila (el resto de la fila se suma siempre) |
+| `nota` | Observaciones para el revisor (p. ej. cuentas añadidas que el modelo del BOE no recoge) |
 
 Fuente del texto y la estructura: modelos de la 3ª parte del PGC (RD 1514/2007) y del PGC PYMES (RD 1515/2007). **La relación cuenta → epígrafe la elabora y firma un contable**; es el entregable de mayor riesgo de esta spec.
 
@@ -57,7 +59,9 @@ Generador `es_contabilidad/statements/generate_templates.py` (se ejecuta en desa
 - `titulo` → `Section Break` o `Blank Line` con texto.
 - Balance con `Closing Balance`; PyG con `Period Movement`. `reverse_sign` en las filas de PN, pasivo e ingresos, según la convención de signo del motor **[verificar en bench]**.
 
-Nombres de plantilla: "PGC Normal — Balance", "PGC Normal — Pérdidas y ganancias", y equivalentes para Abreviado y PYMES.
+Nombres de plantilla: "PGC PYMES - Balance", "PGC PYMES - Pérdidas y ganancias", y equivalentes para Abreviado y Normal.
+
+**Estado (30/10/2026)**: hecho el modelo **PYMES** (Balance y PyG). La relación cuenta → partida sale de la columna "Nº cuentas" de los modelos de la 3ª parte del PGC PYMES (BOE consolidado). Cuentas del plan que el modelo del BOE no recoge y que la app añade, marcadas en la columna `nota` para revisión: 473, 5585, 550, 554, 137, 150/153/154, 195/197/199, 502, 507, 678 y 778. Convención de signo verificada en bench: el motor da debe − haber y `reverse_sign` lo invierte; el PN y el pasivo, y todas las filas de la PyG, van con `reverse_sign` (los gastos salen en negativo, como en el modelo oficial). Las fórmulas del motor son expresiones con los `reference_code` (`ACT_A + ACT_B`). La partida VII "Resultado del ejercicio" suma 129 y los grupos 6 y 7 sin cerrar. Pendiente: Abreviado y Normal, y la reclasificación por signo de clientes, proveedores y bancos (§3).
 
 ## 3. Reclasificación por signo
 

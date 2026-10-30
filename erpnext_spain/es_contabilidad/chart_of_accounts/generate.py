@@ -31,7 +31,7 @@ SOURCE = HERE / "source"
 
 # Versión de los datos del plan. Se sube con cada cambio del generador o de la
 # fuente que altere los JSON (spec 02 §5).
-VERSION = 1
+VERSION = 2
 
 MODELS = {
 	"Normal": ("boe_pgc_normal.json", "pgc_normal.json", "PGC Normal (RD 1514/2007)"),
@@ -47,9 +47,12 @@ ROOTS = {
 }
 
 # Prefijo → rama. Gana el prefijo más largo. Propuesta de la spec 02 §1,
-# pendiente de revisión contable. La 406 (envases a devolver a proveedores,
-# saldo deudor) va a Activo; la 557 (dividendo activo a cuenta) es correctora
-# del patrimonio neto.
+# alineada con el lado en que los modelos oficiales de balance (3ª parte del
+# PGC y del PGC PYMES) presentan cada cuenta, para que los totales del Balance
+# nativo coincidan con los de las plantillas PGC (spec 04). Las correctoras van
+# en la rama de la partida que corrigen: 406 en Pasivo (minora proveedores),
+# 437 en Activo (minora clientes), 1034/1044 y el subgrupo 19 en Pasivo (otras
+# deudas a corto plazo), 557 en Patrimonio neto. Pendiente de revisión contable.
 ROOT_RULES = {
 	"10": "Equity",
 	"11": "Equity",
@@ -60,15 +63,16 @@ ROOT_RULES = {
 	"16": "Liability",
 	"17": "Liability",
 	"18": "Liability",
-	"19": "Equity",
+	"1034": "Liability",
+	"1044": "Liability",
+	"19": "Liability",
 	"2": "Asset",
 	"3": "Asset",
 	"40": "Liability",
-	"406": "Asset",
 	"407": "Asset",
 	"41": "Liability",
 	"43": "Asset",
-	"437": "Liability",
+	"437": "Asset",
 	"438": "Liability",
 	"44": "Asset",
 	"46": "Asset",
@@ -89,8 +93,11 @@ ROOT_RULES = {
 	"53": "Asset",
 	"54": "Asset",
 	"55": "Asset",
+	"555": "Liability",
 	"556": "Liability",
 	"557": "Equity",
+	"5595": "Liability",
+	"5598": "Liability",
 	"56": "Asset",
 	"560": "Liability",
 	"561": "Liability",

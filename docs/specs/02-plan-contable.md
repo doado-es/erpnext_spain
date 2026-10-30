@@ -27,14 +27,17 @@ Gastos (Expense)          Ingresos (Income)
 
 ### Reparto por subgrupo — propuesta, **requiere revisión contable**
 
+Criterio (versión 2 de los datos del plan, 30/10/2026): cada cuenta va a la rama del lado en que la presentan los modelos oficiales de balance del PGC y del PGC PYMES, para que los totales del Balance nativo coincidan con los de las plantillas PGC (spec 04). Las correctoras van en la rama de la partida que corrigen.
+
 | Subgrupo | Rama | Notas |
 |---|---|---|
-| 10–13, 19 | Patrimonio neto | 103/104 y 557 son correctoras de PN; siguen en PN. |
+| 10–13 | Patrimonio neto | 1030/1040 y 557 son correctoras de PN; siguen en PN. **1034 y 1044** van a Pasivo: los modelos de balance las presentan en "Otras deudas a corto plazo". |
+| 19 | Pasivo | Los modelos de balance presentan 190, 192, 194 en "Otras deudas a corto plazo". |
 | 14–18 | Pasivo | |
 | 20–29 | Activo | 28 y 29 son correctoras (saldo acreedor) dentro de Activo. |
 | 30–39 | Activo | 39 correctora. |
-| 40, 41 | Pasivo | **407** (anticipos a proveedores) va a Activo. 406 a revisar. |
-| 43 | Activo (430–436) | **437 y 438** van a Pasivo. |
+| 40, 41 | Pasivo | **407** (anticipos a proveedores) va a Activo. **406** sigue en Pasivo, como correctora de proveedores (así la presenta el modelo de balance). |
+| 43 | Activo (430–437) | **437** sigue en Activo, como correctora de clientes (así la presenta el modelo de balance). **438** va a Pasivo. |
 | 44 | Activo | |
 | 46 | Activo (460) | 465, 466 a Pasivo. |
 | 47 | Activo (470–474) | 475–479 a Pasivo. |
@@ -42,7 +45,7 @@ Gastos (Expense)          Ingresos (Income)
 | 49 | Activo (490–493, correctoras) | 499 a Pasivo. |
 | 50–52 | Pasivo | |
 | 53–54 | Activo | |
-| 55 | Ver nota | Cuentas cuyo lado depende del saldo (550–555, 559): rama nominal Activo, reclasificación por signo en spec 04. 556 Pasivo, 558 Activo. |
+| 55 | Ver nota | Cuentas cuyo lado depende del saldo (550–554, 5590): rama nominal Activo, reclasificación por signo en spec 04. **555, 556, 5595 y 5598** Pasivo, 557 Patrimonio neto, 558 Activo. |
 | 56 | Pasivo (560, 561, 568, 569) | 565, 566, 567 a Activo. |
 | 57 | Activo | 572 en descubierto: reclasificación por signo (spec 04). |
 | 58 | Activo (580–584) | 585–589 a Pasivo. |
