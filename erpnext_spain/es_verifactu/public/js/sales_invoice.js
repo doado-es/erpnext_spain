@@ -37,8 +37,11 @@ erpnext_spain.es_verifactu.invoice_test_mode_banner = function (frm) {
 	// Borrador: sin snapshot aún — el modo lo trae la compañía (lectura barata
 	// por clave primaria, una sola fila).
 	if (frm.doc.docstatus === 0 && frm.doc.company) {
-		frappe.db.get_value("Company", frm.doc.company, "es_verifactu_test_mode").then((r) => {
-			if (r && r.message && r.message.es_verifactu_test_mode === "Pruebas") {
+		// Solo si VeriFactu está ACTIVADO: el modo «Pruebas» es el valor por
+		// defecto del campo y queda guardado aunque VeriFactu esté apagado.
+		frappe.db.get_value("Company", frm.doc.company, ["es_verifactu_enabled", "es_verifactu_test_mode"]).then((r) => {
+			const company = (r && r.message) || {};
+			if (company.es_verifactu_enabled && company.es_verifactu_test_mode === "Pruebas") {
 				// solo si el intro no lo puso ya otra vía (carrera refresh/company)
 				frm.set_intro("");
 				frm.set_intro(

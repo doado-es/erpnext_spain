@@ -23,6 +23,9 @@ doc_events = {
 		# la compuerta de activación de VeriFactu (spec 04 §2.1) corre después.
 		"validate": [
 			"erpnext_spain.nif.party.validate",
+			# SII y VeriFactu excluyentes (spec 14 §1): antes que la compuerta de
+			# activación de VeriFactu, para que el error explique el conflicto.
+			"erpnext_spain.es_sii.company.validate",
 			"erpnext_spain.es_verifactu.company.validate",
 		]
 	},
@@ -63,6 +66,7 @@ doctype_js = {
 		"es_verifactu/public/js/company.js",
 		# Acción «Aplicar plan PGC» (spec 02 §2).
 		"es_contabilidad/public/js/company.js",
+		"es_sii/public/js/company.js",
 	],
 	"Sales Invoice": "es_verifactu/public/js/sales_invoice.js",
 }

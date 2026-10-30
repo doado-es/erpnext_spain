@@ -63,10 +63,12 @@ def before_uninstall() -> None:
 	# pestaña que crea y limpia nif/setup.
 	from erpnext_spain.erpnext_spain.setup import cleanup_custom_fields as _cleanup_base
 	from erpnext_spain.es_impuestos.setup import cleanup_custom_fields as _cleanup_taxes
+	from erpnext_spain.es_sii.setup import cleanup_custom_fields as _cleanup_sii
 	from erpnext_spain.es_verifactu.setup import cleanup_custom_fields as _cleanup_verifactu
 	from erpnext_spain.nif.setup import cleanup_custom_fields as _cleanup_nif
 
 	_cleanup_taxes()
+	_cleanup_sii()
 	_cleanup_verifactu()
 	_cleanup_base()
 	_cleanup_nif()
@@ -77,12 +79,14 @@ def setup_custom_fields() -> None:
 	# del módulo base antes que la de VeriFactu, que se inserta detrás.
 	from erpnext_spain.erpnext_spain.setup import setup_custom_fields as _setup_base
 	from erpnext_spain.es_impuestos.setup import setup_custom_fields as _setup_taxes
+	from erpnext_spain.es_sii.setup import setup_custom_fields as _setup_sii
 	from erpnext_spain.es_verifactu.setup import setup_custom_fields as _setup_verifactu
 	from erpnext_spain.nif.setup import setup_custom_fields as _setup_nif
 
 	_setup_nif()
 	_setup_base()
 	_setup_verifactu()
+	_setup_sii()
 	_setup_taxes()
 
 

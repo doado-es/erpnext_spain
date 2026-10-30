@@ -42,3 +42,46 @@ def is_feature_enabled(company: str | None, flag: str) -> bool:
 	if not company:
 		return False
 	return bool(cint(frappe.get_cached_value("Company", company, flag)))
+
+
+VERIFACTU = "VeriFactu"
+SII = "SII"
+
+
+def active_billing_system(company: str | None) -> str | None:
+	"""Sistema de registro de facturación activo de la compañía: VeriFactu, SII o
+	ninguno (spec 14 §1). Son excluyentes; la validación de Company impide
+	activar los dos, pero una escritura que no pase por ella (db.set_value,
+	importaciones) podría dejarlos activos a la vez. En ese caso no se trata como
+	ninguno de los dos y queda constancia en el Error Log."""
+	if not company:
+		return None
+	values = frappe.get_cached_value(
+		"Company", company, ["es_verifactu_enabled", "es_sii_enabled"], as_dict=True
+	)
+	if not values:
+		return None
+	verifactu, sii = cint(values.es_verifactu_enabled), cint(values.es_sii_enabled)
+	if verifactu and sii:
+		frappe.log_error(
+			title=f"SII y VeriFactu activos a la vez en {company}",
+			message=(
+				f"La compañía {company} tiene activados el SII y VeriFactu. No se genera ningún"
+				" registro de ninguno de los dos hasta que se desactive uno (Company → pestaña"
+				" Spain Compliance)."
+			),
+		)
+		return None
+	if verifactu:
+		return VERIFACTU
+	if sii:
+		return SII
+	return None
+
+
+def is_verifactu_active(company: str | None) -> bool:
+	return active_billing_system(company) == VERIFACTU
+
+
+def is_sii_active(company: str | None) -> bool:
+	return active_billing_system(company) == SII

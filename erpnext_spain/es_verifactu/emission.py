@@ -65,7 +65,7 @@ from frappe.model.naming import make_autoname
 from erpnext_spain.aeat.utils import format_aeat_datetime
 from erpnext_spain.nif import validator
 from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX, is_draft_name
-from erpnext_spain.utils.gating import is_feature_enabled
+from erpnext_spain.utils.gating import is_verifactu_active
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.locks import acquire_chain_lock, release_chain_lock
 
@@ -120,7 +120,7 @@ def before_submit(doc: Document, method: str | None = None) -> None:
 	company = doc.company
 
 	# --- early exit: una lectura indexada ---------------------------------
-	if not is_feature_enabled(company, "es_verifactu_enabled"):
+	if not is_verifactu_active(company):
 		return
 
 	# --- credencial (empresa, VeriFactu) habilitada, con remedio ---------
@@ -288,7 +288,7 @@ def on_submit(doc: Document, method: str | None = None) -> None:
 		company = doc.company
 
 		# --- early exit: una lectura indexada -------------------------------
-		if not is_feature_enabled(company, "es_verifactu_enabled"):
+		if not is_verifactu_active(company):
 			return
 
 		# --- RegistroAlta encadenado (DENTRO del cerrojo, spec 04 §5/§12) ---
@@ -442,7 +442,7 @@ def validate(doc: Document, method: str | None = None) -> None:
 	company = doc.company
 
 	# --- early exit: una lectura indexada ---------------------------------
-	if not is_feature_enabled(company, "es_verifactu_enabled"):
+	if not is_verifactu_active(company):
 		return
 
 	_block_amendment(doc)

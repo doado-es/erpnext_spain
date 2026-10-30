@@ -21,7 +21,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.model.naming import make_autoname
 
-from erpnext_spain.utils.gating import is_feature_enabled
+from erpnext_spain.utils.gating import is_verifactu_active
 
 # Prefijo del nombre temporal cuando la compañía no tiene patrón configurado.
 DRAFT_PREFIX = "BORRADOR-"
@@ -31,7 +31,7 @@ def uses_draft_naming(company: str | None) -> bool:
 	"""¿Numera la compañía al emitir? Hoy, solo con VeriFactu activo. La spec 05
 	§1 lo extenderá a es_fiscal_numbering, independiente de VeriFactu, cuando el
 	renombrado a la serie fiscal deje de depender de VeriFactu."""
-	return is_feature_enabled(company, "es_verifactu_enabled")
+	return is_verifactu_active(company)
 
 
 def autoname(doc: Document, method: str | None = None) -> None:
