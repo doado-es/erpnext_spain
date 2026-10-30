@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "autoname": "format:VFQ-{#####}",
+ "creation": "2026-08-31 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "credential",
+  "section_filters",
+  "counterparty_nif",
+  "series_number",
+  "column_break_filters",
+  "from_date",
+  "to_date",
+  "section_results",
+  "result",
+  "lines"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "description": "Credencial (propósito VeriFactu, habilitada) con la que la empresa firma la consulta — TLS mutua con la AEAT. Se toma por defecto de la ficha de la compañía y se valida antes de remitir.",
+   "fetch_from": "company.es_verifactu_credential",
+   "fieldname": "credential",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Credencial AEAT",
+   "options": "ES AEAT Credential"
+  },
+  {
+   "fieldname": "section_filters",
+   "fieldtype": "Section Break",
+   "label": "Filtros de consulta"
+  },
+  {
+   "description": "Filtro Contraparte: N.I.F. del tercero de los registros consultados.",
+   "fieldname": "counterparty_nif",
+   "fieldtype": "Data",
+   "label": "N.I.F. del tercero"
+  },
+  {
+   "description": "Filtro Nº Serie+Nº Factura del emisor (el nombre fiscal de la factura).",
+   "fieldname": "series_number",
+   "fieldtype": "Data",
+   "label": "Nº de factura"
+  },
+  {
+   "fieldname": "column_break_filters",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Filtro FechaExpedicionFactura: inicio del rango (inclusive). Fija además el período impositivo de la consulta (la AEAT la exige por período).",
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "Expedida desde"
+  },
+  {
+   "description": "Filtro FechaExpedicionFactura: fin del rango (inclusive).",
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "Expedida hasta"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_results",
+   "fieldtype": "Section Break",
+   "label": "Resultados"
+  },
+  {
+   "description": "Respuesta cruda de la AEAT (JSON): exactamente lo que devolvió ConsultaFactuSistemaFacturacion — auditable.",
+   "fieldname": "result",
+   "fieldtype": "JSON",
+   "label": "Respuesta AEAT (JSON)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Table",
+   "label": "Registros devueltos",
+   "options": "ES Verifactu Aeat Query Line",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-31 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Verifactu",
+ "name": "ES Verifactu Aeat Query",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

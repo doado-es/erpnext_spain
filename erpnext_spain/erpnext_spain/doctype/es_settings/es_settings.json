@@ -1,0 +1,103 @@
+{
+ "actions": [],
+ "creation": "2026-08-31 00:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_nif",
+  "modo_validacion_nif",
+  "section_break_verifactu",
+  "sif_nombre_razon",
+  "sif_nif",
+  "sif_nombre_sistema_informatico",
+  "sif_id_sistema_informatico",
+  "sif_version",
+  "verifactu_wsdl_test",
+  "verifactu_wsdl_production"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_nif",
+   "fieldtype": "Section Break",
+   "label": "Validaci\u00f3n NIF"
+  },
+  {
+   "default": "Bloquear",
+   "description": "C\u00f3mo tratar un NIF inv\u00e1lido al guardar un Cliente o Proveedor. \u00abBloquear\u00bb impide guardar; \u00abSolo avisar\u00bb permite guardar con un aviso. La Empresa valida siempre en modo bloqueo (el NIF del emisor es el m\u00e1s cr\u00edtico del sistema).",
+   "fieldname": "modo_validacion_nif",
+   "fieldtype": "Select",
+   "label": "Modo de validaci\u00f3n en terceros",
+   "options": "Bloquear\nSolo avisar"
+  },
+  {
+   "fieldname": "section_break_verifactu",
+   "fieldtype": "Section Break",
+   "label": "VeriFactu"
+  },
+  {
+   "description": "Datos identificativos del Sistema Inform\u00e1tico de Facturaci\u00f3n (SIF) certificados por el productor del software. Se env\u00edan en el alta del sistema ante la AEAT.",
+   "fieldname": "sif_nombre_razon",
+   "fieldtype": "Data",
+   "label": "Nombre o raz\u00f3n social del productor (SIF)"
+  },
+  {
+   "description": "NIF del productor del software de facturaci\u00f3n.",
+   "fieldname": "sif_nif",
+   "fieldtype": "Data",
+   "label": "NIF del productor (SIF)"
+  },
+  {
+   "default": "DOADOErp",
+   "description": "Nombre comercial del sistema de facturaci\u00f3n (ej.: \u00abERPNext Spain\u00bb).",
+   "fieldname": "sif_nombre_sistema_informatico",
+   "fieldtype": "Data",
+   "label": "Nombre del sistema inform\u00e1tico (SIF)"
+  },
+  {
+   "description": "Identificador \u00fanico del sistema inform\u00e1tico (ej.: 128 en el entorno de pruebas de la AEAT).",
+   "fieldname": "sif_id_sistema_informatico",
+   "fieldtype": "Data",
+   "label": "ID del sistema inform\u00e1tico (SIF)"
+  },
+  {
+   "description": "Versi\u00f3n del sistema inform\u00e1tico por release.",
+   "fieldname": "sif_version",
+   "fieldtype": "Data",
+   "label": "Versi\u00f3n (SIF)"
+  },
+  {
+   "default": "https://prewww2.aeat.es/static_files/common/internet/dep/aplicaciones/es/aeat/tikeV1.0/cont/ws/SistemaFacturacion.wsdl",
+   "description": "Endpoint WSDL del servicio VeriFactu de pruebas de la AEAT. Editable por si la AEAT publica uno nuevo.",
+   "fieldname": "verifactu_wsdl_test",
+   "fieldtype": "Data",
+   "label": "WSDL VeriFactu (pruebas)"
+  },
+  {
+   "description": "Endpoint WSDL del servicio VeriFactu de producci\u00f3n. Debe indicarlo el proveedor del certificado/desarrollo: no se incluye un valor por defecto para evitar enviar a producci\u00f3n contra un endpoint incorrecto.",
+   "fieldname": "verifactu_wsdl_production",
+   "fieldtype": "Data",
+   "label": "WSDL VeriFactu (producci\u00f3n)"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-08-31 12:45:07.756815",
+ "modified_by": "Administrator",
+ "module": "ERPNext Spain",
+ "name": "ES Settings",
+ "owner": "Administrator",
+ "permissions": [
+   {
+    "read": 1,
+    "role": "System Manager",
+    "write": 1
+   }
+  ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,197 @@
+{
+ "actions": [],
+ "autoname": "format:VFR-{#####}",
+ "creation": "2026-08-31 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "sales_invoice",
+  "section_registro",
+  "record_type",
+  "invoice_type",
+  "chain_index",
+  "section_cadena",
+  "record_json",
+  "hash",
+  "previous_hash",
+  "section_estado",
+  "status",
+  "response",
+  "response_error_code",
+  "response_error_msg",
+  "curable",
+  "section_indicadores",
+  "is_correction",
+  "prior_rejection",
+  "no_prior_record"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Factura de venta",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "section_registro",
+   "fieldtype": "Section Break",
+   "label": "Registro"
+  },
+  {
+   "description": "RegistroAlta: emisión de factura. RegistroAnulacion: cancelación de una factura emitida (ambos se encadenan por huella).",
+   "fieldname": "record_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo de registro",
+   "options": "RegistroAlta\nRegistroAnulacion",
+   "reqd": 1
+  },
+  {
+   "fieldname": "invoice_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo de factura",
+   "options": "ES Invoice Type"
+  },
+  {
+   "description": "Posición en la cadena de la empresa (SIF): auditoría y orden de subsanación (spec 04 §2.2, §9).",
+   "fieldname": "chain_index",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Índice en la cadena"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_cadena",
+   "fieldtype": "Section Break",
+   "label": "Cadena y huella"
+  },
+  {
+   "description": "Fuente de verdad del registro AEAT: exactamente lo remitido. La huella se calcula sobre este contenido (spec 04 §5).",
+   "fieldname": "record_json",
+   "fieldtype": "JSON",
+   "label": "Registro remitido (JSON)"
+  },
+  {
+   "fieldname": "hash",
+   "fieldtype": "Data",
+   "label": "Huella (SHA-256)"
+  },
+  {
+   "description": "Huella del registro anterior de la cadena; vacío («») para el primer registro (PrimerRegistro=S).",
+   "fieldname": "previous_hash",
+   "fieldtype": "Data",
+   "label": "Huella anterior"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_estado",
+   "fieldtype": "Section Break",
+   "label": "Estado y respuesta"
+  },
+  {
+   "default": "PendienteEnvio",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "PendienteEnvio\nCorrecto\nAceptadoConErrores\nIncorrecto",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Link",
+   "label": "Respuesta AEAT",
+   "options": "ES AEAT Response"
+  },
+  {
+   "fieldname": "response_error_code",
+   "fieldtype": "Data",
+   "label": "Código de error AEAT"
+  },
+  {
+   "fieldname": "response_error_msg",
+   "fieldtype": "Small Text",
+   "label": "Mensaje de error AEAT"
+  },
+  {
+   "description": "Derivado del código de error AEAT; lo actualiza el procesador de respuestas (spec 04 §9).",
+   "fieldname": "curable",
+   "fieldtype": "Check",
+   "label": "Subsanable"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_indicadores",
+   "fieldtype": "Section Break",
+   "label": "Indicadores"
+  },
+  {
+   "description": "Registro de subsanación: NUNCA edita el registro previo — crea un registro nuevo encadenado (spec 04 §2.2/§3).",
+   "fieldname": "is_correction",
+   "fieldtype": "Check",
+   "label": "Subsanación"
+  },
+  {
+   "description": "Reintento automático tras rechazo previo de la AEAT (spec 04 §3).",
+   "fieldname": "prior_rejection",
+   "fieldtype": "Check",
+   "label": "Rechazo previo"
+  },
+  {
+   "description": "Alta que regulariza un registro existente en el SIF que no llegó a remitirse a la AEAT (acogida a VeriFactu desde fuera, spec 04 §2.2).",
+   "fieldname": "no_prior_record",
+   "fieldtype": "Check",
+   "label": "Sin registro previo"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-31 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Verifactu",
+ "name": "ES Verifactu Billing Record",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "role": "Accounts Manager"
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,40 @@
+{
+	"CSV": null,
+	"DatosPresentacion": null,
+	"Cabecera": {
+		"ObligadoEmision": {
+			"NombreRazon": "Empresa Ejemplo S.L.",
+			"NIF": "12345678Z"
+		},
+		"Representante": null,
+		"RemisionVoluntaria": null,
+		"RemisionRequerimiento": null
+	},
+	"TiempoEsperaEnvio": "60",
+	"EstadoEnvio": "Incorrecto",
+	"RespuestaLinea": [
+		{
+			"IDFactura": {
+				"IDEmisorFactura": "12345678Z",
+				"NumSerieFactura": "FACT-2026-001",
+				"FechaExpedicionFactura": "31-01-2026"
+			},
+			"Operacion": {
+				"TipoOperacion": "Alta",
+				"Subsanacion": null,
+				"RechazoPrevio": null,
+				"SinRegistroPrevio": null
+			},
+			"RefExterna": "Spanish compliance - 0.0.0",
+			"EstadoRegistro": "Incorrecto",
+			"CodigoErrorRegistro": 3000,
+			"DescripcionErrorRegistro": "Registro de facturación duplicado.",
+			"RegistroDuplicado": {
+				"IdPeticionRegistroDuplicado": "00000000000000000000",
+				"EstadoRegistroDuplicado": "Correcta",
+				"CodigoErrorRegistro": null,
+				"DescripcionErrorRegistro": null
+			}
+		}
+	]
+}

@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "creation": "2026-08-31 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "invoice_id",
+  "state",
+  "error_code",
+  "error_description",
+  "last_modified_at",
+  "record_data"
+ ],
+ "fields": [
+  {
+   "description": "Identificación AEAT del registro devuelto (IDEmisorFactura, NumSerieFactura, FechaExpedicionFactura) — exactamente lo que contestó la AEAT.",
+   "fieldname": "invoice_id",
+   "fieldtype": "JSON",
+   "label": "Factura (ID AEAT)"
+  },
+  {
+   "description": "Correcto | AceptadoConErrores | Anulado — el estado CONSOLIDADO del registro en la AEAT. Data, no Select: la AEAT podría devolver valores nuevos y la persistencia de la consulta nunca debe bloquearse por validación.",
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Estado del registro"
+  },
+  {
+   "fieldname": "error_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Código de error AEAT"
+  },
+  {
+   "fieldname": "error_description",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Descripción del error AEAT"
+  },
+  {
+   "description": "TimestampUltimaModificacion que la AEAT devuelve por registro.",
+   "fieldname": "last_modified_at",
+   "fieldtype": "Data",
+   "label": "Última modificación en la AEAT"
+  },
+  {
+   "description": "Bloque DatosRegistroFacturacion del registro (tipo, indicadores de subsanación/rechazo, huella…) — crudo auditable.",
+   "fieldname": "record_data",
+   "fieldtype": "JSON",
+   "label": "Datos del registro (JSON)"
+  }
+ ],
+ "istable": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-31 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Verifactu",
+ "name": "ES Verifactu Aeat Query Line",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

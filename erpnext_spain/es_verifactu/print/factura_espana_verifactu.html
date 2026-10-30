@@ -1,0 +1,176 @@
+<!-- Factura España VeriFactu — Print Format de Sales Invoice (spec 04 §11).
+Formato Jinja custom completo (HTML propio, sin builder): layout español
+mínimo con cabecera de compañía (razón social + NIF), bloque de cliente,
+tabla de líneas, desglose de impuestos, totales y el bloque legal VeriFactu
+(QR + enlace de validación + nota de remisión + estado cuando procede).
+Los borradores (docstatus 0) imprimen rotulados «NO ES FACTURA — BORRADOR»
+(spec 04 §4: la impresión de un borrador debe ser inequívoca) y SIN bloque
+VeriFactu (el QR referencia el número fiscal final, que un borrador no tiene).
+Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
+
+<div class="es-factura">
+	<style>
+		.es-factura { font-family: sans-serif; font-size: 13px; color: #333; }
+		.es-factura h1, .es-factura h2, .es-factura h3 { margin: 0; }
+		.es-factura .cabecera { display: flex; justify-content: space-between; margin-bottom: 24px; }
+		.es-factura .empresa h2 { font-size: 18px; }
+		.es-factura .empresa .nif { margin-top: 4px; }
+		.es-factura .titulo-factura { text-align: right; }
+		.es-factura .titulo-factura h1 { font-size: 20px; }
+		.es-factura .titulo-factura .meta { margin-top: 4px; }
+		.es-factura .partes { display: flex; justify-content: space-between; margin-bottom: 20px; }
+		.es-factura .bloque-cliente { max-width: 55%; }
+		.es-factura .bloque-cliente .etiqueta { color: #888; font-size: 11px; text-transform: uppercase; }
+		.es-factura table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+		.es-factura table th, .es-factura table td { padding: 6px 8px; text-align: left; }
+		.es-factura table th { border-bottom: 1px solid #999; font-size: 11px; text-transform: uppercase; color: #555; }
+		.es-factura table td.numero, .es-factura table th.numero { text-align: right; }
+		.es-factura .totales { margin-top: 12px; width: 45%; margin-left: auto; }
+		.es-factura .totales td { padding: 3px 8px; }
+		.es-factura .totales td.numero { font-weight: 600; white-space: nowrap; }
+		.es-factura .totales tr.grande td { font-size: 15px; font-weight: 700; border-top: 1px solid #333; padding-top: 6px; }
+		.es-factura .bloque-verifactu { margin-top: 28px; padding: 14px 16px; border: 1px solid #bbb; display: flex; gap: 18px; align-items: center; }
+		.es-factura .bloque-verifactu .qr { width: 148px; flex-shrink: 0; }
+		.es-factura .bloque-verifactu .qr svg { width: 148px; height: 148px; }
+		.es-factura .bloque-verifactu .legal { font-size: 11px; color: #444; }
+		.es-factura .bloque-verifactu .legal .enlace { word-break: break-all; margin: 4px 0 6px; }
+		.es-factura .bloque-verifactu .estado { margin-top: 6px; }
+		.es-factura .rotulo-borrador { margin: 24px 0; padding: 14px 16px; border: 3px dashed #b00; color: #b00; font-size: 18px; font-weight: 700; text-align: center; text-transform: uppercase; }
+		.es-factura .nota-exencion { color: #555; font-size: 11px; margin-top: 4px; }
+		.es-factura .pie { margin-top: 32px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 10px; color: #777; display: flex; justify-content: space-between; }
+	</style>
+
+	{# --- BORRADOR: rotulado inequívoco (spec 04 §4), SIN bloque VeriFactu --- #}
+	{%- if doc.docstatus == 0 -%}
+		<div class="rotulo-borrador">NO ES FACTURA — BORRADOR</div>
+	{%- endif -%}
+
+	<div class="cabecera">
+		<div class="empresa">
+			<h2>{{ doc.company }}</h2>
+			<div class="nif">NIF: {{ frappe.db.get_value("Company", doc.company, "tax_id") or "—" }}</div>
+		</div>
+		<div class="titulo-factura">
+			<h1>{{ _("Factura") }}</h1>
+			<div class="meta"><strong>{{ doc.name }}</strong></div>
+			<div class="meta">{{ _("Fecha") }}: {{ doc.get_formatted("posting_date") }}</div>
+			{%- if doc.get("due_date") -%}
+				<div class="meta">{{ _("Vencimiento") }}: {{ doc.get_formatted("due_date") }}</div>
+			{%- endif -%}
+		</div>
+	</div>
+
+	<div class="partes">
+		<div class="bloque-cliente">
+			<div class="etiqueta">{{ _("Cliente") }}</div>
+			<div><strong>{{ get_es_display_name(doc, "customer") }}</strong></div>
+			<div>NIF: {{ doc.get("tax_id") or "—" }}</div>
+			{%- if doc.get("customer_address") -%}
+				<div style="margin-top:6px">{{ doc.get_formatted("address_display") }}</div>
+			{%- endif -%}
+		</div>
+		<div class="bloque-cliente" style="text-align:right">
+			{%- if doc.get("es_invoice_type") -%}
+				<div class="etiqueta">{{ _("Tipo de factura (VeriFactu)") }}</div>
+				<div>{{ doc.get("es_invoice_type") }}</div>
+			{%- endif -%}
+			<div class="etiqueta" style="margin-top:6px">{{ _("Moneda") }}</div>
+			<div>{{ doc.get("currency") }}</div>
+		</div>
+	</div>
+
+	<table>
+		<thead>
+			<tr>
+				<th>{{ _("Concepto") }}</th>
+				<th class="numero">{{ _("Cantidad") }}</th>
+				<th class="numero">{{ _("Precio") }}</th>
+				<th class="numero">{{ _("Importe") }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{%- for line in doc.items -%}
+				<tr>
+					<td>{{ line.get("item_name") or line.get("item_code") or line.get("description") }}</td>
+					<td class="numero">{{ line.get_formatted("qty") }}</td>
+					<td class="numero">{{ line.get_formatted("rate") }}</td>
+					<td class="numero">{{ line.get_formatted("amount") }}</td>
+				</tr>
+			{%- endfor -%}
+		</tbody>
+	</table>
+
+	{% set breakup = get_verifactu_breakup(doc) %}
+	{%- if breakup -%}
+		<table>
+			<thead>
+				<tr>
+					<th>{{ _("Impuesto") }}</th>
+					<th class="numero">{{ _("Tipo") }}</th>
+					<th class="numero">{{ _("Base imponible") }}</th>
+					<th class="numero">{{ _("Cuota") }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%- for row in breakup -%}
+					<tr>
+						<td>{{ row.tax }}</td>
+						<td class="numero">{{ row.rate }}</td>
+						<td class="numero">{{ row.base }}</td>
+						<td class="numero">{{ row.tax_amount }}</td>
+					</tr>
+				{%- endfor -%}
+			</tbody>
+		</table>
+	{%- elif doc.get("es_verifactu_exempt_cause") -%}
+		<div class="nota-exencion">
+			{{ _("Operación exenta de IVA — causa de exención") }}: {{ doc.get("es_verifactu_exempt_cause") }} ({{ _("Orden HAC/1177/2024, L10") }}).
+		</div>
+	{%- endif -%}
+
+	<table class="totales">
+		<tr>
+			<td>{{ _("Base imponible") }}</td>
+			<td class="numero">{{ doc.get_formatted("net_total") }}</td>
+		</tr>
+		<tr>
+			<td>{{ _("Total impuestos") }}</td>
+			<td class="numero">{{ doc.get_formatted("total_taxes_and_charges") }}</td>
+		</tr>
+		<tr class="grande">
+			<td>{{ _("Total") }} ({{ doc.get("currency") }})</td>
+			<td class="numero">{{ doc.get_formatted("rounded_total") }}</td>
+		</tr>
+	</table>
+
+	{# --- Bloque legal VeriFactu: SOLO facturas emitidas (spec 04 §11) --- #}
+	{%- if doc.docstatus != 0 and get_verifactu_qr_code(doc) -%}
+		<div class="bloque-verifactu">
+			<div class="qr">{{ get_verifactu_qr_code(doc) }}</div>
+			<div class="legal">
+				<div><strong>{{ _("Factura remitida al sistema VeriFactu de la AEAT") }}</strong></div>
+				<div class="enlace">
+					{{ _("Verificación") }}: {{ get_verifactu_qr_url(doc) }}
+				</div>
+				<div>
+					{{ _("Escanee el código QR o visite el enlace para validar la factura en la sede electrónica de la Agencia Tributaria.") }}
+				</div>
+				{%- if doc.get("es_verifactu_mode") == "Verifactu en pruebas" -%}
+					<div class="estado" style="color:#8a6d3b">
+						{{ _("⚠ Emitida en MODO PRUEBAS de VeriFactu: sin validez fiscal.") }}
+					</div>
+				{%- endif -%}
+				{%- if doc.get("es_verifactu_status") -%}
+					<div class="estado">
+						{{ _("Estado VeriFactu") }}: {{ doc.get("es_verifactu_status") }}
+						{%- if doc.docstatus == 2 %} · {{ _("anulada") }}{% endif -%}
+					</div>
+				{%- endif -%}
+			</div>
+		</div>
+	{%- endif -%}
+
+	<div class="pie">
+		<span>{{ doc.company }} · {{ _("Factura emitida conforme a la normativa de facturación española (RD 1619/2012, VeriFactu RD 1007/2023)") }}</span>
+	</div>
+</div>

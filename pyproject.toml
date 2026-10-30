@@ -9,7 +9,15 @@ readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     # "frappe~=16.0.0" # Installed and managed by bench.
+    "python-stdnum>=1.19",
+    "zeep~=4.3",
+    # QR de validación VeriFactu (spec 04 §11): SVG sin dependencias pesadas.
+    "segno~=1.6",
 ]
+
+[tool.bench.frappe-dependencies]
+frappe = ">=16.0.0-dev,<17.0.0"
+erpnext = ">=16.0.0-dev,<17.0.0"
 
 [build-system]
 requires = ["flit_core >=3.4,<4"]
