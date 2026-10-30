@@ -91,6 +91,8 @@ Inalterable una vez enviada. Una rectificación se hace con una factura rectific
 
 ## Criterios de aceptación
 
+> **Estado (31/10/2026): B2G implementado** en `es_efactura`: Facturae 3.2.2 (esquema oficial versionado en `schemas/`, validación local sin red), firma XAdES-EPES con `signxml` y la política Facturae v3.1 (identificador y huella SHA-1 publicados en facturae.gob.es), certificado de la credencial elegida en Company (`es_einvoice_credential`). Doctype `ES E-Invoice` con XML firmado privado, huella, estado e historial; en Sales Invoice, `es_einvoice` y `es_einvoice_status` de solo lectura y botón "Generar Facturae". Subida manual a FACe y registro manual del número de registro y de los estados. Rectificativas con `es_rectification_reason_code`, `es_correction_method` y `es_rectification_reason` (spec 05 §2). Una factura presentada en FACe no se puede cancelar. Datos nuevos: tipo de persona y nombre y apellidos (Customer, Company), DIR3 (Customer), unidad Facturae (UOM), medio de pago Facturae (Mode of Payment). Limitaciones de esta versión: solo euros, sin redondeo del total y sin descuentos separados (el precio unitario va neto). Pendiente el criterio 1 en su parte manual: validar un XML real con el validador oficial.
+
 1. Una factura a una Administración genera un Facturae que valida contra el XSD oficial y cuya firma verifica la herramienta de validación de la Administración **[identificar la herramienta oficial]**.
 2. Los importes del XML coinciden al céntimo con la factura y con el Registro Fiscal IVA, incluidas retenciones y recargo de equivalencia.
 3. Una factura B2B genera un UBL que valida contra EN 16931 (reglas Schematron) y contra las reglas españolas que publique la AEAT.

@@ -1,0 +1,214 @@
+{
+ "actions": [],
+ "autoname": "format:EF-{YYYY}-{#####}",
+ "creation": "2026-10-30 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sales_invoice",
+  "company",
+  "customer",
+  "column_break_1",
+  "status",
+  "invoice_date",
+  "invoice_total",
+  "currency",
+  "section_file",
+  "format",
+  "channel",
+  "file",
+  "column_break_2",
+  "file_hash",
+  "signing_certificate",
+  "section_face",
+  "face_registry_number",
+  "column_break_3",
+  "face_registry_date",
+  "section_history",
+  "history"
+ ],
+ "fields": [
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Factura de venta",
+   "options": "Sales Invoice",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "read_only": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Cliente",
+   "options": "Customer",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "Generada\nRegistrada en FACe\nContabilizada\nPagada\nRechazada\nAnulada",
+   "default": "Generada",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "invoice_date",
+   "fieldtype": "Date",
+   "label": "Fecha de la factura",
+   "read_only": 1
+  },
+  {
+   "fieldname": "invoice_total",
+   "fieldtype": "Currency",
+   "label": "Total de la factura",
+   "read_only": 1,
+   "in_list_view": 1,
+   "options": "currency"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Moneda",
+   "options": "Currency",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "section_file",
+   "fieldtype": "Section Break",
+   "label": "Fichero"
+  },
+  {
+   "fieldname": "format",
+   "fieldtype": "Select",
+   "label": "Formato",
+   "options": "Facturae 3.2.2",
+   "default": "Facturae 3.2.2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Select",
+   "label": "Canal",
+   "options": "FACe (subida manual)",
+   "default": "FACe (subida manual)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "file",
+   "fieldtype": "Attach",
+   "label": "XML firmado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "file_hash",
+   "fieldtype": "Data",
+   "label": "Huella SHA-256 del XML",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signing_certificate",
+   "fieldtype": "Data",
+   "label": "Certificado de firma",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_face",
+   "fieldtype": "Section Break",
+   "label": "FACe"
+  },
+  {
+   "fieldname": "face_registry_number",
+   "fieldtype": "Data",
+   "label": "Número de registro en FACe",
+   "read_only": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "face_registry_date",
+   "fieldtype": "Datetime",
+   "label": "Fecha de registro en FACe",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_history",
+   "fieldtype": "Section Break",
+   "label": "Historial"
+  },
+  {
+   "fieldname": "history",
+   "fieldtype": "Table",
+   "label": "Historial de estados",
+   "options": "ES E-Invoice Status",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Efactura",
+ "name": "ES E-Invoice",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "role": "System Manager",
+   "delete": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "role": "Accounts Manager"
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "print": 1,
+   "role": "Accounts User"
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "sales_invoice",
+ "show_title_field_in_link": 0
+}

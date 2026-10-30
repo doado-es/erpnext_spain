@@ -102,9 +102,8 @@ class TestAbsoluteSitePaths(IntegrationTestCase):
 		)
 
 		cert, key = pem_paths("Mi Empresa SL", "VeriFactu")
-		files_root = os.path.join(
-			get_bench_path(), "sites", frappe.local.site, "private", "files"
-		)
+		# H3: fuera de private/files (no entra en las copias de ficheros).
+		files_root = os.path.join(get_bench_path(), "sites", frappe.local.site, "private", "es_keys")
 		for path in (cert, key):
 			self.assertTrue(os.path.isabs(path), path)
 			self.assertTrue(path.startswith(files_root), path)

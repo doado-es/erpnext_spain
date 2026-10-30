@@ -47,7 +47,10 @@ doc_events = {
 			"erpnext_spain.es_verifactu.emission.before_submit",
 		],
 		"on_submit": "erpnext_spain.es_verifactu.emission.on_submit",
-		"before_cancel": "erpnext_spain.es_verifactu.emission.before_cancel",
+		"before_cancel": [
+			"erpnext_spain.es_efactura.api.block_cancel_if_presented",
+			"erpnext_spain.es_verifactu.emission.before_cancel",
+		],
 	},
 }
 
@@ -68,7 +71,11 @@ doctype_js = {
 		"es_contabilidad/public/js/company.js",
 		"es_sii/public/js/company.js",
 	],
-	"Sales Invoice": "es_verifactu/public/js/sales_invoice.js",
+	"Sales Invoice": [
+		"es_verifactu/public/js/sales_invoice.js",
+		# Botón «Generar Facturae» (spec 10).
+		"es_efactura/public/js/sales_invoice.js",
+	],
 }
 
 # Estilado de BORRADOR-* en el list view de Sales Invoice (spec 04 §15):

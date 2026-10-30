@@ -11,6 +11,7 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 | F1 | **Facturación masiva de albaranes de venta**: crear facturas de venta a partir de varios Delivery Note, agrupadas por cliente (y opcionalmente por periodo, dirección o condiciones de pago). | Ya prevista en la spec 07 ("facturación masiva desde albaranes"). Decidir criterios de agrupación, qué hacer con albaranes con distinta moneda, lista de precios o impuestos, y si se valida la factura o se deja en borrador. Debe respetar la numeración fiscal (spec 05) y VeriFactu. |
 | F2 | **Facturación masiva de albaranes de compra**: crear facturas de compra a partir de varios Purchase Receipt del mismo proveedor. | La factura de compra la emite el proveedor: hace falta su número y fecha (`bill_no`, `bill_date`). Posible flujo: seleccionar albaranes de un proveedor y registrar la factura recibida que los agrupa. |
 | F3 | **Envío masivo de facturas por correo**: enviar a cada cliente sus facturas validadas (una por correo o agrupadas), con el formato de impresión español y plantilla de correo. | En segundo plano (cola), con registro de lo enviado y de los errores, y sin reenviar lo ya enviado salvo que se pida. Destinatario: contacto de facturación del cliente. |
+| F4 | **Validador de NIF/NIE/CIF y de NIF-IVA europeo**: herramienta para comprobar identificadores a demanda (uno suelto o una lista, p. ej. todos los clientes y proveedores) y no solo al guardar el tercero. | Ya existe el verificador de formato y dígito de control de NIF, NIE y CIF (módulo `nif`, que valida al guardar Customer, Supplier y Company) y el informe ES NIF Checkup. Falta: (a) comprobación en línea del NIF-IVA europeo en **VIES** (servicio de la Comisión Europea; necesario para entregas intracomunitarias exentas); (b) opcionalmente, contraste de NIF y nombre con el censo de la AEAT (servicio de identificación fiscal, requiere certificado); (c) guardar resultado y fecha de la última comprobación en el tercero; (d) pantalla o acción masiva. |
 
 ## Fase 0 — fundamentos (spec 01)
 
@@ -18,7 +19,6 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 - §7 / H4 CI en GitHub Actions: lint, Semgrep con `frappe/semgrep-rules` y reglas propias, tests en un sitio limpio. Antes hay que tener remoto.
 - H7 definitivo: incluir en la app los XSD externos que importa el WSDL de la AEAT y quitar el límite `zeep<4.3.3`.
 - H8: que los tests de VeriFactu creen sus propios datos (cliente, artículo, identidad SIF, compañía) y no dependan del sitio.
-- ~~H3~~: hecho.
 - H5 (resto): `rectify` solo `POST`; borrar al desinstalar el Property Setter del formato de impresión; corregir en `docs/referencia` la guía que recomienda fixtures.
 - Errores de `ruff` heredados del código base (47 avisos y 37 ficheros sin formatear).
 - El botón "Aplicar plan PGC" de Company no respondía al usuario (aparecía, sin error en consola). Sin diagnosticar.
@@ -61,6 +61,8 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 - Retenciones practicadas en compras con el mecanismo nativo (categorías, grupos, cuentas 4751), validación del proveedor, inmuebles arrendados e informes para 111, 115, 180 y 190. Decisión A7.
 
 ## Comunicación con la AEAT y terceros
+
+- Factura electrónica (spec 10): **hecho Facturae 3.2.2 firmado para FACe con subida manual (31/10/2026)**. Pendiente: validar a mano un primer XML con el validador del Ministerio o en el entorno de pruebas de FACe; servicio web de FACe; facturas en moneda extranjera; descuentos por línea y generales; B2B (SPFE o plataforma, decisión A9) y recepción de facturas.
 
 - VeriFactu: prueba real en el entorno de pruebas de la AEAT (falta certificado); pendientes del TODO del código base (catálogos L8A y L10, formato del QR, paginación de la consulta, errores).
 - SII (spec 14): libros, cola de envío, plazos y cuadre. Hoy solo está la activación.

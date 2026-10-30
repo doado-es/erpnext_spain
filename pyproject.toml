@@ -15,6 +15,8 @@ dependencies = [
     "zeep>=4.3,<4.3.3",
     # QR de validación VeriFactu (spec 04 §11): SVG sin dependencias pesadas.
     "segno~=1.6",
+    # Firma XAdES-EPES de Facturae (spec 10 §3).
+    "signxml>=4.0,<6",
 ]
 
 [tool.bench.frappe-dependencies]
