@@ -60,7 +60,11 @@ extend_doctype_class = {
 # y glue del dialog de subsanación (get_dialog_fields → rectify).
 
 doctype_js = {
-	"Company": "es_verifactu/public/js/company.js",
+	"Company": [
+		"es_verifactu/public/js/company.js",
+		# Acción «Aplicar plan PGC» (spec 02 §2).
+		"es_contabilidad/public/js/company.js",
+	],
 	"Sales Invoice": "es_verifactu/public/js/sales_invoice.js",
 }
 

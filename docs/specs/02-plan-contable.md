@@ -84,17 +84,22 @@ def apply_pgc_chart(company: str, chart_model: str, dry_run: bool = True) -> dic
 - `country == "Spain"`.
 - Sin GL Entry de la compañía (mismo criterio que el importador de planes de ERPNext **[verificado v16]**).
 - `pgc_aplicado == 0`.
+- La compañía no es dependiente de otra con el plan heredado de la matriz (`parent_company` sin `allow_account_creation_against_child_company`), mismo criterio que el importador de ERPNext **[verificado v16]**.
+- Abreviatura de la compañía de 12 caracteres como máximo (§1, longitud de los nombres de cuenta).
+- Modelo `Normal` o `PYMES`.
+
+Implementado en `es_contabilidad/pgc.py` (`apply_pgc_chart`). La interfaz es el botón "Plan de cuentas → Aplicar plan PGC" de Company (`es_contabilidad/public/js/company.js`).
 
 **Pasos** (en una transacción; `dry_run` devuelve el resumen sin escribir):
 
-1. `unset_existing_data(company)` del importador de planes **[verificado v16]**: vacía las cuentas por defecto de Company y borra las cuentas, cuentas de terceros, cuentas de modos de pago, cuentas de retención y plantillas de impuestos de esa compañía.
+1. `clear_company_chart(company)`: borra los Item Tax Template y las Tax Rule de la compañía (que `unset_existing_data` no borra y bloquean el borrado de cuentas, ver pendientes) y llama a `unset_existing_data(company)` del importador de planes **[verificado v16]**, que vacía las cuentas por defecto de Company y borra las cuentas, cuentas de terceros, cuentas de modos de pago, cuentas de retención y plantillas de impuestos de venta y compra.
 2. `create_charts(company, custom_chart=tree)` con el JSON elegido.
 3. **Desactivar el inventario permanente** (`enable_perpetual_inventory = 0` en Company; decisión A3). En v16 el valor por defecto es 1 **[verificado v16]**. Sin inventario permanente los movimientos de stock no generan asientos: las compras de existencias se contabilizan en la cuenta de gasto del artículo (grupo 60) y la variación se regulariza al cierre (spec 04 §7). **[verificar en bench]** que Purchase Invoice y Delivery Note no exigen cuentas de stock con el inventario permanente desactivado.
 4. **Fijar las cuentas por defecto de Company explícitamente** por número de cuenta (§3). **No** usar `set_default_accounts` del importador: toma la primera cuenta `Receivable` que encuentra, que podría ser la 438, y además crea la plantilla de IVA genérica del 21 % **[verificado v16]**.
-5. Crear los registros de compañía de la spec 09 §3: plantillas de impuestos, Item Tax Templates, Tax Rules, cuentas de retención y cuentas de los modos de pago. Van después del paso 1, porque `unset_existing_data` borra los de la compañía.
+5. Ejecutar los pasos registrados en `COMPANY_SETUP_STEPS` (`pgc.py`), que crean los registros de compañía de la spec 09 §3: plantillas de impuestos, Item Tax Templates, Tax Rules, cuentas de retención y cuentas de los modos de pago. Van después del paso 1, porque `unset_existing_data` borra los de la compañía.
 6. `sync_financial_report_templates()` (spec 04).
-7. Marcar `pgc_aplicado = 1` y `modelo_plan`.
-8. Registrar en el historial de la compañía qué plan y qué versión del JSON se aplicó.
+7. Marcar `pgc_aplicado = 1` y `modelo_plan` (los pasos 3, 4 y 7 se guardan juntos con `doc.save()` de Company, para que ERPNext valide tipo, rama y moneda de las cuentas por defecto). Al guardar, ERPNext asigna además la 5700 al modo de pago de efectivo (`set_mode_of_payment_account`) **[verificado v16]**.
+8. Registrar en el historial de la compañía (comentario) qué plan, qué versión de los datos del plan y qué fecha de actualización del BOE se aplicaron.
 
 Interfaz: botón en Company (solo si se cumplen las precondiciones) con vista previa del `dry_run` y confirmación explícita, porque borra las cuentas existentes de la compañía.
 
@@ -108,24 +113,24 @@ Interfaz: botón en Company (solo si se cumplen las precondiciones) con vista pr
 | `default_advance_paid_account` | 4070 | ERPNext exige Activo + `Payable` **[verificado v16]**. |
 | `default_cash_account` | 5700 | |
 | `default_bank_account` | 5720 | |
-| `default_income_account` | 7000 / 7050 | Según actividad; configurable. |
-| `default_expense_account` | 6000 / 6290 | Según actividad. |
-| `exchange_gain_loss_account` | 6680 / 7680 | ERPNext usa una sola cuenta para ganancias y pérdidas; decidir cuál y cómo se presenta (la PyG la muestra neta). |
-| `unrealized_exchange_gain_loss_account` | ídem | |
-| `round_off_account`, `write_off_account` | A decidir | |
+| `default_income_account` | 7000 | 7050 para empresas de servicios; se cambia en Company. |
+| `default_expense_account` | 6000 | 6290 para empresas de servicios; se cambia en Company. |
+| `exchange_gain_loss_account` | 6680 | ERPNext usa una sola cuenta para ganancias y pérdidas; la PyG la muestra neta. Propuesta: 6680; la reclasificación de un saldo neto acreedor a la 768 se resuelve en las plantillas de estados (spec 04 §3). |
+| `unrealized_exchange_gain_loss_account` | 6680 | Ídem. |
+| `round_off_account`, `write_off_account` | 6590 | Otras pérdidas en gestión corriente. Propuesta. |
 | `accumulated_depreciation_account` | 2819 | La 2810 no existe en el PGC (la 281 se desglosa en 2811–2819). Propuesta: la 2819 (otro inmovilizado material) como genérica en Company; cada Asset Category usa su 281x. **Pendiente de revisión contable.** |
 | `depreciation_expense_account` | 6810 | |
-| `disposal_account` | 6710 / 7710 | Una sola cuenta en ERPNext; mismo problema que diferencias de cambio. |
-| `capital_work_in_progress_account` | 23x | |
-| `asset_received_but_not_billed` | 523 | |
+| `disposal_account` | 6710 | Una sola cuenta en ERPNext; mismo tratamiento que las diferencias de cambio (771 por reclasificación en los estados). |
+| `capital_work_in_progress_account` | Vacía | Solo la usan las Asset Category con inmovilizado en curso activado; cada una fija su 23x. |
+| `asset_received_but_not_billed` | 5230 | |
 | `default_provisional_account` | 4009 | Servicios recibidos sin factura. |
 | `default_deferred_revenue_account` | 4850 | |
 | `default_deferred_expense_account` | 4800 | |
-| `default_inventory_account` | 300 | Inventario administrativo (A3): sin inventario permanente ERPNext no lo usa para asentar; se fija por coherencia y para la regularización de cierre (spec 04 §7). |
-| `stock_adjustment_account` | 610 | Ídem; la variación de existencias la contabiliza el asiento de regularización, no ERPNext. |
+| `default_inventory_account` | 3000 | Inventario administrativo (A3): sin inventario permanente ERPNext no lo usa para asentar; se fija por coherencia y para la regularización de cierre (spec 04 §7). |
+| `stock_adjustment_account` | 6100 | Ídem; la variación de existencias la contabiliza el asiento de regularización, no ERPNext. |
 | `stock_received_but_not_billed` | Vacía | Sin inventario permanente el albarán de compra no genera asiento **[verificar en bench que ningún flujo la exige]**. |
-| Cuenta de gasto de los artículos de existencias (Item Defaults / Item Group) | 600 (mercaderías), 601 (materias primas), 602 (otros aprovisionamientos) | Inventario administrativo: la compra va a gasto. |
-| Cuenta de cierre del ejercicio (en el Period Closing Voucher) | 1290 | |
+| Cuenta de gasto de los artículos de existencias (Item Defaults / Item Group) | 6000 (mercaderías), 6010 (materias primas), 6020 (otros aprovisionamientos) | Inventario administrativo: la compra va a gasto. |
+| Cuenta de cierre del ejercicio (en el Period Closing Voucher) | 1290 | Se elige en cada Period Closing Voucher; no es un campo de Company. |
 
 `account_type` en el plan: `Receivable` en 430–436 y 4380; `Payable` en 400–405, 410 y 4070, salvo las subcuentas de facturas pendientes de recibir o de formalizar (4009, 4039, 4109, 4309, 4339…), que no llevan tipo porque ERPNext exigiría un tercero en cada apunte; `Tax` en 472, 473, 4751 y 477; `Bank` en 572; `Cash` en 570; `Fixed Asset` en 20–21; `Accumulated Depreciation` en 280–281; `Depreciation` en 680–681; `Capital Work in Progress` en 23; Con inventario administrativo (A3): `Stock` en las hojas de 30–36, `Stock Adjustment` en 610–612 y `Cost of Goods Sold` en 600, solo para cumplir la lista de tipos obligatorios del importador; `Stock Received But Not Billed` no se usa. El importador de ERPNext considera obligatorios Cost of Goods Sold, Depreciation, Fixed Asset, Payable, Receivable, Stock Adjustment, Bank, Cash y Stock **[verificado v16]**; el plan debe incluirlos aunque no se use el importador.
 
