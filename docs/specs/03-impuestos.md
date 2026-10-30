@@ -93,6 +93,14 @@ Usar lo nativo de ERPNext:
 
 ## Criterios de aceptación
 
+> **Estado (30/10/2026): implementados §1, §3 y §4** (`es_impuestos/codes.py`, `setup.py`, `initial_data.py`). Decisiones tomadas al implementar:
+> - Códigos verificados contra el esquema de VeriFactu de la AEAT (`SuministroInformacion.xsd`, versionado en el repo): calificación S1, S2, N1, N2 y exención E1–E6 en un solo campo `es_vat_classification` (en el esquema son elementos excluyentes `CalificacionOperacion` y `OperacionExenta`). El esquema admite también E7, E8 y la clave de régimen 21, sin descripción en el XSD: no se ofrecen hasta verificarlos.
+> - ERPNext admite **una sola plantilla por categoría fiscal y compañía** **[verificado v16]**: solo llevan categoría las plantillas a las que apuntan las reglas.
+> - El recargo de equivalencia repercutido va a la **4771**, que la app añade bajo la 477 al crear los datos iniciales.
+> - Item Tax Template con las cuentas de venta y de compra (4770, 4771, 4720): ERPNext solo añade filas desde la plantilla de artículo cuando la factura no tiene impuestos **[verificado v16]**; con la plantilla de la factura aplicada, el tipo del artículo sustituye al de las filas existentes.
+> - IVA no deducible a la 6310 (mayor gasto) **[revisión contable]**.
+> - Pendiente: §5 (copia y exigencia de la clasificación al validar la factura). Al elegir la plantilla en el formulario, ERPNext ya copia los campos de clasificación a las filas de la factura **[verificado v16]**.
+
 1. Tras "Aplicar plan PGC", existen todas las plantillas del §3 con la clasificación rellena y apuntando a las cuentas del §2.
 2. Una factura de venta a un cliente de otro país de la UE con Tax Category Intracomunitario recibe la plantilla de entrega intracomunitaria sin intervención.
 3. Una factura de venta con la plantilla "IVA 21 % con retención 15 %" calcula base, IVA y retención correctamente y la retención carga la 473 (las retenciones de compras se prueban en la spec 08).

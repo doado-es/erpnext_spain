@@ -58,7 +58,9 @@ DEFAULT_ACCOUNTS = {
 # de impuestos, reglas, cuentas de retención y de modos de pago). Se ejecutan
 # después de crear el plan y fijar las cuentas por defecto. Cada spec añade la
 # suya; reciben el nombre de la compañía y el modelo de plan.
-COMPANY_SETUP_STEPS: list[str] = []
+COMPANY_SETUP_STEPS: list[str] = [
+	"erpnext_spain.es_impuestos.initial_data.setup_company",
+]
 
 
 def load_chart(chart_model: str) -> dict:

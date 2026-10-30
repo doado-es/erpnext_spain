@@ -36,6 +36,7 @@ SPAIN = "Spain"
 def after_install() -> None:
 	setup_custom_fields()
 	seed_catalogs()
+	ensure_global_records()
 	setup_printing()
 	setup_optional_apps()
 	warn_if_system_country_is_not_spain()
@@ -44,6 +45,7 @@ def after_install() -> None:
 def after_migrate() -> None:
 	setup_custom_fields()
 	seed_catalogs()
+	ensure_global_records()
 	ensure_performance_indexes()
 	setup_printing()
 	setup_optional_apps()
@@ -60,9 +62,11 @@ def before_uninstall() -> None:
 	# Orden inverso al de creación: VeriFactu y el módulo base cuelgan de la
 	# pestaña que crea y limpia nif/setup.
 	from erpnext_spain.erpnext_spain.setup import cleanup_custom_fields as _cleanup_base
+	from erpnext_spain.es_impuestos.setup import cleanup_custom_fields as _cleanup_taxes
 	from erpnext_spain.es_verifactu.setup import cleanup_custom_fields as _cleanup_verifactu
 	from erpnext_spain.nif.setup import cleanup_custom_fields as _cleanup_nif
 
+	_cleanup_taxes()
 	_cleanup_verifactu()
 	_cleanup_base()
 	_cleanup_nif()
@@ -72,12 +76,14 @@ def setup_custom_fields() -> None:
 	# El orden importa: la pestaña (nif) antes que sus secciones, y la sección
 	# del módulo base antes que la de VeriFactu, que se inserta detrás.
 	from erpnext_spain.erpnext_spain.setup import setup_custom_fields as _setup_base
+	from erpnext_spain.es_impuestos.setup import setup_custom_fields as _setup_taxes
 	from erpnext_spain.es_verifactu.setup import setup_custom_fields as _setup_verifactu
 	from erpnext_spain.nif.setup import setup_custom_fields as _setup_nif
 
 	_setup_nif()
 	_setup_base()
 	_setup_verifactu()
+	_setup_taxes()
 
 
 def setup_optional_apps() -> None:
@@ -125,6 +131,13 @@ def setup_printing() -> None:
 	from erpnext_spain.es_verifactu.printing import setup_printing as _setup_printing
 
 	_setup_printing()
+
+
+def ensure_global_records() -> None:
+	"""Registros globales de los datos iniciales (spec 09 §2)."""
+	from erpnext_spain.es_impuestos.initial_data import ensure_global_records as _ensure_taxes
+
+	_ensure_taxes()
 
 
 def seed_catalogs() -> None:

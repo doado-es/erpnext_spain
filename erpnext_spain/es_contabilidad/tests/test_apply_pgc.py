@@ -6,6 +6,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 
 from erpnext_spain.es_contabilidad import pgc
+from erpnext_spain.es_impuestos.initial_data import EXTRA_ACCOUNTS
 from erpnext_spain.utils.gating import is_pgc_company
 
 
@@ -80,11 +81,16 @@ class TestApplyPGCChart(IntegrationTestCase):
 				)
 				self.assertEqual(leaves_without_number, [])
 				self.assertEqual(
-					frappe.db.count("Account", {"company": company}), summary["accounts_to_create"]
+					frappe.db.count("Account", {"company": company}),
+					summary["accounts_to_create"] + len(EXTRA_ACCOUNTS),  # 4771 de los datos de impuestos
 				)
-				# Lo que ERPNext crea para España con el asistente desaparece.
-				self.assertFalse(frappe.db.exists("Item Tax Template", {"company": company}))
-				self.assertFalse(frappe.db.exists("Sales Taxes and Charges Template", {"company": company}))
+				# Lo que ERPNext crea para España con el asistente («Spain Tax») desaparece y
+				# quedan las plantillas de la app (spec 09 §3).
+				for doctype in ("Item Tax Template", "Sales Taxes and Charges Template"):
+					self.assertFalse(frappe.db.exists(doctype, {"company": company, "title": "Spain Tax"}))
+				self.assertTrue(
+					frappe.db.exists("Sales Taxes and Charges Template", {"company": company, "title": "IVA 21 %"})
+				)
 
 				# Cuentas por defecto (spec 02 §3).
 				for field, number in pgc.DEFAULT_ACCOUNTS.items():

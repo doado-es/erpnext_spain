@@ -73,6 +73,8 @@ Si la normativa introduce un tipo temporal (como las rebajas de IVA en alimentos
 
 ## Criterios de aceptación
 
+> **Estado (30/10/2026)**: implementados los registros de impuestos: Tax Category (global), plantillas de venta y compra, Item Tax Template, Tax Rule y cuentas de los modos de pago (§3 a, b, c, d, f y h) en `es_impuestos/initial_data.py`, conectados a "Aplicar plan PGC" (`COMPANY_SETUP_STEPS`). Para compañías con el plan ya aplicado, botón "Plan de cuentas → Crear impuestos que faltan" en Company (`create_missing_company_records`). Pendientes: Tax Withholding Group y Category (spec 08), Holiday List, Payment Terms, Address Template, cuentas de retención (§3 e) y reglas bancarias (§3 g).
+
 1. Sitio nuevo con la app: existen todos los registros globales del §2. Un segundo `migrate` no crea ni cambia nada.
 2. Compañía nueva + "Aplicar plan PGC": existen todos los registros del §3, enlazados a cuentas del plan, y no queda la plantilla "Spain Tax".
 3. Segunda compañía en el mismo sitio: recibe sus registros de compañía sin duplicar los globales.

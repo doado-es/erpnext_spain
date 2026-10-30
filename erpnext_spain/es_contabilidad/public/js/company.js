@@ -75,14 +75,44 @@ erpnext_spain.es_contabilidad.apply_pgc_chart = function (frm) {
 	dialog.show();
 };
 
+erpnext_spain.es_contabilidad.create_missing_records = function (frm) {
+	frappe.call({
+		method: "erpnext_spain.es_impuestos.initial_data.create_missing_company_records",
+		type: "POST",
+		args: { company: frm.doc.name },
+		freeze: true,
+		callback(r) {
+			if (!r.message) return;
+			const total = Object.values(r.message).reduce((sum, list) => sum + (list || []).length, 0);
+			frappe.show_alert({
+				message: total
+					? __("Creados {0} registros de impuestos", [total])
+					: __("No faltaba ningún registro de impuestos"),
+				indicator: "green",
+			});
+			frm.reload_doc();
+		},
+	});
+};
+
 frappe.ui.form.on("Company", {
 	refresh(frm) {
-		if (frm.is_new() || frm.doc.country !== "Spain" || frm.doc.es_pgc_applied) return;
+		if (frm.is_new() || frm.doc.country !== "Spain") return;
 		if (!frappe.user.has_role(["Accounts Manager", "System Manager"])) return;
-		frm.add_custom_button(
-			__("Aplicar plan PGC"),
-			() => erpnext_spain.es_contabilidad.apply_pgc_chart(frm),
-			__("Plan de cuentas")
-		);
+		if (!frm.doc.es_pgc_applied) {
+			frm.add_custom_button(
+				__("Aplicar plan PGC"),
+				() => erpnext_spain.es_contabilidad.apply_pgc_chart(frm),
+				__("Plan de cuentas")
+			);
+		} else {
+			// Crea las plantillas, reglas y cuentas de impuestos que falten, sin
+			// tocar las existentes (spec 09).
+			frm.add_custom_button(
+				__("Crear impuestos que faltan"),
+				() => erpnext_spain.es_contabilidad.create_missing_records(frm),
+				__("Plan de cuentas")
+			);
+		}
 	},
 });
