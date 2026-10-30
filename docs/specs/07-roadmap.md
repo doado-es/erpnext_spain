@@ -22,6 +22,7 @@ Ya tienen spec propia: factura electrónica B2G y B2B (10), SEPA (11), confirmin
 - Factoring (cesión de facturas de venta) con el formato estándar de factoring de la AEF (spec 12).
 - Envío automático de ficheros SEPA al banco (EBICS o API de pagos) (spec 11).
 - Traducciones es-ES: catálogo `erpnext_spain/locale/es.po` (primera versión el 30/10/2026). Como la app se instala después de ERPNext, sus traducciones prevalecen sobre las de Frappe y ERPNext (`get_translations_from_apps` las aplica por orden de instalación) **[verificado v16]**. Contiene: los nombres de los doctypes y módulos propios; las cadenas que faltan en los `es.po` de Frappe (51) y ERPNext (648) de la versión instalada; y la terminología contable y comercial de España en lugar de la general (Libro mayor, Balance de sumas y saldos, Centro de coste, Albarán, Presupuesto, Pedido de venta, Artículo, Amortización…). Pendiente: revisión es-ES completa de las cadenas compuestas de ERPNext (p. ej. las que contienen «Sales Order» o «Item»), que siguen con la variante general, y regenerar las que falten tras cada actualización de ERPNext. Los `.mo` se compilan con `bench build` o `bench compile-po-to-mo --app erpnext_spain`.
-- Facturación masiva desde albaranes (Delivery Note → Sales Invoice agrupada por cliente y periodo).
+- Facturación masiva desde albaranes de venta (Delivery Note → Sales Invoice agrupada por cliente y periodo) y de compra (Purchase Receipt → Purchase Invoice). Ver `docs/pendientes.md`, F1 y F2.
+- Envío masivo de facturas por correo. Ver `docs/pendientes.md`, F3.
 - Contribución del plan PGC a la carpeta `verified` de ERPNext, con `disable_default_financial_report_template` (spec 02).
 - Estado de cambios en el patrimonio neto y estado de flujos de efectivo (spec 04).

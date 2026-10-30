@@ -79,6 +79,8 @@ Se adoptan las convenciones que ya aplica el código base (D8):
 
 Fase 0: el inventario del código base ya está hecho. Lo que existe y cumple se conserva (capa AEAT, verificador de NIF, Verifactu v1); antes de añadir funcionalidad se corrigen los hallazgos H1–H5 (spec 01 §8).
 
+La lista consolidada de lo que falta está en [`docs/pendientes.md`](../pendientes.md).
+
 ## 5. Decisiones abiertas
 
 | Id | Pregunta | Propuesta por defecto |
