@@ -129,9 +129,9 @@
 			"indentation_level": 2,
 			"bold_text": 0,
 			"reverse_sign": 0,
-			"data_source": "Account Data",
+			"data_source": "Custom API",
 			"balance_type": "Closing Balance",
-			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"430%\"], [\"account_number\", \"like\", \"431%\"], [\"account_number\", \"like\", \"432%\"], [\"account_number\", \"like\", \"433%\"], [\"account_number\", \"like\", \"434%\"], [\"account_number\", \"like\", \"435%\"], [\"account_number\", \"like\", \"436%\"], [\"account_number\", \"like\", \"437%\"], [\"account_number\", \"like\", \"490%\"], [\"account_number\", \"like\", \"493%\"]]}"
+			"calculation_formula": "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 		},
 		{
 			"doctype": "Financial Report Row",
@@ -151,9 +151,9 @@
 			"indentation_level": 2,
 			"bold_text": 0,
 			"reverse_sign": 0,
-			"data_source": "Account Data",
+			"data_source": "Custom API",
 			"balance_type": "Closing Balance",
-			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"44%\"], [\"account_number\", \"like\", \"460%\"], [\"account_number\", \"like\", \"470%\"], [\"account_number\", \"like\", \"471%\"], [\"account_number\", \"like\", \"472%\"], [\"account_number\", \"like\", \"544%\"], [\"account_number\", \"like\", \"473%\"]]}"
+			"calculation_formula": "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 		},
 		{
 			"doctype": "Financial Report Row",
@@ -195,9 +195,9 @@
 			"indentation_level": 1,
 			"bold_text": 0,
 			"reverse_sign": 0,
-			"data_source": "Account Data",
+			"data_source": "Custom API",
 			"balance_type": "Closing Balance",
-			"calculation_formula": "[\"account_number\", \"like\", \"57%\"]"
+			"calculation_formula": "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 		},
 		{
 			"doctype": "Financial Report Row",
@@ -493,9 +493,9 @@
 			"indentation_level": 2,
 			"bold_text": 0,
 			"reverse_sign": 1,
-			"data_source": "Account Data",
+			"data_source": "Custom API",
 			"balance_type": "Closing Balance",
-			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"5105%\"], [\"account_number\", \"like\", \"520%\"], [\"account_number\", \"like\", \"527%\"]]}"
+			"calculation_formula": "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 		},
 		{
 			"doctype": "Financial Report Row",
@@ -547,9 +547,9 @@
 			"indentation_level": 2,
 			"bold_text": 0,
 			"reverse_sign": 1,
-			"data_source": "Account Data",
+			"data_source": "Custom API",
 			"balance_type": "Closing Balance",
-			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"400%\"], [\"account_number\", \"like\", \"401%\"], [\"account_number\", \"like\", \"403%\"], [\"account_number\", \"like\", \"404%\"], [\"account_number\", \"like\", \"405%\"], [\"account_number\", \"like\", \"406%\"]]}"
+			"calculation_formula": "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 		},
 		{
 			"doctype": "Financial Report Row",
@@ -558,9 +558,9 @@
 			"indentation_level": 2,
 			"bold_text": 0,
 			"reverse_sign": 1,
-			"data_source": "Account Data",
+			"data_source": "Custom API",
 			"balance_type": "Closing Balance",
-			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"41%\"], [\"account_number\", \"like\", \"438%\"], [\"account_number\", \"like\", \"465%\"], [\"account_number\", \"like\", \"475%\"], [\"account_number\", \"like\", \"476%\"], [\"account_number\", \"like\", \"477%\"]]}"
+			"calculation_formula": "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 		},
 		{
 			"doctype": "Financial Report Row",

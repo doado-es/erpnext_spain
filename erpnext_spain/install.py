@@ -66,6 +66,7 @@ def before_uninstall() -> None:
 	# Orden inverso al de creación: VeriFactu y el módulo base cuelgan de la
 	# pestaña que crea y limpia nif/setup.
 	from erpnext_spain.erpnext_spain.setup import cleanup_custom_fields as _cleanup_base
+	from erpnext_spain.es_contabilidad.setup import cleanup_custom_fields as _cleanup_accounting
 	from erpnext_spain.es_efactura.setup import cleanup_custom_fields as _cleanup_efactura
 	from erpnext_spain.es_facturacion.setup import cleanup_custom_fields as _cleanup_billing
 	from erpnext_spain.es_impuestos.setup import cleanup_custom_fields as _cleanup_taxes
@@ -76,6 +77,7 @@ def before_uninstall() -> None:
 	from erpnext_spain.nif.setup import cleanup_custom_fields as _cleanup_nif
 
 	_cleanup_vat()
+	_cleanup_accounting()
 	_cleanup_billing()
 	_cleanup_efactura()
 	_cleanup_withholding()
@@ -90,6 +92,7 @@ def setup_custom_fields() -> None:
 	# El orden importa: la pestaña (nif) antes que sus secciones, y la sección
 	# del módulo base antes que la de VeriFactu, que se inserta detrás.
 	from erpnext_spain.erpnext_spain.setup import setup_custom_fields as _setup_base
+	from erpnext_spain.es_contabilidad.setup import setup_custom_fields as _setup_accounting
 	from erpnext_spain.es_efactura.setup import ensure_defaults as _efactura_defaults
 	from erpnext_spain.es_efactura.setup import setup_custom_fields as _setup_efactura
 	from erpnext_spain.es_facturacion.setup import setup_custom_fields as _setup_billing
@@ -109,6 +112,7 @@ def setup_custom_fields() -> None:
 	_setup_efactura()
 	_setup_billing()
 	_setup_vat()
+	_setup_accounting()
 	_efactura_defaults()
 
 

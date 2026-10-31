@@ -109,6 +109,37 @@ erpnext_spain.es_contabilidad.create_missing_records = function (frm) {
 	});
 };
 
+erpnext_spain.es_contabilidad.closing_entry = function (frm, method, title, extra_fields) {
+	const dialog = new frappe.ui.Dialog({
+		title: title,
+		fields: [
+			{
+				fieldname: "posting_date",
+				label: __("Fecha de cierre"),
+				fieldtype: "Date",
+				default: frappe.datetime.year_end(),
+				reqd: 1,
+			},
+			...(extra_fields || []),
+		],
+		primary_action_label: __("Crear asiento en borrador"),
+		primary_action(values) {
+			frappe.call({
+				method: `erpnext_spain.es_contabilidad.closing.${method}`,
+				type: "POST",
+				args: { company: frm.doc.name, posting_date: values.posting_date, dry_run: 0 },
+				freeze: true,
+				callback(r) {
+					if (!r.message || !r.message.journal_entry) return;
+					dialog.hide();
+					frappe.set_route("Form", "Journal Entry", r.message.journal_entry);
+				},
+			});
+		},
+	});
+	dialog.show();
+};
+
 frappe.ui.form.on("Company", {
 	refresh(frm) {
 		if (frm.is_new() || frm.doc.country !== "Spain") return;
@@ -127,6 +158,29 @@ frappe.ui.form.on("Company", {
 				() => erpnext_spain.es_contabilidad.create_missing_records(frm),
 				__("Plan de cuentas")
 			);
+			// Asientos de cierre PGC (spec 04 §6-§7): se crean en borrador para revisarlos.
+			frm.add_custom_button(
+				__("Regularizar existencias"),
+				() =>
+					erpnext_spain.es_contabilidad.closing_entry(
+						frm,
+						"regularise_inventory",
+						__("Regularización de existencias")
+					),
+				__("Cierre PGC")
+			);
+			if (frm.doc.es_chart_model === "Normal") {
+				frm.add_custom_button(
+					__("Traspasar grupos 8 y 9"),
+					() =>
+						erpnext_spain.es_contabilidad.closing_entry(
+							frm,
+							"transfer_groups_8_9",
+							__("Traspaso de los grupos 8 y 9")
+						),
+					__("Cierre PGC")
+				);
+			}
 		}
 	},
 });

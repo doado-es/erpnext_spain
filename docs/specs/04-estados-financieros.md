@@ -119,6 +119,10 @@ Con una compañía PYMES de prueba y asientos que tocan todas las ramas, incluid
 8. Tras `bench migrate` en un sitio con la app, las seis plantillas existen.
 9. Regularización de existencias: con existencia inicial 1.000 € en 300 y valoración final de 1.500 €, el asiento deja 1.500 € en 300 y un saldo acreedor de 500 € en 610; ejecutarla dos veces para la misma fecha da error.
 
+## Estado (31/10/2026)
+
+Implementado: plantillas Normal y Abreviado (Balance y PyG) además de PYMES, con el mapeo en `epigrafe_mapping.csv` (borrador de los balances extraído del BOE con `statements/extract_models.py`; la PyG Normal va sin el desglose a), b)…); reclasificación por signo de clientes, proveedores, acreedores, deudores y bancos, **por tercero** en las cuentas Receivable/Payable; `ES Trial Balance by Level`; `ES Journal Book`; traspaso de los grupos 8 y 9 y regularización de existencias (`es_contabilidad/closing.py`, asientos en borrador desde Company → Cierre PGC). Verificado en bench: el Stock Ledger valora las existencias aunque el inventario permanente esté desactivado. Tests: `test_statements.py` (PYMES, Normal y Abreviado) y `test_closing_and_books.py`.
+
 ## Pendiente de verificar o decidir
 
 - Sintaxis de las fórmulas y convención de signo del motor de v16 (en bench).

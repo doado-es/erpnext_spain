@@ -22,7 +22,7 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 - §6 Subcuentas por tercero (decisión A1, opcional).
 - Revisión contable del reparto de ramas y de las cuentas por defecto (2819 como amortización acumulada, 406, 6590 para redondeos, 6680 para diferencias de cambio…).
-- Verificar en bench compras y ventas de artículos de existencias con el inventario permanente desactivado (A3).
+- Verificado (31/10/2026): con el inventario permanente desactivado, el Stock Ledger valora las existencias (test de regularización). Falta revisar compras y ventas de artículos de existencias de punta a punta.
 
 ## Impuestos (specs 03 y 09)
 
@@ -32,10 +32,11 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Estados financieros (spec 04)
 
-- Modelos Abreviado y Normal (Balance y PyG).
-- Reclasificación por signo de clientes y proveedores con saldo contrario y de bancos en descubierto.
+- **Hecho (31/10/2026)**: modelos Normal y Abreviado, reclasificación por signo (por tercero en clientes y proveedores), sumas y saldos, libro diario, traspaso de 8/9 y regularización de existencias.
+- PyG del modelo Normal sin el desglose a), b)… de cada partida (solo partidas principales y resultados); añadirlo si se presentan cuentas normales.
+- Revisión contable del mapeo Normal y Abreviado (columna `nota`: 200, 257, 473, 553, 5585, 135, 136, 1341, subgrupo 15, 774…) y de las tablas de cierre (8/9 → 13x, clases de existencias por grupo de artículos).
+- Formato del libro diario para legalización.
 - Revisar las cuentas añadidas al mapeo PYMES que el modelo del BOE no recoge (columna `nota`: 473, 5585, 550, 554, 137, 15x, 195/197/199, 502, 507, 678, 778).
-- §4 Sumas y saldos por niveles; §5 libro diario numerado; §6 traspaso de los grupos 8 y 9; §7 regularización de existencias.
 
 ## Facturación (spec 05)
 

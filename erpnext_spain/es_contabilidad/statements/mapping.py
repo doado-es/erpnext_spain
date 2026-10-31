@@ -16,9 +16,18 @@ MAPPING_FILE = Path(__file__).resolve().parent / "epigrafe_mapping.csv"
 TEMPLATE_NAMES = {
 	("PYMES", "Balance"): "PGC PYMES - Balance",
 	("PYMES", "PyG"): "PGC PYMES - Pérdidas y ganancias",
+	("Normal", "Balance"): "PGC Normal - Balance",
+	("Normal", "PyG"): "PGC Normal - Pérdidas y ganancias",
+	("Abreviado", "Balance"): "PGC Abreviado - Balance",
+	("Abreviado", "PyG"): "PGC Abreviado - Pérdidas y ganancias",
 }
 
-ROW_TYPES = ("titulo", "formula", "cuentas", "signo")
+# Plan de cuentas de cada modelo de cuentas anuales: el Abreviado es del PGC
+# Normal (empresas que pueden presentar cuentas abreviadas).
+CHART_MODEL = {"PYMES": "PYMES", "Normal": "Normal", "Abreviado": "Normal"}
+
+# «vacio»: partida del modelo oficial sin cuentas asignadas (vale 0).
+ROW_TYPES = ("titulo", "formula", "cuentas", "signo", "vacio")
 
 
 @functools.cache

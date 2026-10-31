@@ -31,7 +31,14 @@ MODULE = "ES Contabilidad"
 SIGN_API = "erpnext_spain.es_contabilidad.statements.api.balance_by_sign"
 REPORT_TYPES = {"Balance": "Balance Sheet", "PyG": "Profit and Loss Statement"}
 BALANCE_TYPES = {"Balance": "Closing Balance", "PyG": "Period Movement (Debits - Credits)"}
-FOLDERS = {("PYMES", "Balance"): "pgc_pymes_balance", ("PYMES", "PyG"): "pgc_pymes_pyg"}
+FOLDERS = {
+	("PYMES", "Balance"): "pgc_pymes_balance",
+	("PYMES", "PyG"): "pgc_pymes_pyg",
+	("Normal", "Balance"): "pgc_normal_balance",
+	("Normal", "PyG"): "pgc_normal_pyg",
+	("Abreviado", "Balance"): "pgc_abreviado_balance",
+	("Abreviado", "PyG"): "pgc_abreviado_pyg",
+}
 
 
 def build_row(row: dict, statement: str) -> dict:
@@ -46,6 +53,9 @@ def build_row(row: dict, statement: str) -> dict:
 	}
 	if row["tipo"] == "titulo":
 		out["data_source"] = "Blank Line"
+	elif row["tipo"] == "vacio":
+		out["data_source"] = "Calculated Amount"
+		out["calculation_formula"] = "0"
 	elif row["tipo"] == "formula":
 		out["data_source"] = "Calculated Amount"
 		out["calculation_formula"] = row["formula"]

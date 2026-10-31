@@ -241,7 +241,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Informes",
-   "link_count": 9,
+   "link_count": 11,
    "onboard": 0,
    "type": "Card Break"
   },
@@ -331,6 +331,26 @@
    "label": "Borrador de liquidación de IVA",
    "link_count": 0,
    "link_to": "ES VAT Return Draft",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sumas y saldos PGC",
+   "link_count": 0,
+   "link_to": "ES Trial Balance by Level",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Libro diario PGC",
+   "link_count": 0,
+   "link_to": "ES Journal Book",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -783,6 +803,32 @@
    "keep_closed": 0,
    "label": "Borrador de liquidación de IVA",
    "link_to": "ES VAT Return Draft",
+   "link_type": "Report",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Sumas y saldos PGC",
+   "link_to": "ES Trial Balance by Level",
+   "link_type": "Report",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Libro diario PGC",
+   "link_to": "ES Journal Book",
    "link_type": "Report",
    "open_in_new_tab": 0,
    "show_arrow": 0,

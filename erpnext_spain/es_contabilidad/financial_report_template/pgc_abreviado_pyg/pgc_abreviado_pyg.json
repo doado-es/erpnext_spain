@@ -1,0 +1,275 @@
+{
+	"doctype": "Financial Report Template",
+	"name": "PGC Abreviado - Pérdidas y ganancias",
+	"template_name": "PGC Abreviado - Pérdidas y ganancias",
+	"report_type": "Profit and Loss Statement",
+	"module": "ES Contabilidad",
+	"disabled": 0,
+	"rows": [
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_OPC",
+			"display_name": "A) OPERACIONES CONTINUADAS",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Blank Line"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_1",
+			"display_name": "1. Importe neto de la cifra de negocios.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"700%\"], [\"account_number\", \"like\", \"701%\"], [\"account_number\", \"like\", \"702%\"], [\"account_number\", \"like\", \"703%\"], [\"account_number\", \"like\", \"704%\"], [\"account_number\", \"like\", \"705%\"], [\"account_number\", \"like\", \"706%\"], [\"account_number\", \"like\", \"708%\"], [\"account_number\", \"like\", \"709%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_2",
+			"display_name": "2. Variación de existencias de productos terminados y en curso de fabricación.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"6930%\"], [\"account_number\", \"like\", \"71%\"], [\"account_number\", \"like\", \"7930%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_3",
+			"display_name": "3. Trabajos realizados por la empresa para su activo.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "[\"account_number\", \"like\", \"73%\"]"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_4",
+			"display_name": "4. Aprovisionamientos.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"600%\"], [\"account_number\", \"like\", \"601%\"], [\"account_number\", \"like\", \"602%\"], [\"account_number\", \"like\", \"606%\"], [\"account_number\", \"like\", \"607%\"], [\"account_number\", \"like\", \"608%\"], [\"account_number\", \"like\", \"609%\"], [\"account_number\", \"like\", \"61%\"], [\"account_number\", \"like\", \"6931%\"], [\"account_number\", \"like\", \"6932%\"], [\"account_number\", \"like\", \"6933%\"], [\"account_number\", \"like\", \"7931%\"], [\"account_number\", \"like\", \"7932%\"], [\"account_number\", \"like\", \"7933%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_5",
+			"display_name": "5. Otros ingresos de explotación.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"740%\"], [\"account_number\", \"like\", \"747%\"], [\"account_number\", \"like\", \"75%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_6",
+			"display_name": "6. Gastos de personal.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"64%\"], [\"account_number\", \"like\", \"7950%\"], [\"account_number\", \"like\", \"7957%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_7",
+			"display_name": "7. Otros gastos de explotación.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"62%\"], [\"account_number\", \"like\", \"631%\"], [\"account_number\", \"like\", \"634%\"], [\"account_number\", \"like\", \"636%\"], [\"account_number\", \"like\", \"639%\"], [\"account_number\", \"like\", \"65%\"], [\"account_number\", \"like\", \"694%\"], [\"account_number\", \"like\", \"695%\"], [\"account_number\", \"like\", \"794%\"], [\"account_number\", \"like\", \"7954%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_8",
+			"display_name": "8. Amortización del inmovilizado.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "[\"account_number\", \"like\", \"68%\"]"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_9",
+			"display_name": "9. Imputación de subvenciones de inmovilizado no financiero y otras.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "[\"account_number\", \"like\", \"746%\"]"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_10",
+			"display_name": "10. Excesos de provisiones.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"7951%\"], [\"account_number\", \"like\", \"7952%\"], [\"account_number\", \"like\", \"7955%\"], [\"account_number\", \"like\", \"7956%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_11",
+			"display_name": "11. Deterioro y resultado por enajenaciones del inmovilizado.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"690%\"], [\"account_number\", \"like\", \"691%\"], [\"account_number\", \"like\", \"692%\"], [\"account_number\", \"like\", \"790%\"], [\"account_number\", \"like\", \"791%\"], [\"account_number\", \"like\", \"792%\"], [\"account_number\", \"like\", \"670%\"], [\"account_number\", \"like\", \"671%\"], [\"account_number\", \"like\", \"672%\"], [\"account_number\", \"like\", \"770%\"], [\"account_number\", \"like\", \"771%\"], [\"account_number\", \"like\", \"772%\"], [\"account_number\", \"like\", \"678%\"], [\"account_number\", \"like\", \"778%\"], [\"account_number\", \"like\", \"774%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_A1",
+			"display_name": "A.1) RESULTADO DE EXPLOTACIÓN (1+2+3+4+5+6+7+8+9+10+11)",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Calculated Amount",
+			"calculation_formula": "PYG_1 + PYG_2 + PYG_3 + PYG_4 + PYG_5 + PYG_6 + PYG_7 + PYG_8 + PYG_9 + PYG_10 + PYG_11"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_12",
+			"display_name": "12. Ingresos financieros.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"760%\"], [\"account_number\", \"like\", \"761%\"], [\"account_number\", \"like\", \"762%\"], [\"account_number\", \"like\", \"767%\"], [\"account_number\", \"like\", \"769%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_13",
+			"display_name": "13. Gastos financieros.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"660%\"], [\"account_number\", \"like\", \"661%\"], [\"account_number\", \"like\", \"662%\"], [\"account_number\", \"like\", \"664%\"], [\"account_number\", \"like\", \"665%\"], [\"account_number\", \"like\", \"669%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_14",
+			"display_name": "14. Variación de valor razonable en instrumentos financieros.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"663%\"], [\"account_number\", \"like\", \"763%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_15",
+			"display_name": "15. Diferencias de cambio.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"668%\"], [\"account_number\", \"like\", \"768%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_16",
+			"display_name": "16. Deterioro y resultado por enajenaciones de instrumentos financieros.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"666%\"], [\"account_number\", \"like\", \"667%\"], [\"account_number\", \"like\", \"673%\"], [\"account_number\", \"like\", \"675%\"], [\"account_number\", \"like\", \"696%\"], [\"account_number\", \"like\", \"697%\"], [\"account_number\", \"like\", \"698%\"], [\"account_number\", \"like\", \"699%\"], [\"account_number\", \"like\", \"766%\"], [\"account_number\", \"like\", \"773%\"], [\"account_number\", \"like\", \"775%\"], [\"account_number\", \"like\", \"796%\"], [\"account_number\", \"like\", \"797%\"], [\"account_number\", \"like\", \"798%\"], [\"account_number\", \"like\", \"799%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_A2",
+			"display_name": "A.2) RESULTADO FINANCIERO (12+13+14+15+16)",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Calculated Amount",
+			"calculation_formula": "PYG_12 + PYG_13 + PYG_14 + PYG_15 + PYG_16"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_A3",
+			"display_name": "A.3) RESULTADO ANTES DE IMPUESTOS (A.1+A.2)",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Calculated Amount",
+			"calculation_formula": "PYG_A1 + PYG_A2"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_17",
+			"display_name": "17. Impuestos sobre beneficios.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 1,
+			"data_source": "Account Data",
+			"balance_type": "Period Movement (Debits - Credits)",
+			"calculation_formula": "{\"or\": [[\"account_number\", \"like\", \"6300%\"], [\"account_number\", \"like\", \"6301%\"], [\"account_number\", \"like\", \"633%\"], [\"account_number\", \"like\", \"638%\"]]}"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_A4",
+			"display_name": "A.4) RESULTADO DEL EJERCICIO PROCEDENTE DE OPERACIONES CONTINUADAS (A.3+17)",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Calculated Amount",
+			"calculation_formula": "PYG_A3 + PYG_17"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_OPI",
+			"display_name": "B) OPERACIONES INTERRUMPIDAS",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Blank Line"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_18",
+			"display_name": "18. Resultado del ejercicio procedente de operaciones interrumpidas neto de impuestos.",
+			"indentation_level": 1,
+			"bold_text": 0,
+			"reverse_sign": 0,
+			"data_source": "Calculated Amount",
+			"calculation_formula": "0"
+		},
+		{
+			"doctype": "Financial Report Row",
+			"reference_code": "PYG_A5",
+			"display_name": "A.5) RESULTADO DEL EJERCICIO (A.4+18)",
+			"indentation_level": 0,
+			"bold_text": 1,
+			"reverse_sign": 0,
+			"data_source": "Calculated Amount",
+			"calculation_formula": "PYG_A4 + PYG_18"
+		}
+	]
+}

@@ -27,6 +27,7 @@
 	"globals": {
 		"frappe": true,
 		"erpnext_spain": true,
+		"erpnext": true,
 		"Vue": true,
 		"SetVueGlobals": true,
 		"__": true,
