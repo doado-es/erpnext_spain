@@ -221,7 +221,7 @@ def parse_status_report(content: bytes) -> dict:
 	try:
 		root = etree.fromstring(content)
 	except etree.XMLSyntaxError as error:
-		frappe.throw(_("El fichero no es un XML válido: {0}").format(error))
+		frappe.throw(_("El fichero no es un XML válido: {0}").format(frappe.utils.escape_html(str(error))))
 	namespace = etree.QName(root).namespace or ""
 	if "pain.002" not in namespace:
 		frappe.throw(

@@ -9,10 +9,11 @@ from frappe import _
 from frappe.utils import cint, now_datetime
 
 TEMPLATE = "ES Factura"
-TEMPLATE_SUBJECT = "Factura {{ doc.name }} de {{ doc.company }}"
+# Variables: los campos de la factura (sintaxis de las plantillas de correo de Frappe).
+TEMPLATE_SUBJECT = "Factura {{ name }} de {{ company }}"
 TEMPLATE_RESPONSE = """<p>Estimado cliente:</p>
-<p>Le enviamos adjunta la factura {{ doc.name }}, de fecha {{ frappe.utils.formatdate(doc.posting_date) }}, por importe de {{ doc.get_formatted("grand_total") }}.</p>
-<p>Un saludo,<br>{{ doc.company }}</p>"""
+<p>Le enviamos adjunta la factura {{ name }}, de fecha {{ frappe.utils.formatdate(posting_date) }}, por importe de {{ frappe.utils.fmt_money(grand_total, currency=currency) }}.</p>
+<p>Un saludo,<br>{{ company }}</p>"""
 ROLES = ("Accounts User", "Accounts Manager", "System Manager")
 LOG = "ES Invoice Email Log"
 
@@ -115,14 +116,14 @@ def run(names: list[str], group_by_customer: int = 0, resend: int = 0, user: str
 			counts["errors"] += len(invoices)
 			continue
 		try:
-			context = {"doc": first}
-			subject = frappe.render_template(template.subject, context)
+			formatted = template.get_formatted_email(first.as_dict())
+			subject = formatted["subject"]
 			if len(invoices) > 1:
 				subject = _("Facturas de {0}").format(first.company)
 			frappe.sendmail(
 				recipients=[to],
 				subject=subject,
-				message=frappe.render_template(template.response_html or template.response, context),
+				message=formatted["message"],
 				# El PDF lo genera la cola de correo al enviar, con el formato español.
 				attachments=[
 					{

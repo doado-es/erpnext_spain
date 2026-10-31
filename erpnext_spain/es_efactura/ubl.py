@@ -447,7 +447,9 @@ def parse(content: bytes) -> ReceivedInvoice:
 	try:
 		root = etree.fromstring(content)
 	except etree.XMLSyntaxError as error:
-		frappe.throw(_("El fichero no es un XML válido: {0}").format(error), UblError)
+		frappe.throw(
+			_("El fichero no es un XML válido: {0}").format(frappe.utils.escape_html(str(error))), UblError
+		)
 	doc_type = etree.QName(root).localname
 	if doc_type not in ("Invoice", "CreditNote"):
 		frappe.throw(_("El fichero no es una factura UBL (elemento raíz {0}).").format(doc_type), UblError)

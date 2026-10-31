@@ -327,7 +327,9 @@ def validate_records(company: str, book: str, communication: str, records: list[
 		element.render(root, element(**data["datos"]))
 	except (TypeError, ValueError) as error:
 		frappe.throw(
-			_("El registro del SII no tiene la estructura del esquema: {0}").format(error),
+			_("El registro del SII no tiene la estructura del esquema: {0}").format(
+				frappe.utils.escape_html(str(error))
+			),
 			title=_("Registro SII no válido"),
 		)
 	schema = lr_schema()

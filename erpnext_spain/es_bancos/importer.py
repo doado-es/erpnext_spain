@@ -35,7 +35,10 @@ def import_norma43(company: str, content: bytes) -> dict:
 	try:
 		blocks = norma43.parse(content)
 	except (norma43.Norma43Error, ValueError) as error:
-		frappe.throw(_("El fichero no es un Norma 43 válido: {0}").format(error), title=_("Norma 43"))
+		frappe.throw(
+			_("El fichero no es un Norma 43 válido: {0}").format(frappe.utils.escape_html(str(error))),
+			title=_("Norma 43"),
+		)
 	accounts = company_accounts(company)
 	currency = frappe.get_cached_value("Company", company, "default_currency")
 	summary = {"created": 0, "duplicates": 0, "accounts": [], "errors": []}
