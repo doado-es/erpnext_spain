@@ -10,8 +10,6 @@
 # asientos de cierre y filtros del informe se tratan igual que en las filas
 # «Account Data». Es API interna de ERPNext: la cubren los tests.
 
-from __future__ import annotations
-
 from typing import Any
 
 import frappe

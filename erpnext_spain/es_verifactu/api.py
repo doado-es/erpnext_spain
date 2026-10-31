@@ -7,8 +7,6 @@
 # @frappe.whitelist. No dispara comunicación con la AEAT: es solo lectura del
 # libro local.
 
-from __future__ import annotations
-
 import frappe
 
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (

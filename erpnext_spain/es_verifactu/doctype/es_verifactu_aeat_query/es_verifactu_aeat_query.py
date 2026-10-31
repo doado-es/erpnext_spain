@@ -37,8 +37,6 @@
 # mutua con los PEM de la credencial de la empresa; tests = mock inyectable
 # (mock_client_factory de aeat/tests/mock_aeat_client.py).
 
-from __future__ import annotations
-
 from typing import Any
 
 import frappe

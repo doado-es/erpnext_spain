@@ -6,8 +6,6 @@
 # Los tipos impositivos son los vigentes a 30/10/2026 **[verificar al cambiar
 # la normativa]**: IVA 21/10/4 %, recargo de equivalencia 5,2/1,4/0,5 %.
 
-from __future__ import annotations
-
 import frappe
 from frappe import _
 

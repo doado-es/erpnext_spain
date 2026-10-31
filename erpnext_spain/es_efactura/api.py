@@ -1,8 +1,6 @@
 # Acciones de la factura electrónica (spec 10 §2 y §4): generar el Facturae
 # firmado de una factura de venta y registrar a mano su presentación en FACe.
 
-from __future__ import annotations
-
 import hashlib
 
 import frappe

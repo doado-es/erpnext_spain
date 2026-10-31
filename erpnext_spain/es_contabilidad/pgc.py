@@ -1,7 +1,5 @@
 # Aplicación del plan PGC a una compañía (spec 02 §2-§3).
 
-from __future__ import annotations
-
 import json
 from pathlib import Path
 

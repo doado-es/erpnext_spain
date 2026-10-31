@@ -13,8 +13,6 @@
 # El glue JS del dialog (sales_invoice.js, lote 6a) consume
 # get_rectification_state + get_dialog_fields → rectify.
 
-from __future__ import annotations
-
 import frappe
 
 from erpnext_spain.aeat.utils import has_aeat_permission
