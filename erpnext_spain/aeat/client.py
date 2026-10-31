@@ -71,8 +71,7 @@ def enabled_credential_pem_paths(company: str, service: str) -> tuple[str, str]:
 	from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
 	from erpnext_spain.aeat.utils import require_credential
 
-	require_credential(company, f"comunicar con la AEAT ({service})")
-	return pem_paths(company)
+	return pem_paths(require_credential(company, f"comunicar con la AEAT ({service})"))
 
 
 class AEATClient:

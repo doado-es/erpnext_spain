@@ -82,7 +82,8 @@ def delete_private_file(file_url: str) -> None:
 
 
 def clean_pem(company: str) -> None:
-	"""Borra los PEM extraídos de la empresa si quedaron en disco."""
+	"""Borra los PEM extraídos de la credencial de la empresa (en los tests se
+	llama como la compañía) si quedaron en disco."""
 	from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
 
 	for path in pem_paths(company):

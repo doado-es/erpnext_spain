@@ -8,7 +8,8 @@
 # referencia): los PEM viven en sites/<sitio>/private/es_keys (H3, spec 01 §8):
 # fuera de private/files, así que no entran en las copias de ficheros de
 # `bench backup --with-files`, con el directorio en 0700 y los ficheros en 0600,
-# nombres claveados por la empresa y solo accesibles server-side. PFX y P12 son el
+# nombres claveados por el nombre de la credencial (no cambia aunque se
+# renombre la compañía) y solo accesibles server-side. PFX y P12 son el
 # MISMO contenedor PKCS#12 (estructura ASN.1 idéntica, extensión distinta) —
 # el PFX es el que entregan habitualmente las CA españolas (FNMT, Camerfirma),
 # y cryptography.load_pkcs12 lo lee sin distinción. Se CONSERVA el password
@@ -29,9 +30,12 @@ from frappe.model.document import Document
 from erpnext_spain.aeat.utils import absolute_site_path, get_days_remaining
 
 
-def pem_names(company: str) -> tuple[str, str]:
-	"""Nombres de los PEM extraídos, claveados por la empresa."""
-	base = frappe.scrub(company)
+def pem_names(credential: str) -> tuple[str, str]:
+	"""Nombres de los PEM extraídos, claveados por el nombre de la credencial.
+
+	No por la compañía: el nombre de la credencial se fija al crearla y no cambia
+	si después se renombra la compañía (el enlace `company` sí cambia)."""
+	base = frappe.scrub(credential)
 	return f"{base}-cert.pem", f"{base}-key.pem"
 
 
@@ -57,7 +61,7 @@ def write_secret(path: str, content: bytes) -> None:
 	os.chmod(path, 0o600)
 
 
-def pem_paths(company: str) -> tuple[str, str]:
+def pem_paths(credential: str) -> tuple[str, str]:
 	"""Rutas absolutas (site) de los PEM de la credencial (private/es_keys).
 
 	Ancladas al bench real vía absolute_site_path (get_bench_path):
@@ -65,7 +69,7 @@ def pem_paths(company: str) -> tuple[str, str]:
 	(raíz del bench y sites/) y una ruta relativa haría que la TLS mutua
 	resolviera el PEM distinto (o no lo encontrara) según quién drenara.
 	"""
-	cert, key = pem_names(company)
+	cert, key = pem_names(credential)
 	return (
 		absolute_site_path(*KEYS_DIR, cert),
 		absolute_site_path(*KEYS_DIR, key),
@@ -143,7 +147,7 @@ class ESAEATCredential(Document):
 		key_pem = p12.key.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption())
 
 		keys_dir()
-		cert_path, key_path = pem_paths(self.company)
+		cert_path, key_path = pem_paths(self.name)
 		write_secret(cert_path, cert_pem)
 		write_secret(key_path, key_pem)
 
@@ -184,17 +188,17 @@ class ESAEATCredential(Document):
 			file_doc.save(ignore_permissions=True)
 
 	def _clean_pem(self) -> None:
-		_delete_pem(self.company)
+		_delete_pem(self.name)
 
 
-def _delete_pem(company: str | None) -> None:
-	"""Borra los PEM extraídos de la empresa, si existen.
+def _delete_pem(credential: str | None) -> None:
+	"""Borra los PEM extraídos de la credencial, si existen.
 
-	Ignora `company` vacío (credenciales a medio crear nunca escribieron PEM).
+	Ignora `credential` vacío (credenciales a medio crear nunca escribieron PEM).
 	Ausencia de archivos no es error (limpieza idempotente).
 	"""
-	if not company:
+	if not credential:
 		return
-	for path in pem_paths(company):
+	for path in pem_paths(credential):
 		if os.path.exists(path):
 			os.remove(path)

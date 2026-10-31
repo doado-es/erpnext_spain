@@ -193,6 +193,23 @@ class TestESAEATCredential(IntegrationTestCase):
 			self.assertTrue(os.path.exists(path), path)
 		self.assertTrue(doc.name)  # el save no revienta: extracción ok
 
+	def test_company_rename_keeps_certificate(self):
+		"""Renombrar la compañía no deja la credencial sin PEM: los ficheros van por
+		el nombre de la credencial, que no cambia (caso real: «ctg» → razón social)."""
+		import os
+
+		from erpnext_spain.aeat.client import enabled_credential_pem_paths
+
+		doc = self._new_credential()
+		renamed = f"{self.company} Renombrada"
+		frappe.rename_doc("Company", self.company, renamed, force=True)
+		self.addCleanup(frappe.rename_doc, "Company", renamed, self.company, force=True)
+
+		self.assertEqual(frappe.db.get_value("ES AEAT Credential", doc.name, "company"), renamed)
+		cert, key = enabled_credential_pem_paths(renamed, "VeriFactu")
+		self.assertEqual((cert, key), pem_paths(doc.name))
+		self.assertTrue(os.path.exists(cert) and os.path.exists(key))
+
 	def test_pem_names_keyed_by_company(self):
 		# frappe.scrub de la compañía: espacios y guiones a «_», sin tocar
 		# puntos («S.L.» → «s.l.»).

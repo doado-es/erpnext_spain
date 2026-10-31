@@ -34,7 +34,7 @@ def sign(root, company: str):
 	from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
 
 	credential = frappe.get_doc("ES AEAT Credential", credential_for(company))
-	cert_path, key_path = pem_paths(credential.company)
+	cert_path, key_path = pem_paths(credential.name)
 	try:
 		with open(cert_path, "rb") as f:
 			cert_pem = f.read()
