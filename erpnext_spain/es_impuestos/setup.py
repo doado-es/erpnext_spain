@@ -117,8 +117,29 @@ ITEM_TAX_TEMPLATE_FIELDS = [
 	},
 ]
 
+# Impuestos de los pagos y anticipos (Payment Entry): solo tipo y clave de
+# retención, para clasificar la retención de los anticipos (spec 08 §3).
+ADVANCE_TAX_FIELDS = [
+	{
+		"fieldname": "es_tax_type",
+		"label": "Tipo de impuesto",
+		"fieldtype": "Select",
+		"options": options(TAX_TYPES.values()),
+		"insert_after": "is_tax_withholding_account",
+	},
+	{
+		"fieldname": "es_withholding_key",
+		"label": "Clave de retención",
+		"fieldtype": "Select",
+		"options": options(WITHHOLDING_KEYS),
+		"insert_after": "es_tax_type",
+		"depends_on": "eval:doc.es_tax_type == 'Retención IRPF'",
+	},
+]
+
 CUSTOM_FIELDS = {
 	"Sales Taxes and Charges": classification_fields("is_tax_withholding_account", purchase=False),
+	"Advance Taxes and Charges": ADVANCE_TAX_FIELDS,
 	"Purchase Taxes and Charges": classification_fields("column_break_odzz", purchase=True),
 	"Item Tax Template": ITEM_TAX_TEMPLATE_FIELDS,
 }

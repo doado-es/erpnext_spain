@@ -19,7 +19,16 @@ doc_events = {
 	# Número y rama de las cuentas nuevas en compañías PGC (spec 02 §4).
 	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
 	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
-	"Supplier": {"validate": "erpnext_spain.nif.party.validate"},
+	"Supplier": {
+		"validate": [
+			"erpnext_spain.nif.party.validate",
+			# Grupo de retención con fila de tipo en su categoría (spec 08 §3).
+			"erpnext_spain.es_retenciones.withholding.validate_supplier",
+		]
+	},
+	# Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3).
+	"Purchase Invoice": {"validate": "erpnext_spain.es_retenciones.withholding.validate_purchase_invoice"},
+	"Payment Entry": {"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry"},
 	"Company": {
 		# El NIF de la compañía lo valida primero el verificador (nif/party);
 		# la compuerta de activación de VeriFactu (spec 04 §2.1) corre después.
@@ -155,6 +164,7 @@ scheduler_events = {
 # inmutable: NUNCA debe barrerse con las transacciones de la empresa.
 company_data_to_be_ignored = [
 	"ES AEAT Credential",
+	"ES Leased Property",
 	"ES Invoice Series",
 	"ES Verifactu Notification Role",
 	"ES Verifactu Billing Record",

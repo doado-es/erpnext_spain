@@ -153,7 +153,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Impuestos",
-   "link_count": 4,
+   "link_count": 8,
    "onboard": 0,
    "type": "Card Break"
   },
@@ -194,6 +194,46 @@
    "link_count": 0,
    "link_to": "Tax Rule",
    "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Categorías de retención",
+   "link_count": 0,
+   "link_to": "Tax Withholding Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inmuebles arrendados",
+   "link_count": 0,
+   "link_to": "ES Leased Property",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Retenciones practicadas",
+   "link_count": 0,
+   "link_to": "ES Withholdings Made",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Retenciones soportadas",
+   "link_count": 0,
+   "link_to": "ES Withholdings Received",
+   "link_type": "Report",
    "onboard": 0,
    "type": "Link"
   },
@@ -256,7 +296,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-10-31 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "module_onboarding": "ES Onboarding",
@@ -523,6 +563,58 @@
    "label": "Reglas de impuestos",
    "link_to": "Tax Rule",
    "link_type": "DocType",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Categorías de retención",
+   "link_to": "Tax Withholding Category",
+   "link_type": "DocType",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Inmuebles arrendados",
+   "link_to": "ES Leased Property",
+   "link_type": "DocType",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Retenciones practicadas",
+   "link_to": "ES Withholdings Made",
+   "link_type": "Report",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Retenciones soportadas",
+   "link_to": "ES Withholdings Received",
+   "link_type": "Report",
    "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"

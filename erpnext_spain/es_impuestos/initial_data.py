@@ -243,7 +243,11 @@ def create_missing_company_records(company: str) -> dict:
 				frappe.bold(company)
 			)
 		)
-	return ensure_company_records(company)
+	from erpnext_spain.es_retenciones.setup import setup_company as setup_withholding
+
+	created = ensure_company_records(company)
+	created["Tax Withholding Category"] = setup_withholding(company)
+	return created
 
 
 def ensure_company_records(company: str) -> dict:

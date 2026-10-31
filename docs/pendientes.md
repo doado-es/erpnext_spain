@@ -28,7 +28,7 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 - Verificar en la documentación de la AEAT los códigos E7, E8 y la clave de régimen 21, y los textos de las claves de régimen.
 - Revisión contable: IVA no deducible a la 6310.
-- Spec 09 pendientes: Tax Withholding Group y Category (spec 08), Holiday List de festivos nacionales, Payment Terms Template, Address Template de España, cuentas de retención por compañía, Bank Transaction Rule.
+- Spec 09 pendientes: Holiday List de festivos nacionales, Payment Terms Template, Address Template de España, cuentas de retención por compañía, Bank Transaction Rule.
 
 ## Estados financieros (spec 04)
 
@@ -50,7 +50,10 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Retenciones (spec 08)
 
-- Retenciones practicadas en compras con el mecanismo nativo (categorías, grupos, cuentas 4751), validación del proveedor, inmuebles arrendados e informes para 111, 115, 180 y 190. Decisión A7.
+- **Hecho (31/10/2026)**: categorías, grupos, cuenta 4751, validación del proveedor, inmuebles arrendados, clasificación de la fila e informes de practicadas y soportadas.
+- A7: periodo de 111 y 115 por fecha de pago o de factura (hoy, fecha de la retención). Decidir con el asesor.
+- Revisar con el asesor los tipos, las claves y subclaves del 190 de cada categoría y los grupos con reducción del 60 % (art. 68.4 LIRPF).
+- Exigir `apply_tds` cuando el proveedor tenga categoría (evitar facturas de profesionales sin retención por olvido).
 
 ## Comunicación con la AEAT y terceros
 

@@ -2,6 +2,8 @@
 
 Fase 3 · Depende de: 01, 02, 03 · Bloquea: modelos 111, 115, 180, 190 y 130 (spec 07)
 
+> **Estado (31/10/2026): implementado** (módulo ES Retenciones: `es_retenciones/{codes,setup,withholding}.py`, doctype `ES Leased Property`, informes `ES Withholdings Made` y `ES Withholdings Received`; tests en `es_retenciones/tests/test_withholding.py`, criterios 1-10). Verificado en bench: la fila de tipo negativo en ventas carga la 473, reduce total y pendiente y la rectificativa la invierte. Pendiente: A7 (periodo por fecha de pago), claves y subclaves del 190 y requisitos de exoneración de arrendamientos **[revisar]**.
+
 ## Objetivo
 
 Gestionar las retenciones de IRPF en las dos direcciones:
