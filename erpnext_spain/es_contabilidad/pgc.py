@@ -57,6 +57,8 @@ DEFAULT_ACCOUNTS = {
 # después de crear el plan y fijar las cuentas por defecto. Cada spec añade la
 # suya; reciben el nombre de la compañía y el modelo de plan.
 COMPANY_SETUP_STEPS: list[str] = [
+	# Modos de pago, festivos, condiciones de pago, dirección y reglas bancarias (spec 09).
+	"erpnext_spain.erpnext_spain.initial_data.setup_company",
 	"erpnext_spain.es_impuestos.initial_data.setup_company",
 	# Cuenta 4751 en las categorías de retención (spec 08 §3).
 	"erpnext_spain.es_retenciones.setup.setup_company",

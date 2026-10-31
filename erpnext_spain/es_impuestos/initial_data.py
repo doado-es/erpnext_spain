@@ -12,7 +12,7 @@ from frappe import _
 from erpnext_spain.utils.gating import is_pgc_company
 
 # Versión de los datos iniciales de compañía (Company.es_initial_data_version).
-DATA_VERSION = 1
+DATA_VERSION = 2
 
 NATIONAL = "Nacional"
 NATIONAL_RE = "Nacional con recargo de equivalencia"
@@ -200,6 +200,10 @@ MODE_OF_PAYMENT_ACCOUNTS = {
 	"Credit Card": "5720",
 	"Cheque": "5720",
 	"Bank Draft": "5720",
+	# Modos que añade la app (erpnext_spain/initial_data.py).
+	"Domiciliación bancaria": "5720",
+	"Confirming": "5720",
+	"Bizum": "5720",
 }
 
 CLASSIFICATION_FIELDS = (
@@ -243,9 +247,11 @@ def create_missing_company_records(company: str) -> dict:
 				frappe.bold(company)
 			)
 		)
+	from erpnext_spain.erpnext_spain.initial_data import setup_company as setup_base
 	from erpnext_spain.es_retenciones.setup import setup_company as setup_withholding
 
-	created = ensure_company_records(company)
+	created = {"Bank Transaction Rule": setup_base(company)}
+	created.update(ensure_company_records(company))
 	created["Tax Withholding Category"] = setup_withholding(company)
 	return created
 

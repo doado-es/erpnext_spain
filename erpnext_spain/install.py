@@ -153,9 +153,11 @@ def setup_printing() -> None:
 
 def ensure_global_records() -> None:
 	"""Registros globales de los datos iniciales (spec 09 §2)."""
+	from erpnext_spain.erpnext_spain.initial_data import ensure_global_records as _ensure_base
 	from erpnext_spain.es_impuestos.initial_data import ensure_global_records as _ensure_taxes
 	from erpnext_spain.es_retenciones.setup import ensure_global_records as _ensure_withholding
 
+	_ensure_base()
 	_ensure_taxes()
 	_ensure_withholding()
 
