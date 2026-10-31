@@ -36,3 +36,25 @@ class TestSpanishCatalog(unittest.TestCase):
 		self.assertEqual(translations["General Ledger"], "Libro mayor")
 		self.assertEqual(translations["Trial Balance"], "Balance de sumas y saldos")
 		self.assertEqual(translations["Chart of Accounts"], "Plan de cuentas")
+
+	def test_spain_terms_in_compound_strings(self):
+		"""Cadenas compuestas de ERPNext con la terminología de España (bloque 9)."""
+		translations = {m.id: m.string for m in self.catalog if m.id and not m.context}
+		self.assertEqual(translations["Creating Delivery Note ..."], "Creando albarán...")
+		self.assertIn(
+			"del pedido de compra",
+			translations[
+				"<p>Posting Date {0} cannot be before Purchase Order date for the following:</p><ul>"
+			],
+		)
+		self.assertEqual(translations["All Items"], "Todos los artículos")
+
+	def test_app_doctypes_translated(self):
+		import json
+
+		root = PO_FILE.parents[1]
+		translations = {m.id for m in self.catalog if m.id}
+		for path in root.glob("*/doctype/*/*.json"):
+			name = json.loads(path.read_text(encoding="utf-8")).get("name")
+			with self.subTest(doctype=name):
+				self.assertIn(name, translations)

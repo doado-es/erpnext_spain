@@ -4113,3 +4113,804 @@ msgstr "{0}: es el último paso, así que su artículo resultante debe ser {1}."
 msgid "{0}: {1} moved out of {2}"
 msgstr "{0}: {1} salió de {2}"
 
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-format
+msgid "% of materials billed against this Sales Order"
+msgstr "% de materiales facturados contra este pedido de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-format
+msgid "% of materials delivered against this Sales Order"
+msgstr "% de materiales entregados contra este pedido de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "(Purchase Order + Material Request + Actual Expense)"
+msgstr "(pedido de compra + Solicitud de material + Gasto real)"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid ""
+"<h3>About Product Bundle</h3>\n"
+"\n"
+"<p>Aggregate group of <b>Items</b> into another <b>Item</b>. This is useful if you are bundling a certain <b>Items</b> into a package and you maintain stock of the packed <b>Items</b> and not the aggregate <b>Item</b>.</p>\n"
+"<p>The package <b>Item</b> will have <code>Is Stock Item</code> as <b>No</b> and <code>Is Sales Item</code> as <b>Yes</b>.</p>\n"
+"<h4>Example:</h4>\n"
+"<p>If you are selling Laptops and Backpacks separately and have a special price if the customer buys both, then the Laptop + Backpack will be a new Product Bundle Item.</p>"
+msgstr ""
+"<h3>Acerca de la agrupación de productos</h3>\n"
+"\n"
+"<p>Agregue un grupo de <b>Artículos</b> en otro <b>Artículo</b>. Esto es útil si está agrupando ciertos <b>Artículos</b> en un paquete y mantiene existencias de los <b>Artículos</b> empaquetados y no del <b>Artículo</b> agregado.</p>\n"
+"<p>El <b>Artículo</b> del paquete tendrá <code>Es Artículo de Stock</code> como <b>No</b> y <code>Es Artículo de Venta</code> como <b>Sí</b>.</p>\n"
+"<h4>Ejemplo:</h4>\n"
+"<p>Si está vendiendo Portátiles y Mochilas por separado y tiene un precio especial si el cliente compra ambos, entonces el Portátil + Mochila será un nuevo Artículo de Paquete de artículos.</p>"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "<p>Posting Date {0} cannot be before Purchase Order date for the following:</p><ul>"
+msgstr "<p>La Fecha de Publicación {0} no puede ser anterior a la fecha del pedido de compra para lo siguiente:</p><ul>"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "A quality inspection must be completed before generating a Delivery Note for this item."
+msgstr "Debe completarse una inspección de calidad antes de generar un albarán para este artículo."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Accounting Entry for LCV in Stock Entry {0}"
+msgstr "Entrada Contable para LCV en el movimiento de existencias {0}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Action if Accumulated Monthly Budget Exceeded on PO"
+msgstr "Acción si el Presupuesto Mensual Acumuladose excedió en pedido de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Action if Annual Budget Exceeded on PO"
+msgstr "Acción si se excedió el Presupuesto Anual en pedido de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "All Items"
+msgstr "Todos los artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Allow Purchase Order with Zero Quantity"
+msgstr "Permitir pedido de compra con cantidad cero"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Allowed Items"
+msgstr "Artículos Permitidos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Allows users to submit Request for Quotations with zero quantity. Useful when rates are fixed but the quantities are not. Eg. Rate Contracts."
+msgstr "Permite a los usuarios validar presupuestos con cantidad cero. Útil cuando las tarifas son fijas pero las cantidades no. Ej. Contratos de tarifas."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Applicable on Purchase Order"
+msgstr "Aplicable en pedido de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Asset {0} does not belong to Item {1}"
+msgstr "Activo {0} no pertenece al artículo {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "At row {0}: Batch No is mandatory for Item {1}"
+msgstr "En la fila {0}: el Núm. de Lote es obligatorio para el artículo {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "At row {0}: Serial No is mandatory for Item {1}"
+msgstr "En la fila {0}: el Núm. Serial es obligatorio para el artículo {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Batch Item Expiry Status"
+msgstr "Estado de Caducidad de Lote de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Bundle Items"
+msgstr "Conjunto de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Bypass credit check at Sales Order"
+msgstr "Omitir verificación de crédito en pedido de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Cannot convert Cost Center to ledger as it has child nodes"
+msgstr "No se puede convertir de 'centros de coste' a una cuenta del libro mayor, ya que tiene sub-grupos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Chart of Cost Centers"
+msgstr "Centros de coste"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Click on 'Get Finished Goods for Manufacture' to fetch the items from the above Sales Orders. Items only for which a BOM is present will be fetched."
+msgstr "Haga clic en \"Obtener artículos Terminados para Fabricación\" para obtener los artículos de los Pedidos de Ventas anteriores. Solo se obtendrán los artículos para los que exista una lista de materiales."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Cost Center Allocation Percentage"
+msgstr "Porcentaje de Asignación del centro de coste"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Cost Center is required in row {0} in Taxes table for type {1}"
+msgstr "Centro de coste requerido para la línea {0} en la tabla Impuestos para el tipo {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Cost Center {} doesn't belong to Company {}"
+msgstr "Centro de coste {} no pertenece a la empresa {}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Creating Delivery Note ..."
+msgstr "Creando albarán..."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Creating Purchase Receipt ..."
+msgstr "Creando albarán de compra..."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Customer / Item / Item Group"
+msgstr "Cliente / artículo / Grupo de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Customer's Purchase Order"
+msgstr "Pedidos de compra de clientes"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Default Buying Cost Center"
+msgstr "Centro de coste de compra predeterminado"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Default Cost Center"
+msgstr "Centro de coste por defecto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Default Quotation Validity Days"
+msgstr "Días de Validez de presupuestos Predeterminados"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Default Selling Cost Center"
+msgstr "Centro de coste por defecto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Delivery Note Item"
+msgstr "Albarán del producto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Delivery Note No"
+msgstr "Albarán No."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Delivery Notes"
+msgstr "Albaranes"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Delivery Notes should not be in draft state when submitting a Delivery Trip. The following Delivery Notes are still in draft state: {0}. Please submit them first."
+msgstr "Los albaranes no deben estar en estado borrador al validar un Viaje de Entrega. Las siguientes albaranes están todavía en estado borrador: {0}. Por favor, valídelas primero."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Delivery Notes {0} updated"
+msgstr "Albaranes {0} actualizadas"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Duplicate Item Group"
+msgstr "Grupo de artículos duplicado"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Finished Good Item"
+msgstr "Artículo de artículo Terminado"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Finished Good Item {0} Qty can not be zero"
+msgstr "Artículo terminado {0} La cantidad no puede ser cero"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Finished Goods Item"
+msgstr "Artículo acabado"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "For 'Product Bundle' items, Warehouse, Serial No and Batch No will be considered from the 'Packing List' table. If Warehouse and Batch No are same for all packing items for any 'Product Bundle' item, those values can be entered in the main Item table, values will be copied to 'Packing List' table."
+msgstr "Para 'Paquete de artículos' el Almacén, No. de Serie y No. de lote serán considerados desde el 'Packing List'. Si el Almacén y No. de lote son los mismos para todos los productos empaquetados, los valores podrán ser ingresados en la tabla principal del artículo, estos valores serán copiados al 'Packing List'"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Get Items from Product Bundle"
+msgstr "Obtener artículos del Paquete de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "If checked, Rejected Quantity will be included while making Purchase Invoice from Purchase Receipt."
+msgstr "Si se marca, la Cantidad Rechazada se incluirá al hacer la Factura de Compra a partir del albarán de compra."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "If this option is configured 'Yes', ERPNext will prevent you from creating a Purchase Invoice or Receipt without creating a Purchase Order first. This configuration can be overridden for a particular supplier by enabling the 'Allow Purchase Invoice Creation Without Purchase Order' checkbox in the Supplier master."
+msgstr "Si esta opción está configurada como &#39;Sí&#39;, ERPNext le impedirá crear una Factura o albarán de compra sin crear primero un pedido de compra. Esta configuración se puede anular para un proveedor en particular activando la casilla de verificación &#39;Permitir la creación de facturas de compra sin orden de compra&#39; en el maestro de proveedores."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "If this option is configured 'Yes', ERPNext will prevent you from creating a Purchase Invoice without creating a Purchase Receipt first. This configuration can be overridden for a particular supplier by enabling the 'Allow Purchase Invoice Creation Without Purchase Receipt' checkbox in the Supplier master."
+msgstr "Si esta opción está configurada como &#39;Sí&#39;, ERPNext le impedirá crear una Factura de Compra sin crear primero un albarán de compra. Esta configuración se puede anular para un proveedor en particular activando la casilla de verificación &quot;Permitir la creación de facturas de compra sin recibo de compra&quot; en el maestro de proveedores."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Include Zero Stock Items"
+msgstr "Incluir artículos sin existencias"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Inter Company Sales Order"
+msgstr "Pedido de venta intercompañía"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Internal Sales Order"
+msgstr "Pedido de venta interna"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Attribute"
+msgstr "Atributos del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Attribute Value"
+msgstr "Atributos del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Attribute Values"
+msgstr "Valor de los Atributos del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Barcode"
+msgstr "Código de Barras del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Cart"
+msgstr "Carrito de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Description"
+msgstr "Descripción del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Group Tree"
+msgstr "Árbol de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Price"
+msgstr "Precio de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Price Settings"
+msgstr "Configuración del precio del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Supplier"
+msgstr "Proveedor del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Tax"
+msgstr "Impuestos del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item To Manufacture"
+msgstr "Artículo para Manufactura"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Variant"
+msgstr "Variante del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item Variant Attribute"
+msgstr "Atributo de Variante de artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item and Warehouse"
+msgstr "Artículo y Almacén"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Item and Warranty Details"
+msgstr "Artículo y detalles de garantía"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Item {0} entered multiple times."
+msgstr "Artículo {0} ingresado varias veces."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Item {} does not exist."
+msgstr "El artículo {} no existe."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Items & Pricing"
+msgstr "Artículos y Precios"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Items To Be Requested"
+msgstr "Solicitud de artículos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Leave blank to use the standard Delivery Note format"
+msgstr "Deje en blanco para usar el formato estándar de albarán"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Lost Quotations"
+msgstr "Presupuestos perdidas"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Make Quotation"
+msgstr "Hacer presupuesto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Mandatory Purchase Order"
+msgstr "Pedido de compra obligatoria"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Mandatory Purchase Receipt"
+msgstr "Albarán de compra obligatorio"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Material Request Item"
+msgstr "Requisición de Materiales del artículo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Missing Cost Center"
+msgstr "Centro de coste faltante"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "New Quotations"
+msgstr "Nuevos presupuestos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "No Delivery Note selected for Customer {}"
+msgstr "No se ha seleccionado ninguna albarán para el Cliente {}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "No Purchase Orders were created"
+msgstr "No se crearon pedidos de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Open Quotations"
+msgstr "Presupuestos Abiertas"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Open Sales Orders"
+msgstr "Pedidos de venta abiertas"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Order/Quot %"
+msgstr "% Pedido/presupuesto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Overproduction Percentage For Sales Order"
+msgstr "Porcentaje de Sobreproducción para pedido de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "POS Item Group"
+msgstr "Grupo de artículos PdV"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "POS Item Selector"
+msgstr "Selector de artículos PdV"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "PSOA Cost Center"
+msgstr "Centro de coste de PSOA"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Packed Items"
+msgstr "Artículos Empacados"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Parent Cost Center"
+msgstr "Centro de coste principal"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Parent Item"
+msgstr "Artículo padre / principal"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Party Specific Item"
+msgstr "Artículo específico de la Parte"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Please fill the Sales Orders table"
+msgstr "Por favor complete la tabla de pedidos de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Please select Subcontracting Order instead of Purchase Order {0}"
+msgstr "Por favor seleccione Orden de Subcontratación en lugar de pedido de compra {0}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Please select a valid Purchase Order that has Service Items."
+msgstr "Por favor, seleccione un pedido de compra válida que tenga Artículos de Servicio."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Prevent Purchase Orders"
+msgstr "Evitar pedidos de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Invoice Item"
+msgstr "Artículo de la Factura de Compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Order Date"
+msgstr "Fecha de pedido de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Order Item"
+msgstr "Artículo de la orden de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Order Item Supplied"
+msgstr "Artículo suministrado desde orden de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Order Required"
+msgstr "Pedido de compra requerida"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Order already created for all Sales Order items"
+msgstr "Pedido de compra ya creada para todos los artículos de orden de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Orders"
+msgstr "Pedidos de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Orders Items Overdue"
+msgstr "Pedidos de compra Artículos vencidos"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Orders to Bill"
+msgstr "Pedidos de compra a Bill"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Orders to Receive"
+msgstr "Pedidos de compra para recibir"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Receipt Item"
+msgstr "Albarán de compra del producto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Receipt Item Supplied"
+msgstr "Albarán de compra del producto suministrado"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Receipt No"
+msgstr "Albarán de compra No."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Purchase Receipt Required"
+msgstr "Albarán de compra requerido"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Purchase Receipt {0} created."
+msgstr "Albarán de compra {0} creado."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Quot Count"
+msgstr "Cuenta presupuesto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Quot/Lead %"
+msgstr "Presupuesto/Cliente Potencial %"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Quotation Number"
+msgstr "Número de presupuesto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Quote Status"
+msgstr "Estado del presupuesto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Redemption Cost Center"
+msgstr "Centro de coste de Redención"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Reference Purchase Receipt"
+msgstr "Albarán de compra de referencia"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Request for Quotation"
+msgstr "Solicitud de presupuesto"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Round Off Cost Center"
+msgstr "Centro de coste por defecto (redondeo)"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Row #{0}: Not allowed to change Supplier as Purchase Order already exists"
+msgstr "Fila #{0}: No se permite cambiar de proveedores debido a que el pedido de compra ya existe"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Row {0}: Cost center is required for an item {1}"
+msgstr "Fila {0}: Centro de coste es necesario para un elemento {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Row {0}: Expense Head changed to {1} because expense is booked against this account in Purchase Receipt {2}"
+msgstr "Fila {0}: Cabecera de Gasto cambiada a {1} porque el gasto se contabiliza contra esta cuenta en el albarán de compra {2}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Sales Invoice Item"
+msgstr "Artículo de factura de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Sales Order Item"
+msgstr "Artículo de la orden de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Sales Order required for Item {0}"
+msgstr "Pedido de venta requerida para el producto {0}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Sales Order {0} is not valid"
+msgstr "Pedido de venta {0} no es válida"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Sales Orders"
+msgstr "Pedidos de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Sales Orders Required"
+msgstr "Pedidos de venta requeridas"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Sales Orders to Bill"
+msgstr "Pedidos de ventas a Facturar"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Sales Orders to Deliver"
+msgstr "Pedidos de ventas para Enviar"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Select Alternative Items for Sales Order"
+msgstr "Seleccionar ítems alternativos para pedido de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Select an item from each set to be used in the Sales Order."
+msgstr "Seleccione un ítem de cada conjunto para usarlo en el pedido de venta."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid ""
+"Select whether to get items from a Sales Order or a Material Request. For now select <b>Sales Order</b>.\n"
+" A Production Plan can also be created manually where you can select the Items to manufacture."
+msgstr ""
+"Seleccione si desea obtener los artículos de una orden de venta o de una solicitud de material. Por ahora, seleccione <b>pedido de venta</b>.\n"
+" También se puede crear un plan de producción manualmente, donde puede seleccionar los artículos que desea fabricar."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Serial No {0} does not belong to Delivery Note {1}"
+msgstr "El número de serie {0} no pertenece al albarán {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Shipment Delivery Note"
+msgstr "Albarán de envío"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Stock goes up in the warehouse you receive into, and the bill can be made from the receipt. See [Purchase Receipt](https://docs.frappe.io/erpnext/user/manual/en/purchase-receipt)."
+msgstr "El stock sube en el almacén de recepción, y la factura se puede hacer desde el recibo. Consulta [albarán de compra](https://docs.frappe.io/erpnext/user/manual/en/purchase-receipt)."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Stock will be reserved on submission of <b>Purchase Receipt</b> created against Material Request for Sales Order."
+msgstr "El stock se reservará tras la presentación del <b>albarán de compra</b> creado contra la Solicitud de material para el pedido de venta."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Subcontracting Purchase Order"
+msgstr "Pedido de compra de subcontratación"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Subcontracting Sales Order"
+msgstr "Pedido de venta de subcontratación"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Supplied Item"
+msgstr "Artículo suministrado"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Supplied Items"
+msgstr "Artículos suministrados"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Supplier Delivery Note"
+msgstr "Albarán del Proveedor"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Supplier Item"
+msgstr "Artículo del Proveedor"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Supplier Quotation {0} Created"
+msgstr "Presupuesto de proveedor {0} creada"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Tax Category has been changed to \"Total\" because all the Items are non-stock items"
+msgstr "Categoría de Impuesto fue cambiada a \"Total\" debido a que todos los artículos son items de no stock"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Total Sales Amount (via Sales Order)"
+msgstr "Importe de Ventas Total (a través de pedidos de venta)"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "UOM {0} not found in Item {1}"
+msgstr "UdM {0} no encontrado en el artículo {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Update Billed Amount in Sales Order"
+msgstr "Actualizar el Importe Facturado en el pedido de venta"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Use Company default Cost Center for Round off"
+msgstr "Utilizar el centro de coste por defecto de la compañía para el redondeo"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Warehouse Capacity for Item '{0}' must be greater than the existing stock level of {1} {2}."
+msgstr "Capacidad del Almacén para el artículo '{0}' debe ser mayor que el nivel de stock existente de {1} {2}."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "Warehouse {0} can not be deleted as quantity exists for Item {1}"
+msgstr "El almacén {0} no se puede eliminar ya que existen elementos para el artículo {1}"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Warn Purchase Orders"
+msgstr "Avisar en pedidos de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "Warn for new Purchase Orders"
+msgstr "Avisar para nuevos pedidos de compra"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "What comes out at the end of production, kept in the Products group. See [Item](https://docs.frappe.io/erpnext/user/manual/en/item)."
+msgstr "Lo que sale al final de la producción, en el grupo artículos. Consulta [Artículo](https://docs.frappe.io/erpnext/user/manual/en/item)."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+msgid "`Allow Negative rates for Items`"
+msgstr "`Permitir precios Negativos para los artículos`"
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "{0} currently has a {1} Supplier Scorecard standing, and Purchase Orders to this supplier should be issued with caution."
+msgstr "{0} tiene actualmente una {1} Tarjeta de Puntuación de Proveedores y los pedidos de compra a este Proveedor deben ser emitidas con precaución."
+
+#. Revisión es-ES de ERPNext (automática, revisar)
+#, python-brace-format
+msgid "{0} {1}: Cost Center {2} is a group cost center and group cost centers cannot be used in transactions"
+msgstr "{0} {1}: El centro de coste {2} es un centro de coste de Grupo y los centros de coste de Grupo no pueden utilizarse en transacciones"
+
+#. ERPNext Spain
+msgid "ES Bancos"
+msgstr "Bancos"
+
+#. ERPNext Spain
+msgid "ES Bank Aggregator"
+msgstr "Agregador bancario"
+
+#. ERPNext Spain
+msgid "ES Confirming Batch"
+msgstr "Remesa de confirming"
+
+#. ERPNext Spain
+msgid "ES Confirming Contract"
+msgstr "Contrato de confirming"
+
+#. ERPNext Spain
+msgid "ES Confirming Line"
+msgstr "Línea de remesa de confirming"
+
+#. ERPNext Spain
+msgid "ES E-Invoice"
+msgstr "Factura electrónica"
+
+#. ERPNext Spain
+msgid "ES E-Invoice Status"
+msgstr "Estado de la factura electrónica"
+
+#. ERPNext Spain
+msgid "ES Efactura"
+msgstr "Factura electrónica"
+
+#. ERPNext Spain
+msgid "ES Facturacion"
+msgstr "Facturación"
+
+#. ERPNext Spain
+msgid "ES Impuestos"
+msgstr "Impuestos"
+
+#. ERPNext Spain
+msgid "ES Invoice Email Log"
+msgstr "Registro de envío de facturas"
+
+#. ERPNext Spain
+msgid "ES Issued Invoices Book"
+msgstr "Libro registro de facturas expedidas"
+
+#. ERPNext Spain
+msgid "ES Iva"
+msgstr "IVA"
+
+#. ERPNext Spain
+msgid "ES Journal Book"
+msgstr "Libro diario PGC"
+
+#. ERPNext Spain
+msgid "ES Leased Property"
+msgstr "Inmueble arrendado"
+
+#. ERPNext Spain
+msgid "ES Modelos"
+msgstr "Modelos AEAT"
+
+#. ERPNext Spain
+msgid "ES Norma43 Import"
+msgstr "Importación Norma 43"
+
+#. ERPNext Spain
+msgid "ES Received Invoices Book"
+msgstr "Libro registro de facturas recibidas"
+
+#. ERPNext Spain
+msgid "ES Retenciones"
+msgstr "Retenciones"
+
+#. ERPNext Spain
+msgid "ES Sepa"
+msgstr "SEPA"
+
+#. ERPNext Spain
+msgid "ES Sepa Direct Debit Batch"
+msgstr "Remesa de adeudos SEPA"
+
+#. ERPNext Spain
+msgid "ES Sepa Direct Debit Line"
+msgstr "Línea de remesa de adeudos"
+
+#. ERPNext Spain
+msgid "ES Sepa Mandate"
+msgstr "Mandato SEPA"
+
+#. ERPNext Spain
+msgid "ES Sii"
+msgstr "SII"
+
+#. ERPNext Spain
+msgid "ES Sii Record"
+msgstr "Registro del SII"
+
+#. ERPNext Spain
+msgid "ES Tax Return"
+msgstr "Declaración de impuestos"
+
+#. ERPNext Spain
+msgid "ES Tax Return Box"
+msgstr "Casilla de la declaración"
+
+#. ERPNext Spain
+msgid "ES Trial Balance by Level"
+msgstr "Sumas y saldos PGC"
+
+#. ERPNext Spain
+msgid "ES VAT Return Draft"
+msgstr "Borrador de liquidación de IVA"
+
+#. ERPNext Spain
+msgid "ES Vat Register"
+msgstr "Registro Fiscal IVA"
+
+#. ERPNext Spain
+msgid "ES Withholdings Made"
+msgstr "Retenciones practicadas"
+
+#. ERPNext Spain
+msgid "ES Withholdings Received"
+msgstr "Retenciones soportadas"
+

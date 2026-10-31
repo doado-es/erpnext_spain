@@ -75,7 +75,7 @@ Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `d
 
 ## Traducciones
 
-- Revisión es-ES de las cadenas compuestas de ERPNext que siguen con la variante general ("Orden de venta", "Producto"…).
+- **Hecho (31/10/2026)**: 157 cadenas compuestas de ERPNext revisadas con la terminología de España (pedido de venta y de compra, albarán, presupuesto, artículo, centro de coste, movimiento de existencias) con `locale/revise_erpnext_terms.py`, marcadas «automática, revisar»; nombres de los doctypes, informes y módulos nuevos. Pendiente: revisar a mano esas 157 entradas (concordancias de adjetivos y mayúsculas heredadas de ERPNext); el código heredado de VeriFactu tiene mensajes sin `_()` (avisos de Semgrep).
 - Regenerar las cadenas que falten tras cada actualización de ERPNext.
 
 ## Datos de prueba
