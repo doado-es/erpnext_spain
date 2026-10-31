@@ -64,3 +64,20 @@ class TestSIIActivation(IntegrationTestCase):
 
 		frappe.db.set_value("Company", self.company, "es_sii_enabled", 1)
 		self.assertFalse(uses_draft_naming(self.company))
+
+	def test_mode_changes_tracked(self):
+		"""Track Changes en Company: el historial guarda quién y cuándo cambia los modos."""
+		import json
+
+		self.assertTrue(frappe.get_meta("Company").track_changes)
+		frappe.db.set_value("Company", self.company, {"es_sii_enabled": 0, "es_sii_test_mode": "Pruebas"})
+		frappe.clear_document_cache("Company", self.company)
+		doc = frappe.get_doc("Company", self.company)
+		doc.es_sii_enabled = 1
+		doc.es_sii_test_mode = "Producción"
+		doc.save(ignore_version=False)  # en los tests Frappe no guarda versiones por defecto
+		version = frappe.get_last_doc("Version", filters={"ref_doctype": "Company", "docname": self.company})
+		changed = {row[0]: (row[1], row[2]) for row in json.loads(version.data)["changed"]}
+		self.assertEqual(changed["es_sii_test_mode"], ("Pruebas", "Producción"))
+		self.assertEqual(changed["es_sii_enabled"], (0, 1))
+		self.assertEqual(version.owner, "Administrator")

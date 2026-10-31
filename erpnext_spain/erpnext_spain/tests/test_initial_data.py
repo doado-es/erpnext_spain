@@ -38,7 +38,9 @@ class TestGlobalInitialData(IntegrationTestCase):
 		self.assertTrue(
 			settings.sii_issued_url_production.startswith("https://www1.agenciatributaria.gob.es/")
 		)
-		self.assertFalse(settings.verifactu_wsdl_production)  # a mano, a propósito
+		self.assertTrue(
+			settings.verifactu_wsdl_production.startswith("https://www2.agenciatributaria.gob.es/")
+		)
 
 	def test_payment_terms_within_legal_maximum(self):
 		"""Ley 3/2004: ningún plazo supera los 60 días."""

@@ -12,6 +12,8 @@
 
 from __future__ import annotations
 
+import frappe
+
 COMPANY_FIELDS = [
 	{
 		"fieldname": "es_accounting_section",
@@ -112,10 +114,20 @@ CUSTOM_FIELDS = {"Company": COMPANY_FIELDS}
 FIELDS_PER_DOCTYPE = {"Company": [field["fieldname"] for field in COMPANY_FIELDS]}
 
 
+# Company con Track Changes: el historial guarda quién y cuándo cambia los modos de
+# VeriFactu y del SII. ERPNext v16 ya lo trae activado; el Property Setter lo
+# garantiza aunque cambie en una versión futura.
+TRACK_CHANGES_SETTER = "Company-main-track_changes"
+
+
 def setup_custom_fields() -> None:
 	from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
 	create_custom_fields(CUSTOM_FIELDS, update=True)
+	make_property_setter(
+		"Company", None, "track_changes", 1, "Check", for_doctype=True, validate_fields_for_doctype=False
+	)
 
 
 def cleanup_custom_fields() -> None:
@@ -123,3 +135,5 @@ def cleanup_custom_fields() -> None:
 	from erpnext_spain.utils.custom_fields import cleanup_custom_fields as _cleanup
 
 	_cleanup(FIELDS_PER_DOCTYPE)
+	if frappe.db.exists("Property Setter", TRACK_CHANGES_SETTER):
+		frappe.delete_doc("Property Setter", TRACK_CHANGES_SETTER, ignore_permissions=True, force=True)

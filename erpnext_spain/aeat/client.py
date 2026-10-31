@@ -41,6 +41,13 @@ WSDL_TEST_DEFAULT = (
 	"https://prewww2.aeat.es/static_files/common/internet/dep/aplicaciones/es/"
 	"aeat/tikeV1.0/cont/ws/SistemaFacturacion.wsdl"
 )
+# Dirección oficial del WSDL de producción. La carga inicial la escribe en ES
+# Settings; si el campo se vacía, producción queda bloqueada (sin valor por defecto
+# en el código): el modo «Producción» de la compañía es el que decide el envío real.
+WSDL_PRODUCTION_OFFICIAL = (
+	"https://www2.agenciatributaria.gob.es/static_files/common/internet/dep/aplicaciones/es/"
+	"aeat/tikeV1.0/cont/ws/SistemaFacturacion.wsdl"
+)
 
 
 def _wsdl_from_settings(service: str, environment: str) -> str:

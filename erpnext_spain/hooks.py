@@ -136,6 +136,8 @@ doctype_js = {
 		# Acción «Aplicar plan PGC» (spec 02 §2).
 		"es_contabilidad/public/js/company.js",
 		"es_sii/public/js/company.js",
+		# Avisos al activar, pasar a producción, volver a pruebas o desactivar.
+		"aeat/public/js/company_modes.js",
 	],
 	"Sales Invoice": [
 		"es_verifactu/public/js/sales_invoice.js",

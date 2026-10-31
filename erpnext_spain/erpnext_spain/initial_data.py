@@ -112,13 +112,16 @@ def ensure_global_records() -> dict[str, list[str]]:
 
 def ensure_service_urls() -> list[str]:
 	"""Direcciones oficiales de los servicios de la AEAT en ES Settings: rellena
-	solo las vacías (no pisa las que haya cambiado el usuario). El WSDL de
-	producción de VeriFactu se deja vacío a propósito: hay que indicarlo a mano
-	para no enviar a producción por error."""
-	from erpnext_spain.aeat.client import WSDL_TEST_DEFAULT
+	solo las vacías (no pisa las que haya cambiado el usuario). Lo que decide si se
+	envía a producción es el modo «Producción» de cada compañía."""
+	from erpnext_spain.aeat.client import WSDL_PRODUCTION_OFFICIAL, WSDL_TEST_DEFAULT
 	from erpnext_spain.es_sii.outbox import ENDPOINTS
 
-	official = {"verifactu_wsdl_test": WSDL_TEST_DEFAULT, **dict(ENDPOINTS.values())}
+	official = {
+		"verifactu_wsdl_test": WSDL_TEST_DEFAULT,
+		"verifactu_wsdl_production": WSDL_PRODUCTION_OFFICIAL,
+		**dict(ENDPOINTS.values()),
+	}
 	filled = []
 	for field, url in official.items():
 		if not (frappe.db.get_single_value("ES Settings", field) or "").strip():

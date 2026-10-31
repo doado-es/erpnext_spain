@@ -10,10 +10,10 @@ class TestESSettings(IntegrationTestCase):
 		doc = frappe.get_doc("ES Settings")
 		self.assertEqual(doc.modo_validacion_nif, "Bloquear")
 
-	def test_endpoint_pruebas_por_defecto(self):
+	def test_endpoints_oficiales_tras_la_instalacion(self):
 		doc = frappe.get_doc("ES Settings")
-		self.assertTrue(doc.verifactu_wsdl_test.startswith("https://"))
-		self.assertFalse(doc.verifactu_wsdl_production)
+		self.assertTrue(doc.verifactu_wsdl_test.startswith("https://prewww2.aeat.es/"))
+		self.assertTrue(doc.verifactu_wsdl_production.startswith("https://www2.agenciatributaria.gob.es/"))
 
 	def test_permisos_system_manager(self):
 		"""Regresión: ES Settings nació con «permissions: []» — un doctype

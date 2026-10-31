@@ -80,7 +80,7 @@
    "label": "WSDL VeriFactu (pruebas)"
   },
   {
-   "description": "URL del WSDL de VeriFactu de producción. No tiene valor por defecto para evitar enviar a producción por error. Con la URL oficial de la AEAT (https://www2.agenciatributaria.gob.es/static_files/common/internet/dep/aplicaciones/es/aeat/tikeV1.0/cont/ws/SistemaFacturacion.wsdl), la app usa su copia local del WSDL y de sus esquemas.",
+   "description": "URL del WSDL de VeriFactu de producción. La instalación escribe la oficial de la AEAT; con ella, la app usa su copia local del WSDL y de sus esquemas. Solo se usa si la compañía está en modo «Producción»; vacía, el envío a producción queda bloqueado.",
    "fieldname": "verifactu_wsdl_production",
    "fieldtype": "Data",
    "label": "WSDL VeriFactu (producción)"
@@ -126,7 +126,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-10-31 14:00:00.000000",
+ "modified": "2026-10-31 15:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "name": "ES Settings",
