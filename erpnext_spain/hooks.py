@@ -143,6 +143,8 @@ doctype_js = {
 		"es_facturacion/public/js/fiscal_tab.js",
 	],
 	"Purchase Invoice": "es_facturacion/public/js/fiscal_tab.js",
+	# Aviso del formato de nombre de las personas físicas (APELLIDO APELLIDO NOMBRE).
+	"Customer": "nif/public/js/customer.js",
 }
 
 # Estilado de BORRADOR-* en el list view de Sales Invoice (spec 04 §15):
