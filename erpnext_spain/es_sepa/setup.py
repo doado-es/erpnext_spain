@@ -25,9 +25,10 @@ CUSTOM_FIELDS = {
 			"fieldname": "es_norms_section",
 			"label": "Normas bancarias",
 			"fieldtype": "Section Break",
-			"insert_after": "mask",
+			# Justo después de los datos de la cuenta (IBAN), sin plegar.
+			"insert_after": "statement_password",
 			"depends_on": COMPANY_ACCOUNT,
-			"collapsible": 1,
+			"collapsible": 0,
 		},
 		{
 			"fieldname": "es_norms",
