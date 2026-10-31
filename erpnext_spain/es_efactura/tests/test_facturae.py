@@ -193,7 +193,7 @@ class TestFacturae(IntegrationTestCase):
 		original = self.invoice()
 		credit = make_return_doc("Sales Invoice", original.name)
 		credit.es_rectification_reason_code = "16"
-		credit.es_correction_method = "02"
+		credit.es_rectification_method = "Por diferencias"
 		credit.es_rectification_reason = "Devolución de la mitad del servicio"
 		credit.items[0].qty = -1
 		credit.insert()
@@ -203,7 +203,14 @@ class TestFacturae(IntegrationTestCase):
 		self.assertEqual(root.findtext(".//InvoiceHeader/InvoiceClass"), "OR")
 		self.assertEqual(root.findtext(".//Corrective/InvoiceNumber"), original.name)
 		self.assertEqual(root.findtext(".//Corrective/ReasonCode"), "16")
+		self.assertEqual(root.findtext(".//Corrective/CorrectionMethod"), "02")
 		self.assertTrue(root.findtext(".//InvoiceTotals/InvoiceTotal").startswith("-"))
+
+	def test_correction_method_from_rectification_method(self):
+		"""Un solo campo de método: Facturae deriva su código (01 íntegra, 02 diferencias)."""
+		self.assertEqual(facturae.correction_method("Por sustitución"), "01")
+		self.assertEqual(facturae.correction_method("Por diferencias"), "02")
+		self.assertEqual(facturae.correction_method(None), "02")
 
 	def test_register_in_face_and_block_cancel(self):
 		si = self.invoice()

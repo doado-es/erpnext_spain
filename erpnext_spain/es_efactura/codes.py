@@ -39,6 +39,11 @@ REASONS = {
 	"84": "Base imponible modificada por resolución firme, judicial o administrativa",
 	"85": "Base imponible modificada cuotas repercutidas no satisfechas. Auto de declaración de concurso",
 }
+# CorrectionMethod de Facturae a partir del método de rectificación de la factura
+# (es_rectification_method, un solo campo para Facturae y VeriFactu). Los códigos
+# 03 (descuento por volumen) y 04 (autorizadas por la AEAT) no se emiten.
+CORRECTION_METHOD_BY_RECTIFICATION = {"Por diferencias": "02", "Por sustitución": "01"}
+
 CORRECTION_METHODS = {
 	"01": "Rectificación íntegra",
 	"02": "Rectificación por diferencias",

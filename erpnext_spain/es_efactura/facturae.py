@@ -465,6 +465,11 @@ def company_iban(company) -> str:
 	return iban.replace(" ", "").upper()
 
 
+def correction_method(rectification_method: str | None) -> str:
+	"""Código CorrectionMethod de Facturae; sin método, por diferencias (02)."""
+	return codes.CORRECTION_METHOD_BY_RECTIFICATION.get(rectification_method or "", "02")
+
+
 def corrective(si) -> Corrective:
 	if not si.return_against:
 		fail(
@@ -482,7 +487,7 @@ def corrective(si) -> Corrective:
 		number=si.return_against,
 		issue_date=str(getdate(original_date)),
 		reason_code=reason,
-		method=si.get("es_correction_method") or "02",
+		method=correction_method(si.get("es_rectification_method")),
 		explanation=si.es_rectification_reason,
 	)
 

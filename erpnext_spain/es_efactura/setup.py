@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from erpnext_spain.es_efactura.codes import (
-	CORRECTION_METHODS,
 	PAYMENT_MEANS,
 	PERSON_TYPES,
 	REASONS,
@@ -153,15 +152,6 @@ SALES_INVOICE_FIELDS = [
 		"insert_after": "es_rectification_section",
 		"mandatory_depends_on": "eval:doc.is_return",
 		"description": described(REASONS),
-	},
-	{
-		"fieldname": "es_correction_method",
-		"label": "Método de rectificación",
-		"fieldtype": "Select",
-		"options": select(CORRECTION_METHODS),
-		"default": "02",
-		"insert_after": "es_rectification_reason_code",
-		"description": described(CORRECTION_METHODS),
 	},
 	# es_rectification_reason (la explicación) la define es_facturacion/setup.py,
 	# después de es_rectification_method: un solo campo para Facturae y VeriFactu.

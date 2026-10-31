@@ -33,7 +33,8 @@ CUSTOM_FIELDS = {
 			"options": "\n".join(RECTIFICATION_METHODS),
 			"default": METHOD_DIFFERENCES,
 			# En la sección «Rectificación» de la pestaña principal (es_efactura/setup.py).
-			"insert_after": "es_correction_method",
+			# Vale para VeriFactu y para Facturae (CorrectionMethod 02 o 01).
+			"insert_after": "es_rectification_reason_code",
 			"depends_on": RECTIFICATION_DEPENDS,
 			"no_copy": 1,
 		},
