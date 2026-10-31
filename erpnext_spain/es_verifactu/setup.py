@@ -156,12 +156,12 @@ COMPANY_VERIFACTU_NOTIFICATION_ROLES_FIELD = {
 	"label": "Roles con notificación de incidencias",
 	"fieldtype": "Table",
 	"options": "ES Verifactu Notification Role",
-	"insert_after": "es_invoice_series",
-	"depends_on": "eval:doc.es_verifactu_enabled",
+	# Sección General: lo comparten VeriFactu, el SII y los avisos de certificados.
+	"insert_after": "es_incidents_email",
 	"description": (
-		"Roles de usuarios que reciben in-app (Notification Log) las incidencias"
-		" de compliance: rechazos AEAT, reintentos agotados, outbox estancado y"
-		" caducidad de certificados."
+		"Usuarios con estos roles reciben los avisos de VeriFactu y del SII (rechazos de la"
+		" AEAT, reintentos agotados, envíos parados, plazos) y de caducidad del certificado."
+		" Sin roles, los reciben los administradores del sistema."
 	),
 }
 

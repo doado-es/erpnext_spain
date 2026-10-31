@@ -323,23 +323,32 @@ class TestFiscalTab(BillingTestCase):
 		return tabs
 
 	def test_layout(self):
-		from erpnext_spain.es_facturacion.fiscal_tab import HISTORY, TAB
+		from erpnext_spain.es_facturacion import fiscal_tab
+		from erpnext_spain.es_facturacion.fiscal_tab import TAB
 
 		sales = self.tab_of("Sales Invoice")
 		for fieldname in (
 			"es_verifactu_seccion",
 			"es_invoice_type",
 			"es_verifactu_status",
+			fiscal_tab.VERIFACTU_HISTORY,
+			fiscal_tab.SII_SECTION,
+			fiscal_tab.SII_HISTORY,
+			fiscal_tab.EINVOICE_SECTION,
 			"es_einvoice",
-			HISTORY,
+			fiscal_tab.EINVOICE_HISTORY,
 		):
 			self.assertEqual(sales[fieldname], TAB, fieldname)
+		for fieldname in fiscal_tab.OBSOLETE:
+			self.assertNotIn(fieldname, sales)
 		# La rectificación y la situación de cobro siguen en la pestaña principal.
 		for fieldname in ("es_rectification_reason", "es_rectification_method", "es_collection_status"):
 			self.assertEqual(sales[fieldname], sales["return_against"], fieldname)
 		fields = [field.fieldname for field in frappe.get_meta("Sales Invoice").fields]
 		self.assertLess(fields.index(TAB), fields.index("connections_tab"))
-		self.assertEqual(self.tab_of("Purchase Invoice")["es_e_invoice"], TAB)
+		purchases = self.tab_of("Purchase Invoice")
+		for fieldname in ("es_e_invoice", fiscal_tab.SII_HISTORY, fiscal_tab.EINVOICE_HISTORY):
+			self.assertEqual(purchases[fieldname], TAB, fieldname)
 
 	def test_nothing_loaded_without_verifactu_or_sii(self):
 		from erpnext_spain.es_facturacion.fiscal_tab import ONLOAD_KEY

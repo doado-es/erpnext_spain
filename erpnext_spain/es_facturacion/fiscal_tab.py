@@ -1,8 +1,8 @@
 # Pestaña «VeriFactu / SII» de las facturas (revisión del 31/10/2026).
 #
-# Reúne en una pestaña propia los datos de VeriFactu de la factura de venta y el
-# historial de envíos: registros VeriFactu, registros del SII y facturas
-# electrónicas. El historial no se copia en la factura: se lee de sus doctypes al
+# Reúne en una pestaña propia, con una sección por sistema, los datos de VeriFactu
+# de la factura de venta y el historial de cada uno: registros VeriFactu,
+# registros del SII y facturas electrónicas. El historial no se copia en la factura: se lee de sus doctypes al
 # abrir el formulario (`onload`, que ya exige permiso de lectura de la factura) y
 # `get_all` aplica los permisos del usuario sobre cada doctype.
 #
@@ -21,34 +21,57 @@ PURCHASE_INVOICE = "Purchase Invoice"
 ONLOAD_KEY = "es_fiscal"
 
 TAB = "es_fiscal_tab"
-HISTORY_SECTION = "es_fiscal_history_section"
-HISTORY = "es_fiscal_history"
+# Una sección por sistema, cada una con su lista (EmbeddedList en fiscal_tab.js):
+# VeriFactu (sus campos y sus registros), SII y factura electrónica.
+VERIFACTU_HISTORY = "es_verifactu_history"
+SII_SECTION, SII_HISTORY = "es_sii_history_section", "es_sii_history"
+EINVOICE_SECTION, EINVOICE_HISTORY = "es_einvoice_history_section", "es_einvoice_history"
+# Primera versión de la pestaña (una sola lista); los borra el patch split_fiscal_tab.
+OBSOLETE = ("es_fiscal_history_section", "es_fiscal_history")
 
 
-def tab_fields(label: str, insert_after: str) -> list[dict]:
-	return [
-		{"fieldname": TAB, "label": label, "fieldtype": "Tab Break", "insert_after": insert_after},
-		{
-			"fieldname": HISTORY_SECTION,
-			"label": "Historial de envíos",
-			"fieldtype": "Section Break",
-			# Tras la sección VeriFactu en ventas; en compras, al principio de la pestaña.
-			"insert_after": "es_verifactu_exempt_cause" if label.startswith("VeriFactu") else TAB,
-		},
-		{
-			"fieldname": HISTORY,
-			"label": "Historial de envíos",
-			"fieldtype": "HTML",
-			# Debajo de los enlaces a la factura electrónica (es_efactura/setup.py).
-			"insert_after": "es_einvoice_status" if label.startswith("VeriFactu") else "es_e_invoice",
-		},
-	]
+def html(fieldname: str, insert_after: str) -> dict:
+	return {"fieldname": fieldname, "fieldtype": "HTML", "insert_after": insert_after}
+
+
+def section(fieldname: str, label: str, insert_after: str) -> dict:
+	return {
+		"fieldname": fieldname,
+		"label": label,
+		"fieldtype": "Section Break",
+		"insert_after": insert_after,
+	}
 
 
 CUSTOM_FIELDS = {
 	# Antes de «Connections», la última pestaña estándar.
-	SALES_INVOICE: tab_fields("VeriFactu / SII", "is_discounted"),
-	PURCHASE_INVOICE: tab_fields("SII / Factura electrónica", "remarks"),
+	SALES_INVOICE: [
+		{
+			"fieldname": TAB,
+			"label": "VeriFactu / SII",
+			"fieldtype": "Tab Break",
+			"insert_after": "is_discounted",
+		},
+		# es_verifactu_seccion y sus campos (es_verifactu/setup.py) van tras la pestaña.
+		html(VERIFACTU_HISTORY, "es_verifactu_exempt_cause"),
+		section(SII_SECTION, "SII", VERIFACTU_HISTORY),
+		html(SII_HISTORY, SII_SECTION),
+		# es_einvoice y es_einvoice_status (es_efactura/setup.py) van tras la sección.
+		section(EINVOICE_SECTION, "Factura electrónica", SII_HISTORY),
+		html(EINVOICE_HISTORY, "es_einvoice_status"),
+	],
+	PURCHASE_INVOICE: [
+		{
+			"fieldname": TAB,
+			"label": "SII / Factura electrónica",
+			"fieldtype": "Tab Break",
+			"insert_after": "remarks",
+		},
+		section(SII_SECTION, "SII", TAB),
+		html(SII_HISTORY, SII_SECTION),
+		section(EINVOICE_SECTION, "Factura electrónica", SII_HISTORY),
+		html(EINVOICE_HISTORY, "es_e_invoice"),
+	],
 }
 
 
@@ -91,6 +114,7 @@ def history(doctype: str, name: str) -> dict[str, list]:
 			"name",
 			"communication",
 			"status",
+			"send_on",
 			"deadline",
 			"last_attempt",
 			"csv",

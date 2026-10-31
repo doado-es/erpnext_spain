@@ -7,10 +7,11 @@ from typing import ClassVar
 
 import frappe
 from frappe import _
-from frappe.utils import add_days, add_months, get_first_day, getdate, now_datetime
+from frappe.utils import add_days, add_months, cint, get_first_day, getdate, now_datetime, nowdate
 
 from erpnext_spain.aeat.manager import AEATDriver
 from erpnext_spain.es_sii import records
+from erpnext_spain.es_sii.setup import MANUAL
 from erpnext_spain.utils.gating import is_sii_active
 
 SERVICE = "SII"
@@ -59,6 +60,55 @@ def deadline(book: str, date) -> object:
 	return limit
 
 
+# --- periodo y momento del envío ---------------------------------------------------------
+
+
+def company_settings(company: str):
+	return frappe.get_cached_value(
+		"Company",
+		company,
+		["es_sii_activation_date", "es_sii_end_date", "es_sii_strategy", "es_sii_wait_days"],
+		as_dict=True,
+	)
+
+
+def in_period(doc) -> bool:
+	"""La fecha de registro contable está entre el inicio y el fin en el SII."""
+	conf = company_settings(doc.company)
+	posting_date = getdate(doc.posting_date)
+	if conf.es_sii_activation_date and posting_date < getdate(conf.es_sii_activation_date):
+		return False
+	return not (conf.es_sii_end_date and posting_date > getdate(conf.es_sii_end_date))
+
+
+def send_on(company: str, communication: str, posting_date, limit, wait_days: int | None = None) -> object:
+	"""Desde cuándo puede enviarlo el trabajo programado: altas, a los días hábiles
+	de espera desde el registro contable sin pasar del plazo legal; modificaciones
+	y bajas, el mismo día."""
+	if communication != records.NEW:
+		return getdate(nowdate())
+	days = cint(company_settings(company).es_sii_wait_days if wait_days is None else wait_days)
+	return min(add_working_days(posting_date, days), getdate(limit))
+
+
+def recompute_send_on(company: str, wait_days: int) -> None:
+	"""Altas pendientes tras cambiar los días de espera de la compañía."""
+	for row in frappe.get_all(
+		"ES Sii Record",
+		filters={"company": company, "status": PENDING, "communication": records.NEW},
+		fields=["name", "voucher_type", "voucher_no", "deadline"],
+	):
+		posting_date = frappe.db.get_value(row.voucher_type, row.voucher_no, "posting_date")
+		if posting_date:
+			frappe.db.set_value(
+				"ES Sii Record",
+				row.name,
+				"send_on",
+				send_on(company, records.NEW, posting_date, row.deadline, wait_days),
+				update_modified=False,
+			)
+
+
 # --- generación ------------------------------------------------------------------------
 
 
@@ -66,6 +116,7 @@ def new_record(doc, communication: str, content: dict, previous=None) -> str:
 	book = BOOKS[doc.doctype]
 	identification = content["IDFactura"]
 	issuer = identification["IDEmisorFactura"]
+	limit = deadline(book, doc.posting_date if communication != records.CANCEL else now_datetime())
 	record = frappe.get_doc(
 		{
 			"doctype": "ES Sii Record",
@@ -75,9 +126,8 @@ def new_record(doc, communication: str, content: dict, previous=None) -> str:
 			"voucher_no": doc.name,
 			"communication": communication,
 			"status": PENDING,
-			"deadline": deadline(
-				book, doc.posting_date if communication != records.CANCEL else now_datetime()
-			),
+			"deadline": limit,
+			"send_on": send_on(doc.company, communication, doc.posting_date, limit),
 			"issuer_nif": issuer.get("NIF") or (issuer.get("IDOtro") or {}).get("ID"),
 			"invoice_number": identification["NumSerieFacturaEmisor"],
 			"issue_date": identification["FechaExpedicionFacturaEmisor"],
@@ -92,7 +142,7 @@ def new_record(doc, communication: str, content: dict, previous=None) -> str:
 
 
 def on_submit(doc, method=None) -> None:
-	if not is_sii_active(doc.company):
+	if not is_sii_active(doc.company) or not in_period(doc):
 		return
 	new_record(doc, records.NEW, records.build_record(doc))
 
@@ -149,8 +199,36 @@ def check_role() -> None:
 # --- driver del outbox ---------------------------------------------------------------------
 
 
+# Dirección del servicio por libro y entorno: campo de ES Settings y valor oficial
+# (el de los WSDL incluidos en la app) si el campo está vacío.
+ENDPOINTS: dict[tuple[str, str], tuple[str, str]] = {
+	(records.ISSUED, "pruebas"): (
+		"sii_issued_url_test",
+		"https://www7.aeat.es/wlpl/SSII-FACT/ws/fe/SiiFactFEV1SOAP",
+	),
+	(records.ISSUED, "produccion"): (
+		"sii_issued_url_production",
+		"https://www1.agenciatributaria.gob.es/wlpl/SSII-FACT/ws/fe/SiiFactFEV1SOAP",
+	),
+	(records.RECEIVED, "pruebas"): (
+		"sii_received_url_test",
+		"https://www7.aeat.es/wlpl/SSII-FACT/ws/fr/SiiFactFRV1SOAP",
+	),
+	(records.RECEIVED, "produccion"): (
+		"sii_received_url_production",
+		"https://www1.agenciatributaria.gob.es/wlpl/SSII-FACT/ws/fr/SiiFactFRV1SOAP",
+	),
+}
+
+
+def endpoint(book: str, environment: str) -> str:
+	field, official = ENDPOINTS[(book, environment)]
+	return (frappe.get_cached_doc("ES Settings").get(field) or "").strip() or official
+
+
 class SiiClient:
-	"""Cliente SOAP del SII: un WSDL por libro (expedidas y recibidas)."""
+	"""Cliente SOAP del SII: un WSDL por libro (expedidas y recibidas) y la
+	dirección del servicio de ES Settings."""
 
 	PORTS: ClassVar[dict[tuple[str, str], str]] = {
 		(records.ISSUED, "pruebas"): "SuministroFactEmitidasPruebas",
@@ -180,29 +258,53 @@ class SiiClient:
 			path = os.path.join(
 				frappe.get_app_path("erpnext_spain", "schemas", "aeat", "sii"), records.WSDL[book]
 			)
-			self.clients[book] = load_wsdl_client(
+			client = load_wsdl_client(
 				path,
 				session=session,
 				service_name="siiService",
 				port_name=self.PORTS[(book, self.environment)],
 			)
-		response = getattr(self.clients[book].service, payload["operacion"])(**payload["datos"])
+			binding = next(name for name in client.wsdl.bindings if name.endswith("}siiBinding"))
+			self.clients[book] = client.create_service(binding, endpoint(book, self.environment))
+		response = getattr(self.clients[book], payload["operacion"])(**payload["datos"])
 		return dict(helpers.serialize_object(response, dict))
 
 
 class SiiDriver(AEATDriver):
 	service = SERVICE
 
-	def __init__(self, client: object | None = None):
+	def __init__(self, client: object | None = None, selected: list[str] | None = None):
+		"""`selected`: envío manual de esos registros (sin mirar la estrategia ni la
+		fecha de envío). Sin él, el trabajo programado: compañías en automático y
+		registros con «Enviar a partir del» cumplido."""
 		self.client = client
+		self.selected = selected
 
 	def get_companies(self) -> list[str]:
-		return frappe.get_all("ES Sii Record", filters={"status": PENDING}, pluck="company", distinct=True)
+		return frappe.get_all("ES Sii Record", filters=self.due_filters(), pluck="company", distinct=True)
+
+	def due_filters(self, company: str | None = None) -> dict:
+		filters = {"status": PENDING}
+		if company:
+			filters["company"] = company
+		if self.selected is not None:
+			filters["name"] = ["in", self.selected or [""]]
+		return filters
+
+	def due_or_filters(self, company: str) -> list | None:
+		if self.selected is not None:
+			return None
+		# Registros anteriores a esta versión no tienen fecha de envío: se envían.
+		return [["send_on", "<=", nowdate()], ["send_on", "is", "not set"]]
 
 	def get_pending(self, company: str) -> list:
+		if self.selected is None and company_settings(company).es_sii_strategy == MANUAL:
+			return []
+		filters, or_filters = self.due_filters(company), self.due_or_filters(company)
 		first = frappe.get_all(
 			"ES Sii Record",
-			filters={"company": company, "status": PENDING},
+			filters=filters,
+			or_filters=or_filters,
 			fields=["book", "communication"],
 			order_by="creation",
 			limit=1,
@@ -216,12 +318,8 @@ class SiiDriver(AEATDriver):
 		)
 		return frappe.get_all(
 			"ES Sii Record",
-			filters={
-				"company": company,
-				"status": PENDING,
-				"book": book,
-				"communication": ["in", communications],
-			},
+			filters={**filters, "book": book, "communication": ["in", communications]},
+			or_filters=or_filters,
 			fields=["name", "book", "communication", "content", "invoice_number", "issuer_nif"],
 			order_by="creation",
 			limit=self.batch_limit(company),
@@ -265,6 +363,10 @@ class SiiDriver(AEATDriver):
 		return response
 
 	def process_response(self, response: dict, response_doc) -> None:
+		from erpnext_spain.es_sii import notices
+
+		counts: dict[str, int] = {}
+		company = None
 		lines = response.get("RespuestaLinea") or []
 		by_number = {}
 		for line in lines:
@@ -292,6 +394,10 @@ class SiiDriver(AEATDriver):
 				"aeat_response": getattr(response_doc, "name", None),
 			}
 			frappe.db.set_value("ES Sii Record", name, values, update_modified=False)
+			counts[status] = counts.get(status, 0) + 1
+			company = record.company
+		if company:
+			notices.notify_results(company, counts)
 
 	def rate_limit_seconds(self, company: str) -> int:
 		return 0
@@ -304,10 +410,71 @@ class SiiDriver(AEATDriver):
 
 
 def drain_outbox() -> None:
-	"""Job programado: envía los registros pendientes de todas las compañías."""
+	"""Job programado: envía los registros pendientes de las compañías con envío
+	automático cuya fecha de envío ya ha llegado."""
 	from erpnext_spain.aeat.manager import AEATOutboxManager
 
 	AEATOutboxManager().drain([SiiDriver()])
+
+
+# --- envío manual ----------------------------------------------------------------------------
+
+MANUAL_QUEUE_ABOVE = 50
+
+
+@frappe.whitelist(methods=["POST"])
+def send_invoices(doctype: str, names: list | str) -> dict:
+	"""Acción «Enviar al SII» de las listas de facturas: envía ya los registros
+	pendientes de las facturas seleccionadas (en segundo plano si son muchas)."""
+	from erpnext_spain.es_facturacion.bulk import as_list
+
+	if doctype not in BOOKS:
+		frappe.throw(_("Solo se envían al SII facturas de venta y de compra."))
+	check_role()
+	names = as_list(names)
+	for name in names:
+		frappe.get_doc(doctype, name).check_permission("write")
+	pending = frappe.get_all(
+		"ES Sii Record",
+		filters={"voucher_type": doctype, "voucher_no": ["in", names], "status": PENDING},
+		pluck="name",
+	)
+	if not pending:
+		frappe.throw(
+			_(
+				"Ninguna de las facturas seleccionadas tiene registros del SII pendientes de envío."
+				" Revise que la compañía tenga el SII activado y que la fecha de registro contable"
+				" esté dentro del periodo del SII."
+			)
+		)
+	if len(pending) > MANUAL_QUEUE_ABOVE:
+		frappe.enqueue("erpnext_spain.es_sii.outbox.send_records", queue="long", records=pending)
+		return {"queued": True, "count": len(pending)}
+	return send_records(pending)
+
+
+def send_records(records_to_send: list[str]) -> dict:
+	"""Envía esos registros pendientes, por lotes de un mismo libro y tipo de
+	comunicación, y devuelve el estado final de cada uno."""
+	from erpnext_spain.aeat.manager import AEATOutboxManager
+
+	manager, driver = AEATOutboxManager(), SiiDriver(selected=list(records_to_send))
+	# Cada pasada envía un lote por compañía; como mucho, uno por cada registro.
+	for _attempt in range(len(records_to_send)):
+		before = frappe.db.count("ES Sii Record", {"name": ["in", records_to_send], "status": PENDING})
+		if not before:
+			break
+		manager.drain([driver])
+		if frappe.db.count("ES Sii Record", {"name": ["in", records_to_send], "status": PENDING}) == before:
+			break  # sin avances (error de conexión ya registrado)
+	return dict(
+		frappe.get_all(
+			"ES Sii Record",
+			filters={"name": ["in", records_to_send]},
+			fields=["name", "status"],
+			as_list=True,
+		)
+	)
 
 
 # --- avisos de plazo y cuadre ----------------------------------------------------------------
@@ -315,34 +482,18 @@ def drain_outbox() -> None:
 
 def warn_deadlines() -> None:
 	"""Job diario: registros pendientes o incorrectos que vencen hoy, mañana o ya vencidos."""
-	from frappe.utils import nowdate
+	from erpnext_spain.es_sii import notices
 
 	limit = add_days(nowdate(), 1)
-	for company in frappe.get_all(
-		"ES Sii Record",
-		filters={"status": ["in", [PENDING, WRONG]], "deadline": ["<=", limit]},
-		pluck="company",
-		distinct=True,
-	):
-		count = frappe.db.count(
-			"ES Sii Record",
-			{"company": company, "status": ["in", [PENDING, WRONG]], "deadline": ["<=", limit]},
+	filters = {"status": ["in", [PENDING, WRONG]], "deadline": ["<=", limit]}
+	for company in frappe.get_all("ES Sii Record", filters=filters, pluck="company", distinct=True):
+		count = frappe.db.count("ES Sii Record", {**filters, "company": company})
+		notices.notify(
+			company,
+			_("SII de {0}: {1} registros vencen hoy, mañana o ya han vencido.").format(company, count),
+			_("Revise los registros del SII pendientes o rechazados y envíelos antes del plazo."),
+			notices.RED,
 		)
-		for user in frappe.get_all(
-			"Has Role", filters={"role": "Accounts Manager", "parenttype": "User"}, pluck="parent"
-		):
-			frappe.get_doc(
-				{
-					"doctype": "Notification Log",
-					"for_user": user,
-					"type": "Alert",
-					"document_type": "Company",
-					"document_name": company,
-					"subject": _("SII de {0}: {1} registros vencen hoy, mañana o ya han vencido.").format(
-						company, count
-					),
-				}
-			).insert(ignore_permissions=True)
 
 
 @frappe.whitelist(methods=["POST"])

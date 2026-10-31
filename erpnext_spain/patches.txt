@@ -9,3 +9,4 @@ erpnext_spain.patches.v16.remove_es_vat_register
 erpnext_spain.patches.v16.remove_mandate_and_contract_doctypes
 erpnext_spain.patches.v16.merge_rectification_method
 erpnext_spain.patches.v16.remove_aeat_census_fields
+erpnext_spain.patches.v16.split_fiscal_tab

@@ -60,6 +60,14 @@ erpnext_spain.fiscal_tab.BLOCKS = [
 	{
 		key: "verifactu",
 		title: __("Registros VeriFactu"),
+		// La sección VeriFactu ya existe (sus campos): la lista va al final.
+		section: "es_verifactu_seccion",
+		html: "es_verifactu_history",
+		visible: (frm, data) =>
+			frm.doctype === "Sales Invoice" &&
+			(data.system === "VeriFactu" ||
+				!!frm.doc.es_verifactu_mode ||
+				(data.verifactu || []).length > 0),
 		prepare: (row) => ({
 			_type: erpnext_spain.fiscal_tab.label(row.record_type),
 			_date: erpnext_spain.fiscal_tab.date(row.creation),
@@ -79,7 +87,12 @@ erpnext_spain.fiscal_tab.BLOCKS = [
 	{
 		key: "sii",
 		title: __("Registros del SII"),
+		section: "es_sii_history_section",
+		html: "es_sii_history",
+		visible: (frm, data) =>
+			!frm.is_new() && (data.system === "SII" || (data.sii || []).length > 0),
 		prepare: (row) => ({
+			_send_on: erpnext_spain.fiscal_tab.date(row.send_on),
 			_deadline: erpnext_spain.fiscal_tab.date(row.deadline),
 			_last_attempt: erpnext_spain.fiscal_tab.date(row.last_attempt),
 			_error: erpnext_spain.fiscal_tab.error(row.error_code, row.error_description),
@@ -88,6 +101,7 @@ erpnext_spain.fiscal_tab.BLOCKS = [
 			erpnext_spain.fiscal_tab.link_column(__("Registro"), "ES Sii Record"),
 			{ label: __("Comunicación"), fieldname: "communication" },
 			erpnext_spain.fiscal_tab.status_column(),
+			{ label: __("Enviar a partir del"), fieldname: "_send_on" },
 			{ label: __("Plazo"), fieldname: "_deadline" },
 			{ label: __("Último intento"), fieldname: "_last_attempt" },
 			{ label: __("CSV"), fieldname: "csv" },
@@ -97,6 +111,11 @@ erpnext_spain.fiscal_tab.BLOCKS = [
 	{
 		key: "einvoice",
 		title: __("Factura electrónica"),
+		section: "es_einvoice_history_section",
+		html: "es_einvoice_history",
+		visible: (frm, data) =>
+			!frm.is_new() &&
+			((data.einvoice || []).length > 0 || !!frm.doc.es_einvoice || !!frm.doc.es_e_invoice),
 		prepare: (row) => ({ _modified: erpnext_spain.fiscal_tab.date(row.modified) }),
 		columns: () => [
 			erpnext_spain.fiscal_tab.link_column(__("Documento"), "ES E-Invoice"),
@@ -122,50 +141,40 @@ erpnext_spain.fiscal_tab.make_list = function ($parent, title, columns, rows) {
 	return list;
 };
 
-erpnext_spain.fiscal_tab.render = function ($wrapper, data) {
-	$wrapper.empty();
-	const blocks = erpnext_spain.fiscal_tab.BLOCKS.filter(
-		(block) => (data[block.key] || []).length
+erpnext_spain.fiscal_tab.render = function (frm, block, data) {
+	const field = frm.fields_dict[block.html];
+	if (!field) return;
+	field.$wrapper.empty();
+	const rows = (data[block.key] || []).map((row) =>
+		Object.assign({}, row, block.prepare(row), {
+			_status: erpnext_spain.fiscal_tab.label(row.status),
+		})
 	);
-	if (!blocks.length) {
-		erpnext_spain.fiscal_tab.make_list($wrapper, __("Historial de envíos"), [], []);
-		return;
-	}
-	blocks.forEach((block) => {
-		const rows = data[block.key].map((row) =>
-			Object.assign({}, row, block.prepare(row), {
-				_status: erpnext_spain.fiscal_tab.label(row.status),
-			})
-		);
-		erpnext_spain.fiscal_tab.make_list($wrapper, block.title, block.columns(), rows);
-	});
+	erpnext_spain.fiscal_tab.make_list(field.$wrapper, block.title, block.columns(), rows);
 };
 
 erpnext_spain.fiscal_tab.apply = function (frm, data) {
-	const is_sales = frm.doctype === "Sales Invoice";
-	const show_verifactu =
-		is_sales && (data.system === "VeriFactu" || !!frm.doc.es_verifactu_mode);
-	const show_history = !frm.is_new() && !!data.loaded;
-
-	if (is_sales) {
-		frm.toggle_display("es_verifactu_seccion", show_verifactu);
+	const shown = [];
+	for (const block of erpnext_spain.fiscal_tab.BLOCKS) {
+		if (!frm.fields_dict[block.section]) continue;
+		const visible = block.visible(frm, data);
+		frm.toggle_display(block.section, visible);
+		if (frm.fields_dict[block.html]) frm.fields_dict[block.html].$wrapper.empty();
+		if (visible) shown.push(block);
 	}
-	frm.toggle_display("es_fiscal_history_section", show_history);
-	frm.toggle_display("es_fiscal_tab", show_verifactu || show_history);
-
-	const field = frm.fields_dict.es_fiscal_history;
-	if (!field) {
-		return;
-	}
-	field.$wrapper.empty();
-	if (!show_history) {
-		return;
-	}
+	frm.toggle_display("es_fiscal_tab", shown.length > 0);
+	// Las listas solo con el documento guardado (el historial llega con él).
+	const lists = !frm.is_new() && data.loaded ? shown : [];
+	if (!lists.length) return;
 	frappe
 		.require("embedded_list.bundle.js")
-		.then(() => erpnext_spain.fiscal_tab.render(field.$wrapper, data))
+		.then(() => lists.forEach((block) => erpnext_spain.fiscal_tab.render(frm, block, data)))
 		.catch(() =>
-			field.$wrapper.text(__("No se pudo cargar el historial. Recargue la página."))
+			lists.forEach((block) =>
+				frm.fields_dict[block.html].$wrapper.text(
+					__("No se pudo cargar el historial. Recargue la página.")
+				)
+			)
 		);
 };
 

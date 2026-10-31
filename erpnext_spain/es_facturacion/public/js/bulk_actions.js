@@ -114,12 +114,40 @@ erpnext_spain.es_facturacion.check_tax_ids = function (listview) {
 	});
 };
 
+erpnext_spain.es_facturacion.send_to_sii = function (listview) {
+	const names = erpnext_spain.es_facturacion.selected(listview);
+	if (!names.length) return frappe.msgprint(__("Seleccione facturas."));
+	frappe.call({
+		method: "erpnext_spain.es_sii.outbox.send_invoices",
+		type: "POST",
+		args: { doctype: listview.doctype, names: names },
+		freeze: true,
+		freeze_message: __("Enviando al SII..."),
+		callback(r) {
+			if (!r.message) return;
+			if (r.message.queued) return erpnext_spain.es_facturacion.report(r);
+			const counts = {};
+			for (const status of Object.values(r.message))
+				counts[status] = (counts[status] || 0) + 1;
+			const summary = Object.entries(counts)
+				.map(([status, count]) => `${__(status)}: ${count}`)
+				.join(" · ");
+			frappe.show_alert({ message: __("SII: {0}", [summary]), indicator: "blue" }, 8);
+			listview.refresh();
+		},
+	});
+};
+
 const ES_PARTY_ACTIONS = [[__("Comprobar NIF"), "check_tax_ids"]];
 
 const ES_BULK_ACTIONS = {
 	"Delivery Note": [[__("Facturar seleccionados"), "invoice_delivery_notes"]],
 	"Purchase Receipt": [[__("Registrar factura del proveedor"), "invoice_purchase_receipts"]],
-	"Sales Invoice": [[__("Enviar por correo"), "send_invoices"]],
+	"Sales Invoice": [
+		[__("Enviar por correo"), "send_invoices"],
+		[__("Enviar al SII"), "send_to_sii"],
+	],
+	"Purchase Invoice": [[__("Enviar al SII"), "send_to_sii"]],
 	Customer: ES_PARTY_ACTIONS,
 	Supplier: ES_PARTY_ACTIONS,
 };

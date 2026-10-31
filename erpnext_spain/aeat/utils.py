@@ -107,6 +107,12 @@ def _notification_roles(company: str) -> list[str]:
 	return ["System Manager"]
 
 
+def notification_users(company: str) -> list[str]:
+	"""Usuarios habilitados con los roles de notificación de la empresa (sin roles
+	configurados o sin usuarios: los System Managers)."""
+	return _users_with_roles(_notification_roles(company)) or get_system_managers(only_name=True)
+
+
 def _roles_with_permission(company: str) -> set[str]:
 	"""Roles con permiso AEAT sobre la empresa (spec 13 §7). Mientras la child
 	table de roles no esté configurada, fallback: Accounts Manager (equipo

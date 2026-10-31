@@ -164,7 +164,7 @@ SALES_INVOICE_FIELDS = [
 		"allow_on_submit": 1,
 		"no_copy": 1,
 		# Pestaña «VeriFactu / SII» (es_facturacion/fiscal_tab.py).
-		"insert_after": "es_fiscal_history_section",
+		"insert_after": "es_einvoice_history_section",
 	},
 	{
 		"fieldname": "es_einvoice_status",
@@ -209,7 +209,7 @@ PURCHASE_INVOICE_FIELDS = [
 		"read_only": 1,
 		"no_copy": 1,
 		# Pestaña «SII / Factura electrónica» (es_facturacion/fiscal_tab.py).
-		"insert_after": "es_fiscal_history_section",
+		"insert_after": "es_einvoice_history_section",
 	},
 ]
 

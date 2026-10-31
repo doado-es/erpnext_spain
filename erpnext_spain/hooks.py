@@ -126,6 +126,10 @@ regional_overrides = {
 # (set_intro — snapshot de la factura + test_mode de la compañía en drafts)
 # y glue del dialog de subsanación (get_dialog_fields → rectify).
 
+# Avisos en el escritorio (evento realtime «erpnext_spain_notice»). Fichero
+# servido tal cual desde public/, sin bundle.
+app_include_js = ["/assets/erpnext_spain/js/notices.js"]
+
 doctype_js = {
 	"Company": [
 		"es_verifactu/public/js/company.js",
@@ -166,6 +170,7 @@ doctype_list_js = {
 	"Purchase Receipt": BULK_ACTIONS_JS,
 	"Customer": BULK_ACTIONS_JS,
 	"Supplier": BULK_ACTIONS_JS,
+	"Purchase Invoice": BULK_ACTIONS_JS,
 }
 
 # Métodos Jinja para los Print Formats (doc 12 §14, patrón India Compliance;
