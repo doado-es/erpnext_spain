@@ -3,7 +3,7 @@
 #
 # Los códigos de calificación, exención y clave de régimen son los del esquema
 # de VeriFactu de la AEAT (SuministroInformacion.xsd, versionado en
-# es_verifactu/tests/data/wsdl/): CalificacionOperacionType (S1, S2, N1, N2),
+# erpnext_spain/schemas/aeat/verifactu/): CalificacionOperacionType (S1, S2, N1, N2),
 # OperacionExentaType (E1-E8) e IdOperacionesTrascendenciaTributariaType.
 # El esquema admite además E7 y E8 y la clave 21, cuyo significado no está en el
 # XSD; no se ofrecen hasta verificarlos en la documentación de la AEAT.

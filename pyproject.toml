@@ -10,9 +10,10 @@ dynamic = ["version"]
 dependencies = [
     # "frappe~=16.0.0" # Installed and managed by bench.
     "python-stdnum>=1.19",
-    # zeep 4.3.3 aplica forbid_external a los imports transitivos y el WSDL de la
-    # AEAT importa xmldsig-core-schema.xsd de w3.org: no carga. Ver spec 01 §8 (H7).
-    "zeep>=4.3,<4.3.3",
+    # Desde 4.3.3, forbid_external también bloquea los imports transitivos: el
+    # cliente AEAT sirve el WSDL y sus XSD (incluido xmldsig) desde
+    # erpnext_spain/schemas y no descarga nada. Ver spec 01 §8 (H7).
+    "zeep>=4.3.3,<5",
     # QR de validación VeriFactu (spec 04 §11): SVG sin dependencias pesadas.
     "segno~=1.6",
     # Firma XAdES-EPES de Facturae (spec 10 §3).

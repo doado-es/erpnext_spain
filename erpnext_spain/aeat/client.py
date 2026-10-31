@@ -31,7 +31,7 @@ SERVICES: dict[str, dict[str, Any]] = {
 		# Campos de ES Settings de los que se lee el WSDL EN VIVO:
 		"wsdl_settings": {ENV_TEST: "verifactu_wsdl_test", ENV_PRODUCTION: "verifactu_wsdl_production"},
 		"service_name": "sfVerifactu",
-	 "ports": {ENV_TEST: "SistemaVerifactuPruebas", ENV_PRODUCTION: "SistemaVerifactu"},
+		"ports": {ENV_TEST: "SistemaVerifactuPruebas", ENV_PRODUCTION: "SistemaVerifactu"},
 	},
 }
 
@@ -105,8 +105,7 @@ class AEATClient:
 			)
 		if environment not in ENVIRONMENTS:
 			frappe.throw(
-				f"Entorno AEAT desconocido: {environment}. Remedio: use"
-				f" {' o '.join(ENVIRONMENTS)}.",
+				f"Entorno AEAT desconocido: {environment}. Remedio: use {' o '.join(ENVIRONMENTS)}.",
 				frappe.ValidationError,
 			)
 
@@ -136,8 +135,8 @@ class AEATClient:
 		que los procesadores trabajen un único formato. Errores de conexión
 		propagan (el manager reintenta); cero lógica de negocio aquí.
 		"""
-		from zeep.exceptions import Fault
 		from zeep import helpers
+		from zeep.exceptions import Fault
 
 		operation = payload.get("operacion")
 		data = payload.get("datos")
@@ -156,19 +155,14 @@ class AEATClient:
 		return dict(helpers.serialize_object(response, dict))
 
 
-def _build_zeep_client(
-	*, wsdl: str, cert_pem: str, key_pem: str, timeout: float, service_name: str, port_name: str
-):
-	"""Cliente zeep con sesión requests y TLS mutua (cert de la empresa)."""
-	import requests
-	from zeep import Client, Settings
-	from zeep.transports import Transport
+def zeep_settings():
+	"""Settings de zeep del cliente AEAT. `forbid_entities=False` y
+	`forbid_dtd=False` porque xmldsig-core-schema.xsd declara un DOCTYPE con la
+	entidad `dsig`; `forbid_external=True` bloquea cualquier descarga transitiva
+	(los esquemas se sirven de la copia local, H7)."""
+	from zeep import Settings
 
-	session = requests.Session()
-	session.cert = (cert_pem, key_pem)
-	session.verify = True
-
-	settings = Settings(
+	return Settings(
 		strict=True,
 		raw_response=False,
 		force_https=True,
@@ -179,10 +173,45 @@ def _build_zeep_client(
 		xsd_ignore_sequence_order=False,
 	)
 
-	return Client(
-		wsdl=wsdl,
-		settings=settings,
-		transport=Transport(session=session, timeout=timeout),
+
+def load_wsdl_client(wsdl: str, *, session: Any = None, timeout: float = 15.0, **client_kwargs):
+	"""Cliente zeep sobre el WSDL indicado, con los esquemas externos resueltos
+	desde las copias de la app (spec 01 §8, H7): con la URL oficial de la AEAT no
+	descarga nada."""
+	from zeep import Client
+	from zeep.exceptions import ExternalReferenceForbidden
+
+	from erpnext_spain.aeat.wsdl import LocalSchemaTransport, local_wsdl
+
+	# `timeout` limita la carga de documentos y `operation_timeout` cada llamada
+	# SOAP (sin él, requests espera indefinidamente a la AEAT).
+	transport = LocalSchemaTransport(session=session, timeout=timeout, operation_timeout=timeout)
+	try:
+		return Client(wsdl=local_wsdl(wsdl), settings=zeep_settings(), transport=transport, **client_kwargs)
+	except ExternalReferenceForbidden as error:
+		frappe.throw(
+			f"El WSDL «{wsdl}» importa esquemas remotos ({error.url}) y la app no descarga"
+			" esquemas por seguridad. Remedio: use en ES Settings la URL oficial de la AEAT,"
+			" que la app sirve con su copia local, o añada el WSDL y sus XSD a"
+			" erpnext_spain/schemas.",
+			frappe.ValidationError,
+		)
+
+
+def _build_zeep_client(
+	*, wsdl: str, cert_pem: str, key_pem: str, timeout: float, service_name: str, port_name: str
+):
+	"""Cliente zeep con sesión requests y TLS mutua (cert de la empresa)."""
+	import requests
+
+	session = requests.Session()
+	session.cert = (cert_pem, key_pem)
+	session.verify = True
+
+	return load_wsdl_client(
+		wsdl,
+		session=session,
+		timeout=timeout,
 		service_name=service_name,
 		port_name=port_name,
 	)

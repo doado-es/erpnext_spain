@@ -1,6 +1,6 @@
 # Contrato wire contra el WSDL REAL de la AEAT (SistemaFacturacion.wsdl,
-# tikeV1.0, descargado del entorno de pruebas prewww2 y versionado como
-# fixture en tests/data/wsdl/).
+# tikeV1.0, descargado del entorno de pruebas prewww2 e incluido en la app en
+# erpnext_spain/schemas/aeat/verifactu/, la misma copia que usa el cliente).
 #
 # Por qué existe: la v1 en vivo contra prewww2 fue un whack-a-mole nivel por
 # nivel (NombreRazonEmisor → SinRegistroPrevio → DetalleDesglose minOccurs →
@@ -10,7 +10,7 @@
 # envelope SIN enviar) contra el WSDL versionado: cualquier deriva entre
 # nuestra forma y el schema revienta AQUÍ, offline, antes del drain.
 #
-# Si la AEAT actualiza el WSDL: reemplazar los fixtures (WSDL + 5 XSDs del
+# Si la AEAT actualiza el WSDL: reemplazar la copia (WSDL + 5 XSDs del
 # mismo directorio) y este test grita exactamente qué cambió.
 #
 # Los payloads salen de las funciones PURAS del adapter (build_issuance_record
@@ -22,14 +22,14 @@
 from __future__ import annotations
 
 import json
-import os
 import unittest
 from types import SimpleNamespace
 
 from lxml import etree
-from zeep import Client, Settings
+from zeep import Client
 
-WSDL_PATH = os.path.join(os.path.dirname(__file__), "data", "wsdl", "SistemaFacturacion.wsdl")
+from erpnext_spain.aeat.client import load_wsdl_client
+from erpnext_spain.schemas import VERIFACTU_WSDL
 
 SIF = {
 	"NombreRazon": "Emisor Test SL",
@@ -45,19 +45,9 @@ SIF = {
 
 
 def _local_wsdl_client() -> Client:
-	"""Zeep sobre el WSDL versionado. Settings espejo del AEATClient real
-	(forbid_entities=False: el XSD de la AEAT declara la ENTITY dsig) y
-	force_https=False (fixture local, file://)."""
-	return Client(
-		"file://" + os.path.abspath(WSDL_PATH),
-		settings=Settings(
-			strict=True,
-			forbid_dtd=False,
-			forbid_entities=False,
-			forbid_external=True,
-			force_https=False,
-		),
-	)
+	"""Zeep sobre el WSDL incluido en la app, con los mismos Settings y Transport
+	que el AEATClient real (sin red: H7)."""
+	return load_wsdl_client(str(VERIFACTU_WSDL))
 
 
 def _serialize(client: Client, registro_factura: list[dict]) -> str:
@@ -173,8 +163,11 @@ class TestWSDLContract(unittest.TestCase):
 			}
 		)
 		previous = _ledger_record(
-			{"IDEmisorFactura": "B27331230", "NumSerieFactura": "FA00001",
-			 "FechaExpedicionFactura": "31-08-2026"},
+			{
+				"IDEmisorFactura": "B27331230",
+				"NumSerieFactura": "FA00001",
+				"FechaExpedicionFactura": "31-08-2026",
+			},
 			chain=1,
 		)
 		previous.record_type = "RegistroAlta"
@@ -204,8 +197,11 @@ class TestWSDLContract(unittest.TestCase):
 		record = _ledger_record(data, chain=2)
 		record.record_type = "RegistroAnulacion"
 		previous = _ledger_record(
-			{"IDEmisorFactura": "B27331230", "NumSerieFactura": "FA00001",
-			 "FechaExpedicionFactura": "31-08-2026"},
+			{
+				"IDEmisorFactura": "B27331230",
+				"NumSerieFactura": "FA00001",
+				"FechaExpedicionFactura": "31-08-2026",
+			},
 			chain=1,
 		)
 		previous.record_type = "RegistroAlta"
@@ -248,28 +244,30 @@ class TestWSDLContract(unittest.TestCase):
 		# el legado normalizado TAMBIÉN serializa contra el WSDL real
 		xml = _serialize(
 			self.client,
-			[{
-				"RegistroAlta": {
-					"IDVersion": "1.0",
-					"IDFactura": {
-						"IDEmisorFactura": "B27331230",
-						"NumSerieFactura": "FA00001",
-						"FechaExpedicionFactura": "31-08-2026",
-					},
-					"RefExterna": "VFR-LEGACY",
-					"NombreRazonEmisor": "Emisor Test SL",
-					"TipoFactura": "F1",
-					"DescripcionOperacion": "Factura FA00001 por cantidad 800.0",
-					"Desglose": wire,
-					"CuotaTotal": 0.0,
-					"ImporteTotal": 800.0,
-					"Encadenamiento": {"PrimerRegistro": "S"},
-					"SistemaInformatico": SIF,
-					"FechaHoraHusoGenRegistro": "2026-08-31T20:00:00+02:00",
-					"TipoHuella": "01",
-					"Huella": "A" * 64,
+			[
+				{
+					"RegistroAlta": {
+						"IDVersion": "1.0",
+						"IDFactura": {
+							"IDEmisorFactura": "B27331230",
+							"NumSerieFactura": "FA00001",
+							"FechaExpedicionFactura": "31-08-2026",
+						},
+						"RefExterna": "VFR-LEGACY",
+						"NombreRazonEmisor": "Emisor Test SL",
+						"TipoFactura": "F1",
+						"DescripcionOperacion": "Factura FA00001 por cantidad 800.0",
+						"Desglose": wire,
+						"CuotaTotal": 0.0,
+						"ImporteTotal": 800.0,
+						"Encadenamiento": {"PrimerRegistro": "S"},
+						"SistemaInformatico": SIF,
+						"FechaHoraHusoGenRegistro": "2026-08-31T20:00:00+02:00",
+						"TipoHuella": "01",
+						"Huella": "A" * 64,
+					}
 				}
-			}],
+			],
 		)
 		self.assertIn("OperacionExenta", xml)
 

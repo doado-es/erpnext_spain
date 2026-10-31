@@ -659,15 +659,18 @@ def render_tax(parent, tax: TaxLine, sub, amount, output: bool) -> None:
 
 
 class LocalSchemaResolver:
-	"""Resuelve el import de xmldsig-core-schema.xsd al fichero local: sin red."""
+	"""Resuelve el import de xmldsig-core-schema.xsd a la copia compartida de la
+	app (erpnext_spain/schemas): sin red."""
 
 	def __new__(cls):
 		from lxml import etree
 
+		from erpnext_spain.schemas import XMLDSIG_SCHEMA
+
 		class _Resolver(etree.Resolver):
 			def resolve(self, url, pubid, context):
 				if url.endswith("xmldsig-core-schema.xsd"):
-					return self.resolve_filename(str(codes.SCHEMA_DIR / "xmldsig-core-schema.xsd"), context)
+					return self.resolve_filename(str(XMLDSIG_SCHEMA), context)
 				return None
 
 		return _Resolver()

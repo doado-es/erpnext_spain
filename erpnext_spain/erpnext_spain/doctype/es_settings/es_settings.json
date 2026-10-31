@@ -68,13 +68,13 @@
   },
   {
    "default": "https://prewww2.aeat.es/static_files/common/internet/dep/aplicaciones/es/aeat/tikeV1.0/cont/ws/SistemaFacturacion.wsdl",
-   "description": "Endpoint WSDL del servicio VeriFactu de pruebas de la AEAT. Editable por si la AEAT publica uno nuevo.",
+   "description": "URL del WSDL de VeriFactu de pruebas de la AEAT. Con la URL oficial, la app usa su copia local del WSDL y de sus esquemas (sin descargarlos); otra URL solo funciona si su WSDL no importa esquemas remotos.",
    "fieldname": "verifactu_wsdl_test",
    "fieldtype": "Data",
    "label": "WSDL VeriFactu (pruebas)"
   },
   {
-   "description": "Endpoint WSDL del servicio VeriFactu de producci\u00f3n. Debe indicarlo el proveedor del certificado/desarrollo: no se incluye un valor por defecto para evitar enviar a producci\u00f3n contra un endpoint incorrecto.",
+   "description": "URL del WSDL de VeriFactu de producci\u00f3n. No tiene valor por defecto para evitar enviar a producci\u00f3n por error. Con la URL oficial de la AEAT (https://www2.agenciatributaria.gob.es/static_files/common/internet/dep/aplicaciones/es/aeat/tikeV1.0/cont/ws/SistemaFacturacion.wsdl), la app usa su copia local del WSDL y de sus esquemas.",
    "fieldname": "verifactu_wsdl_production",
    "fieldtype": "Data",
    "label": "WSDL VeriFactu (producci\u00f3n)"
@@ -83,7 +83,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-08-31 12:45:07.756815",
+ "modified": "2026-10-31 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "name": "ES Settings",
