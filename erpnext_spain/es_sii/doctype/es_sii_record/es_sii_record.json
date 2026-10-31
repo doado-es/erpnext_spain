@@ -1,0 +1,229 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "in_create": 1,
+ "description": "Registro enviado (o por enviar) al SII. Inalterable: lo escribe el sistema.",
+ "field_order": [
+  "company",
+  "book",
+  "voucher_type",
+  "voucher_no",
+  "communication",
+  "column_main",
+  "status",
+  "deadline",
+  "issuer_nif",
+  "invoice_number",
+  "issue_date",
+  "section_response",
+  "csv",
+  "error_code",
+  "error_description",
+  "column_response",
+  "attempts",
+  "last_attempt",
+  "aeat_response",
+  "section_content",
+  "content"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "book",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Libro",
+   "options": "Emitidas\nRecibidas",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "voucher_type",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Tipo de documento",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Dynamic Link",
+   "read_only": 1,
+   "label": "Factura",
+   "options": "voucher_type",
+   "reqd": 1,
+   "in_list_view": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "communication",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Tipo de comunicación",
+   "options": "A0\nA1\nBaja",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "A0 alta, A1 modificación, Baja."
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Estado",
+   "options": "Pendiente\nEnviado\nCorrecto\nAceptado con errores\nIncorrecto\nAnulado\nSustituido",
+   "default": "Pendiente",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "deadline",
+   "fieldtype": "Date",
+   "read_only": 1,
+   "label": "Fecha límite",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "issuer_nif",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "NIF del emisor"
+  },
+  {
+   "fieldname": "invoice_number",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Número de factura"
+  },
+  {
+   "fieldname": "issue_date",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Fecha de expedición"
+  },
+  {
+   "fieldname": "section_response",
+   "fieldtype": "Section Break",
+   "label": "Respuesta de la AEAT"
+  },
+  {
+   "fieldname": "csv",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "CSV"
+  },
+  {
+   "fieldname": "error_code",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Código de error"
+  },
+  {
+   "fieldname": "error_description",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "label": "Descripción del error"
+  },
+  {
+   "fieldname": "column_response",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "attempts",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "label": "Intentos"
+  },
+  {
+   "fieldname": "last_attempt",
+   "fieldtype": "Datetime",
+   "read_only": 1,
+   "label": "Último intento"
+  },
+  {
+   "fieldname": "aeat_response",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Respuesta",
+   "options": "ES AEAT Response"
+  },
+  {
+   "fieldname": "section_content",
+   "fieldtype": "Section Break",
+   "label": "Contenido"
+  },
+  {
+   "fieldname": "content",
+   "fieldtype": "Code",
+   "read_only": 1,
+   "label": "Registro enviado",
+   "options": "JSON"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sii",
+ "name": "ES Sii Record",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "share": 0,
+   "email": 0
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "share": 0,
+   "email": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "share": 0,
+   "email": 0
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "voucher_no",
+ "track_changes": 0
+}

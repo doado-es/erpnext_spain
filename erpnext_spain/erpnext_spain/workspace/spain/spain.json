@@ -1,7 +1,7 @@
 {
  "app": "erpnext_spain",
  "charts": [],
- "content": "[{\"id\": \"es0header0\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>España</b></span>\", \"col\": 12}}, {\"id\": \"es0onboard\", \"type\": \"onboarding\", \"data\": {\"onboarding_name\": \"ES Onboarding\", \"col\": 12}}, {\"id\": \"es0card000\", \"type\": \"card\", \"data\": {\"card_name\": \"Configuración\", \"col\": 4}}, {\"id\": \"es0card001\", \"type\": \"card\", \"data\": {\"card_name\": \"Facturación\", \"col\": 4}}, {\"id\": \"es0card002\", \"type\": \"card\", \"data\": {\"card_name\": \"VeriFactu\", \"col\": 4}}, {\"id\": \"es0card003\", \"type\": \"card\", \"data\": {\"card_name\": \"Impuestos\", \"col\": 4}}, {\"id\": \"es0card004\", \"type\": \"card\", \"data\": {\"card_name\": \"Informes\", \"col\": 4}}, {\"id\": \"es0card100\", \"type\": \"card\", \"data\": {\"card_name\": \"Bancos\", \"col\": 4}}]",
+ "content": "[{\"id\": \"es0header0\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>España</b></span>\", \"col\": 12}}, {\"id\": \"es0onboard\", \"type\": \"onboarding\", \"data\": {\"onboarding_name\": \"ES Onboarding\", \"col\": 12}}, {\"id\": \"es0card000\", \"type\": \"card\", \"data\": {\"card_name\": \"Configuración\", \"col\": 4}}, {\"id\": \"es0card001\", \"type\": \"card\", \"data\": {\"card_name\": \"Facturación\", \"col\": 4}}, {\"id\": \"es0card002\", \"type\": \"card\", \"data\": {\"card_name\": \"VeriFactu y SII\", \"col\": 4}}, {\"id\": \"es0card003\", \"type\": \"card\", \"data\": {\"card_name\": \"Impuestos\", \"col\": 4}}, {\"id\": \"es0card004\", \"type\": \"card\", \"data\": {\"card_name\": \"Informes\", \"col\": 4}}, {\"id\": \"es0card100\", \"type\": \"card\", \"data\": {\"card_name\": \"Bancos\", \"col\": 4}}]",
  "creation": "2026-10-31 12:00:00.000000",
  "custom_blocks": [],
  "docstatus": 0,
@@ -104,8 +104,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "VeriFactu",
-   "link_count": 4,
+   "label": "VeriFactu y SII",
+   "link_count": 5,
    "onboard": 0,
    "type": "Card Break"
   },
@@ -146,6 +146,16 @@
    "link_count": 0,
    "link_to": "Rectifiable Invoices",
    "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Registros del SII",
+   "link_count": 0,
+   "link_to": "ES Sii Record",
+   "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   },
@@ -593,7 +603,7 @@
    "default_workspace": 0,
    "indent": 1,
    "keep_closed": 0,
-   "label": "VeriFactu",
+   "label": "VeriFactu y SII",
    "link_type": "DocType",
    "open_in_new_tab": 0,
    "show_arrow": 0,
@@ -647,6 +657,19 @@
    "label": "Facturas por subsanar",
    "link_to": "Rectifiable Invoices",
    "link_type": "Report",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Registros del SII",
+   "link_to": "ES Sii Record",
+   "link_type": "DocType",
    "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"

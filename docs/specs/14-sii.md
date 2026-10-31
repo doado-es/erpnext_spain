@@ -2,6 +2,8 @@
 
 Fase 4 · Depende de: 03, 05, 06 y la capa AEAT del código base (certificado, con la corrección H3 de la spec 01 §8) · Excluyente con Verifactu (07) por compañía
 
+> **Estado (31/10/2026): implementado salvo el envío real**: `ES Sii Record`, registros de expedidas y recibidas desde el Registro Fiscal IVA validados contra el XSD oficial v1.1 (`erpnext_spain/schemas/aeat/sii`), plazo de 4 días hábiles con los festivos nacionales (recibidas: también antes del día 16 del mes siguiente), envío por el outbox de la capa AEAT (driver `SiiDriver`, cada 15 minutos), respuestas por registro con CSV, reenvío (A0/A1), bajas al anular, aviso diario de plazos y cuadre con la consulta de la AEAT. Tests en `es_sii/tests/test_sii_records.py` con un cliente simulado. Pendiente: probar contra el entorno de pruebas de la AEAT (falta certificado), libros de bienes de inversión, cobros y pagos del criterio de caja, informe de estado (hoy, la lista de registros con filtros).
+
 ## Objetivo
 
 Llevar los libros registro de IVA en la sede electrónica de la AEAT mediante el envío de los registros de facturación en los plazos del SII, para las compañías obligadas o adheridas voluntariamente, a partir del Registro Fiscal IVA (spec 06).

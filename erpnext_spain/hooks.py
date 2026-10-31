@@ -29,8 +29,14 @@ doc_events = {
 	# Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3).
 	"Purchase Invoice": {
 		"validate": "erpnext_spain.es_retenciones.withholding.validate_purchase_invoice",
-		"on_submit": "erpnext_spain.es_iva.register.on_submit",
-		"on_cancel": "erpnext_spain.es_iva.register.on_cancel",
+		"on_submit": [
+			"erpnext_spain.es_iva.register.on_submit",
+			"erpnext_spain.es_sii.outbox.on_submit",
+		],
+		"on_cancel": [
+			"erpnext_spain.es_iva.register.on_cancel",
+			"erpnext_spain.es_sii.outbox.on_cancel",
+		],
 	},
 	"Payment Entry": {"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry"},
 	# Tercero por IBAN y pago por EndToEndId SEPA (spec 13 §4).
@@ -70,14 +76,18 @@ doc_events = {
 		],
 		"on_submit": [
 			"erpnext_spain.es_verifactu.emission.on_submit",
-			# Registro Fiscal IVA (spec 06).
+			# Registro Fiscal IVA (spec 06) y, después, su envío al SII (spec 14).
 			"erpnext_spain.es_iva.register.on_submit",
+			"erpnext_spain.es_sii.outbox.on_submit",
 		],
 		"before_cancel": [
 			"erpnext_spain.es_efactura.api.block_cancel_if_presented",
 			"erpnext_spain.es_verifactu.emission.before_cancel",
 		],
-		"on_cancel": "erpnext_spain.es_iva.register.on_cancel",
+		"on_cancel": [
+			"erpnext_spain.es_iva.register.on_cancel",
+			"erpnext_spain.es_sii.outbox.on_cancel",
+		],
 	},
 }
 
@@ -181,11 +191,15 @@ scheduler_events = {
 		"erpnext_spain.es_facturacion.collection.flag_doubtful_candidates",
 		# Aviso de caducidad del consentimiento bancario (spec 13 §3).
 		"erpnext_spain.es_bancos.aggregator.warn_expiring_consents",
+		# Plazos del SII (spec 14 §3).
+		"erpnext_spain.es_sii.outbox.warn_deadlines",
 	],
 	"cron": {
 		"* * * * *": ["erpnext_spain.es_verifactu.tasks.drain_outbox"],
 		# Sincronización con el agregador bancario (spec 13 §3).
 		"0 */6 * * *": ["erpnext_spain.es_bancos.aggregator.sync_all"],
+		# Envío al SII (spec 14 §3).
+		"*/15 * * * *": ["erpnext_spain.es_sii.outbox.drain_outbox"],
 	},
 }
 
@@ -200,6 +214,8 @@ company_data_to_be_ignored = [
 	"ES AEAT Credential",
 	"ES Sepa Mandate",
 	"ES Confirming Contract",
+	# Registros del SII: historia legal, como el libro de VeriFactu.
+	"ES Sii Record",
 	"ES Leased Property",
 	"ES Invoice Series",
 	"ES Verifactu Notification Role",

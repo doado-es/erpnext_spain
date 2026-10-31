@@ -66,7 +66,7 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 - Factura electrónica (spec 10): **hecho Facturae 3.2.2 firmado para FACe con subida manual (31/10/2026)**. Pendiente: validar a mano un primer XML con el validador del Ministerio o en el entorno de pruebas de FACe; servicio web de FACe; facturas en moneda extranjera; descuentos por línea y generales; B2B (SPFE o plataforma, decisión A9) y recepción de facturas.
 
 - VeriFactu: prueba real en el entorno de pruebas de la AEAT (falta certificado); pendientes del TODO del código base (catálogos L8A y L10, formato del QR, paginación de la consulta, errores).
-- SII (spec 14): libros, cola de envío, plazos y cuadre. Hoy solo está la activación.
+- **Hecho (31/10/2026)**: SII (spec 14) con cliente simulado. Pendiente: envío real al entorno de pruebas de la AEAT (falta certificado); libro de bienes de inversión y criterio de caja; con varias calificaciones (S1 y S2) en una misma factura expedida solo se informa la primera; destinatarios extranjeros siempre como entrega de bienes (falta distinguir prestaciones de servicios) **[revisar]**.
 - **Hecho (31/10/2026)**: SEPA (spec 11), Norma 43 y adaptador de agregador (spec 13) y confirming AEF (spec 12).
 - SEPA: verificación previa del beneficiario por lotes (VoP, §7, acuerdo bilateral con cada banco); `pain.001.001.03`/`pain.008.001.02` si algún banco los exige; plazos de presentación y caducidad de mandatos **[revisar]**; formato de los ficheros de devoluciones de cada banco.
 - Agregador bancario real (decisión A8): hoy solo el adaptador simulado. camt.053.

@@ -261,8 +261,10 @@ class AEATOutboxManager:
 # --- persistencia de la respuesta (normalización por servicio) ---
 
 RESPONSE_PARSERS: dict[str, Any] = {
-	# SII registra su parser en su fase (spec 05); misma forma de salida.
 	"VeriFactu": "_parse_verifactu_response",
+	# La respuesta del SII tiene la misma forma (EstadoEnvio, CSV, RespuestaLinea
+	# con IDFactura y EstadoRegistro) (spec 14 §3).
+	"SII": "_parse_verifactu_response",
 }
 
 
