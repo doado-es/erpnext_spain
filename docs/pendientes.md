@@ -67,7 +67,10 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 - VeriFactu: prueba real en el entorno de pruebas de la AEAT (falta certificado); pendientes del TODO del código base (catálogos L8A y L10, formato del QR, paginación de la consulta, errores).
 - SII (spec 14): libros, cola de envío, plazos y cuadre. Hoy solo está la activación.
-- Factura electrónica (spec 10), SEPA (spec 11), confirming (spec 12), Norma 43 y conexión bancaria (spec 13).
+- **Hecho (31/10/2026)**: SEPA (spec 11), Norma 43 y adaptador de agregador (spec 13) y confirming AEF (spec 12).
+- SEPA: verificación previa del beneficiario por lotes (VoP, §7, acuerdo bilateral con cada banco); `pain.001.001.03`/`pain.008.001.02` si algún banco los exige; plazos de presentación y caducidad de mandatos **[revisar]**; formato de los ficheros de devoluciones de cada banco.
+- Agregador bancario real (decisión A8): hoy solo el adaptador simulado. camt.053.
+- Confirming: probar el fichero con una entidad; el estándar no define ficheros de respuesta (estados a mano).
 - Modelos AEAT (spec 07).
 
 ## Traducciones

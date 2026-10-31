@@ -33,6 +33,8 @@ doc_events = {
 		"on_cancel": "erpnext_spain.es_iva.register.on_cancel",
 	},
 	"Payment Entry": {"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry"},
+	# Tercero por IBAN y pago por EndToEndId SEPA (spec 13 §4).
+	"Bank Transaction": {"validate": "erpnext_spain.es_bancos.importer.validate_bank_transaction"},
 	"Company": {
 		# El NIF de la compañía lo valida primero el verificador (nif/party);
 		# la compuerta de activación de VeriFactu (spec 04 §2.1) corre después.
@@ -118,6 +120,13 @@ doctype_js = {
 # Estilado de BORRADOR-* en el list view de Sales Invoice (spec 04 §15):
 # un solo archivo por doctype, mismo criterio que doctype_js.
 
+doctype_js.update(
+	{
+		# Fichero SEPA de transferencias (spec 11 §4).
+		"Payment Order": "es_sepa/public/js/payment_order.js",
+	}
+)
+
 doctype_list_js = {
 	"Sales Invoice": "es_verifactu/public/js/sales_invoice_list.js",
 }
@@ -170,9 +179,13 @@ scheduler_events = {
 		"erpnext_spain.es_verifactu.tasks.daily",
 		# Aviso de facturas candidatas a dudoso cobro (spec 05 §4).
 		"erpnext_spain.es_facturacion.collection.flag_doubtful_candidates",
+		# Aviso de caducidad del consentimiento bancario (spec 13 §3).
+		"erpnext_spain.es_bancos.aggregator.warn_expiring_consents",
 	],
 	"cron": {
 		"* * * * *": ["erpnext_spain.es_verifactu.tasks.drain_outbox"],
+		# Sincronización con el agregador bancario (spec 13 §3).
+		"0 */6 * * *": ["erpnext_spain.es_bancos.aggregator.sync_all"],
 	},
 }
 
@@ -185,6 +198,8 @@ scheduler_events = {
 # inmutable: NUNCA debe barrerse con las transacciones de la empresa.
 company_data_to_be_ignored = [
 	"ES AEAT Credential",
+	"ES Sepa Mandate",
+	"ES Confirming Contract",
 	"ES Leased Property",
 	"ES Invoice Series",
 	"ES Verifactu Notification Role",

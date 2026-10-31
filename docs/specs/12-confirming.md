@@ -2,6 +2,8 @@
 
 Fase 4 · Depende de: 11 · Relacionada con: 13
 
+> **Estado (31/10/2026): implementado** con el PDF oficial de la AEF v.03.26 (registros 1-7 de 250 posiciones): `ES Confirming Contract`, `ES Confirming Batch` (doctype propio en lugar de la Payment Order, que solo admite Payment Entry y Payment Request), opciones contables A y B, cargo al vencimiento casado con el extracto por la referencia de la remesa. Tests en `es_sepa/tests/test_confirming.py` (criterios 1-6). Pendiente: ficheros de respuesta (el estándar no los define), validación con una entidad.
+
 ## Objetivo
 
 Enviar a las entidades financieras las órdenes de pago a proveedores por confirming en el **formato estándar de la Asociación Española de Factoring (AEF)**, y llevar la contabilidad y el seguimiento hasta el cargo en cuenta al vencimiento.

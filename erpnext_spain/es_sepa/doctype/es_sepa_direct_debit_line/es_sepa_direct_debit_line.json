@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sepa",
+ "name": "ES Sepa Direct Debit Line",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1,
+ "permissions": [],
+ "fields": [
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Factura",
+   "options": "Sales Invoice",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Cliente",
+   "options": "Customer",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mandate",
+   "fieldtype": "Link",
+   "label": "Mandato",
+   "options": "ES Sepa Mandate",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Importe",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sequence",
+   "fieldtype": "Select",
+   "label": "Secuencia",
+   "options": "RCUR\nFRST\nOOFF\nFNAL",
+   "default": "RCUR"
+  },
+  {
+   "fieldname": "end_to_end_id",
+   "fieldtype": "Data",
+   "label": "EndToEndId",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "\nEnviada\nRechazada\nDevuelta",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "no_copy": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reason_code",
+   "fieldtype": "Data",
+   "label": "Código de motivo",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Cobro",
+   "options": "Payment Entry",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "history",
+   "fieldtype": "Small Text",
+   "label": "Historial",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "no_copy": 1
+  }
+ ],
+ "field_order": [
+  "sales_invoice",
+  "customer",
+  "mandate",
+  "amount",
+  "sequence",
+  "end_to_end_id",
+  "status",
+  "reason_code",
+  "payment_entry",
+  "history"
+ ]
+}

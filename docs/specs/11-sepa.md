@@ -2,6 +2,8 @@
 
 Fase 4 · Depende de: 02, 09 · Relacionada con: 12 (confirming), 13 (conciliación)
 
+> **Estado (31/10/2026): implementado** en el módulo ES Sepa: `pain.001.001.09` desde la Payment Order nativa, remesas de adeudos `pain.008.001.08` (`ES Sepa Direct Debit Batch`) con mandatos (`ES Sepa Mandate`), importación de `pain.002`, devoluciones con gastos. Los ficheros se validan contra los XSD oficiales (`erpnext_spain/schemas/iso20022`). Tests en `es_sepa/tests/test_sepa.py` (criterios 1-8). Pendiente: verificación previa del beneficiario (§7), versiones anteriores de los mensajes y plazos de cada banco.
+
 ## Objetivo
 
 Generar los ficheros SEPA que la compañía envía a su banco:

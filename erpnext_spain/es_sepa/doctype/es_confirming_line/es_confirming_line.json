@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sepa",
+ "name": "ES Confirming Line",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1,
+ "permissions": [],
+ "fields": [
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Factura",
+   "options": "Purchase Invoice",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Proveedor",
+   "options": "Supplier",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "bill_no",
+   "fieldtype": "Data",
+   "label": "Número de la factura del proveedor"
+  },
+  {
+   "fieldname": "bill_date",
+   "fieldtype": "Date",
+   "label": "Fecha de emisión"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Vencimiento",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Importe",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "Negativo en los abonos."
+  },
+  {
+   "fieldname": "payment_reference",
+   "fieldtype": "Data",
+   "label": "Referencia de pago",
+   "read_only": 1,
+   "length": 16,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "\nGenerada\nEnviada\nAceptada\nRechazada\nAnticipada\nPagada",
+   "allow_on_submit": 1,
+   "no_copy": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Motivo",
+   "allow_on_submit": 1,
+   "no_copy": 1
+  }
+ ],
+ "field_order": [
+  "purchase_invoice",
+  "supplier",
+  "bill_no",
+  "bill_date",
+  "due_date",
+  "amount",
+  "payment_reference",
+  "status",
+  "reason"
+ ]
+}

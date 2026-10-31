@@ -1,0 +1,208 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sepa",
+ "name": "ES Sepa Direct Debit Batch",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:REM-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 0
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 0
+  }
+ ],
+ "title_field": "company",
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "bank_account",
+   "fieldtype": "Link",
+   "label": "Cuenta de abono",
+   "options": "Bank Account",
+   "reqd": 1,
+   "description": "Cuenta bancaria de la compañía en la que se cobra."
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "scheme",
+   "fieldtype": "Select",
+   "label": "Esquema",
+   "options": "CORE\nB2B",
+   "default": "CORE",
+   "reqd": 1
+  },
+  {
+   "fieldname": "collection_date",
+   "fieldtype": "Date",
+   "label": "Fecha de cobro",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "message_format",
+   "fieldtype": "Select",
+   "label": "Formato",
+   "options": "pain.008.001.08",
+   "default": "pain.008.001.08",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_lines",
+   "fieldtype": "Section Break",
+   "label": "Adeudos"
+  },
+  {
+   "fieldname": "from_due_date",
+   "fieldtype": "Date",
+   "label": "Vencimiento desde"
+  },
+  {
+   "fieldname": "column_filters",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_due_date",
+   "fieldtype": "Date",
+   "label": "Vencimiento hasta"
+  },
+  {
+   "fieldname": "section_table",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Table",
+   "label": "Adeudos",
+   "options": "ES Sepa Direct Debit Line",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_file",
+   "fieldtype": "Section Break",
+   "label": "Fichero"
+  },
+  {
+   "fieldname": "message_id",
+   "fieldtype": "Data",
+   "label": "Identificador del mensaje",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "sepa_file",
+   "fieldtype": "Attach",
+   "label": "Fichero SEPA",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "column_file",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status_report",
+   "fieldtype": "Attach",
+   "label": "Informe de estado (pain.002)",
+   "allow_on_submit": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "ES Sepa Direct Debit Batch",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "field_order": [
+  "company",
+  "bank_account",
+  "column_main",
+  "scheme",
+  "collection_date",
+  "message_format",
+  "section_lines",
+  "from_due_date",
+  "column_filters",
+  "to_due_date",
+  "section_table",
+  "lines",
+  "total_amount",
+  "section_file",
+  "message_id",
+  "sepa_file",
+  "column_file",
+  "status_report",
+  "amended_from"
+ ]
+}

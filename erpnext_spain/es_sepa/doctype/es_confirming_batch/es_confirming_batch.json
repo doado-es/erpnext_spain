@@ -1,0 +1,187 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sepa",
+ "name": "ES Confirming Batch",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:CONF-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "contract",
+   "fieldtype": "Link",
+   "label": "Contrato",
+   "options": "ES Confirming Contract",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remittance_date",
+   "fieldtype": "Date",
+   "label": "Fecha de la remesa",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "remittance_type",
+   "fieldtype": "Select",
+   "label": "Tipo de remesa",
+   "options": "\n1 - Estándar\n2 - Pronto pago\n3 - Otros"
+  },
+  {
+   "fieldname": "section_filters",
+   "fieldtype": "Section Break",
+   "label": "Facturas"
+  },
+  {
+   "fieldname": "from_due_date",
+   "fieldtype": "Date",
+   "label": "Vencimiento desde"
+  },
+  {
+   "fieldname": "column_filters",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_due_date",
+   "fieldtype": "Date",
+   "label": "Vencimiento hasta"
+  },
+  {
+   "fieldname": "section_lines",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Table",
+   "label": "Facturas y abonos",
+   "options": "ES Confirming Line",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_file",
+   "fieldtype": "Section Break",
+   "label": "Fichero y contabilidad"
+  },
+  {
+   "fieldname": "confirming_file",
+   "fieldtype": "Attach",
+   "label": "Fichero AEF",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "remittance_entry",
+   "fieldtype": "Link",
+   "label": "Asiento de la remesa",
+   "options": "Journal Entry",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "maturity_registered",
+   "fieldtype": "Check",
+   "label": "Vencimiento registrado",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "ES Confirming Batch",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "field_order": [
+  "company",
+  "contract",
+  "column_main",
+  "remittance_date",
+  "remittance_type",
+  "section_filters",
+  "from_due_date",
+  "column_filters",
+  "to_due_date",
+  "section_lines",
+  "lines",
+  "total_amount",
+  "section_file",
+  "confirming_file",
+  "remittance_entry",
+  "maturity_registered",
+  "amended_from"
+ ]
+}

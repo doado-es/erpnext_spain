@@ -9,3 +9,5 @@ ES Efactura
 ES Retenciones
 ES Facturacion
 ES Iva
+ES Sepa
+ES Bancos

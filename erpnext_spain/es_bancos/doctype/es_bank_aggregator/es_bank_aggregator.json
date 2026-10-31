@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Bancos",
+ "name": "ES Bank Aggregator",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "field:aggregator_name",
+ "naming_rule": "By fieldname",
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "fields": [
+  {
+   "fieldname": "aggregator_name",
+   "fieldtype": "Data",
+   "label": "Nombre",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Select",
+   "label": "Proveedor",
+   "options": "Simulado",
+   "default": "Simulado",
+   "reqd": 1,
+   "description": "Agregador con licencia de información de cuentas (PSD2). Decisión A8 pendiente: hoy solo el simulado."
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Activo",
+   "default": "1"
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Identificador de cliente"
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Password",
+   "label": "Clave secreta"
+  },
+  {
+   "fieldname": "consent_days",
+   "fieldtype": "Int",
+   "label": "Días de validez del consentimiento",
+   "default": "180"
+  }
+ ],
+ "field_order": [
+  "aggregator_name",
+  "company",
+  "provider",
+  "enabled",
+  "column_main",
+  "client_id",
+  "client_secret",
+  "consent_days"
+ ]
+}

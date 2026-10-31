@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sepa",
+ "name": "ES Confirming Contract",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:{company}-{contract_number}",
+ "naming_rule": "Expression",
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Link",
+   "label": "Entidad",
+   "options": "Bank",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "contract_number",
+   "fieldtype": "Data",
+   "label": "Número de contrato y sufijo",
+   "reqd": 1,
+   "length": 20
+  },
+  {
+   "fieldname": "bank_account",
+   "fieldtype": "Link",
+   "label": "Cuenta de cargo",
+   "options": "Bank Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "limit",
+   "fieldtype": "Currency",
+   "label": "Límite"
+  },
+  {
+   "fieldname": "remittance_type",
+   "fieldtype": "Select",
+   "label": "Tipo de remesa por defecto",
+   "options": "1 - Estándar\n2 - Pronto pago\n3 - Otros",
+   "default": "1 - Estándar"
+  },
+  {
+   "fieldname": "accounting_option",
+   "fieldtype": "Select",
+   "label": "Contabilidad",
+   "options": "A - Sin reclasificar\nB - Reclasificar la deuda",
+   "default": "A - Sin reclasificar",
+   "description": "A: la factura se paga al vencimiento. B: al remesar, la deuda con el proveedor pasa a la cuenta de la entidad."
+  },
+  {
+   "fieldname": "debt_account",
+   "fieldtype": "Link",
+   "label": "Cuenta de la deuda con la entidad",
+   "options": "Account",
+   "depends_on": "eval:doc.accounting_option && doc.accounting_option.startsWith('B')",
+   "mandatory_depends_on": "eval:doc.accounting_option && doc.accounting_option.startsWith('B')"
+  }
+ ],
+ "field_order": [
+  "company",
+  "bank",
+  "contract_number",
+  "bank_account",
+  "column_main",
+  "limit",
+  "remittance_type",
+  "accounting_option",
+  "debt_account"
+ ]
+}

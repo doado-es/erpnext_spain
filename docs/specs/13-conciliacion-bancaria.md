@@ -2,6 +2,8 @@
 
 Fase 4 · Depende de: 02, 09 · Relacionada con: 11, 12
 
+> **Estado (31/10/2026): implementado** en el módulo ES Bancos: lector de Norma 43 con comprobación de totales y saldo final, `ES Norma43 Import`, deduplicación por `transaction_id`, tercero por IBAN y conciliación automática por `EndToEndId`; adaptador de agregador con interfaz común y adaptador simulado (`ES Bank Aggregator`, credenciales en `Password`), sincronización cada 6 horas y aviso de caducidad del consentimiento. Tests en `es_bancos/tests/test_banking.py` (criterios 1-7, el 1 con ficheros sintéticos). Pendiente: A8 (agregador real), camt.053.
+
 ## Objetivo
 
 Traer los movimientos bancarios a ERPNext, por fichero **Norma 43** (cuaderno 43 de AEB, CECA y UNACC) o por **API** a través de un agregador de información de cuentas (PSD2), y conciliarlos con la herramienta nativa de ERPNext v16.

@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Bancos",
+ "name": "ES Norma43 Import",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:N43-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "norma43_file",
+   "fieldtype": "Attach",
+   "label": "Fichero Norma 43",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "Pendiente\nImportado\nCon errores",
+   "default": "Pendiente",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "created_transactions",
+   "fieldtype": "Int",
+   "label": "Movimientos creados",
+   "read_only": 1
+  },
+  {
+   "fieldname": "duplicates",
+   "fieldtype": "Int",
+   "label": "Movimientos ya importados",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_log",
+   "fieldtype": "Section Break",
+   "label": "Resultado"
+  },
+  {
+   "fieldname": "import_log",
+   "fieldtype": "Long Text",
+   "label": "Registro",
+   "read_only": 1
+  }
+ ],
+ "field_order": [
+  "company",
+  "norma43_file",
+  "column_main",
+  "status",
+  "created_transactions",
+  "duplicates",
+  "section_log",
+  "import_log"
+ ]
+}
