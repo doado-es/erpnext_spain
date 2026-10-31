@@ -9,6 +9,8 @@ from __future__ import annotations
 import frappe
 from frappe.tests import IntegrationTestCase
 
+from erpnext_spain.tests.fixtures import ensure_test_company
+
 INVALID_CONTROL_DIGIT_NIF = "12345678A"  # la letra correcta es Z
 
 
@@ -112,10 +114,7 @@ class TestPartyValidation(IntegrationTestCase):
 
 	def test_spain_company_invalid_nif_always_blocks(self):
 		self._set_mode("Solo avisar")
-		companies = frappe.get_all("Company", limit=1)
-		if not companies:
-			self.skipTest("el site no tiene empresas")
-		doc = frappe.get_doc("Company", companies[0].name)
+		doc = frappe.get_doc("Company", ensure_test_company())
 		doc.country = "Spain"
 		doc.tax_id = INVALID_CONTROL_DIGIT_NIF
 		with self.assertRaises(frappe.ValidationError) as ctx:

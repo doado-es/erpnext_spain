@@ -35,18 +35,19 @@ from zeep.exceptions import Fault
 from erpnext_spain.aeat.client import _fault_to_synthetic_response
 from erpnext_spain.aeat.manager import AEATOutboxManager
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
 from erpnext_spain.aeat.tests.mock_aeat_client import MockAEATClient, load_seed
-from erpnext_spain.aeat.utils import format_aeat_date, absolute_site_path
+from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date
 from erpnext_spain.es_verifactu import emission
-from erpnext_spain.es_verifactu.driver import VerifactuDriver
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	RESPONSE_PROCESSOR_FLAG,
 )
+from erpnext_spain.es_verifactu.driver import VerifactuDriver
+from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM
 
 P12_PATTERN = "es_test_remision_*.p12"
 PASSWORD = "es-test-pass"
@@ -59,8 +60,8 @@ F1_SERIES = "SIF1-.####."
 F2_SERIES = "SIF2-.####."
 R1_SERIES = "RC-.####."
 
-CUSTOMER = "Palmer Productions Ltd."
-ITEM = "SKU010"
+CUSTOMER = TEST_CUSTOMER
+ITEM = TEST_ITEM
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"
 RESPONSE_DOCTYPE = "ES AEAT Response"

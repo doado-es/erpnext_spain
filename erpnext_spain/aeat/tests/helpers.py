@@ -91,5 +91,13 @@ def clean_pem(company: str, purpose: str) -> None:
 
 
 def test_company() -> str:
-	"""Compañía española propia de los tests (fixture idempotente, H8)."""
-	return ensure_test_company()
+	"""Compañía española propia de los tests (fixture idempotente, H8).
+
+	Asegura también el cliente, el artículo y la identidad SIF de test, que
+	usan todos los tests de facturación: así basta con llamar a esta función
+	en `setUpClass` para no depender de los datos del sitio."""
+	company = ensure_test_company()
+	ensure_test_customer()
+	ensure_test_item()
+	ensure_sif_identity()
+	return company

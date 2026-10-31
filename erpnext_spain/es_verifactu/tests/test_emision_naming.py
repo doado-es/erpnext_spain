@@ -22,14 +22,15 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, cint, nowdate
 
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
 from erpnext_spain.aeat.utils import absolute_site_path
 from erpnext_spain.es_verifactu import emission
 from erpnext_spain.es_verifactu.utils import locks
+from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM
 
 P12_PATTERN = "es_test_emision_*.p12"
 PASSWORD = "es-test-pass"
@@ -48,8 +49,8 @@ DRAFT_FALLBACK_REGEX = r"^BORRADOR-\d{10}-[0-9a-f]{8}$"
 
 # Masters reales del site (verificados): cliente, artículo de venta y
 # cuenta de IVA (tipo Tax) de la compañía de pruebas.
-CUSTOMER = "Palmer Productions Ltd."
-ITEM = "SKU010"
+CUSTOMER = TEST_CUSTOMER
+ITEM = TEST_ITEM
 
 
 def _delete_test_p12s() -> None:

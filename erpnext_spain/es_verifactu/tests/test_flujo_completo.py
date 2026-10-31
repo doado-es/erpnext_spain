@@ -35,22 +35,23 @@ from frappe.utils import add_days, nowdate
 from erpnext_spain.aeat.client import AEATClient
 from erpnext_spain.aeat.manager import AEATOutboxManager
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
 from erpnext_spain.aeat.tests.mock_aeat_client import (
 	MockAEATClient,
 	load_seed,
 	mock_client_factory,
 )
-from erpnext_spain.aeat.utils import format_aeat_date, format_aeat_datetime, absolute_site_path
+from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date, format_aeat_datetime
 from erpnext_spain.es_verifactu import emission, rectification
 from erpnext_spain.es_verifactu.doctype.es_verifactu_aeat_query.es_verifactu_aeat_query import (
 	query_aeat,
 )
 from erpnext_spain.es_verifactu.driver import VerifactuDriver
+from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM
 
 P12_PATTERN = "es_test_flujo_*.p12"
 PASSWORD = "es-test-pass"
@@ -62,8 +63,8 @@ DRAFT_SERIES = "BORRADOR-.#####"
 F1_SERIES = "SIF1-.####."
 R1_SERIES = "RC-.####."
 
-CUSTOMER = "Palmer Productions Ltd."
-ITEM = "SKU010"
+CUSTOMER = TEST_CUSTOMER
+ITEM = TEST_ITEM
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"
 QUERY_DOCTYPE = "ES Verifactu Aeat Query"

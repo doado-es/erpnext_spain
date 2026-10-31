@@ -17,7 +17,6 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 - §6 Workspace "España" y onboarding.
 - §7 / H4 CI en GitHub Actions: lint, Semgrep con `frappe/semgrep-rules` y reglas propias, tests en un sitio limpio. Antes hay que tener remoto.
-- H8: que los tests de VeriFactu creen sus propios datos (cliente, artículo, identidad SIF, compañía) y no dependan del sitio.
 - H5 (resto): `rectify` solo `POST`; borrar al desinstalar el Property Setter del formato de impresión; corregir en `docs/referencia` la guía que recomienda fixtures.
 - Errores de `ruff` heredados del código base (47 avisos y 37 ficheros sin formatear).
 - El botón "Aplicar plan PGC" de Company no respondía al usuario (aparecía, sin error en consola). Sin diagnosticar.

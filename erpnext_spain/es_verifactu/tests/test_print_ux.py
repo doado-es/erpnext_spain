@@ -19,12 +19,12 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
-from erpnext_spain.aeat.utils import format_aeat_date, absolute_site_path
+from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date
 from erpnext_spain.es_verifactu.emission import VERIFACTU_MODE, VERIFACTU_TEST_MODE
 from erpnext_spain.es_verifactu.printing import FORMAT_NAME, setup_printing
 from erpnext_spain.es_verifactu.utils.jinja import (
@@ -35,6 +35,7 @@ from erpnext_spain.es_verifactu.utils.jinja import (
 	get_verifactu_qr_code,
 	get_verifactu_qr_url,
 )
+from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM
 
 VALID_NIF = "12345678Z"
 ACTIVATION_DATE = "2026-01-01"
@@ -43,8 +44,8 @@ INVOICE_DATE = "2026-08-31"
 DRAFT_SERIES = "BORRADOR-.#####"
 F1_SERIES = "SIF1-.####."
 
-CUSTOMER = "Palmer Productions Ltd."
-ITEM = "SKU010"
+CUSTOMER = TEST_CUSTOMER
+ITEM = TEST_ITEM
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"
 P12_PATTERN = "es_test_print_*.p12"

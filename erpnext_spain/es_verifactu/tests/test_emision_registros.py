@@ -30,18 +30,19 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
-from erpnext_spain.aeat.utils import format_aeat_date, absolute_site_path
+from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date
 from erpnext_spain.es_verifactu import emission
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	RESPONSE_PROCESSOR_FLAG,
 )
 from erpnext_spain.es_verifactu.utils import locks
 from erpnext_spain.es_verifactu.utils.data_adapter import compute_issuance_hash
+from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM
 
 P12_PATTERN = "es_test_registros_*.p12"
 PASSWORD = "es-test-pass"
@@ -56,8 +57,8 @@ SERIES_F2 = "SIF2-.####."
 # Serie de las rectificativas (R1..R5): mismo estilo de patrón que SIF1.
 SERIES_R1 = "RC-.####."
 
-CUSTOMER = "Palmer Productions Ltd."
-ITEM = "SKU010"
+CUSTOMER = TEST_CUSTOMER
+ITEM = TEST_ITEM
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"
 

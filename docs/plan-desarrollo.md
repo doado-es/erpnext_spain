@@ -28,6 +28,6 @@ Encargo del usuario (31/10/2026): desarrollar todas las specs, con tests, tomand
 ## Entorno
 
 - Bench `~/es` (Frappe 16.50, ERPNext 16.51, Python 3.14). Sitio de desarrollo `es.localhost` (compañía `ctg` con datos de prueba, servidor en el puerto 8021) y sitio de tests `test.es.localhost`.
-- Los tests de VeriFactu necesitan en `test.es.localhost` el cliente "Palmer Productions Ltd.", el artículo "SKU010" y la identidad SIF en ES Settings mientras no se cierre H8.
+- Los tests crean sus propios datos (`erpnext_spain/tests/fixtures.py`, H8): no dependen de los datos de demostración del sitio.
 - Tras cambiar `hooks.py`: `bench --site <sitio> clear-cache`. Tras añadir doctypes nuevos, `migrate` puede necesitar dos pasadas.
 - Scripts de desarrollo fuera del repo: `~/es/specs/dev/`.

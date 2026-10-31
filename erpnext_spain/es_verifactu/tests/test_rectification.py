@@ -27,10 +27,10 @@ from frappe.utils import add_days, nowdate
 
 from erpnext_spain.aeat.manager import AEATOutboxManager
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
 from erpnext_spain.aeat.tests.mock_aeat_client import MockAEATClient, load_seed
 from erpnext_spain.aeat.utils import absolute_site_path
@@ -39,6 +39,7 @@ from erpnext_spain.es_verifactu.driver import VerifactuDriver
 from erpnext_spain.es_verifactu.report.rectifiable_invoices import (
 	rectifiable_invoices as report,
 )
+from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM
 
 P12_PATTERN = "es_test_rectification_*.p12"
 PASSWORD = "es-test-pass"
@@ -50,8 +51,8 @@ DRAFT_SERIES = "BORRADOR-.#####"
 F1_SERIES = "SIF1-.####."
 R1_SERIES = "RC-.####."
 
-CUSTOMER = "Palmer Productions Ltd."
-ITEM = "SKU010"
+CUSTOMER = TEST_CUSTOMER
+ITEM = TEST_ITEM
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"
 RESPONSE_DOCTYPE = "ES AEAT Response"
