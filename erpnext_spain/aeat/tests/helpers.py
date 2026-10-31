@@ -11,6 +11,13 @@ from datetime import datetime, timedelta, timezone
 
 import frappe
 
+from erpnext_spain.tests.fixtures import (  # noqa: F401 — reexportados
+	ensure_sif_identity,
+	ensure_test_company,
+	ensure_test_customer,
+	ensure_test_item,
+)
+
 
 def generate_p12(
 	password: bytes = b"es-test-pass",
@@ -84,5 +91,5 @@ def clean_pem(company: str, purpose: str) -> None:
 
 
 def test_company() -> str:
-	"""Primera compañía real del site para los tests de integración."""
-	return frappe.get_all("Company", pluck="name", order_by="creation", limit=1)[0]
+	"""Compañía española propia de los tests (fixture idempotente, H8)."""
+	return ensure_test_company()
