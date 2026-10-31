@@ -1,0 +1,43 @@
+{
+ "allow_roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Accounts Manager"
+  }
+ ],
+ "creation": "2026-10-31 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Module Onboarding",
+ "idx": 0,
+ "is_complete": 0,
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ERPNext Spain",
+ "name": "ES Onboarding",
+ "owner": "Administrator",
+ "steps": [
+  {
+   "is_optional": 0,
+   "step": "ES Company Tax Data"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES Apply PGC Chart"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES Review Tax Templates"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES Invoice Series"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES First Balance Sheet"
+  }
+ ],
+ "title": "Prepare la contabilidad española"
+}

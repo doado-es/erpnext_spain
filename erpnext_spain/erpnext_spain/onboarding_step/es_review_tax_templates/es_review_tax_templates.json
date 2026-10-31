@@ -1,0 +1,21 @@
+{
+ "action": "Go to Page",
+ "action_label": "Ver plantillas de ventas",
+ "creation": "2026-10-31 12:00:00.000000",
+ "description": "Revise las plantillas de IVA de ventas y compras creadas con el plan PGC (21 %, 10 %, 4 %, exentas, intracomunitarias, inversión del sujeto pasivo) y su clasificación fiscal.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "ES Review Tax Templates",
+ "owner": "Administrator",
+ "path": "sales-taxes-and-charges-template",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Revisar las plantillas de impuestos",
+ "validate_action": 0
+}

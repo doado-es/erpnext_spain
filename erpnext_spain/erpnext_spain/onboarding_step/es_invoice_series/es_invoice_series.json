@@ -1,0 +1,21 @@
+{
+ "action": "Go to Page",
+ "action_label": "Abrir series",
+ "creation": "2026-10-31 12:00:00.000000",
+ "description": "Defina las series de facturas (ordinarias, rectificativas, simplificadas). Con VeriFactu, asigne cada serie a su tipo de factura en la pestaña *Spain Compliance* de la compañía.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "ES Invoice Series",
+ "owner": "Administrator",
+ "path": "document-naming-settings",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Configurar las series de facturación",
+ "validate_action": 0
+}

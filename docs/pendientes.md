@@ -15,7 +15,6 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Fase 0 — fundamentos (spec 01)
 
-- §6 Workspace "España" y onboarding.
 - §7 / H4 CI en GitHub Actions: lint, Semgrep con `frappe/semgrep-rules` y reglas propias, tests en un sitio limpio. Antes hay que tener remoto.
 - Errores de `ruff` heredados del código base (47 avisos y 37 ficheros sin formatear).
 - URLs del proyecto en `pyproject.toml` cuando haya repositorio remoto; pasar a PR por apartado.

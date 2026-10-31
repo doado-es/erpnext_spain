@@ -1,0 +1,21 @@
+{
+ "action": "Go to Page",
+ "action_label": "Abrir compañías",
+ "creation": "2026-10-31 12:00:00.000000",
+ "description": "En el formulario de la compañía, menú **Plan de cuentas → Aplicar plan PGC**. Sustituye el plan de cuentas por el PGC (Normal o PYMES) con cuentas por defecto, impuestos e inventario administrativo. Solo se puede hacer antes de registrar movimientos.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "ES Apply PGC Chart",
+ "owner": "Administrator",
+ "path": "company",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Aplicar el plan PGC",
+ "validate_action": 0
+}
