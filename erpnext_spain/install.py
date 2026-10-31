@@ -37,8 +37,12 @@ def after_install() -> None:
 	setup_custom_fields()
 	seed_catalogs()
 	ensure_global_records()
+	# Igual que after_migrate: una instalación limpia no pasa por migrate (lo
+	# detectó el primer CI en un sitio nuevo).
+	ensure_performance_indexes()
 	setup_printing()
 	setup_optional_apps()
+	sync_report_templates()
 	warn_if_system_country_is_not_spain()
 
 
