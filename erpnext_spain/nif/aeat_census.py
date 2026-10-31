@@ -16,8 +16,13 @@
 #   censo.
 # - NIF inexistente: NO IDENTIFICADO.
 #
-# Además, una factura aceptada (Correcto) por VeriFactu o el SII con el mismo NIF
-# y nombre que el tercero lo marca como identificado sin llamada extra.
+# Cuándo se contrasta:
+# - Al guardar el tercero (doc_event on_change) si cambian el NIF o el nombre, con
+#   el certificado de la compañía por defecto del usuario. Un fallo de la AEAT no
+#   bloquea el guardado: queda sin contrastar y se anota en el Error Log.
+# - Con el botón «Contrastar con la AEAT» y la acción masiva de la lista.
+# - Una factura aceptada (Correcto) por VeriFactu o el SII con el mismo NIF y
+#   nombre que el tercero lo marca como identificado sin llamada extra.
 
 import re
 
@@ -35,6 +40,8 @@ SERVICE_NAME = "VNifV2Service"
 PORT = "VNifPort1"  # www1: certificados de persona y de representante
 BATCH = 500
 QUEUE_ABOVE = 20
+TIMEOUT = 15.0
+ON_SAVE_TIMEOUT = 5.0  # al guardar el formulario: no hacer esperar al usuario
 
 IDENTIFIED = "Identificado"
 NAME_MISMATCH = "Nombre distinto"
@@ -134,10 +141,11 @@ def is_spanish_nif(tax_id: str | None) -> bool:
 class VNifClient:
 	"""Cliente SOAP de VNifV2 con el certificado de la empresa."""
 
-	def __init__(self, company: str):
+	def __init__(self, company: str, timeout: float = TIMEOUT):
 		from erpnext_spain.aeat.client import enabled_credential_pem_paths
 
 		self.cert = enabled_credential_pem_paths(company, SERVICE)
+		self.timeout = timeout
 
 	def check(self, contributors: list[dict]) -> list[dict]:
 		import requests
@@ -149,7 +157,11 @@ class VNifClient:
 		session = requests.Session()
 		session.cert = self.cert
 		client = load_wsdl_client(
-			str(SCHEMA_ROOT.joinpath(*WSDL_FILE)), session=session, service_name=SERVICE_NAME, port_name=PORT
+			str(SCHEMA_ROOT.joinpath(*WSDL_FILE)),
+			session=session,
+			timeout=self.timeout,
+			service_name=SERVICE_NAME,
+			port_name=PORT,
 		)
 		response = client.service.VNifV2(Contribuyente=contributors)
 		return helpers.serialize_object(response, dict) or []
@@ -170,10 +182,10 @@ class SimulatedVNifClient:
 		return rows
 
 
-def client(company: str):
+def client(company: str, timeout: float = TIMEOUT):
 	if frappe.flags.es_vnif_responses is not None:
 		return SimulatedVNifClient()
-	return VNifClient(company)
+	return VNifClient(company, timeout)
 
 
 # --- estado del tercero --------------------------------------------------------
@@ -211,24 +223,30 @@ def check_parties_now(doctype: str, names: list[str], company: str) -> dict:
 	service = client(company) if pending else None
 	for start in range(0, len(pending), BATCH):
 		batch = pending[start : start + BATCH]
-		contributors = [{"Nif": clean_nif(p.tax_id), "Nombre": (p.party_name or "")[:120]} for p in batch]
+		contributors = [contributor_of(p.tax_id, p.party_name) for p in batch]
 		rows = service.check(contributors)
 		for party, contributor, row in zip(batch, contributors, rows, strict=False):
-			census_name = " ".join((row.get("Nombre") or "").split()) or None
-			status = status_from(row.get("Resultado"), contributor["Nombre"], census_name)
-			save_state(
-				doctype,
-				party.name,
-				{
-					STATUS: status,
-					RESULT: (row.get("Resultado") or "")[:140],
-					CENSUS_NAME: census_name if status == NAME_MISMATCH else None,
-					SOURCE: SOURCE_SERVICE,
-					CHECKED_ON: now_datetime(),
-				},
-			)
-			summary[party.name] = status
+			values = state_from_row(row, contributor["Nombre"])
+			save_state(doctype, party.name, values)
+			summary[party.name] = values[STATUS]
 	return summary
+
+
+def contributor_of(tax_id: str | None, name: str | None) -> dict:
+	return {"Nif": clean_nif(tax_id), "Nombre": (name or "")[:120]}
+
+
+def state_from_row(row: dict, sent_name: str) -> dict:
+	"""Valores del tercero a partir de la respuesta de VNifV2 para un contribuyente."""
+	census_name = " ".join((row.get("Nombre") or "").split()) or None
+	status = status_from(row.get("Resultado"), sent_name, census_name)
+	return {
+		STATUS: status,
+		RESULT: (row.get("Resultado") or "")[:140],
+		CENSUS_NAME: census_name if status == NAME_MISMATCH else None,
+		SOURCE: SOURCE_SERVICE,
+		CHECKED_ON: now_datetime(),
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -283,6 +301,49 @@ def reset_if_changed(doc: Document, method: str | None = None) -> None:
 		return
 	for fieldname in STATE_FIELDS:
 		doc.set(fieldname, None)
+
+
+def census_company() -> str | None:
+	"""Compañía cuyo certificado contrasta al guardar: la compañía por defecto del
+	usuario, si tiene certificado AEAT habilitado y el usuario puede usarlo."""
+	from erpnext_spain.aeat.utils import company_credential, has_aeat_permission
+
+	company = frappe.defaults.get_user_default("Company")
+	if not company or not company_credential(company):
+		return None
+	return company if has_aeat_permission(frappe.session.user, company) else None
+
+
+def on_change(doc: Document, method: str | None = None) -> None:
+	"""doc_event on_change de Customer y Supplier: contraste al guardar si cambian el
+	NIF o el nombre. El resultado se guarda y se copia al documento para que el
+	formulario lo muestre sin recargar. Nunca bloquea el guardado."""
+	name_field = NAME_FIELDS.get(doc.doctype)
+	if not name_field or not (doc.has_value_changed("tax_id") or doc.has_value_changed(name_field)):
+		return
+	if doc.get(STATUS) or not is_spanish_nif(doc.get("tax_id")):
+		return  # ya identificado al aplicar el nombre del censo, o NIF no español
+	flags = frappe.flags
+	if flags.in_import or flags.in_patch or flags.in_install or flags.in_migrate:
+		return
+	if flags.in_test and flags.es_vnif_responses is None:
+		return  # los tests nunca llaman a la AEAT real
+	company = census_company()
+	if not company:
+		return
+	try:
+		contributor = contributor_of(doc.tax_id, doc.get(name_field))
+		rows = client(company, ON_SAVE_TIMEOUT).check([contributor])
+		if not rows:
+			return
+		values = state_from_row(rows[0], contributor["Nombre"])
+	except Exception:
+		frappe.log_error(
+			title=f"Contraste con la AEAT al guardar {doc.doctype} {doc.name}", message=frappe.get_traceback()
+		)
+		return
+	save_state(doc.doctype, doc.name, values)
+	doc.update(values)
 
 
 def mark_from_submission(

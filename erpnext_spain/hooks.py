@@ -21,9 +21,11 @@ doc_events = {
 	"Customer": {
 		"validate": [
 			"erpnext_spain.nif.party.validate",
-			# Contraste con la AEAT caducado si cambian el NIF o el nombre.
+			# Contraste con la AEAT caducado si cambian el NIF o el nombre...
 			"erpnext_spain.nif.aeat_census.reset_if_changed",
-		]
+		],
+		# ... y nuevo contraste al guardar.
+		"on_change": "erpnext_spain.nif.aeat_census.on_change",
 	},
 	"Supplier": {
 		"validate": [
@@ -31,7 +33,8 @@ doc_events = {
 			"erpnext_spain.nif.aeat_census.reset_if_changed",
 			# Grupo de retención con fila de tipo en su categoría (spec 08 §3).
 			"erpnext_spain.es_retenciones.withholding.validate_supplier",
-		]
+		],
+		"on_change": "erpnext_spain.nif.aeat_census.on_change",
 	},
 	# Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3).
 	"Purchase Invoice": {

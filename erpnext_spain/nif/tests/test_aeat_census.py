@@ -110,3 +110,52 @@ class TestCensusCheck(IntegrationTestCase):
 			field = frappe.get_meta(doctype).get_field(aeat_census.STATUS)
 			self.assertIsNotNone(field, doctype)
 			self.assertTrue(field.in_list_view)
+
+
+class TestCensusOnSave(IntegrationTestCase):
+	"""Contraste al guardar (doc_event on_change) si cambian el NIF o el nombre."""
+
+	def setUp(self):
+		from unittest import mock
+
+		frappe.set_user("Administrator")
+		frappe.flags.es_vnif_responses = {COMPANY_NIF: ("IDENTIFICADO", "EMPRESA AL GUARDAR, SL")}
+		self.addCleanup(setattr, frappe.flags, "es_vnif_responses", None)
+		patcher = mock.patch.object(aeat_census, "census_company", return_value="_Test ES Company")
+		patcher.start()
+		self.addCleanup(patcher.stop)
+
+	def test_checked_on_insert_and_on_change(self):
+		doc = frappe.get_doc(
+			{"doctype": "Customer", "customer_name": "Empresa al guardar SL", "tax_id": COMPANY_NIF}
+		).insert()
+		# en el documento (lo que recibe el formulario) y en la base de datos
+		self.assertEqual(doc.es_aeat_status, IDENTIFIED)
+		self.assertEqual(frappe.db.get_value("Customer", doc.name, "es_aeat_status"), IDENTIFIED)
+
+		doc.customer_name = "Empresa con otro nombre SL"
+		doc.save()
+		self.assertEqual(doc.es_aeat_status, NAME_MISMATCH)
+		self.assertEqual(doc.es_aeat_census_name, "EMPRESA AL GUARDAR, SL")
+
+		doc.website = "https://example.com"  # sin cambiar NIF ni nombre: no se consulta
+		frappe.flags.es_vnif_responses = {}
+		doc.save()
+		self.assertEqual(doc.es_aeat_status, NAME_MISMATCH)
+
+	def test_service_failure_does_not_block_save(self):
+		from unittest import mock
+
+		with mock.patch.object(aeat_census.SimulatedVNifClient, "check", side_effect=ConnectionError("AEAT")):
+			doc = frappe.get_doc(
+				{"doctype": "Customer", "customer_name": "Empresa sin red SL", "tax_id": COMPANY_NIF}
+			).insert()
+		self.assertTrue(frappe.db.exists("Customer", doc.name))
+		self.assertFalse(doc.es_aeat_status)
+
+	def test_tests_never_call_the_real_service(self):
+		frappe.flags.es_vnif_responses = None
+		doc = frappe.get_doc(
+			{"doctype": "Customer", "customer_name": "Empresa sin simular SL", "tax_id": COMPANY_NIF}
+		).insert()
+		self.assertFalse(doc.es_aeat_status)
