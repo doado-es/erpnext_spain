@@ -21,7 +21,6 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Plan contable (spec 02)
 
-- §4 Validación de cuentas nuevas en compañías PGC (número obligatorio y coherente con la rama).
 - §6 Subcuentas por tercero (decisión A1, opcional).
 - Revisión contable del reparto de ramas y de las cuentas por defecto (2819 como amortización acumulada, 406, 6590 para redondeos, 6680 para diferencias de cambio…).
 - Verificar en bench compras y ventas de artículos de existencias con el inventario permanente desactivado (A3).

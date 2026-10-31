@@ -139,6 +139,8 @@ Interfaz: botón en Company (solo si se cumplen las precondiciones) con vista pr
 
 ## 4. Validación de cuentas en compañías PGC
 
+**Hecho (31/10/2026)**: `es_contabilidad/account.py` (doc_event `Account.validate`), tests en `es_contabilidad/tests/test_account_validation.py`.
+
 `doc_events` → Account → `validate` (con salida temprana por `is_pgc_company`):
 
 - Hoja nueva sin `account_number` → error.

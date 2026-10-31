@@ -16,6 +16,8 @@ required_apps = ["frappe/erpnext"]
 # (spec 14 §2). Early-exits baratos dentro del handler (doc 12 §2).
 
 doc_events = {
+	# Número y rama de las cuentas nuevas en compañías PGC (spec 02 §4).
+	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
 	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
 	"Supplier": {"validate": "erpnext_spain.nif.party.validate"},
 	"Company": {
