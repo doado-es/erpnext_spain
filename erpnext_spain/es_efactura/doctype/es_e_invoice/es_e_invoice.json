@@ -7,6 +7,16 @@
  "field_order": [
   "sales_invoice",
   "company",
+  "direction",
+  "scope",
+  "purchase_invoice",
+  "supplier",
+  "sender_tax_id",
+  "supplier_invoice_number",
+  "external_id",
+  "payment_communication",
+  "payment_date",
+  "state_deadline",
   "customer",
   "column_break_1",
   "status",
@@ -33,7 +43,7 @@
    "fieldtype": "Link",
    "label": "Factura de venta",
    "options": "Sales Invoice",
-   "reqd": 1,
+   "reqd": 0,
    "read_only": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
@@ -47,6 +57,77 @@
    "reqd": 1,
    "read_only": 1,
    "in_standard_filter": 1
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "label": "Dirección",
+   "options": "Emitida\nRecibida",
+   "default": "Emitida",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "scope",
+   "fieldtype": "Select",
+   "label": "Ámbito",
+   "options": "B2G\nB2B",
+   "default": "B2G",
+   "in_standard_filter": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Factura de compra",
+   "options": "Purchase Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Proveedor",
+   "options": "Supplier",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sender_tax_id",
+   "fieldtype": "Data",
+   "label": "NIF del emisor",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supplier_invoice_number",
+   "fieldtype": "Data",
+   "label": "Número de la factura del proveedor",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_id",
+   "fieldtype": "Data",
+   "label": "Identificador en el canal",
+   "read_only": 1,
+   "description": "Número de registro de la SPFE o de la plataforma. Solo lectura."
+  },
+  {
+   "fieldname": "payment_communication",
+   "fieldtype": "Select",
+   "label": "Comunicación del pago",
+   "options": "\nPendiente\nComunicada",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_date",
+   "fieldtype": "Date",
+   "label": "Fecha del pago",
+   "read_only": 1
+  },
+  {
+   "fieldname": "state_deadline",
+   "fieldtype": "Date",
+   "label": "Fecha límite para comunicar el estado",
+   "read_only": 1
   },
   {
    "fieldname": "customer",
@@ -65,7 +146,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Estado",
-   "options": "Generada\nRegistrada en FACe\nContabilizada\nPagada\nRechazada\nAnulada",
+   "options": "Generada\nEnviada\nRegistrada en FACe\nContabilizada\nAceptada\nRechazada\nPagada\nAnulada\nPendiente de proveedor\nError",
    "default": "Generada",
    "read_only": 1,
    "in_list_view": 1,
@@ -103,7 +184,7 @@
    "fieldname": "format",
    "fieldtype": "Select",
    "label": "Formato",
-   "options": "Facturae 3.2.2",
+   "options": "Facturae 3.2.2\nUBL 2.1",
    "default": "Facturae 3.2.2",
    "read_only": 1
   },
@@ -111,7 +192,7 @@
    "fieldname": "channel",
    "fieldtype": "Select",
    "label": "Canal",
-   "options": "FACe (subida manual)",
+   "options": "FACe (subida manual)\nDescarga manual\nSPFE\nPlataforma privada\nSimulado",
    "default": "FACe (subida manual)",
    "read_only": 1
   },
@@ -174,7 +255,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-30 00:00:00.000000",
+ "modified": "2026-10-31 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Efactura",
  "name": "ES E-Invoice",

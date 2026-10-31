@@ -38,7 +38,16 @@ doc_events = {
 			"erpnext_spain.es_sii.outbox.on_cancel",
 		],
 	},
-	"Payment Entry": {"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry"},
+	"Payment Entry": {
+		"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry",
+		# Pago efectivo completo de facturas electrónicas recibidas (spec 10 §5).
+		"on_submit": "erpnext_spain.es_efactura.b2b.payment_changed",
+		"on_cancel": "erpnext_spain.es_efactura.b2b.payment_changed",
+	},
+	"Journal Entry": {
+		"on_submit": "erpnext_spain.es_efactura.b2b.payment_changed",
+		"on_cancel": "erpnext_spain.es_efactura.b2b.payment_changed",
+	},
 	# Tercero por IBAN y pago por EndToEndId SEPA (spec 13 §4).
 	"Bank Transaction": {"validate": "erpnext_spain.es_bancos.importer.validate_bank_transaction"},
 	"Company": {
@@ -79,6 +88,8 @@ doc_events = {
 			# Registro Fiscal IVA (spec 06) y, después, su envío al SII (spec 14).
 			"erpnext_spain.es_iva.register.on_submit",
 			"erpnext_spain.es_sii.outbox.on_submit",
+			# Factura electrónica B2B (spec 10 §5).
+			"erpnext_spain.es_efactura.b2b.on_submit",
 		],
 		"before_cancel": [
 			"erpnext_spain.es_efactura.api.block_cancel_if_presented",
@@ -184,6 +195,10 @@ after_app_install = "erpnext_spain.install.after_app_install"
 # Formato cron de 5 campos (mismo que frappe/hooks.py y erpnext/hooks.py).
 
 scheduler_events = {
+	"hourly": [
+		# Comunicación del pago de facturas electrónicas recibidas (spec 10 §5).
+		"erpnext_spain.es_efactura.b2b.communicate_payments",
+	],
 	"daily": [
 		"erpnext_spain.aeat.tasks.daily",
 		"erpnext_spain.es_verifactu.tasks.daily",

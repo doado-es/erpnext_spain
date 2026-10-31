@@ -63,7 +63,7 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Comunicación con la AEAT y terceros
 
-- Factura electrónica (spec 10): **hecho Facturae 3.2.2 firmado para FACe con subida manual (31/10/2026)**. Pendiente: validar a mano un primer XML con el validador del Ministerio o en el entorno de pruebas de FACe; servicio web de FACe; facturas en moneda extranjera; descuentos por línea y generales; B2B (SPFE o plataforma, decisión A9) y recepción de facturas.
+- Factura electrónica (spec 10): **hecho Facturae 3.2.2 firmado para FACe con subida manual (31/10/2026)**. Pendiente: validar a mano un primer XML con el validador del Ministerio o en el entorno de pruebas de FACe; servicio web de FACe; facturas en moneda extranjera; descuentos por línea y generales; **B2B hecho (31/10/2026)** con canal manual o simulado: UBL 2.1, recepción y estados. Pendiente B2B: canal real (SPFE o plataforma, A9), validación Schematron EN 16931 (XSLT 2.0) y CIUS española de la AEAT, recargo de equivalencia y retenciones según la CIUS, unidades de medida (hoy C62).
 
 - VeriFactu: prueba real en el entorno de pruebas de la AEAT (falta certificado); pendientes del TODO del código base (catálogos L8A y L10, formato del QR, paginación de la consulta, errores).
 - **Hecho (31/10/2026)**: SII (spec 14) con cliente simulado. Pendiente: envío real al entorno de pruebas de la AEAT (falta certificado); libro de bienes de inversión y criterio de caja; con varias calificaciones (S1 y S2) en una misma factura expedida solo se informa la primera; destinatarios extranjeros siempre como entrega de bienes (falta distinguir prestaciones de servicios) **[revisar]**.

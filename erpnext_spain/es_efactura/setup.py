@@ -124,6 +124,24 @@ COMPANY_FIELDS = [
 		"description": "Credencial de la compañía (de cualquier propósito) cuyo certificado firma las facturas Facturae.",
 	},
 	*person_fields("es_einvoice_credential"),
+	# Factura electrónica B2B (spec 10 §5): obligatoria desde 2027-2028 (RD 238/2026).
+	{
+		"fieldname": "es_einvoice_b2b",
+		"label": "Factura electrónica B2B",
+		"fieldtype": "Check",
+		"insert_after": "es_einvoice_section",
+		"description": "Genera la factura electrónica UBL de las ventas a empresarios y profesionales españoles y recibe las de los proveedores.",
+	},
+	{
+		"fieldname": "es_einvoice_channel",
+		"label": "Canal B2B",
+		"fieldtype": "Select",
+		"options": "Descarga manual\nSPFE\nPlataforma privada\nSimulado",
+		"default": "Descarga manual",
+		"insert_after": "es_einvoice_b2b",
+		"depends_on": "eval:doc.es_einvoice_b2b",
+		"description": "SPFE de la AEAT o plataforma privada (decisión A9 pendiente). «Simulado» solo para pruebas.",
+	},
 ]
 
 SALES_INVOICE_FIELDS = [
@@ -204,7 +222,20 @@ MODE_OF_PAYMENT_FIELDS = [
 	}
 ]
 
+PURCHASE_INVOICE_FIELDS = [
+	{
+		"fieldname": "es_e_invoice",
+		"label": "Factura electrónica recibida",
+		"fieldtype": "Link",
+		"options": "ES E-Invoice",
+		"read_only": 1,
+		"no_copy": 1,
+		"insert_after": "bill_date",
+	},
+]
+
 CUSTOM_FIELDS = {
+	"Purchase Invoice": PURCHASE_INVOICE_FIELDS,
 	"Customer": CUSTOMER_FIELDS,
 	"Company": COMPANY_FIELDS,
 	"Sales Invoice": SALES_INVOICE_FIELDS,
