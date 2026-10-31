@@ -19,9 +19,12 @@ doc_events = {
 	# Número y rama de las cuentas nuevas en compañías PGC (spec 02 §4).
 	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
 	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
+	# Categoría de impuestos por país (España, UE, resto) en direcciones y proveedores.
+	"Address": {"validate": "erpnext_spain.es_impuestos.tax_category.set_address_category"},
 	"Supplier": {
 		"validate": [
 			"erpnext_spain.nif.party.validate",
+			"erpnext_spain.es_impuestos.tax_category.set_supplier_category",
 			# Grupo de retención con fila de tipo en su categoría (spec 08 §3).
 			"erpnext_spain.es_retenciones.withholding.validate_supplier",
 		]
