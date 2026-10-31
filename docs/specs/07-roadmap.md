@@ -15,7 +15,7 @@ Ya tienen spec propia: factura electrónica B2G y B2B (10), SEPA (11), confirmin
 
 - 303, 390, 349, 347, 111, 115, 190, 180 y 130, generados desde el Registro Fiscal IVA (spec 06) y, para las retenciones, desde la tabla nativa `Tax Withholding Entry` (spec 08), con un doctype de declaración por compañía y periodo, cálculo revisable y exportación al formato de la AEAT.
 - Las compañías en el SII no presentan 347 ni 390 **[verificar]** (spec 14).
-- Primera entrega: 303 y 111, por frecuencia.
+- Primera entrega: 303 y 111, por frecuencia. **Hecho (31/10/2026)**: módulo ES Modelos (`ES Tax Return` con casillas revisables y corrección manual que se conserva al recalcular, `es_modelos/returns.py`), cálculo del 303 desde el Registro Fiscal IVA y del 111 desde `Tax Withholding Entry`, y fichero de importación de la AEAT según los diseños de registro DR303e26v101 (páginas 01 y 03) y DR111e16v18. Tests en `es_modelos/tests/test_returns.py`. Pendiente: probar los ficheros con el programa de la AEAT, páginas 02 (régimen simplificado) y DID (domiciliación) del 303, y el resto de modelos (390, 349, 347, 115, 190, 180, 130).
 
 ## Otros
 

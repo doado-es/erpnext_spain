@@ -71,7 +71,7 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 - SEPA: verificación previa del beneficiario por lotes (VoP, §7, acuerdo bilateral con cada banco); `pain.001.001.03`/`pain.008.001.02` si algún banco los exige; plazos de presentación y caducidad de mandatos **[revisar]**; formato de los ficheros de devoluciones de cada banco.
 - Agregador bancario real (decisión A8): hoy solo el adaptador simulado. camt.053.
 - Confirming: probar el fichero con una entidad; el estándar no define ficheros de respuesta (estados a mano).
-- Modelos AEAT (spec 07).
+- **Hecho (31/10/2026)**: modelos 303 y 111 (cálculo, casillas revisables y fichero AEAT). Pendiente: importar los ficheros en el programa de la AEAT para comprobarlos; casillas del 303 sin origen automático (importaciones, regularizaciones, prorrata definitiva, régimen simplificado, criterio de caja) y opciones de la página 01 por defecto (no foral, no REDEME, solo régimen general…) **[revisar]**; modelos 115, 190, 180, 390, 349, 347 y 130.
 
 ## Traducciones
 

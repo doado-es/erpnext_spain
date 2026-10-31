@@ -1,0 +1,181 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Modelos",
+ "name": "ES Tax Return",
+ "owner": "Administrator",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:{tax_model}-{company}-{fiscal_year}-{period}",
+ "naming_rule": "Expression",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "submit": 0,
+   "cancel": 0,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "title_field": "tax_model",
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "tax_model",
+   "fieldtype": "Select",
+   "label": "Modelo",
+   "options": "303\n111",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fiscal_year",
+   "fieldtype": "Int",
+   "label": "Ejercicio",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "period",
+   "fieldtype": "Select",
+   "label": "Periodo",
+   "options": "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n1T\n2T\n3T\n4T",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "declaration_type",
+   "fieldtype": "Select",
+   "label": "Tipo de declaración",
+   "options": "I - Ingreso\nU - Domiciliación\nG - Cuenta corriente tributaria (ingreso)\nN - Sin actividad / resultado cero\nC - Compensación\nD - Devolución\nV - Cuenta corriente tributaria (devolución)\nX - Devolución por transferencia al extranjero",
+   "default": "I - Ingreso"
+  },
+  {
+   "fieldname": "section_boxes",
+   "fieldtype": "Section Break",
+   "label": "Casillas"
+  },
+  {
+   "fieldname": "boxes",
+   "fieldtype": "Table",
+   "label": "Casillas",
+   "options": "ES Tax Return Box"
+  },
+  {
+   "fieldname": "section_result",
+   "fieldtype": "Section Break",
+   "label": "Resultado"
+  },
+  {
+   "fieldname": "previous_compensation",
+   "fieldtype": "Currency",
+   "label": "Cuotas a compensar de periodos anteriores [110]",
+   "depends_on": "eval:doc.tax_model=='303'"
+  },
+  {
+   "fieldname": "applied_compensation",
+   "fieldtype": "Currency",
+   "label": "Cuotas aplicadas en este periodo [78]",
+   "depends_on": "eval:doc.tax_model=='303'"
+  },
+  {
+   "fieldname": "column_result",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Currency",
+   "label": "Resultado",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "aeat_file",
+   "fieldtype": "Attach",
+   "label": "Fichero para la AEAT",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "ES Tax Return",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "field_order": [
+  "company",
+  "tax_model",
+  "column_main",
+  "fiscal_year",
+  "period",
+  "declaration_type",
+  "section_boxes",
+  "boxes",
+  "section_result",
+  "previous_compensation",
+  "applied_compensation",
+  "column_result",
+  "result",
+  "aeat_file",
+  "amended_from"
+ ]
+}

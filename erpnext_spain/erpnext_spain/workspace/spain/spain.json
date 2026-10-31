@@ -163,7 +163,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Impuestos",
-   "link_count": 8,
+   "link_count": 9,
    "onboard": 0,
    "type": "Card Break"
   },
@@ -244,6 +244,16 @@
    "link_count": 0,
    "link_to": "ES Withholdings Received",
    "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Modelos AEAT (303, 111)",
+   "link_count": 0,
+   "link_to": "ES Tax Return",
+   "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   },
@@ -786,6 +796,19 @@
    "label": "Retenciones soportadas",
    "link_to": "ES Withholdings Received",
    "link_type": "Report",
+   "open_in_new_tab": 0,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "default_workspace": 0,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Modelos AEAT (303, 111)",
+   "link_to": "ES Tax Return",
+   "link_type": "DocType",
    "open_in_new_tab": 0,
    "show_arrow": 0,
    "type": "Link"
