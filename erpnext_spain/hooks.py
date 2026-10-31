@@ -46,6 +46,8 @@ doc_events = {
 		"on_submit": "erpnext_spain.es_efactura.b2b.payment_changed",
 		"on_cancel": "erpnext_spain.es_efactura.b2b.payment_changed",
 	},
+	# Normas bancarias y mandato SEPA en la cuenta (spec 11-12).
+	"Bank Account": {"validate": "erpnext_spain.es_sepa.bank_account.validate"},
 	# Tercero por IBAN y pago por EndToEndId SEPA (spec 13 §4).
 	"Bank Transaction": {"validate": "erpnext_spain.es_bancos.importer.validate_bank_transaction"},
 	"Company": {
@@ -229,8 +231,6 @@ scheduler_events = {
 # inmutable: NUNCA debe barrerse con las transacciones de la empresa.
 company_data_to_be_ignored = [
 	"ES AEAT Credential",
-	"ES Sepa Mandate",
-	"ES Confirming Contract",
 	# Registros del SII: historia legal, como el libro de VeriFactu.
 	"ES Sii Record",
 	"ES Leased Property",

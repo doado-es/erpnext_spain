@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "creation": "2026-10-31 23:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "istable": 1,
+ "field_order": [
+  "norm",
+  "suffix",
+  "contract_number",
+  "column_confirming",
+  "limit",
+  "remittance_type",
+  "accounting_option",
+  "debt_account"
+ ],
+ "fields": [
+  {
+   "fieldname": "norm",
+   "fieldtype": "Select",
+   "label": "Norma",
+   "options": "Transferencias SEPA\nAdeudos SEPA\nConfirming",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "suffix",
+   "fieldtype": "Data",
+   "label": "Sufijo",
+   "length": 3,
+   "default": "000",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "description": "Lo asigna el banco para esta norma. Presentador = NIF + sufijo; en adeudos, también forma el identificador de acreedor."
+  },
+  {
+   "fieldname": "contract_number",
+   "fieldtype": "Data",
+   "label": "Nº de contrato",
+   "length": 20,
+   "in_list_view": 1,
+   "columns": 2,
+   "depends_on": "eval:doc.norm=='Confirming'",
+   "mandatory_depends_on": "eval:doc.norm=='Confirming'"
+  },
+  {
+   "fieldname": "column_confirming",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "limit",
+   "fieldtype": "Currency",
+   "label": "Límite",
+   "depends_on": "eval:doc.norm=='Confirming'"
+  },
+  {
+   "fieldname": "remittance_type",
+   "fieldtype": "Select",
+   "label": "Tipo de remesa",
+   "options": "1 - Estándar\n2 - Pronto pago\n3 - Otros",
+   "default": "1 - Estándar",
+   "depends_on": "eval:doc.norm=='Confirming'"
+  },
+  {
+   "fieldname": "accounting_option",
+   "fieldtype": "Select",
+   "label": "Contabilidad",
+   "options": "A - Sin reclasificar\nB - Reclasificar la deuda",
+   "default": "A - Sin reclasificar",
+   "depends_on": "eval:doc.norm=='Confirming'",
+   "description": "A: la factura se paga al vencimiento. B: al remesar, la deuda con el proveedor pasa a la cuenta de la entidad."
+  },
+  {
+   "fieldname": "debt_account",
+   "fieldtype": "Link",
+   "label": "Cuenta de la deuda con la entidad",
+   "options": "Account",
+   "depends_on": "eval:doc.norm=='Confirming' && (doc.accounting_option || '').startsWith('B')",
+   "mandatory_depends_on": "eval:doc.norm=='Confirming' && (doc.accounting_option || '').startsWith('B')"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-31 23:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Sepa",
+ "name": "ES Bank Account Norm",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -6,6 +6,7 @@ from frappe import _
 from frappe.utils import cint, flt, getdate
 
 from erpnext_spain.es_sepa import xml
+from erpnext_spain.es_sepa.bank_account import DIRECT_DEBITS, is_expired
 from erpnext_spain.es_sepa.credit_transfer import (
 	attach,
 	bank_account_party,
@@ -14,24 +15,41 @@ from erpnext_spain.es_sepa.credit_transfer import (
 	presenter_id,
 	sepa_creditor_id,
 )
-from erpnext_spain.es_sepa.doctype.es_sepa_mandate.es_sepa_mandate import is_expired
 from erpnext_spain.es_sepa.utils import check_parties, party_address
 from erpnext_spain.utils.gating import is_pgc_company
 
 DIRECT_DEBIT_MODE = "Domiciliación bancaria"
 
 
-def mandate_for(customer: str, company: str, scheme: str) -> str | None:
-	default = frappe.get_cached_value("Customer", customer, "es_sepa_mandate")
-	if default and frappe.db.get_value(
-		"ES Sepa Mandate", default, ["status", "scheme", "company"], as_dict=True
-	) == {"status": "Activo", "scheme": scheme, "company": company}:
-		return default
-	return frappe.db.get_value(
-		"ES Sepa Mandate",
-		{"customer": customer, "company": company, "scheme": scheme, "status": "Activo"},
-		"name",
+MANDATE_FIELDS = [
+	"party_type",
+	"party",
+	"es_sepa_scheme",
+	"es_sepa_mandate_status",
+	"es_sepa_mandate_type",
+	"es_sepa_mandate_reference",
+	"es_sepa_mandate_date",
+	"es_sepa_last_debit",
+	"es_sepa_first_debit_done",
+]
+
+
+def mandate_account(customer: str, scheme: str) -> str | None:
+	"""Cuenta bancaria del cliente con mandato activo del esquema (primero la
+	cuenta por defecto del cliente)."""
+	default = frappe.get_cached_value("Customer", customer, "default_bank_account")
+	candidates = [default] if default else []
+	candidates += frappe.get_all(
+		"Bank Account",
+		filters={"party_type": "Customer", "party": customer, "es_sepa_scheme": scheme, "disabled": 0},
+		pluck="name",
+		order_by="is_default desc, creation",
 	)
+	for name in candidates:
+		values = frappe.db.get_value("Bank Account", name, MANDATE_FIELDS, as_dict=True)
+		if values and values.es_sepa_scheme == scheme and values.es_sepa_mandate_status == "Activo":
+			return name
+	return None
 
 
 @frappe.whitelist()
@@ -58,17 +76,17 @@ def get_invoices(
 	):
 		mode = frappe.db.get_value(
 			"Payment Schedule", {"parent": invoice.name, "mode_of_payment": DIRECT_DEBIT_MODE}, "name"
-		) or frappe.get_cached_value("Customer", invoice.customer, "es_sepa_mandate")
+		) or mandate_account(invoice.customer, scheme)
 		if not mode:
 			continue
-		mandate = mandate_for(invoice.customer, company, scheme)
+		mandate = mandate_account(invoice.customer, scheme)
 		if not mandate:
 			continue
 		rows.append(
 			{
 				"sales_invoice": invoice.name,
 				"customer": invoice.customer,
-				"mandate": mandate,
+				"bank_account": mandate,
 				"amount": invoice.outstanding_amount,
 			}
 		)
@@ -106,40 +124,28 @@ def validate_batch(doc) -> None:
 					"Fila {0}: el importe debe ser positivo y no superar el pendiente de la factura ({1})."
 				).format(line.idx, invoice.outstanding_amount)
 			)
-		mandate = frappe.db.get_value(
-			"ES Sepa Mandate",
-			line.mandate,
-			[
-				"customer",
-				"company",
-				"scheme",
-				"status",
-				"mandate_type",
-				"last_debit_date",
-				"signature_date",
-				"first_debit_done",
-			],
-			as_dict=True,
-		)
+		mandate = frappe.db.get_value("Bank Account", line.bank_account, MANDATE_FIELDS, as_dict=True)
 		problem = None
-		if not mandate:
-			problem = _("no existe")
-		elif mandate.status != "Activo" or is_expired(mandate.last_debit_date or mandate.signature_date):
-			problem = _("no está activo")
-		elif mandate.scheme != doc.scheme:
-			problem = _("es del esquema {0} y la remesa es {1}").format(mandate.scheme, doc.scheme)
-		elif mandate.customer != invoice.customer or mandate.company != doc.company:
-			problem = _("es de otro cliente o de otra compañía")
-		elif mandate.mandate_type == "Único" and mandate.first_debit_done:
-			problem = _("es de un solo uso y ya se adeudó")
+		if not mandate or not mandate.es_sepa_scheme:
+			problem = _("no tiene mandato SEPA")
+		elif mandate.es_sepa_mandate_status != "Activo" or is_expired(
+			mandate.es_sepa_last_debit or mandate.es_sepa_mandate_date
+		):
+			problem = _("tiene el mandato cancelado o caducado")
+		elif mandate.es_sepa_scheme != doc.scheme:
+			problem = _("tiene un mandato {0} y la remesa es {1}").format(mandate.es_sepa_scheme, doc.scheme)
+		elif mandate.party_type != "Customer" or mandate.party != invoice.customer:
+			problem = _("no es del cliente de la factura")
+		elif mandate.es_sepa_mandate_type == "Único" and mandate.es_sepa_first_debit_done:
+			problem = _("tiene un mandato de un solo uso ya adeudado")
 		if problem:
 			frappe.throw(
 				_(
-					"Fila {0}: el mandato {1} {2}. Use un mandato activo del cliente y del esquema de la remesa."
-				).format(line.idx, frappe.bold(line.mandate), problem),
+					"Fila {0}: la cuenta {1} {2}. Use una cuenta del cliente con mandato activo del esquema de la remesa."
+				).format(line.idx, frappe.bold(line.bank_account), problem),
 				title=_("Mandato no válido"),
 			)
-		line.sequence = "OOFF" if mandate.mandate_type == "Único" else "RCUR"
+		line.sequence = "OOFF" if mandate.es_sepa_mandate_type == "Único" else "RCUR"
 	doc.total_amount = sum(flt(line.amount) for line in doc.lines)
 
 
@@ -148,10 +154,15 @@ def submit_batch(doc) -> None:
 	check_parties([("Customer", line.customer) for line in doc.lines])
 	company_name = frappe.get_cached_value("Company", doc.company, "company_name")
 	account = bank_account_party(
-		doc.bank_account, company_name, company_address(doc.company), sepa_creditor_id(doc.company)
+		doc.bank_account,
+		company_name,
+		company_address(doc.company),
+		sepa_creditor_id(doc.company, doc.bank_account),
 	)
 	initiating = xml.Party(
-		name=company_name, iban=account.iban, identifier=presenter_id(doc.company, doc.bank_account)
+		name=company_name,
+		iban=account.iban,
+		identifier=presenter_id(doc.company, doc.bank_account, DIRECT_DEBITS),
 	)
 	message_id = f"{doc.name}-{frappe.generate_hash(length=6).upper()}"
 	batch = xml.Batch(
@@ -162,18 +173,18 @@ def submit_batch(doc) -> None:
 		scheme=doc.scheme,
 	)
 	for line in doc.lines:
-		mandate = frappe.get_doc("ES Sepa Mandate", line.mandate)
+		mandate = frappe.db.get_value("Bank Account", line.bank_account, MANDATE_FIELDS, as_dict=True)
 		end_to_end = f"{doc.name}-{line.idx}"
 		name = frappe.get_cached_value("Customer", line.customer, "customer_name")
-		debtor = bank_account_party(mandate.bank_account, name, party_address("Customer", line.customer))
+		debtor = bank_account_party(line.bank_account, name, party_address("Customer", line.customer))
 		batch.transactions.append(
 			xml.Transaction(
 				end_to_end_id=end_to_end,
 				amount=xml.amount(line.amount),
 				party=debtor,
 				remittance=_("Factura {0}").format(line.sales_invoice),
-				mandate_id=mandate.mandate_reference,
-				mandate_date=getdate(mandate.signature_date),
+				mandate_id=mandate.es_sepa_mandate_reference,
+				mandate_date=getdate(mandate.es_sepa_mandate_date),
 				sequence=line.sequence,
 			)
 		)
@@ -193,8 +204,11 @@ def submit_batch(doc) -> None:
 		if submit_payments:
 			payment.submit()
 		line.db_set("payment_entry", payment.name)
-		mandate = frappe.get_doc("ES Sepa Mandate", line.mandate)
-		mandate.db_set({"last_debit_date": doc.collection_date, "first_debit_done": 1})
+		frappe.db.set_value(
+			"Bank Account",
+			line.bank_account,
+			{"es_sepa_last_debit": doc.collection_date, "es_sepa_first_debit_done": 1},
+		)
 
 
 def make_payment(doc, line):

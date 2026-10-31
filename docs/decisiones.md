@@ -11,6 +11,8 @@ Decisiones tomadas durante el desarrollo, para revisarlas. Las marcadas **[revis
 | 30/10/2026 | 14 | SII y VeriFactu como dos casillas excluyentes (opción A), con validación en Company y comprobación en tiempo de ejecución. |
 | 30/10/2026 | 01 H1 | Sin VeriFactu no hay numeración de borrador; se usa la `naming_series`. |
 | 31/10/2026 | 06 | Sin doctype `ES Vat Register`: el desglose fiscal se calcula sobre la marcha desde la factura (estilo ERPNext, sin duplicar datos) y la factura congela al validar la clasificación del Item Tax Template por línea, el país y tipo de identificación del tercero y la prorrata. Sustituye a la decisión del registro persistido. |
+| 31/10/2026 | 11/12 | Datos bancarios por norma: tabla `ES Bank Account Norm` en la cuenta de la compañía (Transferencias SEPA, Adeudos SEPA, Confirming) con sufijo y, en confirming, contrato, límite, tipo de remesa, opción contable y cuenta de deuda. Sustituye al sufijo único por cuenta/compañía y a `ES Confirming Contract`. |
+| 31/10/2026 | 11 | Mandato SEPA en la cuenta bancaria del cliente (modelo de `spanish_compliance`), sin doctype `ES Sepa Mandate`. |
 | 31/10/2026 | 10 | Facturae primero para FACe, subida manual, mismo certificado de la empresa, rectificativas incluidas, doctype propio + campos de solo lectura en la factura. |
 
 ## Tomadas por el agente

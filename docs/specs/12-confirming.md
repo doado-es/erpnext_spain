@@ -2,7 +2,7 @@
 
 Fase 4 · Depende de: 11 · Relacionada con: 13
 
-> **Estado (31/10/2026): implementado** con el PDF oficial de la AEF v.03.26 (registros 1-7 de 250 posiciones): `ES Confirming Contract`, `ES Confirming Batch` (doctype propio en lugar de la Payment Order, que solo admite Payment Entry y Payment Request), opciones contables A y B, cargo al vencimiento casado con el extracto por la referencia de la remesa. Tests en `es_sepa/tests/test_confirming.py` (criterios 1-6). Pendiente: ficheros de respuesta (el estándar no los define), validación con una entidad.
+> **Estado (31/10/2026): implementado** con el PDF oficial de la AEF v.03.26 (registros 1-7 de 250 posiciones): norma «Confirming» en la cuenta bancaria de la compañía (revisión del 31/10/2026, sustituye a `ES Confirming Contract`), `ES Confirming Batch` (doctype propio en lugar de la Payment Order, que solo admite Payment Entry y Payment Request), opciones contables A y B, cargo al vencimiento casado con el extracto por la referencia de la remesa. Tests en `es_sepa/tests/test_confirming.py` (criterios 1-6). Pendiente: ficheros de respuesta (el estándar no los define), validación con una entidad.
 
 ## Objetivo
 
@@ -34,7 +34,7 @@ Fuera de alcance: factoring (cesión de facturas de venta), que puede usar el fo
 
 ## 1. Contratos
 
-Doctype "Contrato de Confirming" (módulo ES Sepa; nombre final `ES Confirming Contract`; por compañía, en `company_data_to_be_ignored`, R8): entidad, número de contrato y sufijo, cuenta bancaria de cargo, límite, tipo de remesa por defecto, cuenta contable de la deuda con la entidad si el contable decide reclasificar (ver §3).
+El contrato es una fila «Confirming» de la tabla **Normas bancarias** de la cuenta bancaria de la compañía (`ES Bank Account Norm`): número de contrato y sufijo, límite, tipo de remesa por defecto, opción contable y cuenta de la deuda con la entidad si se reclasifica (ver §3). La cuenta es la de cargo y la entidad es su banco; una cuenta tiene como mucho un contrato. La remesa (`ES Confirming Batch`) elige la cuenta (`bank_account`) en lugar del contrato.
 
 ## 2. Remesas
 

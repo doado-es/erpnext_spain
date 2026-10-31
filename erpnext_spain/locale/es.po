@@ -4799,10 +4799,6 @@ msgid "ES Confirming Batch"
 msgstr "Remesa de confirming"
 
 #. ERPNext Spain
-msgid "ES Confirming Contract"
-msgstr "Contrato de confirming"
-
-#. ERPNext Spain
 msgid "ES Confirming Line"
 msgstr "Línea de remesa de confirming"
 
@@ -4875,10 +4871,6 @@ msgid "ES Sepa Direct Debit Line"
 msgstr "Línea de remesa de adeudos"
 
 #. ERPNext Spain
-msgid "ES Sepa Mandate"
-msgstr "Mandato SEPA"
-
-#. ERPNext Spain
 msgid "ES Sii"
 msgstr "SII"
 
@@ -4909,4 +4901,8 @@ msgstr "Retenciones practicadas"
 #. ERPNext Spain
 msgid "ES Withholdings Received"
 msgstr "Retenciones soportadas"
+
+#. ERPNext Spain
+msgid "ES Bank Account Norm"
+msgstr "Norma bancaria de la cuenta"
 

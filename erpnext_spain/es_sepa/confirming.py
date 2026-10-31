@@ -95,13 +95,9 @@ def supplier_problems(data: dict) -> list[str]:
 
 
 def build_file(batch) -> bytes:
-	contract = frappe.get_doc("ES Confirming Contract", batch.contract)
+	contract = contract_of(batch)
 	company_name = frappe.get_cached_value("Company", batch.company, "company_name")
-	iban = (
-		frappe.get_cached_value("Bank Account", contract.bank_account, "iban")
-		if contract.bank_account
-		else ""
-	)
+	iban = frappe.get_cached_value("Bank Account", batch.bank_account, "iban") or ""
 	lines = [
 		record(
 			"1",
@@ -165,6 +161,13 @@ def build_file(batch) -> bytes:
 	return ("\r\n".join(lines) + "\r\n").encode("ascii")
 
 
+def contract_of(batch):
+	"""Datos del contrato de confirming: la norma «Confirming» de la cuenta de cargo."""
+	from erpnext_spain.es_sepa.bank_account import CONFIRMING, norm
+
+	return norm(batch.bank_account, CONFIRMING)
+
+
 # --- remesa ----------------------------------------------------------------------------
 
 
@@ -224,9 +227,14 @@ def get_invoices(
 def validate_batch(doc) -> None:
 	if not is_pgc_company(doc.company):
 		frappe.throw(_("La compañía {0} no tiene el plan PGC aplicado.").format(frappe.bold(doc.company)))
-	contract = frappe.get_cached_doc("ES Confirming Contract", doc.contract)
-	if contract.company != doc.company:
-		frappe.throw(_("El contrato {0} es de otra compañía.").format(frappe.bold(doc.contract)))
+	account = frappe.db.get_value(
+		"Bank Account", doc.bank_account, ["company", "is_company_account"], as_dict=True
+	)
+	if not account or not account.is_company_account or account.company != doc.company:
+		frappe.throw(
+			_("La cuenta {0} no es una cuenta bancaria de la compañía.").format(frappe.bold(doc.bank_account))
+		)
+	contract = contract_of(doc)
 	doc.remittance_type = doc.remittance_type or contract.remittance_type
 	for line in doc.lines:
 		invoice = frappe.db.get_value(
@@ -269,7 +277,7 @@ def validate_batch(doc) -> None:
 	if flt(contract.limit) and doc.total_amount > flt(contract.limit):
 		frappe.throw(
 			_("La remesa ({0}) supera el límite del contrato {1} ({2}).").format(
-				doc.total_amount, doc.contract, contract.limit
+				doc.total_amount, contract.contract_number, contract.limit
 			),
 			title=_("Límite del contrato"),
 		)
@@ -291,7 +299,7 @@ def submit_batch(doc) -> None:
 	doc.db_set("confirming_file", attach(doc.doctype, doc.name, f"{doc.name}-AEF.txt", content))
 	for line in doc.lines:
 		line.db_set("status", "Generada")
-	contract = frappe.get_cached_doc("ES Confirming Contract", doc.contract)
+	contract = contract_of(doc)
 	if contract.accounting_option == OPTION_B:
 		doc.db_set("remittance_entry", reclassify_debt(doc, contract))
 
@@ -304,9 +312,9 @@ def reclassify_debt(doc, contract) -> str:
 	"""Opción B: 400 (proveedor, por factura) a la cuenta de la entidad."""
 	if not contract.debt_account:
 		frappe.throw(
-			_("El contrato {0} reclasifica la deuda pero no tiene cuenta de la entidad.").format(
-				contract.name
-			)
+			_(
+				"La norma de confirming de la cuenta {0} reclasifica la deuda pero no tiene cuenta de la entidad."
+			).format(doc.bank_account)
 		)
 	entry = frappe.new_doc("Journal Entry")
 	entry.update(
@@ -357,8 +365,8 @@ def register_maturity(batch: str, charge_date: str | None = None) -> list[str]:
 		frappe.throw(_("Valide la remesa antes de registrar el vencimiento."))
 	if doc.maturity_registered:
 		frappe.throw(_("El vencimiento de la remesa {0} ya está registrado.").format(batch))
-	contract = frappe.get_cached_doc("ES Confirming Contract", doc.contract)
-	ledger = frappe.get_cached_value("Bank Account", contract.bank_account, "account")
+	contract = contract_of(doc)
+	ledger = frappe.get_cached_value("Bank Account", doc.bank_account, "account")
 	charge_date = charge_date or nowdate()
 	created = []
 	if contract.accounting_option == OPTION_B:

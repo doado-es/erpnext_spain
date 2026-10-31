@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-10-31 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Sepa",
  "name": "ES Confirming Batch",
@@ -69,11 +69,12 @@
    "reqd": 1
   },
   {
-   "fieldname": "contract",
+   "fieldname": "bank_account",
    "fieldtype": "Link",
-   "label": "Contrato",
-   "options": "ES Confirming Contract",
-   "reqd": 1
+   "label": "Cuenta de cargo",
+   "options": "Bank Account",
+   "reqd": 1,
+   "description": "Cuenta de la compañía con la norma «Confirming» configurada (contrato y sufijo)."
   },
   {
    "fieldname": "column_main",
@@ -167,7 +168,7 @@
  ],
  "field_order": [
   "company",
-  "contract",
+  "bank_account",
   "column_main",
   "remittance_date",
   "remittance_type",

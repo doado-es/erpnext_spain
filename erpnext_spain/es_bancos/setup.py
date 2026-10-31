@@ -7,7 +7,7 @@ CUSTOM_FIELDS = {
 			"label": "Agregador bancario",
 			"fieldtype": "Link",
 			"options": "ES Bank Aggregator",
-			"insert_after": "es_sepa_suffix",
+			"insert_after": "last_integration_date",
 			"depends_on": "eval:doc.is_company_account",
 		},
 		{

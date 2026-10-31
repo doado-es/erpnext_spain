@@ -69,14 +69,18 @@ def company_tax_id(company: str) -> str:
 	return tax_id
 
 
-def presenter_id(company: str, bank_account: str) -> str:
-	suffix = frappe.get_cached_value("Bank Account", bank_account, "es_sepa_suffix") or "000"
-	return f"{company_tax_id(company)}{suffix}"
+def presenter_id(company: str, bank_account: str, norm_name: str | None = None) -> str:
+	"""Identificador del presentador: NIF de la compañía + sufijo de la norma en esa cuenta."""
+	from erpnext_spain.es_sepa.bank_account import TRANSFERS, norm
+
+	return f"{company_tax_id(company)}{norm(bank_account, norm_name or TRANSFERS).suffix or '000'}"
 
 
-def sepa_creditor_id(company: str) -> str:
-	suffix = frappe.get_cached_value("Company", company, "es_sepa_creditor_suffix") or "000"
-	return creditor_identifier(company_tax_id(company), suffix)
+def sepa_creditor_id(company: str, bank_account: str) -> str:
+	"""Identificador de acreedor SEPA con el sufijo de la norma de adeudos de la cuenta."""
+	from erpnext_spain.es_sepa.bank_account import DIRECT_DEBITS, norm
+
+	return creditor_identifier(company_tax_id(company), norm(bank_account, DIRECT_DEBITS).suffix or "000")
 
 
 def attach(doctype: str, name: str, file_name: str, content: bytes) -> str:

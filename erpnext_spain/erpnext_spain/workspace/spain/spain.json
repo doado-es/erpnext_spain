@@ -369,19 +369,9 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Bancos",
-   "link_count": 8,
+   "link_count": 6,
    "onboard": 0,
    "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Mandatos SEPA",
-   "link_count": 0,
-   "link_to": "ES Sepa Mandate",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
   },
   {
    "hidden": 0,
@@ -399,16 +389,6 @@
    "label": "Órdenes de pago (transferencias)",
    "link_count": 0,
    "link_to": "Payment Order",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Contratos de confirming",
-   "link_count": 0,
-   "link_to": "ES Confirming Contract",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -454,7 +434,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-31 22:00:00.000000",
+ "modified": "2026-10-31 23:30:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "module_onboarding": "ES Onboarding",
@@ -963,19 +943,6 @@
    "default_workspace": 0,
    "indent": 0,
    "keep_closed": 0,
-   "label": "Mandatos SEPA",
-   "link_to": "ES Sepa Mandate",
-   "link_type": "DocType",
-   "open_in_new_tab": 0,
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "child": 1,
-   "collapsible": 1,
-   "default_workspace": 0,
-   "indent": 0,
-   "keep_closed": 0,
    "label": "Remesas de adeudos",
    "link_to": "ES Sepa Direct Debit Batch",
    "link_type": "DocType",
@@ -991,19 +958,6 @@
    "keep_closed": 0,
    "label": "Órdenes de pago (transferencias)",
    "link_to": "Payment Order",
-   "link_type": "DocType",
-   "open_in_new_tab": 0,
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "child": 1,
-   "collapsible": 1,
-   "default_workspace": 0,
-   "indent": 0,
-   "keep_closed": 0,
-   "label": "Contratos de confirming",
-   "link_to": "ES Confirming Contract",
    "link_type": "DocType",
    "open_in_new_tab": 0,
    "show_arrow": 0,

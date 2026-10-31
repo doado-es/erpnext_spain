@@ -68,7 +68,48 @@ class SepaTestCase(IntegrationTestCase):
 			make_iban("21000418450200051332"),
 			company_account=pgc.account_by_number(cls.company, "5720"),
 		)
+		cls.ensure_norms(cls.company_account, {"Transferencias SEPA": "000", "Adeudos SEPA": "001"})
 		cls.item = ensure_item("_Test ES Servicio SEPA")
+
+	@classmethod
+	def bank_ledger(cls, number: str, name: str) -> str:
+		"""Subcuenta 572x propia: ERPNext admite una sola Bank Account por cuenta contable."""
+		ledger = frappe.db.get_value("Account", {"company": cls.company, "account_number": number}, "name")
+		if ledger:
+			return ledger
+		return (
+			frappe.get_doc(
+				{
+					"doctype": "Account",
+					"company": cls.company,
+					"account_name": name,
+					"account_number": number,
+					"parent_account": frappe.db.get_value(
+						"Account", {"company": cls.company, "account_number": "572"}
+					),
+					"account_type": "Bank",
+				}
+			)
+			.insert()
+			.name
+		)
+
+	@classmethod
+	def ensure_norms(cls, bank_account: str, norms: dict[str, str], **extra) -> None:
+		"""Normas bancarias de una cuenta de la compañía (sufijo y datos de confirming)."""
+		doc = frappe.get_doc("Bank Account", bank_account)
+		present = {row.norm for row in doc.es_norms}
+		for norm, suffix in norms.items():
+			if norm not in present:
+				doc.append(
+					"es_norms", {"norm": norm, "suffix": suffix, **(extra if norm == "Confirming" else {})}
+				)
+		for row in doc.es_norms:
+			if row.norm in norms:
+				row.suffix = norms[row.norm]
+			if row.norm == "Confirming":
+				row.update(extra)
+		doc.save()
 
 	@classmethod
 	def bank_account(cls, name: str, iban: str, party_type=None, party=None, company_account=None) -> str:
@@ -211,22 +252,21 @@ class TestCreditTransfer(SepaTestCase):
 
 class TestDirectDebit(SepaTestCase):
 	def mandate(self, customer: str, account: str, scheme: str = "CORE", status_value: str = "Activo") -> str:
-		reference = f"MND-{customer[-6:]}-{scheme}-{status_value}".replace(" ", "")
-		if not frappe.db.exists("ES Sepa Mandate", reference):
-			frappe.get_doc(
-				{
-					"doctype": "ES Sepa Mandate",
-					"mandate_reference": reference,
-					"company": self.company,
-					"customer": customer,
-					"bank_account": account,
-					"scheme": scheme,
-					"mandate_type": "Recurrente",
-					"status": status_value,
-					"signature_date": add_days(nowdate(), -30),
-				}
-			).insert()
-		return reference
+		"""Mandato SEPA en la cuenta bancaria del cliente; devuelve la cuenta."""
+		doc = frappe.get_doc("Bank Account", account)
+		doc.update(
+			{
+				"es_sepa_scheme": scheme,
+				"es_sepa_mandate_status": status_value,
+				"es_sepa_mandate_type": "Recurrente",
+				"es_sepa_mandate_reference": doc.es_sepa_mandate_reference
+				or f"MND-{frappe.generate_hash(length=10).upper()}",
+				"es_sepa_mandate_date": add_days(nowdate(), -30),
+				"es_sepa_first_debit_done": 0,
+			}
+		)
+		doc.save()
+		return account
 
 	def sale(self, customer: str, rate: float = 121):
 		si = frappe.get_doc(
@@ -260,7 +300,7 @@ class TestDirectDebit(SepaTestCase):
 				"scheme": "CORE",
 				"collection_date": add_days(nowdate(), 3),
 				"lines": [
-					{"sales_invoice": si.name, "mandate": mandate, "amount": si.outstanding_amount}
+					{"sales_invoice": si.name, "bank_account": mandate, "amount": si.outstanding_amount}
 					for si, mandate in lines
 				],
 			}
@@ -279,9 +319,15 @@ class TestDirectDebit(SepaTestCase):
 		self.assertTrue(xml.schema(xml.PAIN_008).validate(root))
 		self.assertEqual(
 			root.findtext(".//p:CdtrSchmeId/p:Id/p:PrvtId/p:Othr/p:Id", namespaces=NS008),
-			creditor_identifier("B12345674"),
+			creditor_identifier("B12345674", "001"),  # sufijo de la norma de adeudos, no el de transferencias
 		)
-		self.assertEqual(root.findtext(".//p:MndtRltdInf/p:MndtId", namespaces=NS008), mandate)
+		self.assertEqual(
+			root.findtext(".//p:GrpHdr/p:InitgPty/p:Id/p:OrgId/p:Othr/p:Id", namespaces=NS008), "B12345674001"
+		)
+		self.assertEqual(
+			root.findtext(".//p:MndtRltdInf/p:MndtId", namespaces=NS008),
+			frappe.db.get_value("Bank Account", mandate, "es_sepa_mandate_reference"),
+		)
 		line = batch.lines[0]
 		self.assertEqual(
 			root.findtext(".//p:DrctDbtTxInf/p:PmtId/p:EndToEndId", namespaces=NS008), line.end_to_end_id
@@ -291,7 +337,7 @@ class TestDirectDebit(SepaTestCase):
 		)
 		self.assertAlmostEqual(frappe.db.get_value("Sales Invoice", si.name, "outstanding_amount"), 0)
 		self.assertEqual(
-			str(frappe.db.get_value("ES Sepa Mandate", mandate, "last_debit_date")),
+			str(frappe.db.get_value("Bank Account", mandate, "es_sepa_last_debit")),
 			str(batch.collection_date),
 		)
 
@@ -299,10 +345,8 @@ class TestDirectDebit(SepaTestCase):
 		"""Criterio 4: mandato cancelado o de otro esquema."""
 		customer, account = self.party("Customer", "_Test ES Cliente SEPA 2", "21000418450200051387")
 		si = self.sale(customer)
-		for mandate in (
-			self.mandate(customer, account, status_value="Cancelado"),
-			self.mandate(customer, account, scheme="B2B"),
-		):
+		for status_value, scheme in (("Cancelado", "CORE"), ("Activo", "B2B")):
+			mandate = self.mandate(customer, account, scheme=scheme, status_value=status_value)
 			with (
 				self.subTest(mandate=mandate),
 				self.assertRaisesRegex(frappe.ValidationError, "Mandato no válido|mandato"),
@@ -356,3 +400,40 @@ class TestDirectDebit(SepaTestCase):
 		self.assertAlmostEqual(flt(charges.total_debit), 3.5)
 		batch.reload()
 		self.assertEqual(batch.lines[0].status, "Devuelta")
+
+
+class TestBankAccountSepaData(SepaTestCase):
+	def test_missing_norm_blocks(self):
+		"""Una cuenta sin la norma pedida no genera fichero: error con el remedio."""
+		from erpnext_spain.es_sepa.bank_account import CONFIRMING, norm
+
+		self.assertEqual(norm(self.company_account, "Adeudos SEPA").suffix, "001")
+		bare = self.bank_account(
+			"Cuenta sin normas",
+			make_iban("21000418450200051603"),
+			company_account=self.bank_ledger("5723", "Banco sin normas"),
+		)
+		with self.assertRaisesRegex(frappe.ValidationError, "Normas bancarias"):
+			norm(bare, CONFIRMING)
+
+	def test_mandate_reference_unique_and_customer_only(self):
+		first_customer, first = self.party("Customer", "_Test ES Cliente mandato 1", "21000418450200051500")
+		_second_customer, second = self.party(
+			"Customer", "_Test ES Cliente mandato 2", "21000418450200051519"
+		)
+		TestDirectDebit.mandate(self, first_customer, first)
+		reference = frappe.db.get_value("Bank Account", first, "es_sepa_mandate_reference")
+		doc = frappe.get_doc("Bank Account", second)
+		doc.update(
+			{
+				"es_sepa_scheme": "CORE",
+				"es_sepa_mandate_reference": reference,
+				"es_sepa_mandate_date": nowdate(),
+			}
+		)
+		with self.assertRaisesRegex(frappe.ValidationError, "única"):
+			doc.save()
+		company = frappe.get_doc("Bank Account", self.company_account)
+		company.es_sepa_scheme = "CORE"
+		with self.assertRaisesRegex(frappe.ValidationError, "clientes"):
+			company.save()

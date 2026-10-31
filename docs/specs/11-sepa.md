@@ -2,7 +2,7 @@
 
 Fase 4 · Depende de: 02, 09 · Relacionada con: 12 (confirming), 13 (conciliación)
 
-> **Estado (31/10/2026): implementado** en el módulo ES Sepa: `pain.001.001.09` desde la Payment Order nativa, remesas de adeudos `pain.008.001.08` (`ES Sepa Direct Debit Batch`) con mandatos (`ES Sepa Mandate`), importación de `pain.002`, devoluciones con gastos. Los ficheros se validan contra los XSD oficiales (`erpnext_spain/schemas/iso20022`). Tests en `es_sepa/tests/test_sepa.py` (criterios 1-8). Pendiente: verificación previa del beneficiario (§7), versiones anteriores de los mensajes y plazos de cada banco.
+> **Estado (31/10/2026): implementado** en el módulo ES Sepa: `pain.001.001.09` desde la Payment Order nativa, remesas de adeudos `pain.008.001.08` (`ES Sepa Direct Debit Batch`) con el mandato en la cuenta bancaria del cliente y el sufijo por norma en la cuenta de la compañía (tabla `ES Bank Account Norm`, revisión del 31/10/2026), importación de `pain.002`, devoluciones con gastos. Los ficheros se validan contra los XSD oficiales (`erpnext_spain/schemas/iso20022`). Tests en `es_sepa/tests/test_sepa.py` (criterios 1-8). Pendiente: verificación previa del beneficiario (§7), versiones anteriores de los mensajes y plazos de cada banco.
 
 ## Objetivo
 
@@ -45,24 +45,22 @@ Fuera de alcance: envío automático al banco (EBICS o API de pagos). Primera ve
 
 - IBAN validado (dígitos de control) al guardar `Bank Account`; BIC opcional dentro de SEPA.
 - **Dirección estructurada** del tercero (calle, número, código postal, municipio, país) obligatoria para generar ficheros desde el 22/11/2026. Validación al generar la remesa, con la lista de terceros incompletos.
-- Compañía: identificador de presentador (NIF + sufijo) por cuenta bancaria; para adeudos, el **identificador de acreedor SEPA** (ES + dígitos de control + sufijo + NIF).
+- Cuenta bancaria de la compañía: tabla **Normas bancarias** (`es_norms`, doctype hijo `ES Bank Account Norm`) con una fila por norma (Transferencias SEPA, Adeudos SEPA, Confirming) y su sufijo, porque el banco puede asignar un sufijo distinto a cada servicio. El identificador de presentador es NIF + sufijo de la norma del fichero; para adeudos, el **identificador de acreedor SEPA** (ES + dígitos de control + sufijo de la norma de adeudos + NIF). Sin la norma, el fichero no se genera y el error indica dónde añadirla.
 
 ## 3. Mandatos
 
-Doctype "Mandato SEPA" (módulo ES Sepa, nombre final `ES Sepa Mandate`, por compañía, en `company_data_to_be_ignored` porque es un dato maestro que no debe borrarse con las transacciones, R8):
+El mandato se guarda **en la cuenta bancaria del cliente** (`Bank Account` con `party_type = Customer`; una cuenta, un mandato), sin doctype propio (revisión del 31/10/2026; sustituye a `ES Sepa Mandate`):
 
 | Campo | Contenido |
 |---|---|
-| `referencia_mandato` | Única por acreedor (máx. 35 caracteres) |
-| `customer`, `bank_account` | Deudor y su IBAN |
-| `esquema` | CORE / B2B |
-| `tipo` | Recurrente / Único |
-| `fecha_firma`, `documento_firmado` | Fecha y PDF firmado |
-| `estado` | Activo / Cancelado / Caducado |
-| `fecha_ultimo_adeudo` | Para la caducidad (un mandato sin uso durante 36 meses caduca **[verificar]**) |
-| `secuencia` | Primer adeudo (FRST) o recurrente (RCUR), según el esquema y el banco **[verificar si las guías 2025 aún exigen distinguirlos]** |
+| `es_sepa_mandate_reference` | Única entre cuentas (máx. 35 caracteres, caracteres SEPA) |
+| `es_sepa_scheme` | CORE / B2B (vacío: la cuenta no tiene mandato) |
+| `es_sepa_mandate_type` | Recurrente / Único |
+| `es_sepa_mandate_date`, `es_sepa_mandate_form` | Fecha y PDF firmado |
+| `es_sepa_mandate_status` | Activo / Cancelado / Caducado (pasa a Caducado al guardar si no se usa en 36 meses **[verificar]**) |
+| `es_sepa_last_debit`, `es_sepa_first_debit_done` | Último adeudo y si ya hubo un primero (FRST / RCUR) |
 
-En el Customer: modo de pago "Domiciliación bancaria" y mandato por defecto.
+Solo se admite en cuentas de clientes. La remesa elige la cuenta del cliente con mandato activo del esquema de la remesa.
 
 ## 4. Remesas de transferencias (pagos)
 
@@ -77,10 +75,10 @@ En el Customer: modo de pago "Domiciliación bancaria" y mandato por defecto.
 Doctype propio "Remesa de Adeudos" (módulo ES Sepa; nombre final `ES Sepa Direct Debit Batch`; submittable), porque ERPNext no tiene un equivalente para cobros:
 
 - Cabecera: compañía, cuenta bancaria de abono, esquema (CORE/B2B), fecha de cobro solicitada, formato `pain.008`.
-- Líneas: factura de venta, cliente, mandato, importe pendiente, `EndToEndId`, secuencia.
+- Líneas: factura de venta, cliente, cuenta bancaria con el mandato, importe pendiente, `EndToEndId`, secuencia.
 - Selección asistida: facturas validadas con modo de pago "Domiciliación bancaria", vencimiento en el rango y mandato activo.
 - Validaciones: mandato activo y del mismo esquema, IBAN, dirección estructurada, plazos mínimos de presentación del banco **[verificar]**.
-- Al validar: genera el XML y crea los Payment Entries con la fecha de cobro (o los deja en borrador, según ajuste de la compañía). Actualiza `fecha_ultimo_adeudo` de cada mandato.
+- Al validar: genera el XML y crea los Payment Entries con la fecha de cobro (o los deja en borrador, según ajuste de la compañía). Actualiza `es_sepa_last_debit` y `es_sepa_first_debit_done` de cada cuenta.
 
 ## 6. Respuestas, devoluciones y rechazos
 

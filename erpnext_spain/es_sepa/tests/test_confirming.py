@@ -6,39 +6,32 @@ from frappe.utils import add_days, flt, nowdate
 from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_contabilidad.closing import leaf
 from erpnext_spain.es_sepa import confirming
-from erpnext_spain.es_sepa.tests.test_sepa import SepaTestCase
+from erpnext_spain.es_sepa.tests.test_sepa import SepaTestCase, make_iban
 
 
 class TestConfirming(SepaTestCase):
 	@classmethod
 	def setUpClass(cls):
 		super().setUpClass()
-		cls.contracts = {}
-		for option in (confirming.OPTION_A, confirming.OPTION_B):
-			number = f"CONF-{option[0]}"
-			name = frappe.db.get_value("ES Confirming Contract", {"contract_number": number})
-			if not name:
-				name = (
-					frappe.get_doc(
-						{
-							"doctype": "ES Confirming Contract",
-							"company": cls.company,
-							"bank": cls.bank,
-							"contract_number": number,
-							"bank_account": cls.company_account,
-							"accounting_option": option,
-							"debt_account": pgc.account_by_number(cls.company, "4100")
-							if option == confirming.OPTION_B
-							else None,
-						}
-					)
-					.insert()
-					.name
-				)
-			if option == confirming.OPTION_B:
-				frappe.db.set_value("ES Confirming Contract", name, "debt_account", leaf(cls.company, "520"))
-				frappe.clear_document_cache("ES Confirming Contract", name)
-			cls.contracts[option] = name
+		# Una cuenta por opción contable: cada cuenta tiene su norma «Confirming».
+		cls.accounts = {confirming.OPTION_A: cls.company_account}
+		ledger = cls.bank_ledger("5722", "Banco confirming")
+		cls.accounts[confirming.OPTION_B] = cls.bank_account(
+			"Cuenta confirming B", make_iban("21000418450200051998"), company_account=ledger
+		)
+		cls.ensure_norms(
+			cls.accounts[confirming.OPTION_A],
+			{"Confirming": "000"},
+			contract_number="CONF-A",
+			accounting_option=confirming.OPTION_A,
+		)
+		cls.ensure_norms(
+			cls.accounts[confirming.OPTION_B],
+			{"Confirming": "000"},
+			contract_number="CONF-B",
+			accounting_option=confirming.OPTION_B,
+			debt_account=leaf(cls.company, "520"),
+		)
 
 	def supplier(self, name: str, account_number: str, email: bool = True, address: bool = True) -> str:
 		supplier, _account = self.party("Supplier", name, account_number, address=address)
@@ -96,7 +89,7 @@ class TestConfirming(SepaTestCase):
 			{
 				"doctype": "ES Confirming Batch",
 				"company": self.company,
-				"contract": self.contracts[option],
+				"bank_account": self.accounts[option],
 				"remittance_date": nowdate(),
 				"lines": rows or confirming.get_invoices(self.company),
 			}
@@ -159,7 +152,7 @@ class TestConfirming(SepaTestCase):
 		batch.submit()
 		payments = confirming.register_maturity(batch.name, nowdate())
 		self.assertAlmostEqual(frappe.db.get_value("Purchase Invoice", pi.name, "outstanding_amount"), 0)
-		iban = frappe.db.get_value("Bank Account", self.company_account, "iban")
+		iban = frappe.db.get_value("Bank Account", self.accounts[confirming.OPTION_A], "iban")
 		importer.import_norma43(
 			self.company,
 			norma43_file(

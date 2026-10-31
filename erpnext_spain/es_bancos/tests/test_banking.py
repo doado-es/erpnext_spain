@@ -148,17 +148,9 @@ class TestNorma43Import(SepaTestCase):
 	def test_direct_debit_matched_by_end_to_end_id(self):
 		"""Criterio 4: el cobro de la remesa se casa solo por el EndToEndId."""
 		customer, account = self.party("Customer", "_Test ES Cliente N43", "21000418450200051414")
-		mandate = frappe.get_doc(
-			{
-				"doctype": "ES Sepa Mandate",
-				"mandate_reference": "MND-N43-1",
-				"company": self.company,
-				"customer": customer,
-				"bank_account": account,
-				"scheme": "CORE",
-				"signature_date": add_days(nowdate(), -10),
-			}
-		).insert()
+		from erpnext_spain.es_sepa.tests.test_sepa import TestDirectDebit
+
+		mandate = TestDirectDebit.mandate(self, customer, account)
 		si = frappe.get_doc(
 			{
 				"doctype": "Sales Invoice",
@@ -190,7 +182,7 @@ class TestNorma43Import(SepaTestCase):
 				"bank_account": self.caixa,
 				"scheme": "CORE",
 				"collection_date": nowdate(),
-				"lines": [{"sales_invoice": si.name, "mandate": mandate.name, "amount": 80}],
+				"lines": [{"sales_invoice": si.name, "bank_account": mandate, "amount": 80}],
 			}
 		).insert()
 		batch.submit()

@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-10-31 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Sepa",
  "name": "ES Sepa Direct Debit Line",
@@ -33,10 +33,10 @@
    "in_list_view": 1
   },
   {
-   "fieldname": "mandate",
+   "fieldname": "bank_account",
    "fieldtype": "Link",
-   "label": "Mandato",
-   "options": "ES Sepa Mandate",
+   "label": "Cuenta del cliente (mandato)",
+   "options": "Bank Account",
    "reqd": 1,
    "in_list_view": 1
   },
@@ -100,7 +100,7 @@
  "field_order": [
   "sales_invoice",
   "customer",
-  "mandate",
+  "bank_account",
   "amount",
   "sequence",
   "end_to_end_id",
