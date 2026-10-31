@@ -148,8 +148,14 @@ doctype_js.update(
 	}
 )
 
+# Acciones masivas (spec 15): facturar albaranes, enviar facturas, comprobar NIF.
+BULK_ACTIONS_JS = "es_facturacion/public/js/bulk_actions.js"
 doctype_list_js = {
-	"Sales Invoice": "es_verifactu/public/js/sales_invoice_list.js",
+	"Sales Invoice": ["es_verifactu/public/js/sales_invoice_list.js", BULK_ACTIONS_JS],
+	"Delivery Note": BULK_ACTIONS_JS,
+	"Purchase Receipt": BULK_ACTIONS_JS,
+	"Customer": BULK_ACTIONS_JS,
+	"Supplier": BULK_ACTIONS_JS,
 }
 
 # Métodos Jinja para los Print Formats (doc 12 §14, patrón India Compliance;

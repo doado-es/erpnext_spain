@@ -92,6 +92,16 @@ CUSTOM_FIELDS = {
 		read_only_link("es_impairment_entry", "Asiento de deterioro", "es_impairment_amount"),
 		read_only_link("es_loss_entry", "Asiento de pérdida", "es_impairment_entry"),
 		read_only_link("es_recovery_entry", "Asiento de recuperación", "es_loss_entry"),
+		# Envío masivo por correo (spec 15, F3).
+		{
+			"fieldname": "es_emailed_on",
+			"label": "Enviada por correo el",
+			"fieldtype": "Datetime",
+			"read_only": 1,
+			"allow_on_submit": 1,
+			"no_copy": 1,
+			"insert_after": "es_recovery_entry",
+		},
 	],
 	"Company": [
 		{

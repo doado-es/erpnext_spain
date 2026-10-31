@@ -4,7 +4,7 @@ Lista única de lo que falta, para ir cerrándolo por orden. Cada punto remite a
 
 ## Funcionalidades nuevas (no son de cumplimiento)
 
-Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar.
+Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `docs/specs/15-funcionalidades.md`: facturación masiva de albaranes de venta y de compra, envío masivo de facturas por correo y comprobación de NIF (formato) y NIF-IVA (VIES). Pendiente: contraste con el censo de la AEAT (requiere certificado) y probar VIES contra el servicio real. La tabla siguiente conserva la petición original.
 
 | Id | Funcionalidad | Notas |
 |---|---|---|

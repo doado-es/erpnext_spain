@@ -53,9 +53,41 @@ COMPANY_INCIDENTS_EMAIL_FIELD = {
 	),
 }
 
+
+# Resultado de la comprobación del NIF o del NIF-IVA en VIES (spec 15, F4).
+def vies_fields(insert_after: str) -> list[dict]:
+	return [
+		{
+			"fieldname": "es_vies_status",
+			"label": "Comprobación del NIF",
+			"fieldtype": "Data",
+			"read_only": 1,
+			"no_copy": 1,
+			"insert_after": insert_after,
+			"in_standard_filter": 1,
+		},
+		{
+			"fieldname": "es_vies_name",
+			"label": "Nombre registrado en VIES",
+			"fieldtype": "Data",
+			"read_only": 1,
+			"no_copy": 1,
+			"insert_after": "es_vies_status",
+		},
+		{
+			"fieldname": "es_vies_checked_on",
+			"label": "Fecha de la comprobación",
+			"fieldtype": "Datetime",
+			"read_only": 1,
+			"no_copy": 1,
+			"insert_after": "es_vies_name",
+		},
+	]
+
+
 CUSTOM_FIELDS = {
-	"Customer": [TRADE_NAME_FIELD],
-	"Supplier": [TRADE_NAME_FIELD | {"insert_after": "supplier_name"}],
+	"Customer": [TRADE_NAME_FIELD, *vies_fields("tax_id")],
+	"Supplier": [TRADE_NAME_FIELD | {"insert_after": "supplier_name"}, *vies_fields("tax_id")],
 	"Company": [
 		COMPANY_TAB_FIELD,
 		COMPANY_GENERAL_SECTION_FIELD,
@@ -66,8 +98,8 @@ CUSTOM_FIELDS = {
 # Campos propios de la app por doctype, para la limpieza simétrica de la
 # desinstalación (doc 12 §12).
 FIELDS_PER_DOCTYPE = {
-	"Customer": ["es_trade_name"],
-	"Supplier": ["es_trade_name"],
+	"Customer": ["es_trade_name", "es_vies_status", "es_vies_name", "es_vies_checked_on"],
+	"Supplier": ["es_trade_name", "es_vies_status", "es_vies_name", "es_vies_checked_on"],
 	"Company": ["es_tab", "es_seccion_general", "es_incidents_email"],
 }
 

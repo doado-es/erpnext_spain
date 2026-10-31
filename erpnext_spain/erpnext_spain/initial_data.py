@@ -105,7 +105,14 @@ def ensure_global_records() -> dict[str, list[str]]:
 		"Holiday List": ensure_holiday_list(),
 		"Payment Terms Template": ensure_payment_terms(),
 		"Address Template": ensure_address_template(),
+		"Email Template": ensure_email_template(),
 	}
+
+
+def ensure_email_template() -> list[str]:
+	from erpnext_spain.es_facturacion.mailing import ensure_template
+
+	return ensure_template()
 
 
 def ensure_modes_of_payment() -> list[str]:
