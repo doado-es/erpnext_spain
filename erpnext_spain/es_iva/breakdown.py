@@ -47,12 +47,31 @@ def vat_breakdown(doc) -> list[dict]:
 
 	details = doc.get("item_wise_tax_details") or []
 	if details:
+		# Tipo de cada fila de impuesto: el suyo o, si es de importe fijo, el que
+		# resulta de su base y su cuota totales (no de cada artículo: el reparto
+		# redondea por línea).
+		totals: dict[str, list[float]] = {}
+		for detail in details:
+			total = totals.setdefault(detail.tax_row, [0.0, 0.0, 0.0])
+			total[0] = total[0] or flt(detail.rate)
+			total[1] += flt(detail.taxable_amount)
+			total[2] += flt(detail.amount)
+		row_rates = {
+			name: effective_rate(rate, base, amount) for name, (rate, base, amount) in totals.items()
+		}
 		for detail in details:
 			row = taxes.get(detail.tax_row)
 			if not row:
 				continue
 			override = item_overrides.get(detail.item_row) or {}
-			add(groups, row, override, flt(detail.rate), flt(detail.taxable_amount), flt(detail.amount))
+			add(
+				groups,
+				row,
+				override,
+				flt(detail.rate) or row_rates[detail.tax_row],
+				flt(detail.taxable_amount),
+				flt(detail.amount),
+			)
 	else:
 		# Documentos sin detalle por artículo (anteriores a v16 o creados por
 		# código): base = cuota / tipo, o la base de la factura si el tipo es 0.
@@ -64,12 +83,28 @@ def vat_breakdown(doc) -> list[dict]:
 				if rate
 				else flt(doc.get("base_net_total")) or flt(doc.get("net_total")) * conversion
 			)
-			add(groups, row, {}, rate, base, amount)
+			add(groups, row, {}, effective_rate(rate, base, amount), base, amount)
 
 	for group in groups.values():
 		group["taxable_base"] = flt(group["taxable_base"], 2)
 		group["tax_amount"] = flt(group["tax_amount"], 2)
 	return list(groups.values())
+
+
+# Tipos de IVA y de recargo de equivalencia vigentes o recientes, para reconocer el
+# tipo de una fila de importe fijo («Actual», sin tipo) a partir de base y cuota.
+KNOWN_RATES = (21, 10, 5, 4, 2, 0, 5.2, 1.75, 1.4, 0.62, 0.5, 0.26)
+
+
+def effective_rate(rate: float, base: float, amount: float) -> float:
+	"""Tipo de la fila. Si no lo tiene (fila de importe fijo) pero hay base y cuota,
+	el que resulta de ellas, ajustado al tipo legal más cercano si difiere en menos de
+	0,05 puntos (redondeos de la cuota)."""
+	if rate or not base or not amount:
+		return rate
+	computed = abs(amount) * 100 / abs(base)
+	nearest = min(KNOWN_RATES, key=lambda known: abs(known - computed))
+	return nearest if abs(nearest - computed) < 0.05 else flt(computed, 2)
 
 
 def add(groups: OrderedDict, row, override: dict, rate: float, base: float, amount: float) -> None:

@@ -268,3 +268,27 @@ class TestVatRowsNonPgc(IntegrationTestCase):
 		doc = frappe._dict(doctype="Sales Invoice", company=other, name="X", docstatus=1, items=[])
 		rows.validate(doc)
 		self.assertNotIn("es_party_country", doc)
+
+
+class TestEffectiveRate(IntegrationTestCase):
+	"""Filas de IVA de importe fijo («Actual»): el tipo sale de base y cuota."""
+
+	def test_rate_from_base_and_amount(self):
+		from erpnext_spain.es_iva.breakdown import effective_rate
+
+		self.assertEqual(effective_rate(21, 100, 21), 21)  # con tipo, se respeta
+		self.assertEqual(effective_rate(0, 1993, 418.53), 21)
+		self.assertEqual(effective_rate(0, 265.66, 55.8), 21)  # cuota redondeada
+		self.assertEqual(effective_rate(0, 1000, 14), 1.4)  # recargo de equivalencia
+		self.assertEqual(effective_rate(0, 1000, 0), 0)
+		self.assertEqual(effective_rate(0, 1000, 123), 12.3)  # sin tipo legal cercano
+
+
+class TestReportsTargets(IntegrationTestCase):
+	def test_report_ref_doctypes_exist(self):
+		"""Los informes de la app apuntan a doctypes que existen (el borrador de
+		liquidación quedó apuntando a ES Vat Register, ya borrado)."""
+		for report in frappe.get_all(
+			"Report", filters={"module": ["like", "ES %"]}, fields=["name", "ref_doctype"]
+		):
+			self.assertTrue(frappe.db.exists("DocType", report.ref_doctype), report)
