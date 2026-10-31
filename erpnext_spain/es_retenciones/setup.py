@@ -42,7 +42,7 @@ CUSTOM_FIELDS = {
 			"fieldtype": "Select",
 			"options": options(WITHHOLDING_KEYS),
 			"insert_after": "es_tax_model",
-			"description": "Se copia a la fila de retención de la factura (spec 03).",
+			"description": "Se copia a la fila de retención de la factura.",
 		},
 		{
 			"fieldname": "es_column_190",

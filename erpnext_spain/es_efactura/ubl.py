@@ -162,9 +162,7 @@ def build(si) -> UblInvoice:
 		)
 	tax_rows = {row.name: row for row in si.taxes}
 	if any(not row.get("es_tax_type") for row in si.taxes):
-		frappe.throw(
-			_("La factura {0} tiene filas de impuestos sin clasificar (spec 03).").format(si.name), UblError
-		)
+		frappe.throw(_("La factura {0} tiene filas de impuestos sin clasificar.").format(si.name), UblError)
 
 	parts = vat_breakdown(si)
 	taxes = [

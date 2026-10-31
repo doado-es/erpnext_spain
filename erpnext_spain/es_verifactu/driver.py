@@ -233,7 +233,7 @@ class VerifactuDriver(AEATDriver):
 				f" {record.company} (posición {record.chain_index}) no"
 				" tiene predecesor en el libro y no se puede construir su"
 				" Encadenamiento. Remedio: no elimine registros del libro"
-				" manualmente (es historia legal inmutable, spec 04 §2.2);"
+				" manualmente (es historia legal inmutable);"
 				" restaure el registro anterior o repare la cadena antes de"
 				" volver a remitir.",
 				frappe.ValidationError,

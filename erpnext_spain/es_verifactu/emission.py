@@ -273,7 +273,7 @@ def on_submit(doc: Document, method: str | None = None) -> None:
 		if frappe.flags.get(FLAG_TEST_FAIL_SUBMIT):
 			frappe.throw(
 				"es_test_fail_submit: fallo simulado DESPUÉS del renombre (seam de"
-				" test del lote 4b para verificar que el rollback libera el número"
+				" test para verificar que el rollback libera el número"
 				" fiscal).",
 				frappe.ValidationError,
 			)
@@ -454,7 +454,7 @@ def _block_amendment(doc: Document) -> None:
 			f"No se permite «amend» de la factura {doc.amended_from}: VeriFactu"
 			" exige trazabilidad de la cadena (factura → registro Alta → libro)"
 			" y una factura amendada duplicaría la identidad de la original ya"
-			" registrada (spec 04 §4). Remedio: ANULE la factura original (su"
+			" registrada. Remedio: ANULE la factura original (su"
 			" cancelación genera el RegistroAnulación) y emita una rectificativa"
 			" (tipo R1–R5) enlazada con «Devolver contra» o con el trío de"
 			" rectificada externa.",
@@ -472,7 +472,7 @@ def _validate_tax_breakdown(doc: Document) -> None:
 		frappe.throw(
 			f"La factura {doc.name} no permite construir el desglose fiscal AEAT:"
 			f" {exc} Remedio: use plantillas de impuestos con la convención de"
-			" descripción «IVA - 21» (spec 04 §7) o, si la operación es especial,"
+			" descripción «IVA - 21» o, si la operación es especial,"
 			" complete el desglose real en el módulo de impuestos y deje aquí los"
 			" escape hatches fiscales.",
 			frappe.ValidationError,
@@ -483,8 +483,8 @@ def _validate_tax_breakdown(doc: Document) -> None:
 		frappe.throw(
 			f"La factura {doc.name} no tiene desglose fiscal (impuestos españoles)"
 			" ni causa de exención: el RegistroAlta de VeriFactu exige el"
-			" Desglose (DetalleDesglose) o la causa de exención L10 (spec 04"
-			" §4/§7). Remedio: añada los impuestos correspondientes a la factura"
+			" Desglose (DetalleDesglose) o la causa de exención L10."
+			" Remedio: añada los impuestos correspondientes a la factura"
 			" (plantilla «IVA - 21») o seleccione la causa de exención en la"
 			" sección VeriFactu de la factura.",
 			frappe.ValidationError,
@@ -505,7 +505,7 @@ def _validate_simplified(doc: Document) -> None:
 		frappe.throw(
 			f"La factura {doc.name} es de tipo simplificado («{invoice_type}»: F2/R5)"
 			" pero no es una venta POS: los tickets simplificados solo pueden"
-			" emitirse por caja, coherencia tipo↔POS del spec 04 §4. Remedio:"
+			" emitirse por caja. Remedio:"
 			" márquela como venta POS (is_pos) con su forma de pago, o cambie el"
 			" tipo de factura a F1 (ordinaria).",
 			frappe.ValidationError,
@@ -522,8 +522,8 @@ def _validate_tax_ids(doc: Document) -> None:
 	if not issuer_nif:
 		frappe.throw(
 			f"La compañía emisora {doc.company} no tiene NIF: el RegistroAlta"
-			" exige el IDEmisorFactura y la AEAT rechazaría el envío (spec 04"
-			" §4.2). Remedio: fije el NIF de la compañía en su ficha (el campo"
+			" exige el IDEmisorFactura y la AEAT rechazaría el envío."
+			" Remedio: fije el NIF de la compañía en su ficha (el campo"
 			" «Tax ID»)",
 			frappe.ValidationError,
 		)
@@ -550,7 +550,7 @@ def _validate_tax_ids(doc: Document) -> None:
 		frappe.throw(
 			f"El cliente {doc.customer} de la factura {doc.name} es español y no"
 			" tiene NIF: el RegistroAlta exige el destinatario y la AEAT"
-			" rechazaría el envío (spec 04 §4.2, spec 14 §2). Remedio: fije el"
+			" rechazaría el envío. Remedio: fije el"
 			" NIF del cliente en su ficha (pestaña «Tax ID») y reintente.",
 			frappe.ValidationError,
 		)
@@ -593,7 +593,7 @@ def _validate_rectification(doc: Document) -> None:
 				f"La factura rectificativa {doc.name} enlaza a {original}, que está"
 				f" en estado VeriFactu «{status or 'sin estado'}»: solo se rectifica"
 				" una factura cuyo alta esté en estado"
-				f" «{INVOICE_STATUS_ISSUANCE_ACCEPTED}» por la AEAT (spec 04 §6)."
+				f" «{INVOICE_STATUS_ISSUANCE_ACCEPTED}» por la AEAT."
 				" Remedio: espere a que la AEAT procese el alta de la original (o"
 				" subsánela si fue rechazada) antes de emitir la rectificativa.",
 				frappe.ValidationError,
@@ -622,7 +622,7 @@ def _validate_rectification(doc: Document) -> None:
 			frappe.throw(
 				f"Ya existe otra rectificativa pendiente o errónea sobre {original}:"
 				" el libro admite UNA rectificativa en curso por factura original"
-				" (spec 04 §6) — una segunda competiría por el mismo hueco antes"
+				" — una segunda competiría por el mismo hueco antes"
 				" de conocer el resultado de la AEAT. Remedio: espere a que la"
 				" AEAT acepte la rectificativa en curso (o subsánela si fue"
 				" rechazada) y reintente.",
@@ -639,7 +639,7 @@ def _validate_rectification(doc: Document) -> None:
 		frappe.throw(
 			f"La factura {doc.name} es rectificativa (tipo «{invoice_type}») pero no"
 			" enlaza ninguna factura rectificada: ni «Devolver contra» ni el"
-			" trío de rectificada externa están completos (spec 04 §6)."
+			" trío de rectificada externa están completos."
 			" Remedio: enlácela a la original con «Devolver contra», o complete"
 			" NIF + número + fecha de la rectificada externa en la sección"
 			" VeriFactu de la factura.",
@@ -655,7 +655,7 @@ def _require_invoice_type(doc: Document) -> None:
 		frappe.throw(
 			f"{doc.company} emite con VeriFactu pero la factura {doc.name} no"
 			" indica tipo de factura: sin él no se puede resolver la serie"
-			" fiscal ni el TipoFactura del RegistroAlta (spec 04 §2.3/§4)."
+			" fiscal ni el TipoFactura del RegistroAlta."
 			" Remedio: fije el campo «Tipo de factura» (VeriFactu) en la"
 			" sección VeriFactu de la factura.",
 			frappe.ValidationError,
@@ -682,7 +682,7 @@ def before_cancel(doc: Document, method: str | None = None) -> None:
 			f"La factura {doc.name} está en estado VeriFactu «{status or 'sin'}»"
 			" y solo puede anularse si su alta fue aceptada («Alta Aceptada»):"
 			" el alta pendiente/errónea se corrige por SUBSANACIÓN, no"
-			" cancelando la factura (spec 04 §6). Remedio: espere a que la AEAT"
+			" cancelando la factura. Remedio: espere a que la AEAT"
 			" procese el alta (o subsánela si fue rechazada) y después anule la"
 			" factura, que generará su RegistroAnulación.",
 			frappe.ValidationError,
@@ -835,8 +835,8 @@ def _fiscal_series(company: str, invoice_type: str | None) -> str:
 	if not invoice_type:
 		frappe.throw(
 			f"{company} emite con VeriFactu pero la factura no indica tipo de"
-			" factura: sin él no se puede resolver la serie fiscal (spec 04"
-			" §2.3). Remedio: fije el campo «Tipo de factura» (VeriFactu) de la"
+			" factura: sin él no se puede resolver la serie fiscal."
+			" Remedio: fije el campo «Tipo de factura» (VeriFactu) de la"
 			" factura y reintente el submit.",
 			frappe.ValidationError,
 		)
@@ -851,7 +851,7 @@ def _fiscal_series(company: str, invoice_type: str | None) -> str:
 		frappe.throw(
 			f"No hay serie mapeada para el tipo de factura «{invoice_type}» en"
 			f" {company}: el renombre a la serie fiscal es el paso que consume"
-			" el número legal de la factura (spec 04 §4). Remedio: configure el"
+			" el número legal de la factura. Remedio: configure el"
 			f" mapeo serie↔tipo para «{invoice_type}» en la ficha de la"
 			f" compañía {company} (sección VeriFactu, «Series por tipo de"
 			" factura») y reintente el submit.",

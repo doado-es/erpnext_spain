@@ -60,7 +60,7 @@ def rectify(invoice: str) -> str:
 		frappe.throw(
 			f"El usuario {frappe.session.user} no tiene permiso AEAT de {company}:"
 			" la subsanación reenvía el registro a la AEAT y exige el chequeo"
-			" explícito por empresa (doc 12 §18). Remedio: conceda al usuario un rol con permiso (roles de"
+			" explícito por empresa. Remedio: conceda al usuario un rol con permiso (roles de"
 			" notificación de la compañía o, en su defecto, Accounts Manager)"
 			" y acceso de lectura a la compañía.",
 			frappe.PermissionError,
@@ -206,7 +206,7 @@ def _validate_order(company: str, erroneous) -> None:
 	if frontier and frontier.name != erroneous.name:
 		frappe.throw(
 			f"No puede subsanarse la factura {erroneous.sales_invoice}: la compañía"
-			f" {company} exige SUBSANACIÓN EN ORDEN (spec 04 §9) y el registro más"
+			f" {company} exige SUBSANACIÓN EN ORDEN y el registro más"
 			" antiguo pendiente/erróneo sin curar del SIF es otro — el"
 			f" {frontier.name} (cadena {frontier.chain_index}, factura"
 			f" {frontier.sales_invoice or '(sin factura)'}). Remedio: espere a que"

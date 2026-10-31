@@ -1,10 +1,10 @@
-<!-- Factura España VeriFactu — Print Format de Sales Invoice (spec 04 §11).
+<!-- Factura España VeriFactu — Print Format de Sales Invoice.
 Formato Jinja custom completo (HTML propio, sin builder): layout español
 mínimo con cabecera de compañía (razón social + NIF), bloque de cliente,
 tabla de líneas, desglose de impuestos, totales y el bloque legal VeriFactu
 (QR + enlace de validación + nota de remisión + estado cuando procede).
 Los borradores (docstatus 0) imprimen rotulados «NO ES FACTURA — BORRADOR»
-(spec 04 §4: la impresión de un borrador debe ser inequívoca) y SIN bloque
+(la impresión de un borrador debe ser inequívoca) y SIN bloque
 VeriFactu (el QR referencia el número fiscal final, que un borrador no tiene).
 Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 
@@ -42,7 +42,7 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 		.es-factura .pie { margin-top: 32px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 10px; color: #777; display: flex; justify-content: space-between; }
 	</style>
 
-	{# --- BORRADOR: rotulado inequívoco (spec 04 §4), SIN bloque VeriFactu --- #}
+	{# --- BORRADOR: rotulado inequívoco, SIN bloque VeriFactu --- #}
 	{%- if doc.docstatus == 0 -%}
 		<div class="rotulo-borrador">NO ES FACTURA — BORRADOR</div>
 	{%- endif -%}
@@ -174,7 +174,7 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 		</tr>
 	</table>
 
-	{# --- Bloque legal VeriFactu: SOLO facturas emitidas (spec 04 §11) --- #}
+	{# --- Bloque legal VeriFactu: SOLO facturas emitidas --- #}
 	{%- if doc.docstatus != 0 and get_verifactu_qr_code(doc) -%}
 		<div class="bloque-verifactu">
 			<div class="qr">{{ get_verifactu_qr_code(doc) }}</div>

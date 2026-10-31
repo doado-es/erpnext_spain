@@ -29,7 +29,7 @@
   },
   {
    "default": "0",
-   "description": "Factura simplificada (F2) y rectificativa de simplificadas (R5): exige coherencia con POS en la emisión (spec 04 §4).",
+   "description": "Factura simplificada (F2) y rectificativa de simplificadas (R5): exige coherencia con POS en la emisión.",
    "fieldname": "is_simplified",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -37,7 +37,7 @@
    "label": "Simplificada"
   },
   {
-   "description": "S: por sustitución · I: incremental (por diferencias). Vacío: tipo no rectificativo (F1/F2/F3). El valor por defecto del catálogo es «I»; el lote de emisión lo deriva según la rectificación (spec 04 §6).",
+   "description": "S: por sustitución · I: incremental (por diferencias). Vacío: tipo no rectificativo (F1/F2/F3). El valor por defecto del catálogo es «I»; la emisión lo deriva según la rectificación.",
    "fieldname": "rectification_type",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -48,7 +48,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-31 00:00:00.000000",
+ "modified": "2026-10-31 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Verifactu",
  "name": "ES Invoice Type",

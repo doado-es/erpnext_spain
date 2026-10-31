@@ -42,7 +42,7 @@ class ESVerifactuBillingRecord(Document):
 					f"El registro de facturación {self.name or '(nuevo)'} no puede crearse en"
 					f" estado «{self.status}»: todo registro nace en «{PENDING_SEND_STATE}»"
 					" y solo el procesador de respuestas de la AEAT transiciona estados"
-					" (spec 04 §3). Remedio: cree el registro sin estado (nace PendienteEnvio)"
+					". Remedio: cree el registro sin estado (nace PendienteEnvio)"
 					" y deje que la respuesta de la AEAT lo transicione.",
 					frappe.ValidationError,
 				)
@@ -60,7 +60,7 @@ class ESVerifactuBillingRecord(Document):
 				f"El registro de facturación {self.name} está en estado terminal"
 				f" «{previous}» y queda congelado: el libro de registros es inmutable"
 				" y solo el procesador de respuestas de la AEAT puede transicionar"
-				" estados (spec 04 §2.2/§3). Remedio: para corregir un registro"
+				" estados. Remedio: para corregir un registro"
 				" rechazado use la subsanación (crea un registro NUEVO encadenado con"
 				" el indicador «Subsanación»); para anular una factura aceptada use la"
 				" cancelación, que genera su RegistroAnulación.",

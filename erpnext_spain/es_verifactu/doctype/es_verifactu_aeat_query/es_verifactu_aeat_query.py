@@ -118,7 +118,7 @@ def query_aeat(name: str) -> dict:
 		frappe.throw(
 			f"El usuario {frappe.session.user} no tiene permiso AEAT de {doc.company}:"
 			" la consulta usa el certificado de la empresa contra la AEAT y exige el"
-			" chequeo explícito por empresa (doc 12 §18). Remedio: conceda al usuario un rol con"
+			" chequeo explícito por empresa. Remedio: conceda al usuario un rol con"
 			" permiso (roles de notificación de la compañía o, en su defecto,"
 			" Accounts Manager) y acceso de lectura a la compañía.",
 			frappe.PermissionError,

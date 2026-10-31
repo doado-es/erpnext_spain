@@ -131,7 +131,7 @@ COMPANY_FIELDS = [
 		"default": "Descarga manual",
 		"insert_after": "es_einvoice_b2b",
 		"depends_on": "eval:doc.es_einvoice_b2b",
-		"description": "SPFE de la AEAT o plataforma privada (decisión A9 pendiente). «Simulado» solo para pruebas.",
+		"description": "SPFE de la AEAT o plataforma privada. «Simulado» solo para pruebas.",
 	},
 ]
 

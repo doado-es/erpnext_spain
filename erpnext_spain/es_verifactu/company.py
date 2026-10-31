@@ -57,7 +57,7 @@ def _freeze_activation_date(doc: Document, previous: dict | None) -> None:
 			f"No se puede cambiar la fecha de activación de VeriFactu de {doc.name}"
 			f" («{old}» → «{new}»): la empresa ya tiene registros de"
 			" facturación emitidos con esa semántica y moverla invalidaría el"
-			" libro (spec 04 §2.1). Remedio: mantenga la fecha original; para"
+			" libro. Remedio: mantenga la fecha original; para"
 			" dejar de emitir registros nuevos, desactive VeriFactu (los"
 			" registros pendientes seguirán remitiéndose a la AEAT).",
 			frappe.ValidationError,
@@ -90,7 +90,7 @@ def _validate_activation(doc: Document) -> None:
 		frappe.throw(
 			f"{doc.name} no puede activar VeriFactu sin NIF: el NIF del emisor"
 			" identifica los registros ante la AEAT y sin él las respuestas no"
-			" se pueden enrutar (spec 04 §2.1). Remedio: complete el campo NIF"
+			" se pueden enrutar. Remedio: complete el campo NIF"
 			" de la compañía y reintente la activación.",
 			frappe.ValidationError,
 		)
@@ -114,7 +114,7 @@ def _validate_activation(doc: Document) -> None:
 		frappe.throw(
 			f"El NIF «{tax_id}» ya pertenece a otra empresa del site"
 			f" ({duplicate}): las respuestas de la AEAT se enrutan por NIF del"
-			" emisor y dos empresas no pueden compartir NIF (spec 04 §2.1)."
+			" emisor y dos empresas no pueden compartir NIF."
 			" Remedio: asigne a cada empresa su NIF propio; si {duplicate} es"
 			" un dato de prueba, corrija su NIF.",
 			frappe.ValidationError,
@@ -126,8 +126,8 @@ def _validate_activation(doc: Document) -> None:
 		frappe.throw(
 			f"Falta la fecha de activación de VeriFactu de {doc.name}: las"
 			" facturas emitidas (FechaExpedicion) desde esa fecha generan"
-			" registro y las anteriores son legado pre-VeriFactu (spec 04"
-			" §2.1). Remedio: indique la fecha desde la que la empresa emite"
+			" registro y las anteriores son legado pre-VeriFactu."
+			" Remedio: indique la fecha desde la que la empresa emite"
 			" con registro VeriFactu.",
 			frappe.ValidationError,
 		)
@@ -137,7 +137,7 @@ def _validate_activation(doc: Document) -> None:
 		frappe.throw(
 			f"Falta la serie de borradores de {doc.name}: con VeriFactu activo,"
 			" los borradores usan un nombre temporal y el número fiscal solo se"
-			" consume al emitir (spec 04 §4). Remedio: indique un patrón de"
+			" consume al emitir. Remedio: indique un patrón de"
 			" numeración para borradores que no comparta prefijo con las series"
 			" mapeadas, p. ej. «BORRADOR-.#####».",
 			frappe.ValidationError,
@@ -149,8 +149,8 @@ def _validate_activation(doc: Document) -> None:
 		frappe.throw(
 			f"La serie de borradores «{draft_series}» colisiona con una serie"
 			" mapeada: el contador de numeración de ERPNext es global por"
-			" prefijo y la colisión quemaría números de la serie fiscal (spec"
-			" 04 §2.1). Remedio: use un prefijo distinto para los borradores,"
+			" prefijo y la colisión quemaría números de la serie fiscal."
+			" Remedio: use un prefijo distinto para los borradores,"
 			" p. ej. «BORRADOR-.#####».",
 			frappe.ValidationError,
 		)
@@ -174,7 +174,7 @@ def _validate_series(doc: Document) -> set[str]:
 			frappe.throw(
 				f"La serie «{series}» está duplicada en el mapeo de series de"
 				f" {doc.name}: el mapeo serie↔tipo es una biyección, una serie"
-				" por tipo y un tipo por serie (spec 04 §2.1). Remedio: quite"
+				" por tipo y un tipo por serie. Remedio: quite"
 				" la fila duplicada del mapeo.",
 				frappe.ValidationError,
 			)
@@ -184,7 +184,7 @@ def _validate_series(doc: Document) -> set[str]:
 			frappe.throw(
 				f"El tipo de factura «{invoice_type}» está duplicado en el mapeo de"
 				f" series de {doc.name} (series «{types[invoice_type]}» y «{series}»): el"
-				" mapeo serie↔tipo es una biyección (spec 04 §2.1). Remedio:"
+				" mapeo serie↔tipo es una biyección. Remedio:"
 				" asigne un único tipo por serie.",
 				frappe.ValidationError,
 			)
@@ -204,7 +204,7 @@ def _validate_series(doc: Document) -> set[str]:
 					" contador de series de ERPNext es global por prefijo, sin"
 					" dimensión empresa — dos empresas con la misma serie"
 					" intercalarían números y romperían la correlatividad de"
-					" ambas (spec 04 §2.1). Remedio: asigne a esta empresa un"
+					" ambas. Remedio: asigne a esta empresa un"
 					" prefijo de serie propio.",
 					frappe.ValidationError,
 				)

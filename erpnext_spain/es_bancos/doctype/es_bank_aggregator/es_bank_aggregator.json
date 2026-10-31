@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-10-31 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Bancos",
  "name": "ES Bank Aggregator",
@@ -63,7 +63,7 @@
    "options": "Simulado",
    "default": "Simulado",
    "reqd": 1,
-   "description": "Agregador con licencia de información de cuentas (PSD2). Decisión A8 pendiente: hoy solo el simulado."
+   "description": "Agregador con licencia de información de cuentas (PSD2). Hoy solo está disponible el simulado."
   },
   {
    "fieldname": "enabled",

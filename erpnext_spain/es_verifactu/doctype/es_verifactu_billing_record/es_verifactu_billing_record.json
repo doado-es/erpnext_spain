@@ -69,7 +69,7 @@
    "options": "ES Invoice Type"
   },
   {
-   "description": "Posición en la cadena de la empresa (SIF): auditoría y orden de subsanación (spec 04 §2.2, §9).",
+   "description": "Posición en la cadena de la empresa (SIF): auditoría y orden de subsanación.",
    "fieldname": "chain_index",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -82,7 +82,7 @@
    "label": "Cadena y huella"
   },
   {
-   "description": "Fuente de verdad del registro AEAT: exactamente lo remitido. La huella se calcula sobre este contenido (spec 04 §5).",
+   "description": "Fuente de verdad del registro AEAT: exactamente lo remitido. La huella se calcula sobre este contenido.",
    "fieldname": "record_json",
    "fieldtype": "JSON",
    "label": "Registro remitido (JSON)"
@@ -132,7 +132,7 @@
    "label": "Mensaje de error AEAT"
   },
   {
-   "description": "Derivado del código de error AEAT; lo actualiza el procesador de respuestas (spec 04 §9).",
+   "description": "Derivado del código de error AEAT; lo actualiza el procesador de respuestas.",
    "fieldname": "curable",
    "fieldtype": "Check",
    "label": "Subsanable"
@@ -144,19 +144,19 @@
    "label": "Indicadores"
   },
   {
-   "description": "Registro de subsanación: NUNCA edita el registro previo — crea un registro nuevo encadenado (spec 04 §2.2/§3).",
+   "description": "Registro de subsanación: NUNCA edita el registro previo — crea un registro nuevo encadenado.",
    "fieldname": "is_correction",
    "fieldtype": "Check",
    "label": "Subsanación"
   },
   {
-   "description": "Reintento automático tras rechazo previo de la AEAT (spec 04 §3).",
+   "description": "Reintento automático tras rechazo previo de la AEAT.",
    "fieldname": "prior_rejection",
    "fieldtype": "Check",
    "label": "Rechazo previo"
   },
   {
-   "description": "Alta que regulariza un registro existente en el SIF que no llegó a remitirse a la AEAT (acogida a VeriFactu desde fuera, spec 04 §2.2).",
+   "description": "Alta que regulariza un registro existente en el SIF que no llegó a remitirse a la AEAT (acogida a VeriFactu desde fuera).",
    "fieldname": "no_prior_record",
    "fieldtype": "Check",
    "label": "Sin registro previo"
@@ -164,7 +164,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-31 00:00:00.000000",
+ "modified": "2026-10-31 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Verifactu",
  "name": "ES Verifactu Billing Record",

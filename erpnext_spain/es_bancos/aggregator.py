@@ -75,9 +75,9 @@ def adapter_for(aggregator: str) -> AggregatorAdapter:
 	adapter = ADAPTERS.get(settings.provider)
 	if not adapter:
 		frappe.throw(
-			_(
-				"El proveedor {0} aún no tiene adaptador. Hoy solo está disponible el simulado (decisión A8 pendiente)."
-			).format(settings.provider)
+			_("El proveedor {0} aún no tiene adaptador. Hoy solo está disponible el simulado.").format(
+				settings.provider
+			)
 		)
 	return adapter(settings)
 

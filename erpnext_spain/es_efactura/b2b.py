@@ -71,11 +71,7 @@ def adapter_for(company: str) -> ChannelAdapter:
 	channel = frappe.get_cached_value("Company", company, "es_einvoice_channel") or "Descarga manual"
 	adapter = ADAPTERS.get(channel)
 	if not adapter:
-		frappe.throw(
-			_("El canal {0} aún no está disponible (decisión A9 pendiente). Use «Descarga manual».").format(
-				channel
-			)
-		)
+		frappe.throw(_("El canal {0} aún no está disponible. Use «Descarga manual».").format(channel))
 	return adapter()
 
 

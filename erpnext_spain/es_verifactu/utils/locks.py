@@ -58,7 +58,7 @@ def acquire_chain_lock(company: str, timeout: float = DEFAULT_TIMEOUT) -> FileLo
 			f"No se pudo adquirir el cerrojo de la cadena VeriFactu de"
 			f" {company} en {timeout}s: hay otra emisión de la misma empresa en"
 			" curso y la asignación de números fiscales debe ser estrictamente"
-			" secuencial (spec 04 §12). Remedio: reintente en unos instantes; si"
+			" secuencial. Remedio: reintente en unos instantes; si"
 			" el aviso persiste, revise jobs de emisión estancados en el"
 			" monitor de background jobs.",
 			frappe.ValidationError,

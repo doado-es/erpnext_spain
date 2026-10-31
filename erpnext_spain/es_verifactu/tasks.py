@@ -83,7 +83,7 @@ def alert_stale_outbox(hours: int = STALE_OUTBOX_HOURS_DEFAULT) -> list[dict]:
 			f"La empresa {company} tiene {len(records)} registros de facturación"
 			" en estado «PendienteEnvio» que llevan más de"
 			f" {hours} horas sin remitirse a la AEAT: {refs}. Con remisión"
-			" diferida la ventana legal es corta (spec 04 §8): un outbox parado"
+			" diferida la ventana legal es corta: un outbox parado"
 			" es una incidencia, no un estado silencioso. Remedio: verifique la"
 			" salud del planificador (scheduler jobs del bench), la conectividad"
 			" con la AEAT y la credencial en «ES AEAT Credential»; los registros"

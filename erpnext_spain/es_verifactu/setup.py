@@ -36,7 +36,7 @@ COMPANY_VERIFACTU_ENABLED_FIELD = {
 	"description": (
 		"Al activar se validan NIF, credencial AEAT, fecha de activación y series de"
 		" la empresa. La desactivación no exige outbox vacío: los registros pendientes"
-		" siguen remitiéndose (spec 04 §8)."
+		" siguen remitiéndose."
 	),
 }
 
@@ -89,7 +89,7 @@ COMPANY_VERIFACTU_DRAFT_SERIES_FIELD = {
 	"depends_on": "eval:doc.es_verifactu_enabled",
 	"description": (
 		"Patrón de nombre temporal de los borradores (p. ej. «BORRADOR-.#####»):"
-		" ningún número fiscal se consume hasta la emisión real (spec 04 §4). No"
+		" ningún número fiscal se consume hasta la emisión real. No"
 		" debe colisionar con las series mapeadas."
 	),
 }
@@ -110,7 +110,7 @@ COMPANY_VERIFACTU_BATCH_LIMIT_FIELD = {
 	"default": "1000",
 	"insert_after": "es_verifactu_timeout_seconds",
 	"depends_on": "eval:doc.es_verifactu_enabled",
-	"description": "Máximo 1000 registros por envío (límite de la AEAT, spec 04 §8).",
+	"description": "Máximo 1000 registros por envío (límite de la AEAT).",
 }
 
 COMPANY_VERIFACTU_IN_ORDER_CURE_FIELD = {
@@ -120,8 +120,7 @@ COMPANY_VERIFACTU_IN_ORDER_CURE_FIELD = {
 	"insert_after": "es_verifactu_batch_limit",
 	"depends_on": "eval:doc.es_verifactu_enabled",
 	"description": (
-		"Solo permite subsanar la factura cuyo último registro sea el más antiguo"
-		" pendiente/erróneo del SIF (spec 04 §9)."
+		"Solo permite subsanar la factura cuyo último registro sea el más antiguo pendiente/erróneo del SIF."
 	),
 }
 
@@ -162,7 +161,7 @@ COMPANY_VERIFACTU_NOTIFICATION_ROLES_FIELD = {
 	"description": (
 		"Roles de usuarios que reciben in-app (Notification Log) las incidencias"
 		" de compliance: rechazos AEAT, reintentos agotados, outbox estancado y"
-		" caducidad de certificados (spec 04 §9)."
+		" caducidad de certificados."
 	),
 }
 
@@ -215,7 +214,7 @@ SI_MODE_FIELD = {
 	"description": (
 		"Snapshot inmutable del modo operativo al emitir (Verifactu / Verifactu en"
 		" pruebas / Sin SIF): la anulación se gatea por él, no por el modo actual"
-		" de la compañía (spec 04 §6)."
+		" de la compañía."
 	),
 }
 
