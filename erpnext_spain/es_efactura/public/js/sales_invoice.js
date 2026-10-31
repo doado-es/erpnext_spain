@@ -10,7 +10,9 @@ frappe.ui.form.on("Sales Invoice", {
 				__("Factura electrónica")
 			);
 		}
-		if (!["Registrada en FACe", "Contabilizada", "Pagada"].includes(frm.doc.es_einvoice_status)) {
+		if (
+			!["Registrada en FACe", "Contabilizada", "Pagada"].includes(frm.doc.es_einvoice_status)
+		) {
 			frm.add_custom_button(
 				__("Generar Facturae"),
 				() =>

@@ -1,0 +1,132 @@
+name: CI
+
+# Spec 01 §7 (H4): lint, Semgrep (frappe/semgrep-rules + reglas propias) y
+# tests en un sitio limpio con Frappe y ERPNext v16. Nunca contra servicios
+# reales: los tests de la AEAT usan el cliente simulado.
+
+on:
+  push:
+    branches:
+      - version-16
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-erpnext_spain-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - name: ruff
+        run: |
+          pip install ruff
+          ruff check .
+          ruff format --check .
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: prettier y eslint
+        run: |
+          npx --yes prettier@2.7.1 --check "erpnext_spain/**/*.js"
+          npx --yes eslint@8 --no-eslintrc -c .eslintrc --quiet "erpnext_spain/**/*.js"
+
+  semgrep:
+    name: Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - name: Instalar Semgrep y reglas de Frappe
+        run: |
+          pip install semgrep
+          git clone --depth 1 https://github.com/frappe/semgrep-rules.git "$RUNNER_TEMP/frappe-semgrep-rules"
+      - name: Casos de prueba de las reglas propias
+        run: semgrep --test --config .semgrep/erpnext_spain.yml .semgrep/erpnext_spain.py
+      - name: Reglas propias y de Frappe
+        # Fallan los hallazgos de severidad ERROR; los avisos se muestran.
+        run: >-
+          semgrep scan --metrics off --error --severity ERROR
+          --config .semgrep/erpnext_spain.yml
+          --config "$RUNNER_TEMP/frappe-semgrep-rules/rules"
+          --exclude .semgrep
+          erpnext_spain
+      - name: Avisos (informativo)
+        run: >-
+          semgrep scan --metrics off --severity WARNING
+          --config "$RUNNER_TEMP/frappe-semgrep-rules/rules"
+          erpnext_spain || true
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    services:
+      redis-cache:
+        image: redis:alpine
+        ports:
+          - 13000:6379
+      redis-queue:
+        image: redis:alpine
+        ports:
+          - 11000:6379
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mariadb-admin ping" --health-interval=5s --health-timeout=2s --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Cliente de MariaDB y wkhtmltopdf
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mariadb-client wkhtmltopdf
+      - name: Bench con Frappe v16
+        run: |
+          pip install frappe-bench
+          bench init --skip-redis-config-generation --skip-assets \
+            --frappe-branch version-16 --python "$(which python)" ~/frappe-bench
+      - name: ERPNext v16 y erpnext_spain
+        working-directory: /home/runner/frappe-bench
+        run: |
+          bench get-app --branch version-16 erpnext
+          bench get-app erpnext_spain "$GITHUB_WORKSPACE"
+          bench setup requirements --dev
+          bench new-site --db-root-password root --admin-password admin test_site
+          bench --site test_site install-app erpnext
+          bench --site test_site install-app erpnext_spain
+          bench --site test_site execute erpnext_spain.tests.ci_setup.complete_setup
+        env:
+          CI: 'Yes'
+      - name: Tests
+        working-directory: /home/runner/frappe-bench
+        run: |
+          bench --site test_site set-config allow_tests true
+          # El TODO del código base señala fallos intermitentes con el scheduler activo.
+          bench --site test_site disable-scheduler
+          bench --site test_site run-tests --app erpnext_spain
+        env:
+          TYPE: server
+      - name: Desinstalación limpia
+        working-directory: /home/runner/frappe-bench
+        run: bench --site test_site uninstall-app erpnext_spain --yes --no-backup

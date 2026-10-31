@@ -25,8 +25,7 @@
 // existente y ENCADENAR los callbacks previos (mismo patrón que
 // india_compliance).
 
-frappe.listview_settings["Sales Invoice"] =
-	frappe.listview_settings["Sales Invoice"] || {};
+frappe.listview_settings["Sales Invoice"] = frappe.listview_settings["Sales Invoice"] || {};
 
 const es_lvs = frappe.listview_settings["Sales Invoice"];
 

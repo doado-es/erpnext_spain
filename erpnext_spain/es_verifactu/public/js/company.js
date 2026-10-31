@@ -24,10 +24,16 @@ erpnext_spain.es_verifactu.activation_message = function () {
 		__("Va a activar VeriFactu para esta empresa. Consecuencias legales:") +
 		"<br><br>" +
 		[
-			__("Desde la fecha de activación, toda factura emitida genera registros de facturación encadenados (huellas criptográficas) que se remiten a la AEAT."),
-			__("Los borradores pasarán a nombre temporal: el número fiscal solo se asigna al emitir."),
+			__(
+				"Desde la fecha de activación, toda factura emitida genera registros de facturación encadenados (huellas criptográficas) que se remiten a la AEAT."
+			),
+			__(
+				"Los borradores pasarán a nombre temporal: el número fiscal solo se asigna al emitir."
+			),
 			__("No se podrán fechar facturas hacia atrás."),
-			__("Los amendments quedan bloqueados: para corregir una factura emitida se usan facturas rectificativas (R1–R5)."),
+			__(
+				"Los amendments quedan bloqueados: para corregir una factura emitida se usan facturas rectificativas (R1–R5)."
+			),
 			__("Se inicia una cadena que queda como libro inmutable."),
 		]
 			.map((item) => "• " + item)
@@ -42,10 +48,14 @@ erpnext_spain.es_verifactu.deactivation_message = function (pending) {
 		__("Va a desactivar VeriFactu. Tenga presente:") +
 		"<br><br>" +
 		[
-			__("Si la empresa está legalmente obligada a VeriFactu, desactivarlo supone incumplimiento (facturas emitidas sin registro ni remisión)."),
+			__(
+				"Si la empresa está legalmente obligada a VeriFactu, desactivarlo supone incumplimiento (facturas emitidas sin registro ni remisión)."
+			),
 			__("La cadena se congela: al reactivar se CONTINÚA la misma cadena, no empieza otra."),
 			__("Los registros pendientes de envío seguirán remitiéndose a la AEAT."),
-			__("Las facturas emitidas durante el período activo siguen siendo anulables con su Registro de Anulación: el libro no desaparece."),
+			__(
+				"Las facturas emitidas durante el período activo siguen siendo anulables con su Registro de Anulación: el libro no desaparece."
+			),
 		]
 			.map((item) => "• " + item)
 			.join("<br>");
@@ -53,10 +63,7 @@ erpnext_spain.es_verifactu.deactivation_message = function (pending) {
 	if (pending > 0) {
 		msg +=
 			"<br><br>" +
-			__(
-				"Hay {0} registros pendientes de envío, que seguirán drenándose.",
-				[pending]
-			);
+			__("Hay {0} registros pendientes de envío, que seguirán drenándose.", [pending]);
 	}
 
 	return msg + "<br><br>" + __("¿Desea continuar?");

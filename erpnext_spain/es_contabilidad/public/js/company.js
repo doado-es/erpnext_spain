@@ -19,11 +19,18 @@ erpnext_spain.es_contabilidad.summary_html = function (summary) {
 		rows.push([__("{0} que se borran", [__(doctype)]), count]);
 	}
 	const table = rows
-		.map(([label, value]) => `<tr><td>${frappe.utils.escape_html(label)}</td><td><b>${frappe.utils.escape_html(String(value))}</b></td></tr>`)
+		.map(
+			([label, value]) =>
+				`<tr><td>${frappe.utils.escape_html(label)}</td><td><b>${frappe.utils.escape_html(
+					String(value)
+				)}</b></td></tr>`
+		)
 		.join("");
 	return (
 		`<table class="table table-bordered">${table}</table>` +
-		`<p class="text-danger">${__("Se borra el plan de cuentas actual de la compañía y sus plantillas de impuestos. Esta acción no se puede deshacer.")}</p>`
+		`<p class="text-danger">${__(
+			"Se borra el plan de cuentas actual de la compañía y sus plantillas de impuestos. Esta acción no se puede deshacer."
+		)}</p>`
 	);
 };
 
@@ -50,24 +57,28 @@ erpnext_spain.es_contabilidad.apply_pgc_chart = function (frm) {
 				callback(r) {
 					if (!r.message) return;
 					dialog.hide();
-					frappe.confirm(
-						erpnext_spain.es_contabilidad.summary_html(r.message),
-						() => {
-							frappe.call({
-								method: APPLY_METHOD,
-								type: "POST",
-								args: { company: frm.doc.name, chart_model: values.chart_model, dry_run: 0 },
-								freeze: true,
-								freeze_message: __("Creando el plan de cuentas…"),
-								callback(res) {
-									if (res.message && res.message.applied) {
-										frappe.show_alert({ message: __("Plan PGC aplicado"), indicator: "green" });
-										frm.reload_doc();
-									}
-								},
-							});
-						}
-					);
+					frappe.confirm(erpnext_spain.es_contabilidad.summary_html(r.message), () => {
+						frappe.call({
+							method: APPLY_METHOD,
+							type: "POST",
+							args: {
+								company: frm.doc.name,
+								chart_model: values.chart_model,
+								dry_run: 0,
+							},
+							freeze: true,
+							freeze_message: __("Creando el plan de cuentas…"),
+							callback(res) {
+								if (res.message && res.message.applied) {
+									frappe.show_alert({
+										message: __("Plan PGC aplicado"),
+										indicator: "green",
+									});
+									frm.reload_doc();
+								}
+							},
+						});
+					});
 				},
 			});
 		},
@@ -83,7 +94,10 @@ erpnext_spain.es_contabilidad.create_missing_records = function (frm) {
 		freeze: true,
 		callback(r) {
 			if (!r.message) return;
-			const total = Object.values(r.message).reduce((sum, list) => sum + (list || []).length, 0);
+			const total = Object.values(r.message).reduce(
+				(sum, list) => sum + (list || []).length,
+				0
+			);
 			frappe.show_alert({
 				message: total
 					? __("Creados {0} registros de impuestos", [total])

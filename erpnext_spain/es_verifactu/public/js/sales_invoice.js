@@ -15,7 +15,7 @@
 
 frappe.provide("erpnext_spain.es_verifactu");
 
-TEST_MODE = "Verifactu en pruebas";
+erpnext_spain.es_verifactu.TEST_MODE = "Verifactu en pruebas";
 
 // --- banner modo pruebas (spec 04 §15) ------------------------------------
 
@@ -24,7 +24,10 @@ erpnext_spain.es_verifactu.invoice_test_mode_banner = function (frm) {
 	// sobrevivir (patrón set_intro del spec).
 	frm.set_intro("");
 
-	if (frm.doc.docstatus === 1 && frm.doc.es_verifactu_mode === TEST_MODE) {
+	if (
+		frm.doc.docstatus === 1 &&
+		frm.doc.es_verifactu_mode === erpnext_spain.es_verifactu.TEST_MODE
+	) {
 		frm.set_intro(
 			__(
 				"⚠ Modo VeriFactu EN PRUEBAS — las remisiones van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
@@ -39,19 +42,24 @@ erpnext_spain.es_verifactu.invoice_test_mode_banner = function (frm) {
 	if (frm.doc.docstatus === 0 && frm.doc.company) {
 		// Solo si VeriFactu está ACTIVADO: el modo «Pruebas» es el valor por
 		// defecto del campo y queda guardado aunque VeriFactu esté apagado.
-		frappe.db.get_value("Company", frm.doc.company, ["es_verifactu_enabled", "es_verifactu_test_mode"]).then((r) => {
-			const company = (r && r.message) || {};
-			if (company.es_verifactu_enabled && company.es_verifactu_test_mode === "Pruebas") {
-				// solo si el intro no lo puso ya otra vía (carrera refresh/company)
-				frm.set_intro("");
-				frm.set_intro(
-					__(
-						"⚠ Modo VeriFactu EN PRUEBAS — las remisiones van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
-					),
-					"orange"
-				);
-			}
-		});
+		frappe.db
+			.get_value("Company", frm.doc.company, [
+				"es_verifactu_enabled",
+				"es_verifactu_test_mode",
+			])
+			.then((r) => {
+				const company = (r && r.message) || {};
+				if (company.es_verifactu_enabled && company.es_verifactu_test_mode === "Pruebas") {
+					// solo si el intro no lo puso ya otra vía (carrera refresh/company)
+					frm.set_intro("");
+					frm.set_intro(
+						__(
+							"⚠ Modo VeriFactu EN PRUEBAS — las remisiones van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
+						),
+						"orange"
+					);
+				}
+			});
 	}
 };
 

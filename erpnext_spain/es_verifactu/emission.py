@@ -218,7 +218,7 @@ def get_sif_data(company: str) -> dict:
 	Company (NOI derivado, spec 04 §2.1) + los tres flags L4 constantes. ES
 	Settings incompleto BLOQUEA con remedio: el bloque es obligatorio en el
 	WSDL y la AEAT rechazaría el registro entero."""
-	sif = frappe.db.get_value("ES Settings", "ES Settings", SIF_FIELDS, as_dict=True)
+	sif = frappe._dict({field: frappe.db.get_single_value("ES Settings", field) for field in SIF_FIELDS})
 	missing = [campo for campo in SIF_FIELDS if not (getattr(sif, campo, None) or "").strip()]
 	if missing:
 		frappe.throw(

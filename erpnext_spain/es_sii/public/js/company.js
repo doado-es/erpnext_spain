@@ -5,7 +5,9 @@ frappe.ui.form.on("Company", {
 	refresh(frm) {
 		if (frm.doc.es_sii_enabled && frm.doc.es_sii_test_mode === "Pruebas") {
 			frm.dashboard.set_headline(
-				__("SII EN PRUEBAS: los envíos van al entorno de pruebas de la AEAT y NO tienen validez fiscal."),
+				__(
+					"SII EN PRUEBAS: los envíos van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
+				),
 				"yellow"
 			);
 		}

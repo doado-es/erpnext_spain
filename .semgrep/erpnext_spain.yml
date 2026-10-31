@@ -1,0 +1,81 @@
+# Reglas propias de erpnext_spain (maestro R1, R2 y R5; spec 01 §7).
+# Casos de prueba en erpnext_spain.py (mismo nombre): `semgrep --test .semgrep`.
+rules:
+  - id: es-no-doctype-class-override
+    languages: [python]
+    severity: ERROR
+    message: >-
+      R2: prohibidos override_doctype_class y extend_doctype_class. Extiende
+      con doc_events, regional_overrides (funciones con @erpnext.allow_regional),
+      hooks documentados o doctypes propios (maestro §2).
+    pattern-either:
+      - pattern: override_doctype_class = ...
+      - pattern: extend_doctype_class = ...
+    paths:
+      include:
+        - "**/hooks.py"
+        - ".semgrep/*.py"
+
+  - id: es-no-monkey-patching
+    languages: [python]
+    severity: ERROR
+    message: >-
+      R1: no se reasignan funciones, clases ni atributos de módulos de Frappe,
+      ERPNext u otras apps (afectaría a todos los sitios del bench). Usa
+      doc_events, regional_overrides o un hook documentado.
+    patterns:
+      - pattern-either:
+          # Atributo de frappe, erpnext o hrms escrito con su ruta completa.
+          - patterns:
+              - pattern: $OBJ.$ATTR = $X
+              - metavariable-regex:
+                  metavariable: $OBJ
+                  regex: ^(frappe|erpnext|hrms)(\.[A-Za-z_][\w.]*)?$
+          # Atributo de un módulo (o de una clase de un módulo) importado de ellas.
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: |
+                      from $PKG import $MOD
+                      ...
+                  - pattern-inside: |
+                      from $PKG import $NAME as $MOD
+                      ...
+                  - pattern-inside: |
+                      import $PKG as $MOD
+                      ...
+              - metavariable-regex:
+                  metavariable: $PKG
+                  regex: ^(frappe|erpnext|hrms)(\..*)?$
+              - pattern-either:
+                  - pattern: $MOD.$ATTR = $X
+                  - pattern: $MOD.$C.$ATTR = $X
+      # Estado por petición o por test, no atributos de módulo.
+      - pattern-not: frappe.flags.$F = $X
+      - pattern-not: frappe.local.$F = $X
+      - pattern-not: frappe.local.$G.$F = $X
+      - pattern-not: frappe.response.$F = $X
+      - pattern-not: frappe.flags.$G.$F = $X
+
+  - id: es-no-raw-sql
+    languages: [python]
+    severity: ERROR
+    message: >-
+      R5: sin SQL crudo. Usa frappe.qb o frappe.get_all (frappe.db.sql solo se
+      admite en patches/).
+    pattern-either:
+      - pattern: frappe.db.sql(...)
+      - pattern: frappe.db.multisql(...)
+    paths:
+      exclude:
+        - "**/patches/**"
+
+  - id: es-no-db-commit
+    languages: [python]
+    severity: ERROR
+    message: >-
+      R5: sin frappe.db.commit(). Las peticiones y los jobs en segundo plano
+      confirman solos; en tests, el framework gestiona la transacción.
+    pattern: frappe.db.commit()
+    paths:
+      exclude:
+        - "**/patches/**"

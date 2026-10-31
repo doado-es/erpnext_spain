@@ -18,8 +18,18 @@ frappe.ui.form.on("ES E-Invoice", {
 				() =>
 					frappe.prompt(
 						[
-							{ fieldname: "registry_number", label: __("Número de registro en FACe"), fieldtype: "Data", reqd: 1 },
-							{ fieldname: "registry_date", label: __("Fecha de registro"), fieldtype: "Datetime", default: frappe.datetime.now_datetime() },
+							{
+								fieldname: "registry_number",
+								label: __("Número de registro en FACe"),
+								fieldtype: "Data",
+								reqd: 1,
+							},
+							{
+								fieldname: "registry_date",
+								label: __("Fecha de registro"),
+								fieldtype: "Datetime",
+								default: frappe.datetime.now_datetime(),
+							},
 						],
 						(values) => call("register_in_face", values),
 						__("Registrar en FACe"),
@@ -28,14 +38,27 @@ frappe.ui.form.on("ES E-Invoice", {
 				__("FACe")
 			);
 		}
-		if (frm.doc.face_registry_number && !["Pagada", "Anulada", "Rechazada"].includes(frm.doc.status)) {
+		if (
+			frm.doc.face_registry_number &&
+			!["Pagada", "Anulada", "Rechazada"].includes(frm.doc.status)
+		) {
 			frm.add_custom_button(
 				__("Cambiar estado"),
 				() =>
 					frappe.prompt(
 						[
-							{ fieldname: "status", label: __("Estado en FACe"), fieldtype: "Select", options: "Contabilizada\nPagada\nRechazada\nAnulada", reqd: 1 },
-							{ fieldname: "note", label: __("Observaciones"), fieldtype: "Small Text" },
+							{
+								fieldname: "status",
+								label: __("Estado en FACe"),
+								fieldtype: "Select",
+								options: "Contabilizada\nPagada\nRechazada\nAnulada",
+								reqd: 1,
+							},
+							{
+								fieldname: "note",
+								label: __("Observaciones"),
+								fieldtype: "Small Text",
+							},
 						],
 						(values) => call("set_status", values),
 						__("Estado en FACe"),
