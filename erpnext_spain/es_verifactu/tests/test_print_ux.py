@@ -349,6 +349,39 @@ class TestPrintFormat(IntegrationTestCase):
 		# el meta del doctype lo sirve como default real
 		self.assertEqual(frappe.get_meta("Sales Invoice").default_print_format, FORMAT_NAME)
 
+	def test_cleanup_printing_removes_only_our_setter(self):
+		"""before_uninstall borra el Property Setter si apunta a nuestro
+		formato (H5) y respeta el que haya elegido el usuario."""
+		from erpnext_spain.es_verifactu.printing import cleanup_printing
+
+		filters = {"doc_type": "Sales Invoice", "property": "default_print_format"}
+		cleanup_printing()
+		self.assertFalse(frappe.get_all("Property Setter", filters=filters))
+
+		frappe.make_property_setter(
+			{
+				"doctype": "Sales Invoice",
+				"doctype_or_field": "DocType",
+				"fieldname": "",
+				"property": "default_print_format",
+				"value": "Standard",
+				"property_type": "Data",
+			},
+			validate_fields_for_doctype=False,
+			is_system_generated=False,
+		)
+		cleanup_printing()
+		self.assertEqual(frappe.get_all("Property Setter", filters=filters, pluck="value"), ["Standard"])
+
+		setup_printing()
+		self.assertEqual(frappe.get_all("Property Setter", filters=filters, pluck="value"), [FORMAT_NAME])
+
+	def test_rectify_is_post_only(self):
+		"""`rectify` modifica datos: solo admite POST (H5)."""
+		from erpnext_spain.es_verifactu.rectification import rectify
+
+		self.assertEqual(frappe.allowed_http_methods_for_whitelisted_func[rectify], ["POST"])
+
 	def test_render_draft_labeled(self):
 		"""Render con el jenv REAL de impresión de un BORRADOR: sin
 		excepciones, rotulado «NO ES FACTURA — BORRADOR» (spec 04 §4) y SIN

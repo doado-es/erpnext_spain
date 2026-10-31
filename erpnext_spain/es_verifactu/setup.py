@@ -349,6 +349,8 @@ def setup_custom_fields() -> None:
 
 def cleanup_custom_fields() -> None:
 	"""Contrapartida de limpieza en before_uninstall (R3)."""
+	from erpnext_spain.es_verifactu.printing import cleanup_printing
 	from erpnext_spain.utils.custom_fields import cleanup_custom_fields as _cleanup
 
+	cleanup_printing()
 	_cleanup(FIELDS_PER_DOCTYPE)

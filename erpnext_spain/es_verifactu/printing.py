@@ -91,6 +91,26 @@ def _set_default_format() -> None:
 	)
 
 
+def cleanup_printing() -> None:
+	"""Contrapartida de `setup_printing` en before_uninstall (H5).
+
+	Frappe borra el Print Format con el módulo de la app, pero no el Property
+	Setter que lo fija como predeterminado: Sales Invoice quedaría apuntando a
+	un formato inexistente. Solo se borra si sigue apuntando a nuestro formato
+	(si el usuario eligió otro, se respeta)."""
+	for name in frappe.get_all(
+		"Property Setter",
+		filters={
+			"doc_type": INVOICE_DOCTYPE,
+			"property": "default_print_format",
+			"value": FORMAT_NAME,
+		},
+		pluck="name",
+	):
+		frappe.delete_doc("Property Setter", name, ignore_permissions=True, force=True)
+	frappe.clear_cache(doctype=INVOICE_DOCTYPE)
+
+
 def _read_html() -> str:
 	path = os.path.join(
 		frappe.get_app_path("erpnext_spain"), "es_verifactu", "print", "factura_espana_verifactu.html"

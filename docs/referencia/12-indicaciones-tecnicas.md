@@ -144,14 +144,18 @@ override_doctype_class = {
 
 Confirma la regla: incluso el propio India Compliance, que sí usa `override_doctype_class`, lo hace en un único caso muy puntual (Customize Form, para su feature de audit trail) y no como mecanismo por defecto. Para nuestra app, el criterio debería ser el mismo — reservarlo para casos donde de verdad no hay alternativa con `extend_doctype_class` o `doc_events`.
 
-## 4. Custom Fields y Fixtures, no forks
+## 4. Custom Fields por código, no fixtures ni forks
 
-Los campos específicos de España (NIF-IVA, tipo de retención, mandato SEPA, etc.) se añaden como **Custom Fields** definidos vía **fixtures**, exportables a JSON y versionables en el repo de la app — nunca editando directamente el DocType core.
+> **Corrección (31/10/2026, H5 de la spec 01)**: la versión original de este apartado recomendaba fixtures. La regla del maestro (R3) es la contraria: **nunca fixtures para Custom Fields ni Property Setters**.
+
+Los campos específicos de España (NIF-IVA, tipo de retención, mandato SEPA, etc.) se añaden como **Custom Fields declarados en código Python** y versionados en el repo de la app, nunca editando el DocType core.
 
 Flujo estándar:
-1. Crear el Custom Field desde la UI en un bench de desarrollo.
-2. Exportarlo como fixture (`bench --site <site> export-fixtures` o declarándolo en `hooks.py` con `fixtures = [...]`).
-3. Versionarlo en el repo de la app para que se instale automáticamente en cualquier bench donde se instale la app.
+1. Declarar los campos en el `setup.py` del módulo con la estructura `{"DocType": [{campo...}, ...]}`.
+2. Crearlos con `create_custom_fields` desde `after_install` y `after_migrate` (idempotente).
+3. Borrarlos en `before_uninstall` con la limpieza del módulo (`utils/custom_fields.cleanup_custom_fields`). Lo mismo para los Property Setters (`frappe.make_property_setter` al instalar y borrado al desinstalar).
+
+Ver el apartado de India Compliance más abajo, que llega a la misma conclusión.
 
 ## 5. Un DocType de "Settings" tipo Single por bloque funcional
 

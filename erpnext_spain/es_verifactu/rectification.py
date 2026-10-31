@@ -36,7 +36,7 @@ RECTIFIABLE_STATES = ("Incorrecto", "AceptadoConErrores")
 BLOCKING_STATES = ("PendienteEnvio", "Incorrecto")
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST"])
 def rectify(invoice: str) -> str:
 	"""Subsana la factura: regenera su RegistroAlta desde el estado ACTUAL
 	(los campos corregidos ya viven en la factura) y lo deja encadenado
