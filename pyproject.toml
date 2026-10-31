@@ -24,6 +24,10 @@ dependencies = [
 frappe = ">=16.50.0,<17.0.0"
 erpnext = ">=16.50.0,<17.0.0"
 
+[project.urls]
+Repository = "https://github.com/ct-Galega/erpnext_spain"
+Issues = "https://github.com/ct-Galega/erpnext_spain/issues"
+
 [build-system]
 requires = ["flit_core >=3.4,<4"]
 build-backend = "flit_core.buildapi"
