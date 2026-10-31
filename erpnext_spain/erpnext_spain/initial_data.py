@@ -106,7 +106,27 @@ def ensure_global_records() -> dict[str, list[str]]:
 		"Payment Terms Template": ensure_payment_terms(),
 		"Address Template": ensure_address_template(),
 		"Email Template": ensure_email_template(),
+		"ES Settings": ensure_service_urls(),
 	}
+
+
+def ensure_service_urls() -> list[str]:
+	"""Direcciones oficiales de los servicios de la AEAT en ES Settings: rellena
+	solo las vacías (no pisa las que haya cambiado el usuario). El WSDL de
+	producción de VeriFactu se deja vacío a propósito: hay que indicarlo a mano
+	para no enviar a producción por error."""
+	from erpnext_spain.aeat.client import WSDL_TEST_DEFAULT
+	from erpnext_spain.es_sii.outbox import ENDPOINTS
+
+	official = {"verifactu_wsdl_test": WSDL_TEST_DEFAULT, **dict(ENDPOINTS.values())}
+	filled = []
+	for field, url in official.items():
+		if not (frappe.db.get_single_value("ES Settings", field) or "").strip():
+			frappe.db.set_single_value("ES Settings", field, url)
+			filled.append(field)
+	if filled:
+		frappe.clear_document_cache("ES Settings", "ES Settings")
+	return filled
 
 
 def ensure_email_template() -> list[str]:

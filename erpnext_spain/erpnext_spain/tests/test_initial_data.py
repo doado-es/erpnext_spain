@@ -25,6 +25,21 @@ class TestGlobalInitialData(IntegrationTestCase):
 			initial_data.ensure_global_records(), {k: [] for k in initial_data.ensure_global_records()}
 		)
 
+	def test_service_urls_filled_without_overwriting(self):
+		from erpnext_spain.es_sii.outbox import ENDPOINTS
+
+		frappe.db.set_single_value("ES Settings", "sii_issued_url_test", None)
+		frappe.db.set_single_value("ES Settings", "sii_received_url_test", "https://example.test/propia")
+		self.addCleanup(frappe.db.set_single_value, "ES Settings", "sii_received_url_test", None)
+		initial_data.ensure_service_urls()
+		settings = frappe.get_single("ES Settings")
+		self.assertEqual(settings.sii_issued_url_test, ENDPOINTS[("Emitidas", "pruebas")][1])
+		self.assertEqual(settings.sii_received_url_test, "https://example.test/propia")  # no se pisa
+		self.assertTrue(
+			settings.sii_issued_url_production.startswith("https://www1.agenciatributaria.gob.es/")
+		)
+		self.assertFalse(settings.verifactu_wsdl_production)  # a mano, a propósito
+
 	def test_payment_terms_within_legal_maximum(self):
 		"""Ley 3/2004: ningún plazo supera los 60 días."""
 		for name in initial_data.PAYMENT_TERMS_TEMPLATES:
