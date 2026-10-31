@@ -2,8 +2,11 @@
 // Purchase Invoice (revisión del 31/10/2026).
 //
 // El historial llega con el documento (`__onload.es_fiscal`, ver
-// es_facturacion/fiscal_tab.py). Sin VeriFactu ni SII en la compañía y sin
-// historial, la pestaña no se muestra: la factura se ve como en ERPNext estándar.
+// es_facturacion/fiscal_tab.py) y se pinta con frappe.ui.EmbeddedList (una lista
+// por bloque: registros VeriFactu, registros del SII, facturas electrónicas), sin
+// consultas extra. EmbeddedList va en un bundle aparte que se carga bajo demanda.
+// Sin VeriFactu ni SII en la compañía y sin historial, la pestaña no se muestra:
+// la factura se ve como en ERPNext estándar.
 
 frappe.provide("erpnext_spain.fiscal_tab");
 
@@ -26,117 +29,116 @@ erpnext_spain.fiscal_tab.COLORS = {
 	Sustituido: "gray",
 };
 
-erpnext_spain.fiscal_tab.text = function (value) {
-	return frappe.utils.escape_html(value === null || value === undefined ? "" : String(value));
-};
-
 erpnext_spain.fiscal_tab.label = function (value) {
 	return erpnext_spain.fiscal_tab.LABELS[value] || value;
 };
 
-erpnext_spain.fiscal_tab.status = function (value) {
-	if (!value) {
-		return "";
-	}
-	const color = erpnext_spain.fiscal_tab.COLORS[value] || "orange";
-	return `<span class="indicator-pill ${color}">${erpnext_spain.fiscal_tab.text(
-		erpnext_spain.fiscal_tab.label(value)
-	)}</span>`;
-};
-
-erpnext_spain.fiscal_tab.link = function (doctype, name) {
-	const href = frappe.utils.get_form_link(doctype, name);
-	return `<a href="${encodeURI(href)}">${erpnext_spain.fiscal_tab.text(name)}</a>`;
-};
-
 erpnext_spain.fiscal_tab.date = function (value) {
-	return erpnext_spain.fiscal_tab.text(value ? frappe.datetime.str_to_user(value) : "");
+	return value ? frappe.datetime.str_to_user(value) : "";
 };
 
 erpnext_spain.fiscal_tab.error = function (code, message) {
-	return erpnext_spain.fiscal_tab.text([code, message].filter(Boolean).join(": "));
+	return [code, message].filter(Boolean).join(": ");
+};
+
+// Columnas de EmbeddedList: `badge` y el texto plano ya se escapan en el
+// componente; los valores calculados se preparan en `prepare`.
+erpnext_spain.fiscal_tab.link_column = function (label, doctype) {
+	return { label, fieldname: "name", type: "link", route: (row) => ["Form", doctype, row.name] };
+};
+
+erpnext_spain.fiscal_tab.status_column = function () {
+	return {
+		label: __("Estado"),
+		fieldname: "_status",
+		type: "badge",
+		color: (row) => erpnext_spain.fiscal_tab.COLORS[row.status] || "orange",
+	};
 };
 
 erpnext_spain.fiscal_tab.BLOCKS = [
 	{
 		key: "verifactu",
 		title: __("Registros VeriFactu"),
-		doctype: "ES Verifactu Billing Record",
-		columns: [
-			[
-				__("Registro"),
-				(r) => erpnext_spain.fiscal_tab.link("ES Verifactu Billing Record", r.name),
-			],
-			[
-				__("Tipo"),
-				(r) =>
-					erpnext_spain.fiscal_tab.text(erpnext_spain.fiscal_tab.label(r.record_type)),
-			],
-			[__("Estado"), (r) => erpnext_spain.fiscal_tab.status(r.status)],
-			[__("Fecha"), (r) => erpnext_spain.fiscal_tab.date(r.creation)],
-			[
-				__("Error"),
-				(r) => erpnext_spain.fiscal_tab.error(r.response_error_code, r.response_error_msg),
-			],
+		prepare: (row) => ({
+			_type: erpnext_spain.fiscal_tab.label(row.record_type),
+			_date: erpnext_spain.fiscal_tab.date(row.creation),
+			_error: erpnext_spain.fiscal_tab.error(
+				row.response_error_code,
+				row.response_error_msg
+			),
+		}),
+		columns: () => [
+			erpnext_spain.fiscal_tab.link_column(__("Registro"), "ES Verifactu Billing Record"),
+			{ label: __("Tipo"), fieldname: "_type" },
+			erpnext_spain.fiscal_tab.status_column(),
+			{ label: __("Fecha"), fieldname: "_date" },
+			{ label: __("Error"), fieldname: "_error" },
 		],
 	},
 	{
 		key: "sii",
 		title: __("Registros del SII"),
-		doctype: "ES Sii Record",
-		columns: [
-			[__("Registro"), (r) => erpnext_spain.fiscal_tab.link("ES Sii Record", r.name)],
-			[__("Comunicación"), (r) => erpnext_spain.fiscal_tab.text(r.communication)],
-			[__("Estado"), (r) => erpnext_spain.fiscal_tab.status(r.status)],
-			[__("Plazo"), (r) => erpnext_spain.fiscal_tab.date(r.deadline)],
-			[__("Último intento"), (r) => erpnext_spain.fiscal_tab.date(r.last_attempt)],
-			[__("CSV"), (r) => erpnext_spain.fiscal_tab.text(r.csv)],
-			[
-				__("Error"),
-				(r) => erpnext_spain.fiscal_tab.error(r.error_code, r.error_description),
-			],
+		prepare: (row) => ({
+			_deadline: erpnext_spain.fiscal_tab.date(row.deadline),
+			_last_attempt: erpnext_spain.fiscal_tab.date(row.last_attempt),
+			_error: erpnext_spain.fiscal_tab.error(row.error_code, row.error_description),
+		}),
+		columns: () => [
+			erpnext_spain.fiscal_tab.link_column(__("Registro"), "ES Sii Record"),
+			{ label: __("Comunicación"), fieldname: "communication" },
+			erpnext_spain.fiscal_tab.status_column(),
+			{ label: __("Plazo"), fieldname: "_deadline" },
+			{ label: __("Último intento"), fieldname: "_last_attempt" },
+			{ label: __("CSV"), fieldname: "csv" },
+			{ label: __("Error"), fieldname: "_error" },
 		],
 	},
 	{
 		key: "einvoice",
 		title: __("Factura electrónica"),
-		doctype: "ES E-Invoice",
-		columns: [
-			[__("Documento"), (r) => erpnext_spain.fiscal_tab.link("ES E-Invoice", r.name)],
-			[__("Formato"), (r) => erpnext_spain.fiscal_tab.text(r.format)],
-			[__("Canal"), (r) => erpnext_spain.fiscal_tab.text(r.channel)],
-			[__("Estado"), (r) => erpnext_spain.fiscal_tab.status(r.status)],
-			[__("Registro FACe"), (r) => erpnext_spain.fiscal_tab.text(r.face_registry_number)],
-			[__("Modificado"), (r) => erpnext_spain.fiscal_tab.date(r.modified)],
+		prepare: (row) => ({ _modified: erpnext_spain.fiscal_tab.date(row.modified) }),
+		columns: () => [
+			erpnext_spain.fiscal_tab.link_column(__("Documento"), "ES E-Invoice"),
+			{ label: __("Formato"), fieldname: "format" },
+			{ label: __("Canal"), fieldname: "channel" },
+			erpnext_spain.fiscal_tab.status_column(),
+			{ label: __("Registro FACe"), fieldname: "face_registry_number" },
+			{ label: __("Modificado"), fieldname: "_modified" },
 		],
 	},
 ];
 
-erpnext_spain.fiscal_tab.render = function (data) {
+erpnext_spain.fiscal_tab.make_list = function ($parent, title, columns, rows) {
+	const list = new frappe.ui.EmbeddedList({
+		wrapper: $("<div class='mb-4'></div>").appendTo($parent),
+		title: title,
+		columns: columns,
+		show_search: false,
+		empty_message: __("Sin envíos todavía."),
+		get_data: () => Promise.resolve(rows),
+	});
+	list.refresh();
+	return list;
+};
+
+erpnext_spain.fiscal_tab.render = function ($wrapper, data) {
+	$wrapper.empty();
 	const blocks = erpnext_spain.fiscal_tab.BLOCKS.filter(
 		(block) => (data[block.key] || []).length
 	);
 	if (!blocks.length) {
-		return `<p class="text-muted">${__("Sin envíos todavía.")}</p>`;
+		erpnext_spain.fiscal_tab.make_list($wrapper, __("Historial de envíos"), [], []);
+		return;
 	}
-	return blocks
-		.map((block) => {
-			const head = block.columns
-				.map(([label]) => `<th>${erpnext_spain.fiscal_tab.text(label)}</th>`)
-				.join("");
-			const rows = data[block.key]
-				.map(
-					(row) =>
-						`<tr>${block.columns
-							.map(([, cell]) => `<td>${cell(row)}</td>`)
-							.join("")}</tr>`
-				)
-				.join("");
-			return `<h6 class="mt-3">${erpnext_spain.fiscal_tab.text(block.title)}</h6>
-				<div class="table-responsive"><table class="table table-bordered table-sm">
-				<thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
-		})
-		.join("");
+	blocks.forEach((block) => {
+		const rows = data[block.key].map((row) =>
+			Object.assign({}, row, block.prepare(row), {
+				_status: erpnext_spain.fiscal_tab.label(row.status),
+			})
+		);
+		erpnext_spain.fiscal_tab.make_list($wrapper, block.title, block.columns(), rows);
+	});
 };
 
 erpnext_spain.fiscal_tab.apply = function (frm, data) {
@@ -151,11 +153,20 @@ erpnext_spain.fiscal_tab.apply = function (frm, data) {
 	frm.toggle_display("es_fiscal_history_section", show_history);
 	frm.toggle_display("es_fiscal_tab", show_verifactu || show_history);
 
-	const wrapper =
-		frm.fields_dict.es_fiscal_history && frm.fields_dict.es_fiscal_history.$wrapper;
-	if (wrapper) {
-		wrapper.html(show_history ? erpnext_spain.fiscal_tab.render(data) : "");
+	const field = frm.fields_dict.es_fiscal_history;
+	if (!field) {
+		return;
 	}
+	field.$wrapper.empty();
+	if (!show_history) {
+		return;
+	}
+	frappe
+		.require("embedded_list.bundle.js")
+		.then(() => erpnext_spain.fiscal_tab.render(field.$wrapper, data))
+		.catch(() =>
+			field.$wrapper.text(__("No se pudo cargar el historial. Recargue la página."))
+		);
 };
 
 erpnext_spain.fiscal_tab.refresh = function (frm) {
