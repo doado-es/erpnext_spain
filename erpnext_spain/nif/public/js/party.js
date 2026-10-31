@@ -4,7 +4,7 @@
 //    (VeriFactu, SII). La AEAT contrasta NIF y nombre con su censo, que guarda a
 //    las personas físicas como «APELLIDO APELLIDO NOMBRE»; con otro orden VeriFactu
 //    rechaza el envío (error 103 «NIF no identificado»). Es persona física si el
-//    tipo de persona es «Física» o, sin tipo, si el NIF es un DNI o un NIE.
+//    NIF es un DNI o un NIE, o si el tipo de cliente o de proveedor es «Individual».
 // 2. Marca de verificación dentro del campo NIF (mismo patrón que el botón de los
 //    campos URL y Barcode de Frappe). Al pulsarla contrasta el NIF y el nombre del
 //    formulario con el censo de la AEAT (nif/aeat_census.check_tax_id) y se pinta
@@ -60,9 +60,11 @@ erpnext_spain.nif.is_spanish = function (tax_id) {
 	);
 };
 
+erpnext_spain.nif.TYPE_FIELDS = { Customer: "customer_type", Supplier: "supplier_type" };
+
 erpnext_spain.nif.is_individual = function (doc) {
-	if (doc.es_person_type) {
-		return doc.es_person_type === "Física";
+	if (doc[erpnext_spain.nif.TYPE_FIELDS[doc.doctype]] === "Individual") {
+		return true;
 	}
 	return /^([0-9]{8}[A-Z]|[KLMXYZ][0-9]{7}[A-Z])$/.test(erpnext_spain.nif.clean_nif(doc.tax_id));
 };
@@ -150,7 +152,8 @@ if (!erpnext_spain.nif_party_events) {
 			tax_id: (frm) => erpnext_spain.nif.reset(frm),
 			[erpnext_spain.nif.NAME_FIELDS[doctype]]: (frm) =>
 				erpnext_spain.nif.set_mark(frm, "unchecked"),
-			es_person_type: (frm) => erpnext_spain.nif.toggle_name_hint(frm),
+			[erpnext_spain.nif.TYPE_FIELDS[doctype]]: (frm) =>
+				erpnext_spain.nif.toggle_name_hint(frm),
 		});
 	});
 }

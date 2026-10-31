@@ -244,13 +244,22 @@ class TestFacturae(IntegrationTestCase):
 			api.generate_facturae(si.name)
 
 	def test_individual_needs_surnames(self):
-		frappe.db.set_value("Customer", CUSTOMER, {"es_person_type": "Física", "es_individual_name": None})
-		try:
-			si = self.invoice()
-			with self.assertRaisesRegex(frappe.ValidationError, "apellido"):
-				api.generate_facturae(si.name)
-		finally:
-			frappe.db.set_value("Customer", CUSTOMER, "es_person_type", None)
+		"""Persona física por el NIF (DNI): Facturae exige nombre y apellidos por separado."""
+		previous = frappe.db.get_value("Customer", CUSTOMER, ["tax_id", "es_individual_name"], as_dict=True)
+		frappe.db.set_value("Customer", CUSTOMER, {"tax_id": "12345678Z", "es_individual_name": None})
+		self.addCleanup(frappe.db.set_value, "Customer", CUSTOMER, previous)
+		si = self.invoice()
+		with self.assertRaisesRegex(frappe.ValidationError, "apellido"):
+			api.generate_facturae(si.name)
+
+	def test_person_type_from_nif_or_customer_type(self):
+		"""Sin campo propio: el NIF español decide; si no es español, el tipo de cliente."""
+		individual = frappe._dict(doctype="Customer", name="X", customer_type="Individual")
+		company = frappe._dict(doctype="Customer", name="X", customer_type="Company")
+		self.assertEqual(facturae.person_type(company, "12345678Z", True), "F")
+		self.assertEqual(facturae.person_type(individual, "B12345674", True), "J")
+		self.assertEqual(facturae.person_type(individual, "FR40303265045", False), "F")
+		self.assertEqual(facturae.person_type(company, "FR40303265045", False), "J")
 
 	def test_country_codes(self):
 		self.assertEqual(codes.alpha3("ES"), "ESP")

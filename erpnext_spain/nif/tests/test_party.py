@@ -57,6 +57,25 @@ class TestPartyValidation(IntegrationTestCase):
 		name = self._new_customer("12345678Z")
 		self.assertTrue(frappe.db.exists("Customer", name))
 
+	def test_type_mismatch_warns_without_blocking(self):
+		"""Un DNI con «Tipo de cliente» = Company (el valor por defecto) avisa, no bloquea."""
+		self._set_mode("Bloquear")
+		frappe.clear_messages()
+		doc = frappe.get_doc(
+			{
+				"doctype": "Customer",
+				"customer_name": "ES NIF Tipo " + frappe.generate_hash(length=6),
+				"customer_type": "Company",
+				"tax_id": "12345678Z",
+			}
+		).insert()
+		self.assertTrue(frappe.db.exists("Customer", doc.name))
+		self.assertIn("persona física", str(frappe.get_message_log()))
+		frappe.clear_messages()
+		doc.customer_type = "Individual"
+		doc.save()
+		self.assertNotIn("Tipo de tercero", str(frappe.get_message_log()))
+
 	def test_foreign_customer_without_pattern_saves(self):
 		self._set_mode("Bloquear")
 		name = self._new_customer("FR12345678")

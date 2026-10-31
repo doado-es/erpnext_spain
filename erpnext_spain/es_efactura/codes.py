@@ -11,7 +11,6 @@ SCHEMA_FILES = {"3.2.2": SCHEMA_DIR / "Facturaev3_2_2.xsd"}
 NAMESPACES = {"3.2.2": "http://www.facturae.gob.es/formato/Versiones/Facturaev3_2_2.xml"}
 DEFAULT_VERSION = "3.2.2"
 
-PERSON_TYPES = {"Física": "F", "Jurídica": "J"}
 
 # Rectificativas: motivo (ReasonCodeType) con el texto fijo que exige el esquema
 # (ReasonDescriptionType) y método de corrección (CorrectionMethodType).

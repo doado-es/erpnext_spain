@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from erpnext_spain.es_efactura.codes import (
 	PAYMENT_MEANS,
-	PERSON_TYPES,
 	REASONS,
 	UNITS,
 )
@@ -19,36 +18,39 @@ def described(catalog: dict) -> str:
 	return "; ".join(f"{code}: {label}" for code, label in catalog.items())
 
 
-def person_fields(insert_after: str, prefix_label: str = "") -> list[dict]:
+# NIF de persona física (DNI, NIE o NIF de las letras K, L y M), para los depends_on.
+PERSONAL_NIF_JS = (
+	"/^([0-9]{8}[A-Z]|[KLMXYZ][0-9]{7}[A-Z])$/.test((doc.tax_id || '').toUpperCase()"
+	".replace(/[^0-9A-Z]/g, '').replace(/^ES(?=.{9}$)/, ''))"
+)
+
+
+def person_fields(insert_after: str, individual_js: str) -> list[dict]:
+	"""Nombre y apellidos por separado para Facturae, visibles si es persona física.
+	El tipo de persona no es un campo propio: sale del NIF español (DNI o NIE, física;
+	CIF, jurídica) o, si no es español, del «Tipo de cliente» de ERPNext."""
+	depends_on = f"eval:{individual_js}"
 	return [
-		{
-			"fieldname": "es_person_type",
-			"label": "Tipo de persona",
-			"fieldtype": "Select",
-			"options": "\n" + "\n".join(PERSON_TYPES),
-			"insert_after": insert_after,
-			"description": "Si se deja vacío se deduce del NIF: DNI o NIE, persona física; CIF, jurídica.",
-		},
 		{
 			"fieldname": "es_individual_name",
 			"label": "Nombre",
 			"fieldtype": "Data",
-			"insert_after": "es_person_type",
-			"depends_on": "eval:doc.es_person_type == 'Física'",
+			"insert_after": insert_after,
+			"depends_on": depends_on,
 		},
 		{
 			"fieldname": "es_first_surname",
 			"label": "Primer apellido",
 			"fieldtype": "Data",
 			"insert_after": "es_individual_name",
-			"depends_on": "eval:doc.es_person_type == 'Física'",
+			"depends_on": depends_on,
 		},
 		{
 			"fieldname": "es_second_surname",
 			"label": "Segundo apellido",
 			"fieldtype": "Data",
 			"insert_after": "es_first_surname",
-			"depends_on": "eval:doc.es_person_type == 'Física'",
+			"depends_on": depends_on,
 		},
 	]
 
@@ -61,7 +63,7 @@ CUSTOMER_FIELDS = [
 		"collapsible": 1,
 		"insert_after": "tax_category",
 	},
-	*person_fields("es_einvoice_section"),
+	*person_fields("es_einvoice_section", f"doc.customer_type == 'Individual' || {PERSONAL_NIF_JS}"),
 	{
 		"fieldname": "es_einvoice_column",
 		"fieldtype": "Column Break",
@@ -114,7 +116,7 @@ COMPANY_FIELDS = [
 		"fieldtype": "Section Break",
 		"insert_after": "es_sii_activation_date",
 	},
-	*person_fields("es_einvoice_section"),
+	*person_fields("es_einvoice_section", PERSONAL_NIF_JS),
 	# Factura electrónica B2B (spec 10 §5): obligatoria desde 2027-2028 (RD 238/2026).
 	{
 		"fieldname": "es_einvoice_b2b",

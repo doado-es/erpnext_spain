@@ -38,7 +38,7 @@ def _validate_party(doc: Document) -> None:
 		return
 
 	try:
-		validator.validate_spanish_tax_id(tax_id)
+		result = validator.validate_spanish_tax_id(tax_id)
 	except validator.InvalidTaxID as exc:
 		if _validation_mode() == MODE_WARN:
 			frappe.msgprint(
@@ -49,6 +49,34 @@ def _validate_party(doc: Document) -> None:
 			)
 			return
 		frappe.throw(str(exc), title="NIF no válido")
+	_warn_type_mismatch(doc, result.kind)
+
+
+TYPE_FIELDS = {
+	"Customer": ("customer_type", "Tipo de cliente"),
+	"Supplier": ("supplier_type", "Tipo de proveedor"),
+}
+INDIVIDUAL = "Individual"
+
+
+def _warn_type_mismatch(doc: Document, kind: str) -> None:
+	"""El tipo de cliente o de proveedor de ERPNext no cuadra con el NIF (p. ej. un DNI
+	con el tipo por defecto «Company»). No bloquea: los envíos a la AEAT y Facturae
+	usan el NIF."""
+	field, label = TYPE_FIELDS.get(doc.doctype, (None, None))
+	if not field or not doc.get(field):
+		return
+	individual_nif = kind in ("dni", "nie")
+	if individual_nif == (doc.get(field) == INDIVIDUAL):
+		return
+	expected = INDIVIDUAL if individual_nif else "Company"
+	who = "una persona física" if individual_nif else "una persona jurídica"
+	frappe.msgprint(
+		f"El NIF {doc.tax_id} es de {who}, pero el campo «{label}» es «{doc.get(field)}»."
+		f" Remedio: cámbielo a «{expected}».",
+		title="Tipo de tercero",
+		indicator="orange",
+	)
 
 
 def _validate_company(doc: Document) -> None:

@@ -339,15 +339,19 @@ def tax_id(value: str | None, who: str) -> str:
 
 
 def person_type(doc, nif: str, spanish: bool) -> str:
-	if doc.get("es_person_type"):
-		return codes.PERSON_TYPES[doc.es_person_type]
+	"""F (física) o J (jurídica): por el NIF si es español (DNI o NIE, física; CIF,
+	jurídica); si no, por el «Tipo de cliente» de ERPNext (Individual, física)."""
 	if spanish:
 		try:
-			if validator.validate_spanish_tax_id(nif).kind in ("dni", "nie"):
-				return "F"
+			kind = validator.validate_spanish_tax_id(nif).kind
 		except validator.InvalidTaxID:
 			fail(_("El NIF {0} de {1} no es válido.").format(nif, doc.name))
-	return "J"
+		return "F" if kind in ("dni", "nie") else "J"
+	party_type = doc.get("customer_type") or doc.get("supplier_type")
+	return "F" if party_type == INDIVIDUAL else "J"
+
+
+INDIVIDUAL = "Individual"  # customer_type / supplier_type de ERPNext
 
 
 def address_of(name: str | None, who: str) -> Address:
