@@ -186,6 +186,12 @@ def build_tax_breakdown(breakup_rows: list[dict]) -> list[dict]:
 			else:
 				group["CalificacionOperacion"] = row.get("operation_classification") or CLASSIFICATION_TAXABLE
 
+		if row.get("equivalence_rate") is not None:
+			group["TipoRecargoEquivalencia"] = _format_tax_rate(row["equivalence_rate"])
+			group["CuotaRecargoEquivalencia"] = (
+				group.get("CuotaRecargoEquivalencia", Decimal("0")) + Decimal(str(row["equivalence_amount"]))
+			).quantize(CENT, rounding=ROUND_HALF_UP)
+
 		new_base = group["BaseImponibleOimporteNoSujeto"] + Decimal(str(row["taxable_base"]))
 		group["BaseImponibleOimporteNoSujeto"] = new_base.quantize(CENT, rounding=ROUND_HALF_UP)
 		new_tax_amount = group["CuotaRepercutida"] + Decimal(str(row["tax_amount"]))
@@ -202,6 +208,14 @@ def build_tax_breakdown(breakup_rows: list[dict]) -> list[dict]:
 			**(
 				{"CuotaRepercutida": float(group["CuotaRepercutida"])}
 				if "OperacionExenta" not in group
+				else {}
+			),
+			**(
+				{
+					"TipoRecargoEquivalencia": group["TipoRecargoEquivalencia"],
+					"CuotaRecargoEquivalencia": float(group["CuotaRecargoEquivalencia"]),
+				}
+				if "TipoRecargoEquivalencia" in group and "OperacionExenta" not in group
 				else {}
 			),
 			"ClaveRegimen": group["ClaveRegimen"],
@@ -330,7 +344,83 @@ def build_cancellation_record(data: dict) -> dict:
 
 
 def get_spain_tax_breakup(invoice) -> list[dict]:
-	"""STUB — CONTRATO 07 (reemplazable): heurística de lectura de `invoice.taxes`.
+	"""Desglose del RegistroAlta (contrato de spec 04 §7).
+
+	Si todas las filas de impuestos están clasificadas (`es_tax_type`, spec 03),
+	sale de la función común del Registro Fiscal IVA (spec 06 §6). Si no, se
+	mantiene la lectura heredada de la descripción («IVA - 21»)."""
+	taxes = getattr(invoice, "taxes", None) or []
+	if taxes and hasattr(invoice, "get") and all(getattr(row, "es_tax_type", None) for row in taxes):
+		return classified_tax_breakup(invoice)
+	return legacy_tax_breakup(invoice)
+
+
+def classified_tax_breakup(invoice) -> list[dict]:
+	"""Filas del contrato a partir de `es_iva.breakdown.vat_breakdown`.
+
+	- Solo IVA: las retenciones no van en el desglose (spec 06 §6).
+	- El recargo de equivalencia se adjunta a la línea de IVA de la misma base
+	  (TipoRecargoEquivalencia y CuotaRecargoEquivalencia del DetalleType).
+	- Calificación E1-E6 → OperacionExenta; S1, S2, N1, N2 → CalificacionOperacion."""
+	from erpnext_spain.es_iva.breakdown import SURCHARGE, VAT, vat_breakdown
+
+	parts = vat_breakdown(invoice)
+	default_regime = getattr(invoice, "es_verifactu_regime_key", None) or DEFAULT_REGIME_KEY
+	rows = []
+	for part in parts:
+		if part["tax_type"] != VAT:
+			continue
+		classification = part["vat_classification"] or CLASSIFICATION_TAXABLE
+		exempt = classification.startswith("E")
+		rows.append(
+			{
+				"tax_type": "IVA",
+				"tax_rate": _format_tax_rate(part["tax_rate"]),
+				"taxable_base": part["taxable_base"],
+				"tax_amount": part["tax_amount"],
+				"operation_classification": None if exempt else classification,
+				"regime_key": part["regime_key"] or default_regime,
+				"exemption_cause": classification if exempt else None,
+				"recipients": None,
+			}
+		)
+	for part in parts:
+		if part["tax_type"] != SURCHARGE:
+			continue
+		target = next(
+			(
+				row
+				for row in rows
+				if abs(row["taxable_base"] - part["taxable_base"]) < 0.01 and "equivalence_rate" not in row
+			),
+			None,
+		)
+		if target is None:
+			raise ValueError(
+				"Recargo de equivalencia sin línea de IVA de la misma base: revise las filas de impuestos."
+			)
+		target["equivalence_rate"] = part["tax_rate"]
+		target["equivalence_amount"] = part["tax_amount"]
+	return rows
+
+
+def invoice_totals(invoice, breakdown: list[dict]) -> tuple[float, float]:
+	"""CuotaTotal e ImporteTotal del RegistroAlta.
+
+	Con filas clasificadas: CuotaTotal = IVA + recargo del desglose (sin
+	retenciones) e ImporteTotal = base de la factura + CuotaTotal, es decir, el
+	total sin descontar la retención (spec 06 §6, spec 08 §5). Sin clasificar se
+	mantiene el cálculo heredado (total de impuestos y total redondeado)."""
+	taxes = getattr(invoice, "taxes", None) or []
+	if taxes and hasattr(invoice, "get") and all(getattr(row, "es_tax_type", None) for row in taxes):
+		quota = sum(float(row["tax_amount"]) + float(row.get("equivalence_amount") or 0) for row in breakdown)
+		base = float(invoice.get("base_net_total") or invoice.get("net_total") or 0)
+		return round(quota, 2), round(base + quota, 2)
+	return float(invoice.get("total_taxes_and_charges") or 0), float(invoice.get("rounded_total") or 0)
+
+
+def legacy_tax_breakup(invoice) -> list[dict]:
+	"""Lectura heredada de `invoice.taxes` por la descripción («IVA - 21»).
 
 	Produce las filas del contrato de spec 04 §7 (consumidas por
 	build_tax_breakdown): {tax_type, tax_rate, taxable_base, tax_amount,

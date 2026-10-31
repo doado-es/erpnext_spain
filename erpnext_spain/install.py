@@ -69,11 +69,13 @@ def before_uninstall() -> None:
 	from erpnext_spain.es_efactura.setup import cleanup_custom_fields as _cleanup_efactura
 	from erpnext_spain.es_facturacion.setup import cleanup_custom_fields as _cleanup_billing
 	from erpnext_spain.es_impuestos.setup import cleanup_custom_fields as _cleanup_taxes
+	from erpnext_spain.es_iva.setup import cleanup_custom_fields as _cleanup_vat
 	from erpnext_spain.es_retenciones.setup import cleanup_custom_fields as _cleanup_withholding
 	from erpnext_spain.es_sii.setup import cleanup_custom_fields as _cleanup_sii
 	from erpnext_spain.es_verifactu.setup import cleanup_custom_fields as _cleanup_verifactu
 	from erpnext_spain.nif.setup import cleanup_custom_fields as _cleanup_nif
 
+	_cleanup_vat()
 	_cleanup_billing()
 	_cleanup_efactura()
 	_cleanup_withholding()
@@ -92,6 +94,7 @@ def setup_custom_fields() -> None:
 	from erpnext_spain.es_efactura.setup import setup_custom_fields as _setup_efactura
 	from erpnext_spain.es_facturacion.setup import setup_custom_fields as _setup_billing
 	from erpnext_spain.es_impuestos.setup import setup_custom_fields as _setup_taxes
+	from erpnext_spain.es_iva.setup import setup_custom_fields as _setup_vat
 	from erpnext_spain.es_retenciones.setup import setup_custom_fields as _setup_withholding
 	from erpnext_spain.es_sii.setup import setup_custom_fields as _setup_sii
 	from erpnext_spain.es_verifactu.setup import setup_custom_fields as _setup_verifactu
@@ -105,6 +108,7 @@ def setup_custom_fields() -> None:
 	_setup_withholding()
 	_setup_efactura()
 	_setup_billing()
+	_setup_vat()
 	_efactura_defaults()
 
 

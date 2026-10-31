@@ -338,14 +338,16 @@ def _register_issuance(doc: Document, flags: dict | None = None) -> str:
 	flags = flags or {}
 	conf = frappe.db.get_value("Company", company, ["tax_id", "company_name"], as_dict=True)
 
+	breakdown = data_adapter.get_spain_tax_breakup(doc)
+	total_tax, total_amount = data_adapter.invoice_totals(doc, breakdown)
 	data = {
 		"issuer_nif": conf.tax_id,
 		"series_number": doc.name,
 		"issue_date": doc.posting_date,
 		"invoice_type_code": doc.get("es_invoice_type"),
-		"tax_breakdown": data_adapter.get_spain_tax_breakup(doc),
-		"total_tax": doc.get("total_taxes_and_charges") or 0,
-		"total_amount": doc.get("rounded_total") or 0,
+		"tax_breakdown": breakdown,
+		"total_tax": total_tax,
+		"total_amount": total_amount,
 		"previous_hash": previous_hash,
 		"generation_timestamp": format_aeat_datetime(),
 		"issuer_name": conf.company_name,

@@ -47,9 +47,11 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Registro fiscal de IVA (spec 06)
 
-- Todo el doctype y los libros.
-- Confirmar la propuesta de autorrepercusión con dos filas en la plantilla de compra (ya implementada en los datos iniciales) frente al regional override.
-- Importaciones con DUA.
+- **Hecho (31/10/2026)**: Registro Fiscal IVA, reconstrucción, libros de expedidas y recibidas, borrador de liquidación y desglose común para VeriFactu.
+- Confirmar con el usuario la autorrepercusión con dos filas en la plantilla de compra (implementada y probada con el registro y la liquidación) frente al regional override.
+- Importaciones con DUA (base del valor en aduana).
+- VeriFactu: comprobar contra el entorno de pruebas el desglose de N1/N2 (hoy se envía tipo y cuota 0) y el recargo de equivalencia.
+- Tipo de factura de las recibidas (hoy F1, o R1 si es rectificativa) y clave de identificación del tercero (02 UE, 06 resto) **[revisar]** con el SII.
 
 ## Retenciones (spec 08)
 

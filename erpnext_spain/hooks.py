@@ -27,7 +27,11 @@ doc_events = {
 		]
 	},
 	# Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3).
-	"Purchase Invoice": {"validate": "erpnext_spain.es_retenciones.withholding.validate_purchase_invoice"},
+	"Purchase Invoice": {
+		"validate": "erpnext_spain.es_retenciones.withholding.validate_purchase_invoice",
+		"on_submit": "erpnext_spain.es_iva.register.on_submit",
+		"on_cancel": "erpnext_spain.es_iva.register.on_cancel",
+	},
 	"Payment Entry": {"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry"},
 	"Company": {
 		# El NIF de la compañía lo valida primero el verificador (nif/party);
@@ -62,11 +66,16 @@ doc_events = {
 			"erpnext_spain.es_facturacion.numbering.before_submit",
 			"erpnext_spain.es_verifactu.emission.before_submit",
 		],
-		"on_submit": "erpnext_spain.es_verifactu.emission.on_submit",
+		"on_submit": [
+			"erpnext_spain.es_verifactu.emission.on_submit",
+			# Registro Fiscal IVA (spec 06).
+			"erpnext_spain.es_iva.register.on_submit",
+		],
 		"before_cancel": [
 			"erpnext_spain.es_efactura.api.block_cancel_if_presented",
 			"erpnext_spain.es_verifactu.emission.before_cancel",
 		],
+		"on_cancel": "erpnext_spain.es_iva.register.on_cancel",
 	},
 }
 

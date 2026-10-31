@@ -2,6 +2,8 @@
 
 Fase 3 · Depende de: 01, 02, 03, 05 · Bloquea: modelos, SII y Verifactu (07)
 
+> **Estado (31/10/2026): implementado** en el módulo ES Iva (`es_iva/{breakdown,register,books,eu,setup}.py`, doctype `ES Vat Register`, informes `ES Issued Invoices Book`, `ES Received Invoices Book` y `ES VAT Return Draft`); tests en `es_iva/tests/test_vat_register.py` (criterios 1-9 y contrato con VeriFactu). Autorrepercusión con las dos filas de la plantilla (sin regional override). VeriFactu usa el desglose común cuando las filas están clasificadas. Pendiente: importaciones con DUA, criterio de caja, prorrata especial.
+
 ## Objetivo
 
 Guardar, al validar cada factura, su desglose fiscal (una fila por calificación, tipo de operación y tipo impositivo) en un doctype propio del que saldrán los libros registro, los modelos, el SII y Verifactu. Incluye las operaciones con devengo especial (ISP, adquisiciones intracomunitarias, importaciones), que es lo que suele fallar.

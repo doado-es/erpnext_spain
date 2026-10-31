@@ -1,0 +1,439 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-10-31 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "in_create": 1,
+ "description": "Desglose fiscal de cada factura validada (spec 06). Lo escribe el sistema; no se edita.",
+ "field_order": [
+  "company",
+  "book",
+  "voucher_type",
+  "voucher_no",
+  "tax_row",
+  "column_dates",
+  "posting_date",
+  "issue_date",
+  "operation_date",
+  "fiscal_year",
+  "quarter",
+  "month",
+  "section_party",
+  "party_type",
+  "party",
+  "party_name",
+  "column_party",
+  "tax_id",
+  "id_type",
+  "country",
+  "section_invoice",
+  "invoice_type",
+  "series",
+  "number",
+  "supplier_invoice_no",
+  "column_invoice",
+  "rectified_invoice",
+  "invoice_total",
+  "section_classification",
+  "tax_type",
+  "vat_classification",
+  "operation_type",
+  "column_classification",
+  "regime_key",
+  "deductibility",
+  "withholding_key",
+  "account",
+  "section_amounts",
+  "taxable_base",
+  "tax_rate",
+  "tax_amount",
+  "column_amounts",
+  "deductible_amount",
+  "pro_rata",
+  "section_status",
+  "self_assessed",
+  "cancelled",
+  "unclassified"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Compañía",
+   "options": "Company",
+   "reqd": 1,
+   "in_standard_filter": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "book",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Libro",
+   "options": "Expedidas\nRecibidas",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "voucher_type",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Tipo de documento",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Dynamic Link",
+   "read_only": 1,
+   "label": "Documento",
+   "options": "voucher_type",
+   "reqd": 1,
+   "in_list_view": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "tax_row",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Fila de impuesto"
+  },
+  {
+   "fieldname": "column_dates",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "read_only": 1,
+   "label": "Fecha de contabilización",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "issue_date",
+   "fieldtype": "Date",
+   "read_only": 1,
+   "label": "Fecha de expedición"
+  },
+  {
+   "fieldname": "operation_date",
+   "fieldtype": "Date",
+   "read_only": 1,
+   "label": "Fecha de operación"
+  },
+  {
+   "fieldname": "fiscal_year",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "label": "Ejercicio",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "quarter",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Trimestre",
+   "options": "\n1T\n2T\n3T\n4T",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "month",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "label": "Mes"
+  },
+  {
+   "fieldname": "section_party",
+   "fieldtype": "Section Break",
+   "label": "Tercero"
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Tipo de tercero",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "read_only": 1,
+   "label": "Tercero",
+   "options": "party_type",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Nombre o razón social"
+  },
+  {
+   "fieldname": "column_party",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_id",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "NIF",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "id_type",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Tipo de identificación",
+   "description": "Vacío: NIF español. 02: NIF-IVA de otro Estado de la UE. 06: otro documento (fuera de la UE)."
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "País",
+   "options": "Country"
+  },
+  {
+   "fieldname": "section_invoice",
+   "fieldtype": "Section Break",
+   "label": "Factura"
+  },
+  {
+   "fieldname": "invoice_type",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Tipo de factura"
+  },
+  {
+   "fieldname": "series",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Serie"
+  },
+  {
+   "fieldname": "number",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Número"
+  },
+  {
+   "fieldname": "supplier_invoice_no",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Número de la factura del proveedor"
+  },
+  {
+   "fieldname": "column_invoice",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rectified_invoice",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Factura rectificada"
+  },
+  {
+   "fieldname": "invoice_total",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "label": "Total de la factura",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "section_classification",
+   "fieldtype": "Section Break",
+   "label": "Clasificación"
+  },
+  {
+   "fieldname": "tax_type",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Tipo de impuesto",
+   "options": "\nIVA\nRecargo de equivalencia\nRetención IRPF\nOtro",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "vat_classification",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Calificación o exención",
+   "options": "\nS1\nS2\nN1\nN2\nE1\nE2\nE3\nE4\nE5\nE6"
+  },
+  {
+   "fieldname": "operation_type",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Tipo de operación",
+   "options": "\nInterior\nEntrega intracomunitaria\nAdquisición intracomunitaria de bienes\nAdquisición intracomunitaria de servicios\nImportación\nExportación\nServicios a/desde fuera de la UE"
+  },
+  {
+   "fieldname": "column_classification",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "regime_key",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "label": "Clave de régimen"
+  },
+  {
+   "fieldname": "deductibility",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Deducibilidad",
+   "options": "\nCorriente\nBien de inversión\nNo deducible"
+  },
+  {
+   "fieldname": "withholding_key",
+   "fieldtype": "Select",
+   "read_only": 1,
+   "label": "Clave de retención",
+   "options": "\nTrabajo\nActividades profesionales\nArrendamiento de inmuebles\nCapital mobiliario\nOtras"
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "label": "Cuenta",
+   "options": "Account"
+  },
+  {
+   "fieldname": "section_amounts",
+   "fieldtype": "Section Break",
+   "label": "Importes (moneda de la compañía)"
+  },
+  {
+   "fieldname": "taxable_base",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "label": "Base imponible",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "tax_rate",
+   "fieldtype": "Percent",
+   "read_only": 1,
+   "label": "Tipo impositivo",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tax_amount",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "label": "Cuota",
+   "in_list_view": 1,
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "column_amounts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "deductible_amount",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "label": "Cuota deducible",
+   "options": "Company:company:default_currency"
+  },
+  {
+   "fieldname": "pro_rata",
+   "fieldtype": "Percent",
+   "read_only": 1,
+   "label": "Prorrata aplicada"
+  },
+  {
+   "fieldname": "section_status",
+   "fieldtype": "Section Break",
+   "label": "Estado"
+  },
+  {
+   "fieldname": "self_assessed",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "label": "Autorrepercutida"
+  },
+  {
+   "fieldname": "cancelled",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "label": "Anulado",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "unclassified",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "label": "Sin clasificar",
+   "in_standard_filter": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-31 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ES Iva",
+ "name": "ES Vat Register",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "share": 0,
+   "email": 0
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "share": 0,
+   "email": 0
+  },
+  {
+   "role": "Auditor",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "share": 0,
+   "email": 0
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 1,
+   "share": 0,
+   "email": 0
+  }
+ ],
+ "sort_field": "posting_date",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "voucher_no",
+ "track_changes": 0
+}
