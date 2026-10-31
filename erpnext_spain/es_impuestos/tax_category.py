@@ -6,7 +6,8 @@
 #
 # - España → «Nacional», salvo Canarias (códigos postales 35 y 38), Ceuta (51) y
 #   Melilla (52) → «Canarias, Ceuta y Melilla».
-# - País de la UE con NIF-IVA → «Intracomunitario»; sin NIF (consumidor final), la
+# - País de la UE con NIF-IVA → «Entrega intracomunitaria» si es cliente y
+#   «Adquisición intracomunitaria» si es proveedor; sin NIF (consumidor final), la
 #   venta lleva IVA español → «Nacional».
 # - Resto → «Extracomunitario».
 #
@@ -25,13 +26,23 @@
 import frappe
 from frappe.model.document import Document
 
-from erpnext_spain.es_impuestos.initial_data import EXTRA_EU, INTRA_EU, NATIONAL, SPECIAL_TERRITORIES
+from erpnext_spain.es_impuestos.initial_data import (
+	EXTRA_EU,
+	INTRA_EU_PURCHASES,
+	INTRA_EU_SALES,
+	NATIONAL,
+	SPECIAL_TERRITORIES,
+)
+
+CUSTOMER, SUPPLIER = "Customer", "Supplier"
 
 SPAIN = "Spain"
 SPECIAL_POSTCODES = ("35", "38", "51", "52")
 
 
-def category_for(country: str | None, postcode: str | None = None, tax_id: str | None = None) -> str | None:
+def category_for(
+	country: str | None, postcode: str | None = None, tax_id: str | None = None, side: str = CUSTOMER
+) -> str | None:
 	"""Categoría por país; NATIONAL para España peninsular y Baleares (y la UE sin
 	NIF-IVA). Quien la guarda la convierte en vacío con `stored`."""
 	if not country:
@@ -44,7 +55,9 @@ def category_for(country: str | None, postcode: str | None = None, tax_id: str |
 
 	code = (frappe.get_cached_value("Country", country, "code") or "").upper()
 	if code in EU_COUNTRIES:
-		return INTRA_EU if (tax_id or "").strip() else NATIONAL
+		if not (tax_id or "").strip():
+			return NATIONAL
+		return INTRA_EU_PURCHASES if side == SUPPLIER else INTRA_EU_SALES
 	return EXTRA_EU
 
 
@@ -72,24 +85,29 @@ def _apply(doc: Document, category: str | None, fields: tuple[str, ...]) -> None
 	doc.tax_category = stored(category)
 
 
-def _party_tax_id(address: Document) -> str | None:
-	for link in address.get("links") or []:
-		if link.link_doctype in ("Customer", "Supplier") and link.link_name:
-			tax_id = frappe.db.get_value(link.link_doctype, link.link_name, "tax_id")
-			if tax_id:
-				return tax_id
-	return None
+def _party(address: Document) -> tuple[str, str | None]:
+	"""Lado (cliente o proveedor) y NIF del tercero de la dirección. Sin enlaces o
+	con enlaces a los dos, se trata como de cliente."""
+	sides = {
+		link.link_doctype: link.link_name
+		for link in address.get("links") or []
+		if link.link_doctype in (CUSTOMER, SUPPLIER) and link.link_name
+	}
+	side = SUPPLIER if SUPPLIER in sides and CUSTOMER not in sides else CUSTOMER
+	name = sides.get(side)
+	return side, frappe.db.get_value(side, name, "tax_id") if name else None
 
 
 def set_address_category(doc: Document, method: str | None = None) -> None:
 	"""doc_event validate de Address."""
 	if not doc.get("country") or not _categories_ready():
 		return
-	_apply(doc, category_for(doc.country, doc.get("pincode"), _party_tax_id(doc)), ("country", "pincode"))
+	side, tax_id = _party(doc)
+	_apply(doc, category_for(doc.country, doc.get("pincode"), tax_id, side), ("country", "pincode"))
 
 
 def set_supplier_category(doc: Document, method: str | None = None) -> None:
 	"""doc_event validate de Supplier: su propio país (por si no tiene dirección)."""
 	if not doc.get("country") or not _categories_ready():
 		return
-	_apply(doc, category_for(doc.country, None, doc.get("tax_id")), ("country",))
+	_apply(doc, category_for(doc.country, None, doc.get("tax_id"), SUPPLIER), ("country",))

@@ -176,7 +176,9 @@ class TestTaxInitialData(IntegrationTestCase):
 
 	def test_intra_community_acquisition_self_assessed(self):
 		"""Spec 06, criterio 6: la autorrepercusión deja 210 € en la 4720 y 210 € en la 4770."""
-		supplier = ensure_party("Supplier", "_Test ES Impuestos Proveedor UE", initial_data.INTRA_EU)
+		supplier = ensure_party(
+			"Supplier", "_Test ES Impuestos Proveedor UE", initial_data.INTRA_EU_PURCHASES
+		)
 		pi = frappe.get_doc(
 			{
 				"doctype": "Purchase Invoice",
@@ -208,12 +210,80 @@ class TestTaxInitialData(IntegrationTestCase):
 		self.assertAlmostEqual(gl["4000"], -1000)
 		self.assertEqual([t.es_self_assessed for t in pi.taxes], [0, 1])
 
+	def test_reduced_item_rows_mirrored(self):
+		"""La fila sin categoría del artículo se replica para recargo, retención y
+		adquisición intracomunitaria, sin duplicarse al volver a guardar."""
+		reduced = self.template("Item Tax Template", "IVA 10 %")
+		item = frappe.get_doc("Item", ensure_item("_Test ES Artículo IVA 10 categorías", reduced))
+		item.save()
+		categories = sorted(row.tax_category or "" for row in item.taxes)
+		self.assertEqual(
+			categories,
+			sorted(
+				[
+					"",
+					initial_data.NATIONAL_RE,
+					initial_data.NATIONAL_WITHHOLDING,
+					initial_data.INTRA_EU_PURCHASES,
+				]
+			),
+		)
+
+	def reduced_purchase(self, supplier: str, template: str):
+		reduced = self.template("Item Tax Template", "IVA 10 %")
+		item = ensure_item("_Test ES Artículo IVA 10 compras", reduced)
+		pi = frappe.get_doc(
+			{
+				"doctype": "Purchase Invoice",
+				"company": self.company,
+				"supplier": supplier,
+				"credit_to": pgc.account_by_number(self.company, "4000"),
+				"cost_center": self.cost_center,
+				"items": [
+					{
+						"item_code": item,
+						"qty": 1,
+						"rate": 1000,
+						"expense_account": pgc.account_by_number(self.company, "6000"),
+						"cost_center": self.cost_center,
+					}
+				],
+				"taxes_and_charges": self.template("Purchase Taxes and Charges Template", template),
+			}
+		)
+		apply_template(pi)
+		pi.insert()
+		return pi
+
+	def test_reduced_item_for_surcharge_customer(self):
+		"""Cliente con recargo: el artículo al 10 % lleva 10 % de IVA y 1,4 % de recargo."""
+		reduced = self.template("Item Tax Template", "IVA 10 %")
+		item = ensure_item("_Test ES Artículo IVA 10 recargo", reduced)
+		customer = ensure_party("Customer", "_Test ES Impuestos Cliente RE", initial_data.NATIONAL_RE)
+		si = self.sales_invoice("IVA 21 % + RE 5,2 %", item=item, customer=customer)
+		self.assertEqual(si.tax_category, initial_data.NATIONAL_RE)
+		self.assertAlmostEqual(si.total_taxes_and_charges, 114)
+
+	def test_reduced_item_intra_eu_purchase_and_sale(self):
+		"""Compra intracomunitaria: se autoliquida al 10 %. Venta: sigue exenta."""
+		supplier = ensure_party(
+			"Supplier", "_Test ES Impuestos Proveedor UE", initial_data.INTRA_EU_PURCHASES
+		)
+		pi = self.reduced_purchase(supplier, "Adquisición intracomunitaria de bienes 21 %")
+		self.assertEqual([row.tax_amount for row in pi.taxes], [100, 100])
+
+		reduced = self.template("Item Tax Template", "IVA 10 %")
+		item = ensure_item("_Test ES Artículo IVA 10 ventas UE", reduced)
+		customer = ensure_party("Customer", "_Test ES Impuestos Cliente UE", initial_data.INTRA_EU_SALES)
+		si = self.sales_invoice("Entrega intracomunitaria", item=item, customer=customer)
+		self.assertAlmostEqual(si.total_taxes_and_charges, 0)
+
 	def test_tax_rule_picks_template_by_category(self):
 		"""Spec 03, criterio 2: al elegir un cliente intracomunitario, la factura recibe
 		la plantilla de entrega intracomunitaria (lo mismo que hace el formulario)."""
 		from erpnext.accounts.party import get_party_details
 
-		customer = ensure_party("Customer", "_Test ES Impuestos Cliente UE", initial_data.INTRA_EU)
+		customer = ensure_party("Customer", "_Test ES Impuestos Cliente UE", initial_data.INTRA_EU_SALES)
 		details = get_party_details(customer, "Customer", company=self.company, doctype="Sales Invoice")
 		self.assertEqual(
 			details.get("taxes_and_charges"),

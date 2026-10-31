@@ -6,7 +6,8 @@ from frappe.tests import IntegrationTestCase
 from erpnext_spain.es_impuestos import tax_category
 from erpnext_spain.es_impuestos.initial_data import (
 	EXTRA_EU,
-	INTRA_EU,
+	INTRA_EU_PURCHASES,
+	INTRA_EU_SALES,
 	NATIONAL,
 	NATIONAL_RE,
 	SPECIAL_TERRITORIES,
@@ -25,7 +26,11 @@ class TestTaxCategoryByCountry(IntegrationTestCase):
 		self.assertEqual(tax_category.category_for("Spain", "15705"), NATIONAL)
 		for postcode in ("35001", "38001", "51001", "52001"):
 			self.assertEqual(tax_category.category_for("Spain", postcode), SPECIAL_TERRITORIES, postcode)
-		self.assertEqual(tax_category.category_for("France", None, "FR40303265045"), INTRA_EU)
+		self.assertEqual(tax_category.category_for("France", None, "FR40303265045"), INTRA_EU_SALES)
+		self.assertEqual(
+			tax_category.category_for("France", None, "FR40303265045", tax_category.SUPPLIER),
+			INTRA_EU_PURCHASES,
+		)
 		self.assertEqual(tax_category.category_for("France", None, None), NATIONAL)  # consumidor final
 		self.assertEqual(tax_category.category_for("United States", None, "12-3456789"), EXTRA_EU)
 		self.assertIsNone(tax_category.category_for(None))
@@ -54,7 +59,7 @@ class TestTaxCategoryByCountry(IntegrationTestCase):
 			{"doctype": "Customer", "customer_name": "Client Exemple SARL", "tax_id": "FR40303265045"}
 		).insert()
 		address = self.address(customer.name, "France", "75001")
-		self.assertEqual(address.tax_category, INTRA_EU)
+		self.assertEqual(address.tax_category, INTRA_EU_SALES)
 
 		address.tax_category = EXTRA_EU  # a mano, mismo país: se respeta
 		address.save()
@@ -77,7 +82,7 @@ class TestTaxCategoryByCountry(IntegrationTestCase):
 				"tax_id": "DE136695976",
 			}
 		).insert()
-		self.assertEqual(supplier.tax_category, INTRA_EU)
+		self.assertEqual(supplier.tax_category, INTRA_EU_PURCHASES)
 
 		supplier.tax_category = NATIONAL_RE  # a mano, mismo país: se respeta
 		supplier.save()

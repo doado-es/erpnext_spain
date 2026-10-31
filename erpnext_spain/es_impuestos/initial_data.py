@@ -17,10 +17,25 @@ DATA_VERSION = 2
 NATIONAL = "Nacional"
 NATIONAL_RE = "Nacional con recargo de equivalencia"
 NATIONAL_WITHHOLDING = "Nacional con retención"
-INTRA_EU = "Intracomunitario"
+# Intracomunitario por sentido de la operación (revisión del 31/10/2026): ERPNext
+# elige la plantilla de impuestos del artículo por categoría, sin distinguir venta
+# y compra, y la venta va exenta mientras la compra se autoliquida al tipo del
+# artículo. Con una sola categoría, la fila del artículo que acierta en la compra
+# estropea la venta (ver es_impuestos/item_tax.py).
+INTRA_EU_SALES = "Entrega intracomunitaria"
+INTRA_EU_PURCHASES = "Adquisición intracomunitaria"
+OLD_INTRA_EU = "Intracomunitario"  # categoría única anterior (patch split_intra_eu_category)
 EXTRA_EU = "Extracomunitario"
 SPECIAL_TERRITORIES = "Canarias, Ceuta y Melilla"
-TAX_CATEGORIES = (NATIONAL, NATIONAL_RE, NATIONAL_WITHHOLDING, INTRA_EU, EXTRA_EU, SPECIAL_TERRITORIES)
+TAX_CATEGORIES = (
+	NATIONAL,
+	NATIONAL_RE,
+	NATIONAL_WITHHOLDING,
+	INTRA_EU_SALES,
+	INTRA_EU_PURCHASES,
+	EXTRA_EU,
+	SPECIAL_TERRITORIES,
+)
 
 # Cuentas que la app añade al plan PGC si no existen (número, nombre, grupo, tipo).
 EXTRA_ACCOUNTS = (("4771", "Hacienda Pública, IVA repercutido por recargo de equivalencia", "477", "Tax"),)
@@ -90,7 +105,7 @@ SALES_TEMPLATES = (
 	{"title": "Exenta", "rows": [vat(0, "E1") | {"description": "Operación exenta"}]},
 	{
 		"title": "Entrega intracomunitaria",
-		"tax_category": INTRA_EU,
+		"tax_category": INTRA_EU_SALES,
 		"rows": [
 			vat(0, "E5", "Entrega intracomunitaria") | {"description": "Entrega intracomunitaria exenta"}
 		],
@@ -151,7 +166,7 @@ PURCHASE_TEMPLATES = (
 	},
 	{
 		"title": "Adquisición intracomunitaria de bienes 21 %",
-		"tax_category": INTRA_EU,
+		"tax_category": INTRA_EU_PURCHASES,
 		"rows": self_assessed(21, "S1", "Adquisición intracomunitaria de bienes"),
 	},
 	{
@@ -182,7 +197,7 @@ SALES_RULES = (
 	(NATIONAL, "IVA 21 %"),
 	(NATIONAL_RE, "IVA 21 % + RE 5,2 %"),
 	(NATIONAL_WITHHOLDING, "IVA 21 % con retención 15 %"),
-	(INTRA_EU, "Entrega intracomunitaria"),
+	(INTRA_EU_SALES, "Entrega intracomunitaria"),
 	(EXTRA_EU, "Exportación"),
 	(SPECIAL_TERRITORIES, "Exportación"),
 )
@@ -190,7 +205,7 @@ PURCHASE_RULES = (
 	(NATIONAL, "IVA soportado 21 %"),
 	(NATIONAL_WITHHOLDING, "IVA soportado 21 %"),
 	(NATIONAL_RE, "IVA soportado 21 %"),
-	(INTRA_EU, "Adquisición intracomunitaria de bienes 21 %"),
+	(INTRA_EU_PURCHASES, "Adquisición intracomunitaria de bienes 21 %"),
 )
 
 # Cuenta por defecto de cada modo de pago estándar de ERPNext.

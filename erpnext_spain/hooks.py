@@ -21,6 +21,10 @@ doc_events = {
 	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
 	# Categoría de impuestos por país (España, UE, resto) en direcciones y proveedores.
 	"Address": {"validate": "erpnext_spain.es_impuestos.tax_category.set_address_category"},
+	# Plantilla de impuestos del artículo también para recargo, retención y
+	# adquisición intracomunitaria (es_impuestos/item_tax.py).
+	"Item": {"validate": "erpnext_spain.es_impuestos.item_tax.mirror_rows"},
+	"Item Group": {"validate": "erpnext_spain.es_impuestos.item_tax.mirror_rows"},
 	"Supplier": {
 		"validate": [
 			"erpnext_spain.nif.party.validate",
