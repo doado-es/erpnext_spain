@@ -349,6 +349,20 @@ class TestEmisionRegistros(IntegrationTestCase):
 			emission.INVOICE_STATUS_PENDING_SEND,
 		)
 
+	def test_history_in_fiscal_tab(self):
+		"""Pestaña «VeriFactu / SII»: el registro de alta llega con la factura."""
+		from erpnext_spain.es_facturacion.fiscal_tab import ONLOAD_KEY
+
+		self._activate()
+		a = self._draft_invoice()
+		a.submit()
+		loaded = frappe.get_doc("Sales Invoice", a.name)
+		loaded.run_method("onload")
+		data = loaded.get_onload().get(ONLOAD_KEY)
+		self.assertEqual(data["system"], "VeriFactu")
+		self.assertEqual([row.record_type for row in data["verifactu"]], ["RegistroAlta"])
+		self.assertEqual(data["verifactu"][0].status, "PendienteEnvio")
+
 	def test_immediate_remission_enqueued_after_commit(self):
 		"""Inmediata: el submit encola el drenaje del outbox con
 		enqueue_after_commit=True (JAMÁS antes del commit — en el test la

@@ -142,7 +142,7 @@ SALES_INVOICE_FIELDS = [
 		"label": "Rectificación",
 		"fieldtype": "Section Break",
 		"insert_after": "return_against",
-		"depends_on": "eval:doc.is_return",
+		"depends_on": "eval:doc.is_return || (doc.es_invoice_type || '').startsWith('R')",
 		"collapsible": 1,
 	},
 	{
@@ -163,13 +163,8 @@ SALES_INVOICE_FIELDS = [
 		"insert_after": "es_rectification_reason_code",
 		"description": described(CORRECTION_METHODS),
 	},
-	{
-		"fieldname": "es_rectification_reason",
-		"label": "Explicación de la rectificación",
-		"fieldtype": "Small Text",
-		"insert_after": "es_correction_method",
-		"mandatory_depends_on": "eval:doc.is_return",
-	},
+	# es_rectification_reason (la explicación) la define es_facturacion/setup.py,
+	# después de es_rectification_method: un solo campo para Facturae y VeriFactu.
 	{
 		"fieldname": "es_einvoice",
 		"label": "Factura electrónica",
@@ -178,7 +173,8 @@ SALES_INVOICE_FIELDS = [
 		"read_only": 1,
 		"allow_on_submit": 1,
 		"no_copy": 1,
-		"insert_after": "es_rectification_reason",
+		# Pestaña «VeriFactu / SII» (es_facturacion/fiscal_tab.py).
+		"insert_after": "es_fiscal_history_section",
 	},
 	{
 		"fieldname": "es_einvoice_status",
@@ -222,7 +218,8 @@ PURCHASE_INVOICE_FIELDS = [
 		"options": "ES E-Invoice",
 		"read_only": 1,
 		"no_copy": 1,
-		"insert_after": "bill_date",
+		# Pestaña «SII / Factura electrónica» (es_facturacion/fiscal_tab.py).
+		"insert_after": "es_fiscal_history_section",
 	},
 ]
 

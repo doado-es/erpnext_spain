@@ -35,6 +35,8 @@ doc_events = {
 		],
 		"on_submit": "erpnext_spain.es_sii.outbox.on_submit",
 		"on_cancel": "erpnext_spain.es_sii.outbox.on_cancel",
+		# Historial de la pestaña «SII / Factura electrónica».
+		"onload": "erpnext_spain.es_facturacion.fiscal_tab.onload",
 	},
 	"Payment Entry": {
 		"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry",
@@ -73,6 +75,8 @@ doc_events = {
 		# Nombre temporal del borrador solo en compañías que numeran al emitir
 		# (H1); como doc_event y no como extensión de la clase (H2).
 		"autoname": "erpnext_spain.es_verifactu.invoice.autoname",
+		# Historial de la pestaña «VeriFactu / SII».
+		"onload": "erpnext_spain.es_facturacion.fiscal_tab.onload",
 		"validate": [
 			# Numeración fiscal sin VeriFactu, amend y rectificativas (spec 05 §1-§2).
 			"erpnext_spain.es_facturacion.numbering.validate",
@@ -133,7 +137,10 @@ doctype_js = {
 		"es_efactura/public/js/sales_invoice.js",
 		# Situación de cobro (spec 05 §4).
 		"es_facturacion/public/js/sales_invoice.js",
+		# Pestaña «VeriFactu / SII».
+		"es_facturacion/public/js/fiscal_tab.js",
 	],
+	"Purchase Invoice": "es_facturacion/public/js/fiscal_tab.js",
 }
 
 # Estilado de BORRADOR-* en el list view de Sales Invoice (spec 04 §15):

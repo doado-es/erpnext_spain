@@ -187,8 +187,8 @@ SI_SECTION_FIELD = {
 	"fieldname": "es_verifactu_seccion",
 	"label": "VeriFactu",
 	"fieldtype": "Section Break",
-	"insert_after": "taxes_and_charges",
-	"collapsible": 1,
+	# Primera sección de la pestaña «VeriFactu / SII» (es_facturacion/fiscal_tab.py).
+	"insert_after": "es_fiscal_tab",
 }
 
 SI_INVOICE_TYPE_FIELD = {

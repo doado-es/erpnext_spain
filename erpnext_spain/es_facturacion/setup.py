@@ -2,6 +2,7 @@
 
 import frappe
 
+from erpnext_spain.es_facturacion import fiscal_tab
 from erpnext_spain.es_facturacion.collection import STATUSES
 from erpnext_spain.es_facturacion.numbering import METHOD_DIFFERENCES, RECTIFICATION_METHODS
 
@@ -31,7 +32,8 @@ CUSTOM_FIELDS = {
 			"fieldtype": "Select",
 			"options": "\n".join(RECTIFICATION_METHODS),
 			"default": METHOD_DIFFERENCES,
-			"insert_after": "es_external_rectified_date",
+			# En la sección «Rectificación» de la pestaña principal (es_efactura/setup.py).
+			"insert_after": "es_correction_method",
 			"depends_on": RECTIFICATION_DEPENDS,
 			"no_copy": 1,
 		},
@@ -117,6 +119,9 @@ CUSTOM_FIELDS = {
 	],
 }
 
+for _doctype, _fields in fiscal_tab.CUSTOM_FIELDS.items():
+	CUSTOM_FIELDS.setdefault(_doctype, []).extend(_fields)
+
 FIELDS_PER_DOCTYPE = {doctype: [f["fieldname"] for f in fields] for doctype, fields in CUSTOM_FIELDS.items()}
 
 
@@ -131,3 +136,4 @@ def cleanup_custom_fields() -> None:
 
 	_cleanup(FIELDS_PER_DOCTYPE)
 	frappe.clear_cache(doctype="Sales Invoice")
+	frappe.clear_cache(doctype="Purchase Invoice")

@@ -309,3 +309,44 @@ class TestPrintFormat(BillingTestCase):
 		self.assertIn("Factura rectificativa", html)
 		self.assertIn(si.name, html)
 		self.assertIn("Error en el precio", html)
+
+
+class TestFiscalTab(BillingTestCase):
+	"""Pestaña «VeriFactu / SII» (revisión del 31/10/2026)."""
+
+	def tab_of(self, doctype: str) -> dict[str, str]:
+		tab, tabs = None, {}
+		for field in frappe.get_meta(doctype).fields:
+			if field.fieldtype == "Tab Break":
+				tab = field.fieldname
+			tabs[field.fieldname] = tab
+		return tabs
+
+	def test_layout(self):
+		from erpnext_spain.es_facturacion.fiscal_tab import HISTORY, TAB
+
+		sales = self.tab_of("Sales Invoice")
+		for fieldname in (
+			"es_verifactu_seccion",
+			"es_invoice_type",
+			"es_verifactu_status",
+			"es_einvoice",
+			HISTORY,
+		):
+			self.assertEqual(sales[fieldname], TAB, fieldname)
+		# La rectificación y la situación de cobro siguen en la pestaña principal.
+		for fieldname in ("es_rectification_reason", "es_rectification_method", "es_collection_status"):
+			self.assertEqual(sales[fieldname], sales["return_against"], fieldname)
+		fields = [field.fieldname for field in frappe.get_meta("Sales Invoice").fields]
+		self.assertLess(fields.index(TAB), fields.index("connections_tab"))
+		self.assertEqual(self.tab_of("Purchase Invoice")["es_e_invoice"], TAB)
+
+	def test_nothing_loaded_without_verifactu_or_sii(self):
+		from erpnext_spain.es_facturacion.fiscal_tab import ONLOAD_KEY
+
+		self.configure(numbering=False)
+		si = self.invoice().insert()
+		si.submit()
+		loaded = frappe.get_doc("Sales Invoice", si.name)
+		loaded.run_method("onload")
+		self.assertNotIn(ONLOAD_KEY, loaded.get_onload() or {})

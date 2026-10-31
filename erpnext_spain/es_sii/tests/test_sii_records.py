@@ -149,6 +149,19 @@ class TestSii(IntegrationTestCase):
 		)
 		self.assertEqual(content["FacturaExpedida"]["Contraparte"]["NIF"], "12345678Z")
 
+	def test_history_in_fiscal_tab(self):
+		"""Pestaña de la factura: el registro del SII llega con el documento (onload)."""
+		from erpnext_spain.es_facturacion.fiscal_tab import ONLOAD_KEY
+
+		for doc in (self.sale(), self.purchase("IVA soportado 21 %")):
+			with self.subTest(doctype=doc.doctype):
+				loaded = frappe.get_doc(doc.doctype, doc.name)
+				loaded.run_method("onload")
+				data = loaded.get_onload().get(ONLOAD_KEY)
+				self.assertEqual(data["system"], "SII")
+				self.assertEqual([row.name for row in data["sii"]], [self.record(doc).name])
+				self.assertEqual(data["verifactu"], [])
+
 	def test_special_cases(self):
 		"""Criterio 7: ISP, intracomunitaria y rectificativa con sus claves y desgloses."""
 		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
