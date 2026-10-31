@@ -38,8 +38,6 @@ class TestESSettings(IntegrationTestCase):
 			pluck="name",
 		)
 		sin_permisos = [
-			dt
-			for dt in doctypes
-			if not frappe.get_all("DocPerm", filters={"parent": dt}, limit=1)
+			dt for dt in doctypes if not frappe.get_all("DocPerm", filters={"parent": dt}, limit=1)
 		]
 		self.assertEqual(sin_permisos, [])

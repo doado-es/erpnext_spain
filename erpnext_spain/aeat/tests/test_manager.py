@@ -9,9 +9,9 @@ from datetime import timedelta
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext_spain.aeat.manager import AEATOutboxManager, AEATDriver, get_drivers, register_driver
-from erpnext_spain.aeat.utils import now_aeat
+from erpnext_spain.aeat.manager import AEATDriver, AEATOutboxManager, get_drivers, register_driver
 from erpnext_spain.aeat.tests.helpers import test_company
+from erpnext_spain.aeat.utils import now_aeat
 
 GHOST_COMPANY = "ES Empresa Fantasma AEAT"  # no existe: errores aislados
 
@@ -63,7 +63,12 @@ def ok_response(refs: list[str], wait_seconds: int = 0) -> dict:
 					"NumSerieFactura": ref,
 					"FechaExpedicionFactura": "30-01-2026",
 				},
-				"Operacion": {"TipoOperacion": "Alta", "Subsanacion": None, "RechazoPrevio": None, "SinRegistroPrevio": None},
+				"Operacion": {
+					"TipoOperacion": "Alta",
+					"Subsanacion": None,
+					"RechazoPrevio": None,
+					"SinRegistroPrevio": None,
+				},
 				"RefExterna": ref,
 				"EstadoRegistro": "Correcto",
 				"CodigoErrorRegistro": None,
@@ -300,9 +305,7 @@ class TestAEATOutboxManager(IntegrationTestCase):
 			)
 		)
 		# sin response persistida por ESTE drain (no la hubo)
-		self.assertEqual(
-			frappe.db.count("ES AEAT Response", {"company": self.company}), responses_before
-		)
+		self.assertEqual(frappe.db.count("ES AEAT Response", {"company": self.company}), responses_before)
 
 	def test_transient_retry_recovers(self):
 		"""Un fallo transitorio seguido de éxito: reintenta con backoff y
@@ -340,7 +343,9 @@ class TestAEATOutboxManager(IntegrationTestCase):
 		driver = MockDriver([self.company])
 		driver.clients[self.company] = FakeClient(responses=[ok_response(["BR-001", "BR-002"])])
 		register_driver(driver)
-		self.addCleanup(lambda: get_drivers.__globals__["_DRIVERS"].setdefault("VeriFactu", []).remove(driver))
+		self.addCleanup(
+			lambda: get_drivers.__globals__["_DRIVERS"].setdefault("VeriFactu", []).remove(driver)
+		)
 
 		self.assertIn(driver, get_drivers("VeriFactu"))
 		AEATOutboxManager(clock=FakeClock()).drain()  # drena los registrados

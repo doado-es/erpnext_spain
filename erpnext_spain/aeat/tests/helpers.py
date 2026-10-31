@@ -7,11 +7,11 @@
 from __future__ import annotations
 
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 
 import frappe
 
-from erpnext_spain.tests.fixtures import (  # noqa: F401 — reexportados
+from erpnext_spain.tests.fixtures import (
 	ensure_sif_identity,
 	ensure_test_company,
 	ensure_test_customer,
@@ -32,7 +32,7 @@ def generate_p12(
 	from cryptography.hazmat.primitives.serialization.pkcs12 import serialize_key_and_certificates
 	from cryptography.x509.oid import NameOID
 
-	now = datetime.now(timezone.utc)
+	now = datetime.now(UTC)
 	start = now - timedelta(days=days_from)
 	end = now + timedelta(days=days_to)
 

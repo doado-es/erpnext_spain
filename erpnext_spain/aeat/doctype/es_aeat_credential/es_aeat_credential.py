@@ -25,7 +25,7 @@ import os
 import frappe
 from frappe.model.document import Document
 
-from erpnext_spain.aeat.utils import get_days_remaining, absolute_site_path
+from erpnext_spain.aeat.utils import absolute_site_path, get_days_remaining
 
 
 def pem_names(company: str, purpose: str) -> tuple[str, str]:

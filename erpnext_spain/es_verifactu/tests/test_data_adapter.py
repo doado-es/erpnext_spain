@@ -15,6 +15,7 @@ import unittest
 from datetime import date
 from decimal import Decimal
 from types import SimpleNamespace
+from typing import ClassVar
 
 from erpnext_spain.es_verifactu.utils.data_adapter import (
 	build_cancellation_record,
@@ -373,9 +374,7 @@ class TestBuildIssuanceRecord(unittest.TestCase):
 		self.assertEqual(rectified_list[0]["FechaExpedicionFactura"], "31-12-2025")
 
 	def test_explicit_rectification_type_prevails(self):
-		record = build_issuance_record(
-			_issuance_data(invoice_type_code="R1", rectification_type="S")
-		)
+		record = build_issuance_record(_issuance_data(invoice_type_code="R1", rectification_type="S"))
 		self.assertEqual(record["TipoRectificativa"], "S")
 
 
@@ -600,7 +599,7 @@ class TestFullInterior(unittest.TestCase):
 	entrada → omitidas (retrocompatibilidad con el record_json del formato
 	anterior); la HUELLA NO las incluye (cadena canónica congelada)."""
 
-	SIF = {
+	SIF: ClassVar[dict[str, str]] = {
 		"NombreRazon": "Productor del Software SL",
 		"NIF": "B12345678",
 		"NombreSistemaInformatico": "ES Erp",
@@ -624,9 +623,7 @@ class TestFullInterior(unittest.TestCase):
 			)
 		)
 		self.assertEqual(record["NombreRazonEmisor"], "Emisor SL")
-		self.assertEqual(
-			record["DescripcionOperacion"], "Factura 2026-001 por cantidad 1000.0"
-		)
+		self.assertEqual(record["DescripcionOperacion"], "Factura 2026-001 por cantidad 1000.0")
 		self.assertEqual(record["Subsanacion"], "N")
 		self.assertEqual(record["RechazoPrevio"], "X")
 		# SinRegistroPrevio es campo del tipo ANULACIÓN — en el Alta JAMÁS

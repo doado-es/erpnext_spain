@@ -68,9 +68,7 @@ class TestInvoiceTypeCatalog(IntegrationTestCase):
 		seed_invoice_types()
 		seed_invoice_types()
 		for entry in INVOICE_TYPE_CATALOG:
-			self.assertEqual(
-				len(frappe.get_all(DOCTYPE, filters={"name": entry["code"]}, pluck="name")), 1
-			)
+			self.assertEqual(len(frappe.get_all(DOCTYPE, filters={"name": entry["code"]}, pluck="name")), 1)
 
 	def test_code_unique(self):
 		# el docname ES el código (autoname field:code): otra «F1» rebota
@@ -79,7 +77,7 @@ class TestInvoiceTypeCatalog(IntegrationTestCase):
 			duplicado.insert(ignore_permissions=True)
 
 	def test_code_normalized(self):
-		doc = frappe.get_doc(
-			{"doctype": DOCTYPE, "code": " t9 ", "label": "Tipo de prueba"}
-		).insert(ignore_permissions=True)
+		doc = frappe.get_doc({"doctype": DOCTYPE, "code": " t9 ", "label": "Tipo de prueba"}).insert(
+			ignore_permissions=True
+		)
 		self.assertEqual(doc.code, "T9")

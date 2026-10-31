@@ -15,12 +15,29 @@ INVOICE_DOCTYPE = "Sales Invoice"
 
 def execute(filters: dict | None = None) -> tuple[list[dict], list[dict]]:
 	columns = [
-		{"label": "Factura", "fieldname": "invoice", "fieldtype": "Link", "options": "Sales Invoice", "width": 220},
-		{"label": "Compañía", "fieldname": "company", "fieldtype": "Link", "options": "Company", "width": 200},
+		{
+			"label": "Factura",
+			"fieldname": "invoice",
+			"fieldtype": "Link",
+			"options": "Sales Invoice",
+			"width": 220,
+		},
+		{
+			"label": "Compañía",
+			"fieldname": "company",
+			"fieldtype": "Link",
+			"options": "Company",
+			"width": 200,
+		},
 		{"label": "Fecha", "fieldname": "date", "fieldtype": "Date", "width": 100},
 		{"label": "Tipo", "fieldname": "type", "fieldtype": "Data", "width": 60},
 		{"label": "Código de error AEAT", "fieldname": "error_code", "fieldtype": "Data", "width": 150},
-		{"label": "Descripción del error AEAT", "fieldname": "error_description", "fieldtype": "Small Text", "width": 400},
+		{
+			"label": "Descripción del error AEAT",
+			"fieldname": "error_description",
+			"fieldtype": "Small Text",
+			"width": 400,
+		},
 		{"label": "Pendiente desde", "fieldname": "pending_since", "fieldtype": "Datetime", "width": 160},
 	]
 

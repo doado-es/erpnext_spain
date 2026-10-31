@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import glob
+import itertools
 import json
 import os
 import unittest.mock
@@ -125,7 +126,9 @@ class TestEmisionRegistros(IntegrationTestCase):
 		frappe.db.delete("ES Invoice Series", {"parent": self.company})
 		frappe.db.delete("ES Verifactu Notification Role", {"parent": self.company})
 		frappe.db.delete(LEDGER_DOCTYPE, {"company": self.company})
-		for credential in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
+		for credential in frappe.get_all(
+			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
+		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
 
 	# --- helpers -----------------------------------------------------------
@@ -161,9 +164,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		doc.set("es_invoice_series", [])
 		doc.append("es_invoice_series", {"series": series, "invoice_type": invoice_type})
 		doc.append("es_invoice_series", {"series": SERIES_R1, "invoice_type": "R1"})
-		url = write_private_p12(
-			f"es_test_registros_{frappe.generate_hash(length=8)}.p12", self.p12
-		)
+		url = write_private_p12(f"es_test_registros_{frappe.generate_hash(length=8)}.p12", self.p12)
 		frappe.get_doc(
 			{
 				"doctype": "ES AEAT Credential",
@@ -234,7 +235,15 @@ class TestEmisionRegistros(IntegrationTestCase):
 		return frappe.get_all(
 			LEDGER_DOCTYPE,
 			filters={"company": self.company, "sales_invoice": invoice_name, **overrides},
-			fields=["name", "record_type", "invoice_type", "chain_index", "hash", "previous_hash", "record_json"],
+			fields=[
+				"name",
+				"record_type",
+				"invoice_type",
+				"chain_index",
+				"hash",
+				"previous_hash",
+				"record_json",
+			],
 			order_by="chain_index asc",
 		)
 
@@ -242,7 +251,9 @@ class TestEmisionRegistros(IntegrationTestCase):
 		"""Simula el procesador de respuestas (lote 5) por la VÍA SANCIONADA
 		del libro (flag, ver test_es_verifactu_billing_record.py): transiciona
 		el Alta a Correcto y denormaliza «Alta Aceptada» en la factura."""
-		record = frappe.get_doc(LEDGER_DOCTYPE, {"sales_invoice": invoice_name, "record_type": "RegistroAlta"})
+		record = frappe.get_doc(
+			LEDGER_DOCTYPE, {"sales_invoice": invoice_name, "record_type": "RegistroAlta"}
+		)
 		record.flags[RESPONSE_PROCESSOR_FLAG] = True
 		record.status = "Correcto"
 		record.save(ignore_permissions=True)
@@ -293,7 +304,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		self.assertEqual(records[2]["PrimerRegistro"], "N")
 
 		# record_json = fuente de verdad del Alta completo (valores REALES)
-		for record, si in zip(records, (a, b, c)):
+		for record, si in zip(records, (a, b, c), strict=True):
 			self.assertEqual(record["IDEmisorFactura"], VALID_NIF)
 			self.assertEqual(record["NumSerieFactura"], si.name)
 			self.assertEqual(record["TipoFactura"], "F1")
@@ -347,8 +358,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		with unittest.mock.patch("frappe.enqueue") as mock_enqueue:
 			a.submit()
 			llamadas = [
-				c for c in mock_enqueue.call_args_list
-				if c.args and c.args[0] == emission.TASK_SEND_PENDING
+				c for c in mock_enqueue.call_args_list if c.args and c.args[0] == emission.TASK_SEND_PENDING
 			]
 			self.assertEqual(len(llamadas), 1)
 			self.assertTrue(llamadas[0].kwargs.get("enqueue_after_commit"))
@@ -363,8 +373,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		with unittest.mock.patch("frappe.enqueue") as mock_enqueue:
 			b.submit()
 			llamadas = [
-				c for c in mock_enqueue.call_args_list
-				if c.args and c.args[0] == emission.TASK_SEND_PENDING
+				c for c in mock_enqueue.call_args_list if c.args and c.args[0] == emission.TASK_SEND_PENDING
 			]
 			self.assertEqual(llamadas, [])
 
@@ -475,12 +484,8 @@ class TestEmisionRegistros(IntegrationTestCase):
 		Settings». Se restauran los valores previos para no envenenar los
 		tests posteriores de la clase."""
 		self._activate()
-		originales = frappe.db.get_value(
-			"ES Settings", "ES Settings", emission.SIF_FIELDS, as_dict=True
-		)
-		frappe.db.set_value(
-			"ES Settings", "ES Settings", {campo: None for campo in emission.SIF_FIELDS}
-		)
+		originales = frappe.db.get_value("ES Settings", "ES Settings", emission.SIF_FIELDS, as_dict=True)
+		frappe.db.set_value("ES Settings", "ES Settings", {campo: None for campo in emission.SIF_FIELDS})
 		self.addCleanup(
 			frappe.db.set_value,
 			"ES Settings",
@@ -503,9 +508,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		maxLength client-side): la compuerta es NUESTRA. Con un id de 3+
 		caracteres el submit rebota con remedio que cita el límite."""
 		self._activate()
-		originales = frappe.db.get_value(
-			"ES Settings", "ES Settings", emission.SIF_FIELDS, as_dict=True
-		)
+		originales = frappe.db.get_value("ES Settings", "ES Settings", emission.SIF_FIELDS, as_dict=True)
 		frappe.db.set_value("ES Settings", "ES Settings", "sif_id_sistema_informatico", "TOOLARGE")
 		self.addCleanup(
 			frappe.db.set_value,
@@ -534,7 +537,9 @@ class TestEmisionRegistros(IntegrationTestCase):
 
 		record = json.loads(self._register(a.name)[0].record_json)
 		self.assertEqual(record["SistemaInformatico"], emission.get_sif_data(self.company))
-		self.assertEqual(record["NombreRazonEmisor"], frappe.db.get_value("Company", self.company, "company_name"))
+		self.assertEqual(
+			record["NombreRazonEmisor"], frappe.db.get_value("Company", self.company, "company_name")
+		)
 		self.assertEqual(record["Subsanacion"], "N")
 		self.assertEqual(record["RechazoPrevio"], "N")
 		self.assertNotIn("SinRegistroPrevio", record)  # campo exclusivo del tipo anulación
@@ -754,9 +759,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		submit encadena sobre el estado PREVIO (sin huecos ni horquillas)."""
 		self._activate()
 		a = self._draft_invoice()
-		before = frappe.get_all(
-			LEDGER_DOCTYPE, filters={"company": self.company}, pluck="name"
-		)
+		before = frappe.get_all(LEDGER_DOCTYPE, filters={"company": self.company}, pluck="name")
 
 		frappe.db.savepoint("es_l4c")
 		frappe.flags.es_test_fail_submit = True
@@ -854,6 +857,6 @@ class TestEmisionRegistros(IntegrationTestCase):
 		)
 		self.assertEqual([r.chain_index for r in chain], [1, 2, 3])
 		self.assertEqual(chain[0].previous_hash, "")
-		for previous, current in zip(chain, chain[1:]):
+		for previous, current in itertools.pairwise(chain):
 			self.assertEqual(current.previous_hash, previous.hash)
 		self.assertEqual(len({r.hash for r in chain}), 3)

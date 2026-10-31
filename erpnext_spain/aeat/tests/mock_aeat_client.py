@@ -153,7 +153,7 @@ class MockAEATClient:
 					return response[0]
 				return response[0]
 			return response
-		if operation in self._recorded_responses and self._recorded_responses[operation]:
+		if self._recorded_responses.get(operation):
 			return self._recorded_responses[operation].pop(0)["respuesta"]
 		return load_seed(self.default_seed)
 

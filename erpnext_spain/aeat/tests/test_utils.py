@@ -163,7 +163,9 @@ class TestAEATPermissions(IntegrationTestCase):
 				).insert(ignore_permissions=True)
 
 	def test_administrator_and_system_manager_pass(self):
-		self.assertTrue(utils.has_aeat_permission(user="Administrator", company=self.company, purpose="VeriFactu"))
+		self.assertTrue(
+			utils.has_aeat_permission(user="Administrator", company=self.company, purpose="VeriFactu")
+		)
 		self.assertTrue(utils.has_aeat_permission(user="Administrator"))
 
 	def test_missing_company_or_purpose_denies(self):
@@ -174,14 +176,10 @@ class TestAEATPermissions(IntegrationTestCase):
 	def test_without_enabled_credential_denies(self):
 		"""El permiso es por empresa+propósito: sin credencial habilitada NO
 		hay nada que autorizar (doc 12 §18)."""
-		self.assertFalse(
-			utils.has_aeat_permission(user=self.user, company=self.company, purpose="SII")
-		)
+		self.assertFalse(utils.has_aeat_permission(user=self.user, company=self.company, purpose="SII"))
 
 	def test_accounts_manager_with_enabled_credential_passes(self):
-		self.assertTrue(
-			utils.has_aeat_permission(user=self.user, company=self.company, purpose="VeriFactu")
-		)
+		self.assertTrue(utils.has_aeat_permission(user=self.user, company=self.company, purpose="VeriFactu"))
 
 	def test_user_without_relevant_role_denied_with_credential(self):
 		"""Un usuario sin System Manager ni Accounts Manager NO dispara
@@ -217,9 +215,7 @@ class TestNotifyRoles(IntegrationTestCase):
 		)
 
 	def test_notify_roles_creates_notification_log_for_role_users(self):
-		utils.notify_roles(
-			self.company, "ES sujeta", "ES cuerpo", roles=["System Manager"]
-		)
+		utils.notify_roles(self.company, "ES sujeta", "ES cuerpo", roles=["System Manager"])
 		notifications = self._notifications_for(self.user)
 		self.assertTrue(any("ES sujeta" in a for a in notifications), notifications)
 

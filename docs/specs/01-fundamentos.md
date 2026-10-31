@@ -123,10 +123,11 @@ Funciones de gating en `utils/gating.py`:
 
 ```python
 def is_pgc_company(company: str | None) -> bool:
-    """True solo si la compañía es de España y tiene el plan PGC aplicado."""
+	"""True solo si la compañía es de España y tiene el plan PGC aplicado."""
+
 
 def is_feature_enabled(company: str | None, flag: str) -> bool:
-    """True si la compañía tiene activado el flag de esa funcionalidad (p. ej. es_verifactu_enabled)."""
+	"""True si la compañía tiene activado el flag de esa funcionalidad (p. ej. es_verifactu_enabled)."""
 ```
 
 - Usan `frappe.get_cached_value` (el código base usa hoy `frappe.db.get_value` en sus salidas tempranas: H5).

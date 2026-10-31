@@ -78,7 +78,4 @@ def seed_invoice_types() -> None:
 
 
 def _differs(current, entry: dict) -> bool:
-	return any(
-		(getattr(current, field) or "") != entry[field]
-		for field in SYNCED_FIELDS
-	)
+	return any((getattr(current, field) or "") != entry[field] for field in SYNCED_FIELDS)

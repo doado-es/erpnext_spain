@@ -18,10 +18,10 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from stdnum.es import vat as stdnum_vat  # dispatcher ES: alias de stdnum.es.nif
 from stdnum.es import cif as stdnum_cif
 from stdnum.es import dni as stdnum_dni
 from stdnum.es import nie as stdnum_nie
+from stdnum.es import vat as stdnum_vat  # dispatcher ES: alias de stdnum.es.nif
 from stdnum.exceptions import InvalidChecksum, ValidationError
 
 compact = stdnum_vat.compact

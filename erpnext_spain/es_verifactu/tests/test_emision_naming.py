@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import glob
 import os
+from typing import ClassVar
 
 import frappe
 from frappe.tests import IntegrationTestCase
@@ -472,7 +473,7 @@ class TestPerformanceIndexes(IntegrationTestCase):
 	`bench --site es.localhost migrate` (after_migrate los crea de forma
 	idempotente: has_index + ADD INDEX IF NOT EXISTS)."""
 
-	INDEXES = [
+	INDEXES: ClassVar[list[tuple[str, str]]] = [
 		("tabVersion", "docname_ref_doctype_index"),
 		("tabFile", "attached_to_name_attached_to_doctype_index"),
 		("tabCommunication", "reference_name_reference_doctype_index"),

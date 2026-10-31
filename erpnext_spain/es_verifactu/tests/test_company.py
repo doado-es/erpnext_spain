@@ -109,7 +109,9 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 			)
 			frappe.db.delete("ES Invoice Series", {"parent": company_name})
 			frappe.db.delete("ES Verifactu Notification Role", {"parent": company_name})
-			for credential in frappe.get_all("ES AEAT Credential", filters={"company": company_name}, pluck="name"):
+			for credential in frappe.get_all(
+				"ES AEAT Credential", filters={"company": company_name}, pluck="name"
+			):
 				frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
 			for record in frappe.get_all(
 				"ES Verifactu Billing Record", filters={"company": company_name}, pluck="name"

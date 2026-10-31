@@ -10,13 +10,13 @@ import frappe
 from frappe.tests import IntegrationTestCase
 
 from erpnext_spain.aeat.tasks import notify_certificate_expiry
-from erpnext_spain.aeat.utils import now_aeat
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
+from erpnext_spain.aeat.utils import now_aeat
 
 
 class TestCertificateExpiryWarnings(IntegrationTestCase):
@@ -36,9 +36,7 @@ class TestCertificateExpiryWarnings(IntegrationTestCase):
 		# credencial de un test anterior (p. ej. SII a 30 de
 		# test_notifies_thirty_days_before_expiry) sigue dentro de la ventana
 		# y dispara notificaciones cruzadas.
-		for name in frappe.get_all(
-			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
-		):
+		for name in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
 			frappe.db.set_value("ES AEAT Credential", name, "enabled", 1)
 			frappe.db.set_value(
 				"ES AEAT Credential",
@@ -149,6 +147,4 @@ class TestCertificateExpiryWarnings(IntegrationTestCase):
 			notify_certificate_expiry()
 
 		notifications = self._in_app_notifications()
-		self.assertEqual(
-			sum(1 for a in notifications if "caduca en 7 días" in a and "(SII)" in a), 2
-		)
+		self.assertEqual(sum(1 for a in notifications if "caduca en 7 días" in a and "(SII)" in a), 2)

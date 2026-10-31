@@ -26,8 +26,8 @@ import segno
 
 from erpnext_spain.aeat.utils import format_aeat_date
 from erpnext_spain.es_verifactu.emission import VERIFACTU_MODE, VERIFACTU_TEST_MODE
-from erpnext_spain.es_verifactu.utils.data_adapter import _format_amount
 from erpnext_spain.es_verifactu.utils import data_adapter
+from erpnext_spain.es_verifactu.utils.data_adapter import _format_amount
 
 # Bases del endpoint ValidarQR de la AEAT (verificadas contra la referencia
 # `spanish_compliance/overrides/sales_invoice.py` es_verifactu_sales_invoice_qr):
@@ -106,7 +106,7 @@ def get_verifactu_breakup(doc) -> list[dict]:
 	return [
 		{
 			"tax": row["tax_type"],
-			"rate": f'{row["tax_rate"]}%',
+			"rate": f"{row['tax_rate']}%",
 			# v16: fmt_money(amount, precision, currency, ...) — la moneda va
 			# POR CLAVE (posicional caería en precision).
 			"base": frappe.utils.fmt_money(row["taxable_base"], currency=currency),
@@ -128,9 +128,7 @@ def get_es_display_name(doc, party_field: str = "customer") -> str:
 	trade_name = ""
 
 	if link and frappe.db.exists(doctype, link):
-		data = frappe.db.get_value(
-			doctype, link, ["es_trade_name", f"{party_field}_name"], as_dict=True
-		)
+		data = frappe.db.get_value(doctype, link, ["es_trade_name", f"{party_field}_name"], as_dict=True)
 		if data:
 			trade_name = data.get("es_trade_name") or ""
 			legal_name = data.get(f"{party_field}_name") or legal_name

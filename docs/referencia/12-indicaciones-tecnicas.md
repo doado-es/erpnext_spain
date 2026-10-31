@@ -16,19 +16,16 @@ Ejemplo real tomado del `hooks.py` de ERPNext:
 
 ```python
 regional_overrides = {
-    "France": {
-        "erpnext.tests.test_regional.test_method": "erpnext.regional.france.utils.test_method",
-    },
-    "United Arab Emirates": {
-        "erpnext.controllers.taxes_and_totals.update_itemised_tax_data":
-            "erpnext.regional.united_arab_emirates.utils.update_itemised_tax_data",
-        "erpnext.accounts.doctype.purchase_invoice.purchase_invoice.make_regional_gl_entries":
-            "erpnext.regional.united_arab_emirates.utils.make_regional_gl_entries",
-    },
-    "Italy": {
-        "erpnext.controllers.taxes_and_totals.update_itemised_tax_data":
-            "erpnext.regional.italy.utils.update_itemised_tax_data",
-    },
+	"France": {
+		"erpnext.tests.test_regional.test_method": "erpnext.regional.france.utils.test_method",
+	},
+	"United Arab Emirates": {
+		"erpnext.controllers.taxes_and_totals.update_itemised_tax_data": "erpnext.regional.united_arab_emirates.utils.update_itemised_tax_data",
+		"erpnext.accounts.doctype.purchase_invoice.purchase_invoice.make_regional_gl_entries": "erpnext.regional.united_arab_emirates.utils.make_regional_gl_entries",
+	},
+	"Italy": {
+		"erpnext.controllers.taxes_and_totals.update_itemised_tax_data": "erpnext.regional.italy.utils.update_itemised_tax_data",
+	},
 }
 ```
 
@@ -45,7 +42,7 @@ Estas dos diapositivas de la charla muestran los dos lados exactos del mismo mec
 ```python
 @erpnext.allow_regional
 def adjust_allocations_for_taxes(doc):
-    pass
+	pass
 ```
 
 Es decir: el core define la función con un cuerpo vacío (`pass`) marcado como punto de extensión, y deja que sea la app regional quien aporte la implementación real.
@@ -54,23 +51,23 @@ Es decir: el core define la función con un cuerpo vacío (`pass`) marcado como 
 
 ```python
 regional_overrides = {
-    "India": {
-        "erpnext.controllers.taxes_and_totals.get_regional_round_off_accounts": (
-            "india_compliance.gst_india.overrides.transaction.get_regional_round_off_accounts"
-        ),
-        "erpnext.controllers.accounts_controller.update_gl_dict_with_regional_fields": (
-            "india_compliance.gst_india.overrides.gl_entry.update_gl_dict_with_regional_fields"
-        ),
-        "erpnext.controllers.accounts_controller.get_advance_payment_entries_for_regional": (
-            "india_compliance.gst_india.overrides.payment_entry.get_advance_payment_entries_for_regional"
-        ),
-        "erpnext.controllers.buying_controller.update_regional_item_valuation_rate": (
-            "india_compliance.gst_india.overrides.ineligible_itc.update_valuation_rate"
-        ),
-        "erpnext.accounts.doctype.payment_reconciliation.payment_reconciliation.adjust_allocations_for_taxes": (
-            "india_compliance.gst_india.overrides.payment_entry.adjust_allocations_for_taxes_in_payment_reconciliation"
-        ),
-    },
+	"India": {
+		"erpnext.controllers.taxes_and_totals.get_regional_round_off_accounts": (
+			"india_compliance.gst_india.overrides.transaction.get_regional_round_off_accounts"
+		),
+		"erpnext.controllers.accounts_controller.update_gl_dict_with_regional_fields": (
+			"india_compliance.gst_india.overrides.gl_entry.update_gl_dict_with_regional_fields"
+		),
+		"erpnext.controllers.accounts_controller.get_advance_payment_entries_for_regional": (
+			"india_compliance.gst_india.overrides.payment_entry.get_advance_payment_entries_for_regional"
+		),
+		"erpnext.controllers.buying_controller.update_regional_item_valuation_rate": (
+			"india_compliance.gst_india.overrides.ineligible_itc.update_valuation_rate"
+		),
+		"erpnext.accounts.doctype.payment_reconciliation.payment_reconciliation.adjust_allocations_for_taxes": (
+			"india_compliance.gst_india.overrides.payment_entry.adjust_allocations_for_taxes_in_payment_reconciliation"
+		),
+	},
 }
 ```
 
@@ -82,13 +79,13 @@ Donde no hay un punto `@allow_regional` disponible, el patrón estándar (usado 
 
 ```python
 doc_events = {
-    "Sales Invoice": {
-        "validate": "custom_app.overrides.sales_invoice.validate",
-        "on_submit": "custom_app.overrides.sales_invoice.on_submit",
-    },
-    "Purchase Invoice": {
-        "before_save": "custom_app.overrides.purchase_invoice.calculate_retencion",
-    },
+	"Sales Invoice": {
+		"validate": "custom_app.overrides.sales_invoice.validate",
+		"on_submit": "custom_app.overrides.sales_invoice.on_submit",
+	},
+	"Purchase Invoice": {
+		"before_save": "custom_app.overrides.purchase_invoice.calculate_retencion",
+	},
 }
 ```
 
@@ -99,28 +96,26 @@ Esto es lo que usaremos para: generación del registro VeriFactu al emitir factu
 **Ejemplo real de India Compliance** (confirma el patrón anterior, enganchando `GL Entry`):
 
 ```python
-doc_events = {
-    "GL Entry": "some_custom_function"
-}
+doc_events = {"GL Entry": "some_custom_function"}
 ```
 
 Y el cuerpo típico de una función de validación enganchada así — nótese el patrón de "salir pronto si no aplica" seguido de una validación dura con `frappe.throw` cuando sí aplica:
 
 ```python
 def validate(doc, method=None):
-    if doc.company_gstin or not is_indian_registered_company(doc):
-        return
+	if doc.company_gstin or not is_indian_registered_company(doc):
+		return
 
-    gst_accounts = get_all_gst_accounts(doc.company)
-    if doc.account not in gst_accounts:
-        return
+	gst_accounts = get_all_gst_accounts(doc.company)
+	if doc.account not in gst_accounts:
+		return
 
-    frappe.throw(
-        _(
-            "Company GSTIN is a mandatory field for accounting of GST Accounts."
-            " Run `Update GSTIN` patch from GST Balance Report to update GSTIN in all transactions."
-        )
-    )
+	frappe.throw(
+		_(
+			"Company GSTIN is a mandatory field for accounting of GST Accounts."
+			" Run `Update GSTIN` patch from GST Balance Report to update GSTIN in all transactions."
+		)
+	)
 ```
 
 **Aplicación para nosotros**: este es el molde a seguir para nuestras propias validaciones de campo obligatorio — por ejemplo, exigir NIF-IVA en operaciones intracomunitarias, o exigir que el certificado VeriFactu esté configurado antes de permitir el envío de una factura. Dos detalles a replicar: (1) las condiciones de salida temprana (`return`) van primero y son baratas de evaluar; (2) el mensaje de error en `frappe.throw` no solo dice qué falta, sino que indica el remedio concreto (qué patch o acción ejecutar) — no un error genérico.
@@ -138,7 +133,7 @@ La propia charla lo remarca explícitamente en el título de la diapositiva corr
 
 ```python
 override_doctype_class = {
-    "Customize Form": ("india_compliance.audit_trail.overrides.customize_form.CustomizeForm"),
+	"Customize Form": ("india_compliance.audit_trail.overrides.customize_form.CustomizeForm"),
 }
 ```
 
@@ -180,8 +175,8 @@ Para llamadas periódicas a servicios externos (comprobación de estado de enví
 
 ```python
 scheduler_events = {
-    "hourly": ["custom_app.tasks.retry_pending_sii_submissions"],
-    "daily": ["custom_app.tasks.sync_verifactu_status"],
+	"hourly": ["custom_app.tasks.retry_pending_sii_submissions"],
+	"daily": ["custom_app.tasks.sync_verifactu_status"],
 }
 ```
 
@@ -201,14 +196,14 @@ Patrón muy relevante para nosotros: cuando el comportamiento debe reaccionar a 
 
 ```python
 def after_app_install(app_name):
-    if app_name == "hrms":
-        create_hrms_custom_fields()
+	if app_name == "hrms":
+		create_hrms_custom_fields()
 
-    if app_name == "education":
-        create_education_custom_fields()
+	if app_name == "education":
+		create_education_custom_fields()
 
-    if app_name == "healthcare":
-        create_healthcare_custom_fields()
+	if app_name == "healthcare":
+		create_healthcare_custom_fields()
 ```
 
 **Aplicación directa a nuestra app**: si en el futuro queremos, por ejemplo, añadir campos específicos solo cuando el cliente tiene instalado HRMS (retenciones de nóminas, IRPF de trabajadores) o algún módulo de e-commerce de terceros, este es el mecanismo — no una comprobación manual en cada `doc_event`, sino reaccionar una vez, en la instalación, y crear los campos que correspondan según lo que haya presente.
@@ -236,20 +231,23 @@ El helper estándar es `create_custom_fields` de `frappe.custom.doctype.custom_f
 ```python
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
+
 def after_install():
-    create_custom_fields({
-        "Bank Transaction Payments": [
-            {
-                "fieldname": "reconciliation_type",
-                "fieldtype": "Select",
-                "label": "Reconciliation Type",
-                "options": "Matched\nVoucher Created",
-                "insert_after": "clearance_date",
-                "read_only": 1,
-                "default": "Matched",
-            }
-        ],
-    })
+	create_custom_fields(
+		{
+			"Bank Transaction Payments": [
+				{
+					"fieldname": "reconciliation_type",
+					"fieldtype": "Select",
+					"label": "Reconciliation Type",
+					"options": "Matched\nVoucher Created",
+					"insert_after": "clearance_date",
+					"read_only": 1,
+					"default": "Matched",
+				}
+			],
+		}
+	)
 ```
 
 Esto confirma y concreta el punto 4 (Custom Fields vía fixtures) del apartado anterior de este documento: en la práctica, el patrón preferido no es solo exportar fixtures desde la UI, sino **declarar los Custom Fields directamente en código Python** dentro de `after_install`, con la estructura `{"DocType": [ {campo...}, ... ]}`. Esto tiene una ventaja importante sobre las fixtures JSON: es más fácil de revisar en un PR, de mantener versionado junto a la lógica que depende de ese campo, y de generar/mantener con ayuda de agentes.
@@ -260,23 +258,23 @@ Contrapartida necesaria del punto anterior: si la app crea campos en la instalac
 
 ```python
 def delete_custom_fields(custom_fields):
-    """
-    :param custom_fields: a dict like `{'Sales Invoice': [{fieldname: 'test', ...}]}`
-    """
-    for doctypes, fields in custom_fields.items():
-        if isinstance(fields, dict):
-            # only one field
-            fields = [fields]
+	"""
+	:param custom_fields: a dict like `{'Sales Invoice': [{fieldname: 'test', ...}]}`
+	"""
+	for doctypes, fields in custom_fields.items():
+		if isinstance(fields, dict):
+			# only one field
+			fields = [fields]
 
-        if isinstance(doctypes, str):
-            # only one doctype
-            doctypes = (doctypes,)
+		if isinstance(doctypes, str):
+			# only one doctype
+			doctypes = (doctypes,)
 
-        for doctype in doctypes:
-            frappe.db.delete(
-                "Custom Field",
-                {"fieldname": ("in", [field["fieldname"] for field in fields])},
-            )
+		for doctype in doctypes:
+			frappe.db.delete(
+				"Custom Field",
+				{"fieldname": ("in", [field["fieldname"] for field in fields])},
+			)
 ```
 
 **Aplicación para nosotros**: cualquier Custom Field que añadamos (NIF-IVA, mandato SEPA, tipo de retención, campos VeriFactu/SII) debe tener su contrapartida de limpieza en `before_uninstall`/`after_uninstall`. Esto es especialmente importante en nuestro contexto multi-cliente (bench compartido con ~18 instancias): una desinstalación limpia evita dejar basura de campos huérfanos en benches que ya no usan la app.
@@ -288,14 +286,14 @@ Para fijar el print format por defecto de un DocType (ej. que "Sales Invoice" us
 ```python
 # print format
 frappe.make_property_setter(
-    {
-        "doctype": "Sales Invoice",
-        "doctype_or_field": "DocType",
-        "property": "default_print_format",
-        "value": "GST Tax Invoice",
-    },
-    validate_fields_for_doctype=False,
-    is_system_generated=False,
+	{
+		"doctype": "Sales Invoice",
+		"doctype_or_field": "DocType",
+		"property": "default_print_format",
+		"value": "GST Tax Invoice",
+	},
+	validate_fields_for_doctype=False,
+	is_system_generated=False,
 )
 ```
 
@@ -307,21 +305,21 @@ Para exponer funciones Python como helpers utilizables directamente dentro de la
 
 ```python
 jinja = {
-    "methods": [
-        "india_compliance.gst_india.utils.get_state",
-        "india_compliance.gst_india.utils.jinja.add_spacing",
-        "india_compliance.gst_india.utils.jinja.get_supply_type",
-        "india_compliance.gst_india.utils.jinja.get_sub_supply_type",
-        "india_compliance.gst_india.utils.jinja.get_e_waybill_qr_code",
-        "india_compliance.gst_india.utils.jinja.get_qr_code",
-        "india_compliance.gst_india.utils.jinja.get_transport_type",
-        "india_compliance.gst_india.utils.jinja.get_transport_mode",
-        "india_compliance.gst_india.utils.jinja.get_e_waybill_document_type",
-        "india_compliance.gst_india.utils.jinja.get_ewaybill_barcode",
-        "india_compliance.gst_india.utils.jinja.get_e_invoice_item_fields",
-        "india_compliance.gst_india.utils.jinja.get_e_invoice_amount_fields",
-        "india_compliance.gst_india.utils.jinja.get_gst_breakup",
-    ],
+	"methods": [
+		"india_compliance.gst_india.utils.get_state",
+		"india_compliance.gst_india.utils.jinja.add_spacing",
+		"india_compliance.gst_india.utils.jinja.get_supply_type",
+		"india_compliance.gst_india.utils.jinja.get_sub_supply_type",
+		"india_compliance.gst_india.utils.jinja.get_e_waybill_qr_code",
+		"india_compliance.gst_india.utils.jinja.get_qr_code",
+		"india_compliance.gst_india.utils.jinja.get_transport_type",
+		"india_compliance.gst_india.utils.jinja.get_transport_mode",
+		"india_compliance.gst_india.utils.jinja.get_e_waybill_document_type",
+		"india_compliance.gst_india.utils.jinja.get_ewaybill_barcode",
+		"india_compliance.gst_india.utils.jinja.get_e_invoice_item_fields",
+		"india_compliance.gst_india.utils.jinja.get_e_invoice_amount_fields",
+		"india_compliance.gst_india.utils.jinja.get_gst_breakup",
+	],
 }
 ```
 
@@ -342,12 +340,17 @@ from erpnext.setup.setup_wizard.operations.taxes_setup import setup_taxes_and_ch
 
 
 def erpnext_china_setup_taxes_and_charges(company_name: str, country: str):
-    chart_of_accounts = frappe.db.get_value("Company", company_name, "chart_of_accounts")
-    china_coa = ["一般企业会计准则(2024)", "小企业会计准则(2024)", "小企业会计准则", "民间非营利组织会计制度(2025)"]
-    if chart_of_accounts and chart_of_accounts in china_coa and country == "China":
-        return
+	chart_of_accounts = frappe.db.get_value("Company", company_name, "chart_of_accounts")
+	china_coa = [
+		"一般企业会计准则(2024)",
+		"小企业会计准则(2024)",
+		"小企业会计准则",
+		"民间非营利组织会计制度(2025)",
+	]
+	if chart_of_accounts and chart_of_accounts in china_coa and country == "China":
+		return
 
-    setup_taxes_and_charges(company_name, country)
+	setup_taxes_and_charges(company_name, country)
 
 
 taxes_setup.setup_taxes_and_charges = erpnext_china_setup_taxes_and_charges
@@ -384,13 +387,13 @@ Patrón obligatorio para cualquier endpoint whitelisted que llame a un servicio 
 ```python
 @frappe.whitelist()
 def call_third_party_service(params: dict):
-    """
-    Call a third party service (for e.g. e-invoicing/tax filing)
-    """
+	"""
+	Call a third party service (for e.g. e-invoicing/tax filing)
+	"""
 
-    # Check for permissions
-    if not has_permission():
-        frappe.throw(_("You do not have permission to call this third party service"), frappe.PermissionError)
+	# Check for permissions
+	if not has_permission():
+		frappe.throw(_("You do not have permission to call this third party service"), frappe.PermissionError)
 ```
 
 **Aplicación directa para nosotros**: cada endpoint whitelisted que dispare una llamada real a la AEAT (SII, VeriFactu) o a un banco (SEPA) debe verificar permisos explícitamente al principio de la función — no basta con la protección estándar de `@frappe.whitelist()`, porque estas llamadas tienen coste (en el caso de India Compliance, las APIs de GST son de pago) y consecuencias legales/fiscales reales si se disparan sin autorización adecuada. Esto conecta directamente con la pregunta ya abierta en el fichero de VeriFactu sobre gestión de certificado multi-empresa — el chequeo de permisos debe considerar de qué Company/certificado se trata, no solo si el usuario tiene un rol genérico.

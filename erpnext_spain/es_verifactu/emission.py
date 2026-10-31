@@ -63,11 +63,11 @@ from frappe.model.document import Document
 from frappe.model.naming import make_autoname
 
 from erpnext_spain.aeat.utils import format_aeat_datetime
-from erpnext_spain.nif import validator
 from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX, is_draft_name
-from erpnext_spain.utils.gating import is_verifactu_active
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.locks import acquire_chain_lock, release_chain_lock
+from erpnext_spain.nif import validator
+from erpnext_spain.utils.gating import is_verifactu_active
 
 VERIFACTU_PURPOSE = "VeriFactu"
 
@@ -234,10 +234,13 @@ def get_sif_data(company: str) -> dict:
 	# rechazó con código 1100 «Valor o tipo incorrecto del campo» un id de 8
 	# caracteres): zeep NO valida maxLength client-side, la compuerta es NUESTRA.
 	SIF_LIMITS = {
-		"IdSistemaInformatico": (sif.sif_id_sistema_informatico.strip(), 2,
+		"IdSistemaInformatico": (
+			sif.sif_id_sistema_informatico.strip(),
+			2,
 			"el ID del sistema informático es un código de hasta 2 caracteres"
 			" (TextMax2Type; en el entorno de pruebas el valor verificado es"
-			" «01»)"),
+			" «01»)",
+		),
 		"NombreRazon": (sif.sif_nombre_razon.strip(), 120, None),
 		"NombreSistemaInformatico": (sif.sif_nombre_sistema_informatico.strip(), 30, None),
 		"Version": (sif.sif_version.strip(), 50, None),
@@ -310,10 +313,7 @@ def on_submit(doc: Document, method: str | None = None) -> None:
 		)
 
 		# --- remisión Inmediata: NUNCA antes del commit del submit ----------
-		if (
-			frappe.db.get_value("Company", company, "es_verifactu_remission_mode")
-			== IMMEDIATE_REMISSION
-		):
+		if frappe.db.get_value("Company", company, "es_verifactu_remission_mode") == IMMEDIATE_REMISSION:
 			frappe.enqueue(TASK_SEND_PENDING, enqueue_after_commit=True, company=company)
 	finally:
 		if lock is not None:

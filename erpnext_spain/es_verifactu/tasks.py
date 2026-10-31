@@ -90,8 +90,6 @@ def alert_stale_outbox(hours: int = STALE_OUTBOX_HOURS_DEFAULT) -> list[dict]:
 			" seguirán intentándose en cada corrida del drenaje (cron por minuto),"
 			" y este aviso se repetirá a diario mientras el outbox siga parado.",
 		)
-		alerted.append(
-			{"company": company, "records": [record.name for record in records]}
-		)
+		alerted.append({"company": company, "records": [record.name for record in records]})
 
 	return alerted

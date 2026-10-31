@@ -81,12 +81,13 @@ def rectify(invoice: str) -> str:
 	# El flag «Subsanable» marca la cura PENDIENTE: subsanada, el registro
 	# sale del informe «Rectifiable Invoices» (spec 04 §9). La vía del
 	# procesador (db.set_value): el registro es terminal y congelado.
-	frappe.db.set_value(
-		LEDGER_DOCTYPE, erroneous.name, "curable", 0, update_modified=False
-	)
+	frappe.db.set_value(LEDGER_DOCTYPE, erroneous.name, "curable", 0, update_modified=False)
 	# La factura vuelve al outbox: su registro nuevo viaja PendienteEnvio.
 	frappe.db.set_value(
-		"Sales Invoice", invoice, "es_verifactu_status", INVOICE_STATUS_PENDING_SEND,
+		"Sales Invoice",
+		invoice,
+		"es_verifactu_status",
+		INVOICE_STATUS_PENDING_SEND,
 		update_modified=False,
 	)
 	return new_name

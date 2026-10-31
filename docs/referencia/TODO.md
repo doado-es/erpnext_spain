@@ -14,8 +14,8 @@ automático (`accounts_controller.py:1284`) es:
 
 ```python
 self.taxes_and_charges = frappe.db.get_value(
-    "Sales Taxes and Charges Template",
-    {"is_default": 1, "company": self.company},
+	"Sales Taxes and Charges Template",
+	{"is_default": 1, "company": self.company},
 )
 ```
 

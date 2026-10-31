@@ -78,9 +78,7 @@ def _ensure_notified_user() -> None:
 	Administrador (for_user == from_user), así que las incidencias de los
 	dos canales se afirman sobre este usuario."""
 	if not frappe.db.exists("Role", NOTIFIER_ROLE):
-		frappe.get_doc({"doctype": "Role", "role_name": NOTIFIER_ROLE}).insert(
-			ignore_permissions=True
-		)
+		frappe.get_doc({"doctype": "Role", "role_name": NOTIFIER_ROLE}).insert(ignore_permissions=True)
 	if not frappe.db.exists("User", NOTIFIED_USER):
 		frappe.get_doc(
 			{
@@ -136,7 +134,9 @@ class BaseRectification(IntegrationTestCase):
 		frappe.db.delete("ES Invoice Series", {"parent": self.company})
 		frappe.db.delete("ES Verifactu Notification Role", {"parent": self.company})
 		frappe.db.delete(LEDGER_DOCTYPE, {"company": self.company})
-		for credential in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
+		for credential in frappe.get_all(
+			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
+		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
 
 	# --- helpers de fixture (patrón de test_remision.py) --------------------
@@ -164,9 +164,7 @@ class BaseRectification(IntegrationTestCase):
 		doc.set("es_verifactu_notification_roles", [])
 		if notify:
 			doc.append("es_verifactu_notification_roles", {"role": NOTIFIER_ROLE})
-		url = write_private_p12(
-			f"es_test_rectification_{frappe.generate_hash(length=8)}.p12", self.p12
-		)
+		url = write_private_p12(f"es_test_rectification_{frappe.generate_hash(length=8)}.p12", self.p12)
 		frappe.get_doc(
 			{
 				"doctype": "ES AEAT Credential",
@@ -256,9 +254,7 @@ class BaseRectification(IntegrationTestCase):
 		otras empresas con pendientes REALES (registro en vivo del entorno
 		de pruebas) que un drain global remitiría por el mock."""
 		mock = MockAEATClient(responses={OPERATION: response})
-		AEATOutboxManager().drain_company(
-			VerifactuDriver(client_factory=lambda **kw: mock), self.company
-		)
+		AEATOutboxManager().drain_company(VerifactuDriver(client_factory=lambda **kw: mock), self.company)
 		return mock
 
 	def _in_app_alerts(self) -> list[str]:
@@ -455,10 +451,7 @@ class TestErrorStrategy(BaseRectification):
 		self._activate()
 		fields_3000 = rectification.get_dialog_fields("3000")
 		self.assertTrue(
-			any(
-				c.get("fieldtype") == "HTML" and "3000" in (c.get("options") or "")
-				for c in fields_3000
-			)
+			any(c.get("fieldtype") == "HTML" and "3000" in (c.get("options") or "") for c in fields_3000)
 		)
 		default_fields = rectification.get_dialog_fields("9999")
 		self.assertTrue(any(c.get("fieldname") == "error_code" for c in default_fields))
@@ -577,7 +570,7 @@ class TestInOrderRectification(BaseRectification):
 		self.assertTrue(rectification.rectify(b.name))
 
 	def test_without_order_both_ok(self):
-		a, b, rows = self._two_erroneous()  # regla OFF (reset del setUp)
+		a, b, _rows = self._two_erroneous()  # regla OFF (reset del setUp)
 
 		for si in (a, b):
 			self.assertTrue(rectification.rectify(si.name))
@@ -743,9 +736,7 @@ class TestStaleOutbox(BaseRectification):
 		existe y la tarea es resoluble por su vía real."""
 		hooks = frappe.get_hooks("scheduler_events", app_name="erpnext_spain")
 		self.assertIn("erpnext_spain.es_verifactu.tasks.daily", hooks.get("daily") or [])
-		self.assertTrue(
-			callable(frappe.get_attr("erpnext_spain.es_verifactu.tasks.alert_stale_outbox"))
-		)
+		self.assertTrue(callable(frappe.get_attr("erpnext_spain.es_verifactu.tasks.alert_stale_outbox")))
 		self.assertEqual(tasks.STALE_OUTBOX_HOURS_DEFAULT, 24)
 
 

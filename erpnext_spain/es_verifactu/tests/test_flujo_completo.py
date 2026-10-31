@@ -24,6 +24,7 @@
 from __future__ import annotations
 
 import glob
+import itertools
 import json
 import os
 import unittest.mock
@@ -93,9 +94,7 @@ def _ensure_users() -> None:
 	incidencias — notify_roles salta la auto-notificación del propio
 	Administrador) y el usuario SIN permiso AEAT (gate de la consulta)."""
 	if not frappe.db.exists("Role", NOTIFIER_ROLE):
-		frappe.get_doc({"doctype": "Role", "role_name": NOTIFIER_ROLE}).insert(
-			ignore_permissions=True
-		)
+		frappe.get_doc({"doctype": "Role", "role_name": NOTIFIER_ROLE}).insert(ignore_permissions=True)
 	if not frappe.db.exists("User", NOTIFIED_USER):
 		frappe.get_doc(
 			{
@@ -164,7 +163,9 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		frappe.db.delete("ES Verifactu Notification Role", {"parent": self.company})
 		frappe.db.delete(LEDGER_DOCTYPE, {"company": self.company})
 		frappe.db.delete(QUERY_DOCTYPE, {"company": self.company})
-		for credential in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
+		for credential in frappe.get_all(
+			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
+		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
 
 	# --- helpers de fixture (patrón de test_rectification.py) ----------------
@@ -192,9 +193,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		doc.set("es_verifactu_notification_roles", [])
 		if notify:
 			doc.append("es_verifactu_notification_roles", {"role": NOTIFIER_ROLE})
-		url = write_private_p12(
-			f"es_test_flujo_{frappe.generate_hash(length=8)}.p12", self.p12
-		)
+		url = write_private_p12(f"es_test_flujo_{frappe.generate_hash(length=8)}.p12", self.p12)
 		frappe.get_doc(
 			{
 				"doctype": "ES AEAT Credential",
@@ -286,9 +285,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		de pruebas) que un drain global remitiría por el mock."""
 		frappe.cache().delete_keys("es_aeat_rate_limit:*")
 		mock = MockAEATClient(responses={OPERATION: response})
-		AEATOutboxManager().drain_company(
-			VerifactuDriver(client_factory=lambda **kw: mock), self.company
-		)
+		AEATOutboxManager().drain_company(VerifactuDriver(client_factory=lambda **kw: mock), self.company)
 		return mock
 
 	def _in_app_alerts(self) -> list[str]:
@@ -347,9 +344,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		# el Alta de A a la AEAT (mock) y la acepta → registro Correcto +
 		# factura «Alta Aceptada» (mapper de emission.py).
 		# --------------------------------------------------------------------
-		self._drain_with_mock(
-			self._adapted_seed([(issuance_a.name, a.name, "Correcto", None, None)])
-		)
+		self._drain_with_mock(self._adapted_seed([(issuance_a.name, a.name, "Correcto", None, None)]))
 
 		self.assertEqual(frappe.db.get_value(LEDGER_DOCTYPE, issuance_a.name, "status"), "Correcto")
 		self.assertEqual(
@@ -389,10 +384,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		# canal IN-APP (Notification Log del rol notificador)
 		alerts = self._in_app_alerts()
 		self.assertTrue(
-			any(
-				"requiere subsanación manual" in subject and b.name in subject
-				for subject in alerts
-			),
+			any("requiere subsanación manual" in subject and b.name in subject for subject in alerts),
 			alerts,
 		)
 
@@ -427,9 +419,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		self.assertEqual(frappe.db.get_value(LEDGER_DOCTYPE, issuance_b.name, "status"), "Incorrecto")
 		self.assertEqual(frappe.db.get_value(LEDGER_DOCTYPE, issuance_b.name, "curable"), 0)
 
-		self._drain_with_mock(
-			self._adapted_seed([(new_b, b.name, "Correcto", None, None)])
-		)
+		self._drain_with_mock(self._adapted_seed([(new_b, b.name, "Correcto", None, None)]))
 		self.assertEqual(frappe.db.get_value(LEDGER_DOCTYPE, new_b, "status"), "Correcto")
 		self.assertEqual(
 			frappe.db.get_value("Sales Invoice", b.name, "es_verifactu_status"),
@@ -444,18 +434,14 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		a = frappe.get_doc("Sales Invoice", a.name)
 		a.cancel()
 
-		cancellation_a = next(
-			r for r in self._register_in_chain() if r.record_type == "RegistroAnulacion"
-		)
+		cancellation_a = next(r for r in self._register_in_chain() if r.record_type == "RegistroAnulacion")
 		self.assertEqual(cancellation_a.status, "PendienteEnvio")
 		# la anulación ENCADENA sobre el último registro del SIF (la
 		# subsanación de B, no el Alta de A)
 		self.assertEqual(cancellation_a.chain_index, 4)
 		self.assertEqual(cancellation_a.previous_hash, rectified_b.hash)
 
-		cancellation_response = self._adapted_seed(
-			[(cancellation_a.name, a.name, "Correcto", None, None)]
-		)
+		cancellation_response = self._adapted_seed([(cancellation_a.name, a.name, "Correcto", None, None)])
 		cancellation_response["RespuestaLinea"][0]["Operacion"]["TipoOperacion"] = "Anulacion"
 		self._drain_with_mock(cancellation_response)
 
@@ -597,9 +583,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 					"Ejercicio": str(period.year),
 					"Periodo": f"{period.month:02d}",
 				},
-				"FechaExpedicionFactura": {
-					"RangoFechaExpedicion": {"Desde": aeat_date, "Hasta": aeat_date}
-				},
+				"FechaExpedicionFactura": {"RangoFechaExpedicion": {"Desde": aeat_date, "Hasta": aeat_date}},
 			},
 		)
 
@@ -637,7 +621,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		self.assertEqual(chain[0].previous_hash, "")
 		self.assertEqual(json.loads(chain[0].record_json)["PrimerRegistro"], "S")
 		# cada registro encadena sobre la huella del anterior (sin huecos)
-		for previous, current in zip(chain, chain[1:]):
+		for previous, current in itertools.pairwise(chain):
 			self.assertEqual(
 				current.previous_hash,
 				previous.hash,

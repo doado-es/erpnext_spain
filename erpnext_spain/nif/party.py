@@ -10,10 +10,9 @@
 
 from __future__ import annotations
 
+import frappe
 from frappe.contacts.doctype.address.address import get_default_address
 from frappe.model.document import Document
-
-import frappe
 
 from erpnext_spain.nif import validator
 

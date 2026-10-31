@@ -16,13 +16,14 @@ from __future__ import annotations
 
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from datetime import datetime, timedelta
-from typing import Any, ClassVar, Iterable
+from typing import Any, ClassVar
 
 import frappe
 from frappe.utils import cint
 
-from erpnext_spain.aeat.utils import now_aeat, notify_roles
+from erpnext_spain.aeat.utils import notify_roles, now_aeat
 
 
 class AEATClock:
@@ -107,7 +108,7 @@ class AEATDriver(ABC):
 		"""Tope de intentos por lote antes de notificar el agotamiento."""
 		return 3
 
-	def on_batch_failure(self, company: str, records: list[Any], error: Exception) -> None:
+	def on_batch_failure(self, company: str, records: list[Any], error: Exception) -> None:  # noqa: B027 (gancho opcional)
 		"""Estado visible en los registros del driver tras agotar reintentos
 		(spec 13 §5: notificación + estado visible)."""
 
@@ -158,7 +159,7 @@ class AEATOutboxManager:
 		"""Drena los drivers dados (por defecto: todos los registrados en el
 		dispatcher). Sin drivers: no-op silencioso (el driver de VeriFactu llega
 		en su lote)."""
-		for driver in (drivers if drivers is not None else get_drivers()):
+		for driver in drivers if drivers is not None else get_drivers():
 			self.drain_driver(driver)
 
 	def drain_driver(self, driver: AEATDriver) -> None:
@@ -173,9 +174,7 @@ class AEATOutboxManager:
 					message=frappe.get_traceback(),
 				)
 
-	def drain_company(
-		self, driver: AEATDriver, company: str, limiter: RateLimiter | None = None
-	) -> None:
+	def drain_company(self, driver: AEATDriver, company: str, limiter: RateLimiter | None = None) -> None:
 		"""Drena UNA empresa: rate-limit → lote ordenado → payload → envío con
 		reintentos → persistencia de la respuesta → procesamiento → rate-limit."""
 		limiter = limiter or RateLimiter(driver.service, clock=self.clock)

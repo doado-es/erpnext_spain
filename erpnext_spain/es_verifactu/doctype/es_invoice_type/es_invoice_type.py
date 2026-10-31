@@ -9,9 +9,8 @@
 
 from __future__ import annotations
 
-from frappe.model.document import Document
-
 import frappe
+from frappe.model.document import Document
 
 
 class ESInvoiceType(Document):

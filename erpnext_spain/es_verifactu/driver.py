@@ -36,20 +36,20 @@ from typing import Any
 import frappe
 from frappe.utils import cint
 
-from erpnext_spain.aeat.client import ENV_TEST, ENV_PRODUCTION
+from erpnext_spain.aeat.client import ENV_PRODUCTION, ENV_TEST
 from erpnext_spain.aeat.manager import AEATDriver
 from erpnext_spain.aeat.tests.mock_aeat_client import build_client
-from erpnext_spain.es_verifactu.error_strategy import RESUBMITTABLE_STATES, apply_strategy
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	LEDGER_DOCTYPE,
 	PENDING_SEND_STATE,
-	TERMINAL_STATES,
 	RESPONSE_PROCESSOR_FLAG,
+	TERMINAL_STATES,
 )
 from erpnext_spain.es_verifactu.emission import (
 	INVOICE_STATUS_BY_LEDGER,
 	get_sif_data,
 )
+from erpnext_spain.es_verifactu.error_strategy import RESUBMITTABLE_STATES, apply_strategy
 
 # Operación SOAP de remisión de lotes de registros (WSDL VeriFactu).
 REGFACTU_OPERATION = "RegFactuSistemaFacturacion"
@@ -119,9 +119,7 @@ class VerifactuDriver(AEATDriver):
 		"""Payload estructurado del manager: {"operacion", "datos"} con la
 		Cabecera (ObligadoEmisión de la Company) y los RegistroFactura
 		anidados desde el record_json plano del libro."""
-		company_conf = frappe.db.get_value(
-			"Company", company, ["company_name", "tax_id"], as_dict=True
-		)
+		company_conf = frappe.db.get_value("Company", company, ["company_name", "tax_id"], as_dict=True)
 		predecessors = self._predecessors(company, records)
 		return {
 			"operacion": REGFACTU_OPERATION,
@@ -133,8 +131,7 @@ class VerifactuDriver(AEATDriver):
 					}
 				},
 				"RegistroFactura": [
-					self._wire_record(record, predecessors, company, company_conf)
-					for record in records
+					self._wire_record(record, predecessors, company, company_conf) for record in records
 				],
 			},
 		}
@@ -171,8 +168,7 @@ class VerifactuDriver(AEATDriver):
 				"RefExterna": record.name,
 				"RechazoPrevio": data.get("RechazoPrevio") or "N",
 				"SinRegistroPrevio": data.get("SinRegistroPrevio") or "N",
-				"SistemaInformatico": data.get("SistemaInformatico")
-				or get_sif_data(company),
+				"SistemaInformatico": data.get("SistemaInformatico") or get_sif_data(company),
 				"Encadenamiento": chain,
 				"FechaHoraHusoGenRegistro": data["FechaHoraHusoGenRegistro"],
 				"TipoHuella": data["TipoHuella"],
@@ -197,9 +193,7 @@ class VerifactuDriver(AEATDriver):
 			interior["TipoRectificativa"] = data["TipoRectificativa"]
 		if "FacturasRectificadas" in data:
 			interior["FacturasRectificadas"] = data["FacturasRectificadas"]
-		interior["NombreRazonEmisor"] = (
-			data.get("NombreRazonEmisor") or company_conf.company_name
-		)
+		interior["NombreRazonEmisor"] = data.get("NombreRazonEmisor") or company_conf.company_name
 		interior["Subsanacion"] = data.get("Subsanacion") or "N"
 		interior["RechazoPrevio"] = data.get("RechazoPrevio") or "N"
 		# OJO: SinRegistroPrevio es campo del tipo ANULACIÓN del WSDL
@@ -212,9 +206,7 @@ class VerifactuDriver(AEATDriver):
 		interior["Desglose"] = _wire_tax_breakdown(data["Desglose"])
 		interior["CuotaTotal"] = data["CuotaTotal"]
 		interior["ImporteTotal"] = data["ImporteTotal"]
-		interior["SistemaInformatico"] = data.get("SistemaInformatico") or get_sif_data(
-			company
-		)
+		interior["SistemaInformatico"] = data.get("SistemaInformatico") or get_sif_data(company)
 		interior["Encadenamiento"] = chain
 		interior["FechaHoraHusoGenRegistro"] = data["FechaHoraHusoGenRegistro"]
 		interior["TipoHuella"] = data["TipoHuella"]
@@ -259,9 +251,7 @@ class VerifactuDriver(AEATDriver):
 				"NumSerieFactura": previous_data["NumSerieFactura"],
 				"FechaExpedicionFactura": previous_data["FechaExpedicionFactura"],
 			}
-		return {
-			"RegistroAnterior": {**identification, "Huella": previous.hash}
-		}
+		return {"RegistroAnterior": {**identification, "Huella": previous.hash}}
 
 	def _predecessors(self, company: str, records: list[Any]) -> dict[int, Any]:
 		"""chain_index → registro previo (una lectura indexada por lote):
@@ -367,9 +357,7 @@ class VerifactuDriver(AEATDriver):
 		record.flags.ignore_links = True
 		record.status = state
 		record.response = response_name
-		record.response_error_code = (
-			str(code) if code not in (None, "") else None
-		)
+		record.response_error_code = str(code) if code not in (None, "") else None
 		record.response_error_msg = description or None
 		record.save(ignore_permissions=True)
 
@@ -377,9 +365,7 @@ class VerifactuDriver(AEATDriver):
 		# fija la denominación de los estados; las variantes de subsanación
 		# llegan con el lote 5b). Combinaciones sin entrada (p. ej. Alta
 		# Incorrecto) no tocan la factura: su estrategia es la subsanación.
-		invoice_status = INVOICE_STATUS_BY_LEDGER.get(record.record_type, {}).get(
-			state
-		)
+		invoice_status = INVOICE_STATUS_BY_LEDGER.get(record.record_type, {}).get(state)
 		if invoice_status and record.sales_invoice:
 			frappe.db.set_value(
 				"Sales Invoice",
@@ -411,8 +397,7 @@ class VerifactuDriver(AEATDriver):
 		"""Máximo de registros por lote (tope AEAT 1000): el campo de la
 		Company (default 1000); el manager recorta además a su tope."""
 		return (
-			cint(frappe.db.get_value("Company", company, "es_verifactu_batch_limit"))
-			or BATCH_LIMIT_DEFAULT
+			cint(frappe.db.get_value("Company", company, "es_verifactu_batch_limit")) or BATCH_LIMIT_DEFAULT
 		)
 
 	def on_batch_failure(self, company: str, records: list[Any], error: Exception) -> None:
@@ -444,7 +429,7 @@ def _wire_tax_breakdown(breakdown: dict) -> dict:
 	la causa de exención L10 viaja como VALOR de OperacionExenta (string
 	E1–E8), nunca como CausaExenta plano junto a una calificación.
 	Retrocompatible: los record_json anteriores al fix llevan la forma
-	planа ({CalificacionOperacion, CausaExenta}) de un WSDL más antiguo —
+	plana ({CalificacionOperacion, CausaExenta}) de un WSDL más antiguo —
 	se reescriben aquí sin tocar el libro (la fuente de verdad queda
 	como estaba; solo el wire cambia).
 	"""
@@ -491,9 +476,7 @@ def _legacy_recipients(record: Any) -> dict | None:
 	NO viaja."""
 	if not record.sales_invoice:
 		return None
-	invoice = frappe.db.get_value(
-		"Sales Invoice", record.sales_invoice, ["customer", "is_pos"], as_dict=True
-	)
+	invoice = frappe.db.get_value("Sales Invoice", record.sales_invoice, ["customer", "is_pos"], as_dict=True)
 	if not invoice or not invoice.customer or invoice.is_pos:
 		return None
 	name, tax_id = frappe.db.get_value("Customer", invoice.customer, ["customer_name", "tax_id"])

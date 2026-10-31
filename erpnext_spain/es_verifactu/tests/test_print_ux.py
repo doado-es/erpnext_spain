@@ -138,9 +138,7 @@ def _invoice(company: str, vat_account: str, **overrides):
 
 
 def _vat_account(company: str) -> str:
-	return frappe.db.get_value(
-		"Account", {"company": company, "account_type": "Tax", "is_group": 0}, "name"
-	)
+	return frappe.db.get_value("Account", {"company": company, "account_type": "Tax", "is_group": 0}, "name")
 
 
 # ---------------------------------------------------------------------------
@@ -181,12 +179,12 @@ class TestJinjaQR(IntegrationTestCase):
 		# REAL de la factura (dd-mm-aaaa, el formato AEAT del QR)
 		self.assertIn(f"fecha={format_aeat_date(a.posting_date)}", url)
 		# importe con el formato de monto congelado del adaptador
-		self.assertIn(f"importe={str(float(a.rounded_total))}", url)
+		self.assertIn(f"importe={float(a.rounded_total)!s}", url)
 		self.assertIn(f"numserie={a.name}", url)
 
 		svg = get_verifactu_qr_code(a)
 		self.assertIn("<svg", svg)
-		self.assertIn("class=\"segno\"", svg)  # marca del QR generado
+		self.assertIn('class="segno"', svg)  # marca del QR generado
 		# el SVG es reproducible: mismo input → mismo código
 		self.assertEqual(svg, get_verifactu_qr_code(frappe.get_doc("Sales Invoice", a.name)))
 
@@ -393,7 +391,7 @@ class TestPrintFormat(IntegrationTestCase):
 
 		self.assertIn("NO ES FACTURA", render)
 		self.assertIn('class="rotulo-borrador"', render)  # el rótulo del borrador
-		self.assertNotIn("class=\"segno\"", render)  # sin QR en borradores
+		self.assertNotIn('class="segno"', render)  # sin QR en borradores
 		self.assertIn(draft.name, render)
 
 	def test_render_submitted_invoice_with_qr(self):
@@ -408,7 +406,7 @@ class TestPrintFormat(IntegrationTestCase):
 		format_doc = frappe.get_doc("Print Format", FORMAT_NAME)
 		render = frappe.render_template(format_doc.html, {"doc": invoice})
 
-		self.assertIn("class=\"segno\"", render)  # QR (SVG inline de segno)
+		self.assertIn('class="segno"', render)  # QR (SVG inline de segno)
 		self.assertIn(QR_URL_BASE_PRUEBAS, render)  # enlace de validación
 		self.assertIn("Pendiente Envío", render)  # estado denormalizado
 		self.assertIn(invoice.name, render)

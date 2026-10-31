@@ -9,12 +9,12 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from zeep.exceptions import Fault
 
-from erpnext_spain.aeat.client import ENV_TEST, ENV_PRODUCTION, AEATClient, SERVICES
+from erpnext_spain.aeat.client import ENV_PRODUCTION, ENV_TEST, SERVICES, AEATClient
 from erpnext_spain.aeat.tests.helpers import (
+	clean_pem,
+	generate_p12,
 	test_company,
 	write_private_p12,
-	generate_p12,
-	clean_pem,
 )
 from erpnext_spain.aeat.tests.mock_aeat_client import (
 	load_seed,
@@ -92,7 +92,10 @@ class TestAEATClient(IntegrationTestCase):
 	def test_live_wsdl_from_settings_and_ports_per_environment(self):
 		self._production_wsdl("https://v16.example.com/Verifactu.wsdl")
 
-		for environment, expected_port in ((ENV_TEST, "SistemaVerifactuPruebas"), (ENV_PRODUCTION, "SistemaVerifactu")):
+		for environment, expected_port in (
+			(ENV_TEST, "SistemaVerifactuPruebas"),
+			(ENV_PRODUCTION, "SistemaVerifactu"),
+		):
 			captured: dict[str, object] = {}
 
 			def factory(**kwargs):
@@ -146,9 +149,7 @@ class TestAEATClient(IntegrationTestCase):
 			captured.update(kwargs)
 			return frappe._dict(service=frappe._dict())
 
-		AEATClient(
-			service="VeriFactu", environment=ENV_TEST, company=self.company, client_factory=factory
-		)
+		AEATClient(service="VeriFactu", environment=ENV_TEST, company=self.company, client_factory=factory)
 		self.assertTrue(os.path.exists(captured["cert_pem"]))
 		self.assertTrue(os.path.exists(captured["key_pem"]))
 		self.assertIn("private", captured["cert_pem"])
@@ -207,9 +208,7 @@ class TestAEATClient(IntegrationTestCase):
 			service="VeriFactu",
 			environment=ENV_TEST,
 			company=self.company,
-			client_factory=mock_client_factory(
-				{"RegFactuSistemaFacturacion": fault}
-			),
+			client_factory=mock_client_factory({"RegFactuSistemaFacturacion": fault}),
 		)
 		response = client.send(SUBMISSION)
 
@@ -250,9 +249,7 @@ class TestAEATClient(IntegrationTestCase):
 			service="VeriFactu",
 			environment=ENV_TEST,
 			company=self.company,
-			client_factory=mock_client_factory(
-				{"RegFactuSistemaFacturacion": ConnectionError("timeout")}
-			),
+			client_factory=mock_client_factory({"RegFactuSistemaFacturacion": ConnectionError("timeout")}),
 		)
 		with self.assertRaises(ConnectionError):
 			client.send(SUBMISSION)

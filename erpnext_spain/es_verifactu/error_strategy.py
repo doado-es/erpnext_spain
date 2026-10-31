@@ -61,9 +61,7 @@ CODES_BY_STRATEGY: dict[str, tuple[int, ...]] = {
 }
 
 _STRATEGY_BY_CODE: dict[int, str] = {
-	code: strategy
-	for strategy, codes in CODES_BY_STRATEGY.items()
-	for code in codes
+	code: strategy for strategy, codes in CODES_BY_STRATEGY.items() for code in codes
 }
 
 # Estados desde los que la reemisión tiene sentido (spec 04 §3): solo se
@@ -78,7 +76,7 @@ DIALOG_FIELDS_BY_ERROR: dict[int, list[dict]] = {
 		{
 			"fieldtype": "HTML",
 			"options": (
-				"<div class=\"alert alert-danger\"><strong>Error 3000: registro de"
+				'<div class="alert alert-danger"><strong>Error 3000: registro de'
 				" facturación duplicado.</strong><br>Ya existe en la AEAT un registro"
 				" con el mismo número de serie. Corrija la numeración de la factura"
 				" (la serie fiscal no debe reutilizarse) y vuelva a remitir."
@@ -97,7 +95,7 @@ DIALOG_FIELDS_BY_ERROR: dict[int, list[dict]] = {
 		{
 			"fieldtype": "HTML",
 			"options": (
-				"<div class=\"alert alert-danger\"><strong>Error 1239: bloque"
+				'<div class="alert alert-danger"><strong>Error 1239: bloque'
 				" Destinatario erróneo.</strong><br>Actualice los datos fiscales del"
 				" cliente (NIF/denominación) en su ficha y en la factura, y subsane:"
 				" el registro se regenera desde el estado actual de la factura."
@@ -120,7 +118,7 @@ DEFAULT_DIALOG_FIELDS: list[dict] = [
 	{
 		"fieldtype": "HTML",
 		"options": (
-			"<div class=\"alert alert-danger\"><strong>Error no contemplado.</strong>"
+			'<div class="alert alert-danger"><strong>Error no contemplado.</strong>'
 			"<br>Corrija la factura según la descripción del error de la AEAT y"
 			" subsane: el registro se regenera desde el estado actual de la"
 			" factura. Tenga cuidado: los valores remitidos tienen relevancia"
@@ -128,10 +126,13 @@ DEFAULT_DIALOG_FIELDS: list[dict] = [
 		),
 	},
 	{"fieldtype": "Section Break", "label": "Acción correctiva"},
-	{"fieldname": "error_code",
-	"label": "Código de error AEAT", "fieldtype": "Data", "read_only": 1},
-	{"fieldname": "error_description",
-	"label": "Descripción del error AEAT", "fieldtype": "Small Text", "read_only": 1},
+	{"fieldname": "error_code", "label": "Código de error AEAT", "fieldtype": "Data", "read_only": 1},
+	{
+		"fieldname": "error_description",
+		"label": "Descripción del error AEAT",
+		"fieldtype": "Small Text",
+		"read_only": 1,
+	},
 ]
 
 
@@ -140,7 +141,7 @@ def strategy_for(error_code: Any) -> str:
 	vacío → Desconocido (nunc cras: se registra y notifica, jamás revienta)."""
 	try:
 		code = int(str(error_code).strip())
-	except (TypeError, ValueError):
+	except TypeError, ValueError:
 		return STRATEGY_UNKNOWN
 	return _STRATEGY_BY_CODE.get(code, STRATEGY_UNKNOWN)
 
@@ -159,14 +160,12 @@ def dialog_fields(error_code: Any) -> list[dict]:
 	«default» en sitio) sin envenenar el mapa."""
 	try:
 		code = int(str(error_code).strip())
-	except (TypeError, ValueError):
+	except TypeError, ValueError:
 		code = None
 	return copy.deepcopy(DIALOG_FIELDS_BY_ERROR.get(code, DEFAULT_DIALOG_FIELDS))
 
 
-def apply_strategy(
-	record_name: str, error_code: str | None, description: str | None
-) -> None:
+def apply_strategy(record_name: str, error_code: str | None, description: str | None) -> None:
 	"""Aplica la estrategia del código de error a un registro del libro que
 	acaba de transicionar a Incorrecto/AceptadoConErrores (la llama el
 	procesador del driver; NUNCA lanza — el driver aísla por empresa, pero el
@@ -220,14 +219,11 @@ def _manual_rectification(record, error_code: str | None, description: str | Non
 	"""Deriva `curable=1` (la vía del procesador: db.set_value sin pasar
 	por el validate del libro — el registro ya es terminal y congelado,
 	spec 04 §2.2/§3) y notifica la incidencia con remedio (spec 04 §9)."""
-	frappe.db.set_value(
-		LEDGER_DOCTYPE, record.name, "curable", 1, update_modified=False
-	)
+	frappe.db.set_value(LEDGER_DOCTYPE, record.name, "curable", 1, update_modified=False)
 	invoice = record.sales_invoice or "(sin factura)"
 	notify_roles(
 		record.company,
-		f"VeriFactu: la factura {invoice} requiere subsanación manual"
-		f" (error {error_code} de la AEAT)",
+		f"VeriFactu: la factura {invoice} requiere subsanación manual (error {error_code} de la AEAT)",
 		f"El registro {record.record_type} de la factura {invoice} de"
 		f" {record.company} fue rechazado por la AEAT con el código"
 		f" {error_code}: {description or '(sin descripción)'}. Remedio:"

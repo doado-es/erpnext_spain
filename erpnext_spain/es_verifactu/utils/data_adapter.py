@@ -184,9 +184,7 @@ def build_tax_breakdown(breakup_rows: list[dict]) -> list[dict]:
 			if row.get("exemption_cause"):
 				group["OperacionExenta"] = row["exemption_cause"]
 			else:
-				group["CalificacionOperacion"] = (
-					row.get("operation_classification") or CLASSIFICATION_TAXABLE
-				)
+				group["CalificacionOperacion"] = row.get("operation_classification") or CLASSIFICATION_TAXABLE
 
 		new_base = group["BaseImponibleOimporteNoSujeto"] + Decimal(str(row["taxable_base"]))
 		group["BaseImponibleOimporteNoSujeto"] = new_base.quantize(CENT, rounding=ROUND_HALF_UP)
@@ -199,11 +197,7 @@ def build_tax_breakdown(breakup_rows: list[dict]) -> list[dict]:
 			# Regla 1238 de la AEAT (verificada EN VIVO): si la operación es
 			# exenta NO se informa ninguno de TipoImpositivo, CuotaRepercutida,
 			# TipoRecargoEquivalencia ni CuotaRecargoEquivalencia — solo la base.
-			**(
-				{"TipoImpositivo": group["TipoImpositivo"]}
-				if "OperacionExenta" not in group
-				else {}
-			),
+			**({"TipoImpositivo": group["TipoImpositivo"]} if "OperacionExenta" not in group else {}),
 			"BaseImponibleOimporteNoSujeto": float(group["BaseImponibleOimporteNoSujeto"]),
 			**(
 				{"CuotaRepercutida": float(group["CuotaRepercutida"])}
@@ -249,9 +243,7 @@ def build_issuance_record(data: dict) -> dict:
 	La HUELLA NO incluye ninguna de ellas: la cadena canónica (L13) está
 	CONGELADA — añadirlas al record no altera los vectores del lote 4a.
 	"""
-	rectification_type = data.get("rectification_type") or get_rectification_type(
-		data["invoice_type_code"]
-	)
+	rectification_type = data.get("rectification_type") or get_rectification_type(data["invoice_type_code"])
 	previous_hash = data.get("previous_hash") or ""
 
 	record = {

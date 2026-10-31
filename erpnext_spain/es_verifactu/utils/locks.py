@@ -70,7 +70,7 @@ def release_chain_lock(lock: FileLock) -> None:
 	"""Libera un cerrojo adquirido con acquire_chain_lock (idempotente)."""
 	try:
 		lock.release()
-	except Exception:  # noqa: BLE001 - liberar jamás debe enmascarar el flujo
+	except Exception:
 		pass
 
 

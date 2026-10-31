@@ -77,7 +77,7 @@ Endpoint:
 ```python
 @frappe.whitelist(methods=["POST"])
 def apply_pgc_chart(company: str, chart_model: str, dry_run: bool = True) -> dict:
-    """chart_model: "Normal" | "PYMES". Con dry_run devuelve el resumen sin escribir."""
+	"""chart_model: "Normal" | "PYMES". Con dry_run devuelve el resumen sin escribir."""
 ```
 
 **Permisos**: `write` sobre la Company y rol Accounts Manager o System Manager.

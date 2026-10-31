@@ -79,7 +79,9 @@ class TestMockAEATClient(IntegrationTestCase):
 		self.assertEqual(recorded["respuesta"]["EstadoEnvio"], "Incorrecto")
 
 		# reproducir desde la grabación, sin real_client
-		replayer = MockAEATClient(mode="replay", recordings_dir=directory, default_seed="alta_aceptada_con_errores")
+		replayer = MockAEATClient(
+			mode="replay", recordings_dir=directory, default_seed="alta_aceptada_con_errores"
+		)
 		self.assertEqual(replayer.send(PAYLOAD)["EstadoEnvio"], "Incorrecto")
 
 	def test_record_without_real_client_blocks(self):

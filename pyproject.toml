@@ -50,6 +50,8 @@ select = [
     "B",
     "RUF",
 ]
+# Raya y signo de multiplicación: tipografía española correcta en textos y comentarios.
+allowed-confusables = ["–", "×"]
 ignore = [
     "B017", # assertRaises(Exception) - should be more specific
     "B018", # useless expression, not assigned to anything

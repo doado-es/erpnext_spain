@@ -199,9 +199,7 @@ def _query_filters(doc: Document) -> dict:
 	rango) + los filtros opcionales SOLO si están cumplimentados, en el
 	orden del esquema."""
 	base = frappe.utils.getdate(doc.from_date) if doc.from_date else now_aeat().date()
-	filters = {
-		"PeriodoImputacion": {"Ejercicio": str(base.year), "Periodo": f"{base.month:02d}"}
-	}
+	filters = {"PeriodoImputacion": {"Ejercicio": str(base.year), "Periodo": f"{base.month:02d}"}}
 
 	if doc.series_number:
 		filters["NumSerieFactura"] = doc.series_number

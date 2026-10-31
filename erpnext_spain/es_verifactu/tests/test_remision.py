@@ -112,7 +112,9 @@ class TestOutboxDispatch(IntegrationTestCase):
 		frappe.db.delete("ES Invoice Series", {"parent": self.company})
 		frappe.db.delete("ES Verifactu Notification Role", {"parent": self.company})
 		frappe.db.delete(LEDGER_DOCTYPE, {"company": self.company})
-		for credential in frappe.get_all("ES AEAT Credential", filters={"company": self.company}, pluck="name"):
+		for credential in frappe.get_all(
+			"ES AEAT Credential", filters={"company": self.company}, pluck="name"
+		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
 
 	# --- helpers de fixture (patrón de test_emision_registros.py) ------------
@@ -143,9 +145,7 @@ class TestOutboxDispatch(IntegrationTestCase):
 		doc.set("es_invoice_series", [])
 		doc.append("es_invoice_series", {"series": series, "invoice_type": invoice_type})
 		doc.append("es_invoice_series", {"series": R1_SERIES, "invoice_type": "R1"})
-		url = write_private_p12(
-			f"es_test_remision_{frappe.generate_hash(length=8)}.p12", self.p12
-		)
+		url = write_private_p12(f"es_test_remision_{frappe.generate_hash(length=8)}.p12", self.p12)
 		frappe.get_doc(
 			{
 				"doctype": "ES AEAT Credential",
@@ -189,7 +189,16 @@ class TestOutboxDispatch(IntegrationTestCase):
 		return frappe.get_all(
 			LEDGER_DOCTYPE,
 			filters={"company": self.company, "sales_invoice": invoice_name, **overrides},
-			fields=["name", "record_type", "invoice_type", "chain_index", "hash", "previous_hash", "record_json", "status"],
+			fields=[
+				"name",
+				"record_type",
+				"invoice_type",
+				"chain_index",
+				"hash",
+				"previous_hash",
+				"record_json",
+				"status",
+			],
 			order_by="chain_index asc",
 		)
 
@@ -206,7 +215,9 @@ class TestOutboxDispatch(IntegrationTestCase):
 		"""Simula un procesador previo por la VÍA SANCIONADA del libro
 		(flag): transiciona el Alta a Correcto y denormaliza «Alta
 		Aceptada» en la factura (patrón de test_emision_registros.py)."""
-		record = frappe.get_doc(LEDGER_DOCTYPE, {"sales_invoice": invoice_name, "record_type": "RegistroAlta"})
+		record = frappe.get_doc(
+			LEDGER_DOCTYPE, {"sales_invoice": invoice_name, "record_type": "RegistroAlta"}
+		)
 		record.flags[RESPONSE_PROCESSOR_FLAG] = True
 		record.status = "Correcto"
 		record.save(ignore_permissions=True)
@@ -246,9 +257,7 @@ class TestOutboxDispatch(IntegrationTestCase):
 		entorno de pruebas) que un drain global remitiría por el mock y cuyo
 		procesado re-enlazaría registros ajenos a la respuesta del test."""
 		mock = MockAEATClient(responses={OPERATION: response})
-		AEATOutboxManager().drain_company(
-			VerifactuDriver(client_factory=lambda **kw: mock), self.company
-		)
+		AEATOutboxManager().drain_company(VerifactuDriver(client_factory=lambda **kw: mock), self.company)
 		return mock
 
 	# --- outbox: get_companies / get_pending (spec 04 §8) ---------------------
@@ -382,9 +391,7 @@ class TestOutboxDispatch(IntegrationTestCase):
 			issuance["NombreRazonEmisor"],
 			frappe.db.get_value("Company", self.company, "company_name"),
 		)
-		self.assertEqual(
-			issuance["DescripcionOperacion"], f"Factura {a.name} por cantidad {a.base_total}"
-		)
+		self.assertEqual(issuance["DescripcionOperacion"], f"Factura {a.name} por cantidad {a.base_total}")
 		self.assertEqual(issuance["Subsanacion"], "N")
 		self.assertEqual(issuance["RechazoPrevio"], "N")
 		self.assertNotIn("SinRegistroPrevio", issuance)  # campo del tipo anulación
@@ -425,9 +432,7 @@ class TestOutboxDispatch(IntegrationTestCase):
 
 		self.assertEqual(cancellation["RechazoPrevio"], "N")
 		self.assertEqual(cancellation["SinRegistroPrevio"], "N")
-		self.assertEqual(
-			cancellation["SistemaInformatico"], emission.get_sif_data(self.company)
-		)
+		self.assertEqual(cancellation["SistemaInformatico"], emission.get_sif_data(self.company))
 		for key in (
 			"NombreRazonEmisor",
 			"Destinatarios",
@@ -466,7 +471,10 @@ class TestOutboxDispatch(IntegrationTestCase):
 		):
 			legacy_data.pop(key, None)
 		frappe.db.set_value(
-			LEDGER_DOCTYPE, record.name, "record_json", json.dumps(legacy_data),
+			LEDGER_DOCTYPE,
+			record.name,
+			"record_json",
+			json.dumps(legacy_data),
 			update_modified=False,
 		)
 
@@ -479,18 +487,12 @@ class TestOutboxDispatch(IntegrationTestCase):
 			issuance["NombreRazonEmisor"],
 			frappe.db.get_value("Company", self.company, "company_name"),
 		)
-		self.assertEqual(
-			issuance["DescripcionOperacion"], f"Factura {a.name} por cantidad {a.base_total}"
-		)
+		self.assertEqual(issuance["DescripcionOperacion"], f"Factura {a.name} por cantidad {a.base_total}")
 		self.assertEqual(issuance["Subsanacion"], "N")
 		self.assertEqual(issuance["RechazoPrevio"], "N")
 		self.assertNotIn("SinRegistroPrevio", issuance)  # campo del tipo anulación
-		self.assertEqual(
-			issuance["Destinatarios"]["IDDestinatario"][0]["NombreRazon"], a.customer_name
-		)
-		self.assertEqual(
-			issuance["SistemaInformatico"], emission.get_sif_data(self.company)
-		)
+		self.assertEqual(issuance["Destinatarios"]["IDDestinatario"][0]["NombreRazon"], a.customer_name)
+		self.assertEqual(issuance["SistemaInformatico"], emission.get_sif_data(self.company))
 		# el record_json del libro queda INTACTO (lo remitido ≠ lo registrado
 		# solo en el enriquecimiento del wire, nunca en el libro)
 		self.assertNotIn(
@@ -549,10 +551,10 @@ class TestOutboxDispatch(IntegrationTestCase):
 
 		self.assertNotIn("Destinatarios", issuance)
 		self.assertEqual(issuance["Subsanacion"], "N")
-		self.assertEqual(issuance["NombreRazonEmisor"], frappe.db.get_value("Company", self.company, "company_name"))
 		self.assertEqual(
-			issuance["SistemaInformatico"], emission.get_sif_data(self.company)
+			issuance["NombreRazonEmisor"], frappe.db.get_value("Company", self.company, "company_name")
 		)
+		self.assertEqual(issuance["SistemaInformatico"], emission.get_sif_data(self.company))
 
 	def test_build_payload_pos_no_recipients(self):
 		"""POS (venta por caja, tipo simplificado): el RegistroAlta NACE sin
@@ -591,7 +593,13 @@ class TestOutboxDispatch(IntegrationTestCase):
 		response = self._adapted_seed(
 			[
 				(names[0], a.name, "Correcto", None, None),
-				(names[1], b.name, "AceptadoConErrores", 2004, "El valor del campo FechaHoraHusoGenRegistro debe ser la fecha actual del sistema de la AEAT."),
+				(
+					names[1],
+					b.name,
+					"AceptadoConErrores",
+					2004,
+					"El valor del campo FechaHoraHusoGenRegistro debe ser la fecha actual del sistema de la AEAT.",
+				),
 			]
 		)
 		mock = self._drain_with_mock(response)
@@ -642,9 +650,7 @@ class TestOutboxDispatch(IntegrationTestCase):
 		frappe.db.set_value("Company", self.company, "es_verifactu_enabled", 0)
 
 		name = self._invoice_records(a.name)[0].name
-		self._drain_with_mock(
-			self._adapted_seed([(name, a.name, "Correcto", None, None)])
-		)
+		self._drain_with_mock(self._adapted_seed([(name, a.name, "Correcto", None, None)]))
 
 		record = frappe.get_doc(LEDGER_DOCTYPE, name)
 		self.assertEqual(record.status, "Correcto")
@@ -790,10 +796,9 @@ class TestOutboxDispatch(IntegrationTestCase):
 		# verdad a la AEAT.
 		real = VerifactuDriver()
 		with_mock = VerifactuDriver(client_factory=lambda **kw: mock)
-		with unittest.mock.patch.object(
-			real, "get_companies", return_value=[self.company]
-		), unittest.mock.patch.object(
-			with_mock, "get_companies", return_value=[self.company]
+		with (
+			unittest.mock.patch.object(real, "get_companies", return_value=[self.company]),
+			unittest.mock.patch.object(with_mock, "get_companies", return_value=[self.company]),
 		):
 			AEATOutboxManager().drain([real, with_mock])
 
@@ -825,9 +830,5 @@ class TestOutboxDispatch(IntegrationTestCase):
 			"erpnext_spain.es_verifactu.tasks.drain_outbox",
 			cron_entries.get("* * * * *", []),
 		)
-		self.assertTrue(
-			callable(frappe.get_attr("erpnext_spain.es_verifactu.tasks.drain_outbox"))
-		)
-		self.assertTrue(
-			callable(frappe.get_attr("erpnext_spain.es_verifactu.tasks.send_pending"))
-		)
+		self.assertTrue(callable(frappe.get_attr("erpnext_spain.es_verifactu.tasks.drain_outbox")))
+		self.assertTrue(callable(frappe.get_attr("erpnext_spain.es_verifactu.tasks.send_pending")))

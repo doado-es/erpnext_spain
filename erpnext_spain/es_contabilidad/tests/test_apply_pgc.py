@@ -89,7 +89,9 @@ class TestApplyPGCChart(IntegrationTestCase):
 				for doctype in ("Item Tax Template", "Sales Taxes and Charges Template"):
 					self.assertFalse(frappe.db.exists(doctype, {"company": company, "title": "Spain Tax"}))
 				self.assertTrue(
-					frappe.db.exists("Sales Taxes and Charges Template", {"company": company, "title": "IVA 21 %"})
+					frappe.db.exists(
+						"Sales Taxes and Charges Template", {"company": company, "title": "IVA 21 %"}
+					)
 				)
 
 				# Cuentas por defecto (spec 02 §3).
