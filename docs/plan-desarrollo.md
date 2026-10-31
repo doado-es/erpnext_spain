@@ -11,6 +11,10 @@ Encargo del usuario (31/10/2026): desarrollar todas las specs, con tests, tomand
 5. **Sin servicios reales**: AEAT, FACe, bancos y VIES solo con clientes simulados en los tests.
 6. Al terminar cada bloque: suite completa (`bench --site test.es.localhost run-tests --app erpnext_spain`), `ruff check`, actualizar el estado en la spec y en `pendientes.md`.
 
+## Estado (31/10/2026)
+
+Los nueve bloques están desarrollados, con tests (≈ 444 en total, en verde en local y en el CI de GitHub sobre un sitio limpio) y fusionados en `version-16`. Lo que queda por revisar o completar está en [`decisiones.md`](decisiones.md) (marcas **[revisar]**) y en [`pendientes.md`](pendientes.md).
+
 ## Orden
 
 | Bloque | Contenido | Specs |
