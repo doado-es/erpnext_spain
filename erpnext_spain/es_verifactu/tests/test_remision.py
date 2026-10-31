@@ -621,10 +621,6 @@ class TestOutboxDispatch(IntegrationTestCase):
 			frappe.db.get_value("Sales Invoice", a.name, "es_verifactu_status"),
 			emission.INVOICE_STATUS_ISSUANCE_ACCEPTED,
 		)
-
-		# alta Correcto: el cliente queda contrastado con la AEAT (nif/aeat_census.py)
-		census = frappe.db.get_value("Customer", CUSTOMER, ["es_aeat_status", "es_aeat_source"], as_dict=True)
-		self.assertEqual((census.es_aeat_status, census.es_aeat_source), ("Identificado", "VeriFactu"))
 		self.assertEqual(
 			frappe.db.get_value("Sales Invoice", b.name, "es_verifactu_status"),
 			emission.INVOICE_STATUS_ISSUANCE_WITH_ERRORS,

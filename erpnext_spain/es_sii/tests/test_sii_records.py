@@ -195,11 +195,6 @@ class TestSii(IntegrationTestCase):
 		ok = self.record(good)
 		self.assertEqual((ok.status, ok.csv), ("Correcto", "CSV1234567890"))
 		self.assertTrue(ok.aeat_response)
-		# registro Correcto: el cliente queda contrastado con la AEAT (nif/aeat_census.py)
-		self.assertEqual(
-			frappe.db.get_value("Customer", "_Test ES Cliente SII", ["es_aeat_status", "es_aeat_source"]),
-			("Identificado", "SII"),
-		)
 		wrong = self.record(bad)
 		self.assertEqual((wrong.status, wrong.error_code), ("Incorrecto", "1104"))
 		new = outbox.resend(wrong.name)

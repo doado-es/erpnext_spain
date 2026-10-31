@@ -376,11 +376,6 @@ class VerifactuDriver(AEATDriver):
 				update_modified=False,
 			)
 
-		# Alta aceptada: el NIF y el nombre del destinatario están en el censo
-		# (indicador «Contraste con la AEAT» del cliente, nif/aeat_census.py).
-		if state == "Correcto" and record.record_type == "RegistroAlta" and record.sales_invoice:
-			_mark_recipient_identified(record)
-
 		# Estrategia por código de error (lote 5b, spec 04 §3/§9): cuando el
 		# registro NO quedó Correcto y la línea trae código, el mapa decide
 		# (reintento / subsanación automática / manual / desconocido). El
@@ -487,16 +482,3 @@ def _legacy_recipients(record: Any) -> dict | None:
 		return None
 	name, tax_id = frappe.db.get_value("Customer", invoice.customer, ["customer_name", "tax_id"])
 	return {"IDDestinatario": [{"NombreRazon": name, "NIF": tax_id}]}
-
-
-def _mark_recipient_identified(record: Any) -> None:
-	from erpnext_spain.nif.aeat_census import SOURCE_VERIFACTU, mark_from_submission
-
-	data = json.loads(record.record_json or "{}")
-	recipients = (data.get("Destinatarios") or {}).get("IDDestinatario") or []
-	if not recipients or not recipients[0].get("NIF"):
-		return
-	customer = frappe.db.get_value("Sales Invoice", record.sales_invoice, "customer")
-	mark_from_submission(
-		"Customer", customer, recipients[0]["NIF"], recipients[0].get("NombreRazon"), SOURCE_VERIFACTU
-	)

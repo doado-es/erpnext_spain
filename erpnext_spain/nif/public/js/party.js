@@ -5,9 +5,11 @@
 //    las personas físicas como «APELLIDO APELLIDO NOMBRE»; con otro orden VeriFactu
 //    rechaza el envío (error 103 «NIF no identificado»). Es persona física si el
 //    tipo de persona es «Física» o, sin tipo, si el NIF es un DNI o un NIE.
-// 2. Indicador del contraste con el censo de la AEAT junto al NIF (verde, naranja,
-//    rojo o gris), botón «Contrastar con la AEAT» y, si el censo tiene otro
-//    nombre, «Usar el nombre del censo» (nif/aeat_census.py).
+// 2. Marca de verificación dentro del campo NIF (mismo patrón que el botón de los
+//    campos URL y Barcode de Frappe). Al pulsarla contrasta el NIF y el nombre del
+//    formulario con el censo de la AEAT (nif/aeat_census.check_tax_id) y se pinta
+//    verde, naranja (el censo tiene otro nombre: se ofrece usarlo) o roja. No se
+//    guarda nada; vuelve a gris si cambian el NIF o el nombre.
 
 frappe.provide("erpnext_spain.nif");
 
@@ -22,11 +24,27 @@ erpnext_spain.nif.NAME_FORMAT_HINTS = {
 	),
 };
 
-erpnext_spain.nif.STATUS_COLORS = {
-	Identificado: "green",
-	"Nombre distinto": "orange",
-	"No identificado": "red",
-	"Respuesta no reconocida": "orange",
+// Estado de la marca → [icono, color, texto].
+erpnext_spain.nif.MARKS = {
+	unchecked: ["badge-check", "var(--gray-500)", __("Contrastar NIF y nombre con la AEAT")],
+	checking: ["loader-circle", "var(--gray-500)", __("Consultando el censo de la AEAT...")],
+	Identificado: ["badge-check", "var(--green-500)", __("Identificado en el censo de la AEAT")],
+	"Nombre distinto": [
+		"badge-alert",
+		"var(--orange-500)",
+		__("La AEAT tiene otro nombre para este NIF"),
+	],
+	"No identificado": [
+		"badge-x",
+		"var(--red-500)",
+		__("NIF no identificado en el censo de la AEAT"),
+	],
+	"Respuesta no reconocida": [
+		"badge-alert",
+		"var(--orange-500)",
+		__("Respuesta no reconocida de la AEAT"),
+	],
+	error: ["badge-alert", "var(--red-500)", __("No se pudo consultar a la AEAT")],
 };
 
 erpnext_spain.nif.clean_nif = function (tax_id) {
@@ -56,77 +74,71 @@ erpnext_spain.nif.toggle_name_hint = function (frm) {
 	frm.set_df_property(erpnext_spain.nif.NAME_FIELDS[frm.doctype], "description", hint);
 };
 
-// Indicador junto al NIF (descripción del campo tax_id).
-erpnext_spain.nif.show_census_indicator = function (frm) {
-	if (!erpnext_spain.nif.is_spanish(frm.doc.tax_id)) {
-		frm.set_df_property("tax_id", "description", "");
-		return;
+// --- marca de verificación ---------------------------------------------------
+
+erpnext_spain.nif.mark_button = function (frm) {
+	const field = frm.fields_dict.tax_id;
+	if (!field || !field.$wrapper) {
+		return null;
 	}
-	const status = frm.doc.es_aeat_status;
-	let label = __("Sin contrastar con la AEAT");
-	let color = "gray";
-	if (status) {
-		color = erpnext_spain.nif.STATUS_COLORS[status] || "orange";
-		const detail = [
-			frm.doc.es_aeat_source,
-			frappe.datetime.str_to_user(frm.doc.es_aeat_checked_on),
-		]
-			.filter(Boolean)
-			.join(" · ");
-		label = __("AEAT: {0}", [__(status)]) + (detail ? ` (${detail})` : "");
+	let $button = field.$wrapper.find(".es-aeat-check");
+	if (!$button.length) {
+		$button = $(
+			`<span class="link-btn es-aeat-check"><a class="btn-open no-decoration"></a></span>`
+		).appendTo(field.$wrapper.find(".control-input"));
+		$button.find("a").on("click", (event) => {
+			event.preventDefault();
+			erpnext_spain.nif.check(frm);
+		});
 	}
-	frm.set_df_property(
-		"tax_id",
-		"description",
-		`<span class="indicator-pill ${color}">${frappe.utils.escape_html(label)}</span>`
-	);
+	return $button;
 };
 
-erpnext_spain.nif.add_census_buttons = function (frm) {
-	if (frm.is_new() || !erpnext_spain.nif.is_spanish(frm.doc.tax_id)) {
+erpnext_spain.nif.set_mark = function (frm, state, detail) {
+	const $button = erpnext_spain.nif.mark_button(frm);
+	if (!$button) {
 		return;
 	}
-	frm.add_custom_button(
-		__("Contrastar con la AEAT"),
+	const [icon, color, text] = erpnext_spain.nif.MARKS[state] || erpnext_spain.nif.MARKS.error;
+	const title = detail ? `${text}: ${detail}` : text;
+	$button.find("a").attr("title", title).css("color", color).html(frappe.utils.icon(icon, "sm"));
+	$button.toggle(erpnext_spain.nif.is_spanish(frm.doc.tax_id));
+};
+
+erpnext_spain.nif.check = function (frm) {
+	const name = frm.doc[erpnext_spain.nif.NAME_FIELDS[frm.doctype]];
+	erpnext_spain.nif.set_mark(frm, "checking");
+	frappe
+		.call({
+			method: "erpnext_spain.nif.aeat_census.check_tax_id",
+			type: "POST",
+			args: { doctype: frm.doctype, tax_id: frm.doc.tax_id, party_name: name },
+		})
+		.then((r) => {
+			const result = r.message || {};
+			erpnext_spain.nif.set_mark(frm, result.status, result.census_name || result.result);
+			if (result.status === "Nombre distinto" && result.census_name) {
+				erpnext_spain.nif.offer_census_name(frm, result.census_name);
+			}
+		})
+		.catch(() => erpnext_spain.nif.set_mark(frm, "error"));
+};
+
+erpnext_spain.nif.offer_census_name = function (frm, census_name) {
+	frappe.confirm(
+		__("La AEAT tiene este NIF a nombre de «{0}». ¿Usar ese nombre?", [
+			frappe.utils.escape_html(census_name),
+		]),
 		() =>
-			frappe.call({
-				method: "erpnext_spain.nif.aeat_census.check_parties",
-				type: "POST",
-				args: { doctype: frm.doctype, names: [frm.doc.name] },
-				freeze: true,
-				freeze_message: __("Consultando el censo de la AEAT..."),
-				callback: () => frm.reload_doc(),
-			}),
-		__("Acciones")
+			frm
+				.set_value(erpnext_spain.nif.NAME_FIELDS[frm.doctype], census_name)
+				.then(() => erpnext_spain.nif.set_mark(frm, "Identificado"))
 	);
-	const census_name = frm.doc.es_aeat_census_name;
-	if (frm.doc.es_aeat_status === "Nombre distinto" && census_name) {
-		frm.add_custom_button(
-			__("Usar el nombre del censo"),
-			() =>
-				frappe.confirm(
-					__("¿Cambiar el nombre a «{0}», como figura en el censo de la AEAT?", [
-						frappe.utils.escape_html(census_name),
-					]),
-					() => {
-						frm.set_value(erpnext_spain.nif.NAME_FIELDS[frm.doctype], census_name);
-						frm.save();
-					}
-				),
-			__("Acciones")
-		);
-	}
 };
 
-erpnext_spain.nif.refresh = function (frm) {
+erpnext_spain.nif.reset = function (frm) {
 	erpnext_spain.nif.toggle_name_hint(frm);
-	erpnext_spain.nif.show_census_indicator(frm);
-	erpnext_spain.nif.add_census_buttons(frm);
-};
-
-erpnext_spain.nif.on_tax_id = function (frm) {
-	erpnext_spain.nif.toggle_name_hint(frm);
-	erpnext_spain.nif.show_census_indicator(frm);
+	erpnext_spain.nif.set_mark(frm, "unchecked");
 };
 
 // El mismo fichero se carga con los dos formularios: eventos una sola vez.
@@ -134,8 +146,10 @@ if (!erpnext_spain.nif_party_events) {
 	erpnext_spain.nif_party_events = true;
 	["Customer", "Supplier"].forEach((doctype) => {
 		frappe.ui.form.on(doctype, {
-			refresh: (frm) => erpnext_spain.nif.refresh(frm),
-			tax_id: (frm) => erpnext_spain.nif.on_tax_id(frm),
+			refresh: (frm) => erpnext_spain.nif.reset(frm),
+			tax_id: (frm) => erpnext_spain.nif.reset(frm),
+			[erpnext_spain.nif.NAME_FIELDS[doctype]]: (frm) =>
+				erpnext_spain.nif.set_mark(frm, "unchecked"),
 			es_person_type: (frm) => erpnext_spain.nif.toggle_name_hint(frm),
 		});
 	});

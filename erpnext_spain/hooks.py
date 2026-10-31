@@ -18,23 +18,13 @@ required_apps = ["frappe/erpnext"]
 doc_events = {
 	# Número y rama de las cuentas nuevas en compañías PGC (spec 02 §4).
 	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
-	"Customer": {
-		"validate": [
-			"erpnext_spain.nif.party.validate",
-			# Contraste con la AEAT caducado si cambian el NIF o el nombre...
-			"erpnext_spain.nif.aeat_census.reset_if_changed",
-		],
-		# ... y nuevo contraste al guardar.
-		"on_change": "erpnext_spain.nif.aeat_census.on_change",
-	},
+	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
 	"Supplier": {
 		"validate": [
 			"erpnext_spain.nif.party.validate",
-			"erpnext_spain.nif.aeat_census.reset_if_changed",
 			# Grupo de retención con fila de tipo en su categoría (spec 08 §3).
 			"erpnext_spain.es_retenciones.withholding.validate_supplier",
-		],
-		"on_change": "erpnext_spain.nif.aeat_census.on_change",
+		]
 	},
 	# Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3).
 	"Purchase Invoice": {
@@ -153,7 +143,7 @@ doctype_js = {
 		"es_facturacion/public/js/fiscal_tab.js",
 	],
 	"Purchase Invoice": "es_facturacion/public/js/fiscal_tab.js",
-	# Formato de nombre de las personas físicas e indicador del contraste con la AEAT.
+	# Formato de nombre de las personas físicas y contraste del NIF con la AEAT.
 	"Customer": "nif/public/js/party.js",
 	"Supplier": "nif/public/js/party.js",
 }

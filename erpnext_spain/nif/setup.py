@@ -18,8 +18,6 @@ from __future__ import annotations
 
 import frappe
 
-from erpnext_spain.nif.aeat_census import party_fields
-
 TRADE_NAME_FIELD = {
 	"fieldname": "es_trade_name",
 	"label": "Nombre comercial",
@@ -101,12 +99,8 @@ def vies_fields(insert_after: str) -> list[dict]:
 
 
 CUSTOM_FIELDS = {
-	"Customer": [TRADE_NAME_FIELD, *vies_fields("tax_id"), *party_fields("es_vies_checked_on")],
-	"Supplier": [
-		TRADE_NAME_FIELD | {"insert_after": "supplier_name"},
-		*vies_fields("tax_id"),
-		*party_fields("es_vies_checked_on"),
-	],
+	"Customer": [TRADE_NAME_FIELD, *vies_fields("tax_id")],
+	"Supplier": [TRADE_NAME_FIELD | {"insert_after": "supplier_name"}, *vies_fields("tax_id")],
 	"Company": [
 		COMPANY_TAB_FIELD,
 		COMPANY_GENERAL_SECTION_FIELD,

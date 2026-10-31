@@ -114,27 +114,7 @@ erpnext_spain.es_facturacion.check_tax_ids = function (listview) {
 	});
 };
 
-erpnext_spain.es_facturacion.check_census = function (listview) {
-	const names = erpnext_spain.es_facturacion.selected(listview);
-	if (!names.length) return frappe.msgprint(__("Seleccione terceros."));
-	frappe.call({
-		method: "erpnext_spain.nif.aeat_census.check_parties",
-		type: "POST",
-		args: { doctype: listview.doctype, names: names },
-		freeze: true,
-		freeze_message: __("Consultando el censo de la AEAT..."),
-		callback(r) {
-			if (r.message && r.message.queued) return erpnext_spain.es_facturacion.report(r);
-			listview.refresh();
-			frappe.show_alert({ message: __("NIF contrastados con la AEAT"), indicator: "green" });
-		},
-	});
-};
-
-const ES_PARTY_ACTIONS = [
-	[__("Comprobar NIF"), "check_tax_ids"],
-	[__("Contrastar con la AEAT"), "check_census"],
-];
+const ES_PARTY_ACTIONS = [[__("Comprobar NIF"), "check_tax_ids"]];
 
 const ES_BULK_ACTIONS = {
 	"Delivery Note": [[__("Facturar seleccionados"), "invoice_delivery_notes"]],

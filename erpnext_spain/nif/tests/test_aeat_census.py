@@ -4,6 +4,8 @@
 # Los comportamientos simulados son los comprobados contra el servicio real el
 # 31/10/2026 (ver la cabecera del módulo).
 
+from unittest import mock
+
 import frappe
 from frappe.tests import IntegrationTestCase
 
@@ -32,130 +34,45 @@ class TestNames(IntegrationTestCase):
 		self.assertFalse(aeat_census.is_spanish_nif("FR40303265045"))
 
 
-class TestCensusCheck(IntegrationTestCase):
+class TestCheckTaxId(IntegrationTestCase):
 	def setUp(self):
 		frappe.set_user("Administrator")
-		frappe.flags.es_vnif_responses = {}
-		self.addCleanup(setattr, frappe.flags, "es_vnif_responses", None)
-
-	def customer(self, name: str, tax_id: str) -> str:
-		return frappe.get_doc({"doctype": "Customer", "customer_name": name, "tax_id": tax_id}).insert().name
-
-	def state(self, name: str, doctype: str = "Customer") -> dict:
-		return frappe.db.get_value(doctype, name, list(aeat_census.STATE_FIELDS), as_dict=True)
-
-	def test_identified_mismatch_and_not_identified(self):
-		"""Persona física en otro orden: el censo la identifica pero con su nombre
-		(«APELLIDO APELLIDO NOMBRE»), que es el que exige VeriFactu."""
-		person = self.customer("Alberto Ejemplo Prueba", PERSON_NIF)
-		company = self.customer("Empresa de Censo SL", COMPANY_NIF)
-		foreign = self.customer("Société Exemple", "FR40303265045")
 		frappe.flags.es_vnif_responses = {
 			PERSON_NIF: ("IDENTIFICADO", "EJEMPLO PRUEBA ALBERTO          "),
 			COMPANY_NIF: ("IDENTIFICADO", "EMPRESA DE CENSO, SL"),
 		}
-		summary = aeat_census.check_parties_now("Customer", [person, company, foreign], "_Test ES Company")
+		self.addCleanup(setattr, frappe.flags, "es_vnif_responses", None)
+		patcher = mock.patch("erpnext_spain.aeat.utils.require_credential", return_value="x")
+		patcher.start()
+		self.addCleanup(patcher.stop)
 
-		self.assertEqual(summary[person], NAME_MISMATCH)
-		self.assertEqual(self.state(person).es_aeat_census_name, "EJEMPLO PRUEBA ALBERTO")
-		self.assertEqual(summary[company], IDENTIFIED)
-		self.assertIsNone(self.state(company).es_aeat_census_name)
-		self.assertEqual(self.state(company).es_aeat_source, aeat_census.SOURCE_SERVICE)
-		self.assertNotIn(summary[foreign], aeat_census.STATUSES)
-		self.assertFalse(self.state(foreign).es_aeat_status)
+	def check(self, tax_id: str, name: str) -> dict:
+		return aeat_census.check_tax_id("Customer", tax_id, name, company="_Test ES Company")
 
-		frappe.flags.es_vnif_responses = {}
-		aeat_census.check_parties_now("Customer", [company], "_Test ES Company")
-		self.assertEqual(self.state(company).es_aeat_status, NOT_IDENTIFIED)
-
-	def test_census_name_applied_then_change_resets(self):
-		person = self.customer("Alberto Ejemplo Prueba", PERSON_NIF)
-		frappe.flags.es_vnif_responses = {PERSON_NIF: ("IDENTIFICADO", "EJEMPLO PRUEBA ALBERTO")}
-		aeat_census.check_parties_now("Customer", [person], "_Test ES Company")
-
-		doc = frappe.get_doc("Customer", person)
-		doc.customer_name = "EJEMPLO PRUEBA ALBERTO"  # «Usar el nombre del censo»
-		doc.save()
-		self.assertEqual(doc.es_aeat_status, IDENTIFIED)
-		self.assertIsNone(doc.es_aeat_census_name)
-
-		doc.tax_id = "87654321X"
-		doc.save()
-		self.assertFalse(doc.es_aeat_status)
-		self.assertIsNone(doc.es_aeat_checked_on)
-
-	def test_accepted_submission_marks_identified(self):
-		company = self.customer("Empresa Aceptada SL", COMPANY_NIF)
-		aeat_census.mark_from_submission(
-			"Customer", company, "ES" + COMPANY_NIF, "EMPRESA ACEPTADA, S.L.", aeat_census.SOURCE_VERIFACTU
+	def test_results(self):
+		"""Persona física en otro orden: identificada, pero con el nombre del censo
+		(«APELLIDO APELLIDO NOMBRE»), que es el que exige VeriFactu."""
+		self.assertEqual(
+			self.check(PERSON_NIF, "Alberto Ejemplo Prueba"),
+			{"status": NAME_MISMATCH, "result": "IDENTIFICADO", "census_name": "EJEMPLO PRUEBA ALBERTO"},
 		)
-		state = self.state(company)
-		self.assertEqual((state.es_aeat_status, state.es_aeat_source), (IDENTIFIED, "VeriFactu"))
+		self.assertEqual(self.check(PERSON_NIF, "EJEMPLO PRUEBA ALBERTO")["status"], IDENTIFIED)
+		self.assertEqual(self.check("ES-" + COMPANY_NIF, "Empresa de Censo S.L.")["status"], IDENTIFIED)
+		self.assertEqual(self.check("87654321X", "Nadie")["status"], NOT_IDENTIFIED)
 
-		other = self.customer("Empresa Renombrada SL", COMPANY_NIF)
-		aeat_census.mark_from_submission("Customer", other, COMPANY_NIF, "OTRO NOMBRE SL", "SII")
-		aeat_census.mark_from_submission("Customer", "No existe", COMPANY_NIF, "X", "SII")  # no lanza
-		self.assertFalse(self.state(other).es_aeat_status)
+	def test_nothing_is_stored(self):
+		for doctype in aeat_census.PARTY_DOCTYPES:
+			fields = [field.fieldname for field in frappe.get_meta(doctype).fields]
+			self.assertFalse([f for f in fields if f.startswith("es_aeat_")], doctype)
 
-	def test_endpoint_requires_role(self):
+	def test_foreign_nif_rejected(self):
+		with self.assertRaises(frappe.ValidationError):
+			self.check("FR40303265045", "Société Exemple")
+
+	def test_requires_role(self):
 		user = "es_census_sin_rol@test.example.com"
 		if not frappe.db.exists("User", user):
 			frappe.get_doc({"doctype": "User", "email": user, "first_name": "ES"}).insert()
 		frappe.set_user(user)
 		with self.assertRaises(frappe.PermissionError):
-			aeat_census.check_parties("Customer", ["x"])
-
-	def test_fields_on_both_parties(self):
-		for doctype in aeat_census.PARTY_DOCTYPES:
-			field = frappe.get_meta(doctype).get_field(aeat_census.STATUS)
-			self.assertIsNotNone(field, doctype)
-			self.assertTrue(field.in_list_view)
-
-
-class TestCensusOnSave(IntegrationTestCase):
-	"""Contraste al guardar (doc_event on_change) si cambian el NIF o el nombre."""
-
-	def setUp(self):
-		from unittest import mock
-
-		frappe.set_user("Administrator")
-		frappe.flags.es_vnif_responses = {COMPANY_NIF: ("IDENTIFICADO", "EMPRESA AL GUARDAR, SL")}
-		self.addCleanup(setattr, frappe.flags, "es_vnif_responses", None)
-		patcher = mock.patch.object(aeat_census, "census_company", return_value="_Test ES Company")
-		patcher.start()
-		self.addCleanup(patcher.stop)
-
-	def test_checked_on_insert_and_on_change(self):
-		doc = frappe.get_doc(
-			{"doctype": "Customer", "customer_name": "Empresa al guardar SL", "tax_id": COMPANY_NIF}
-		).insert()
-		# en el documento (lo que recibe el formulario) y en la base de datos
-		self.assertEqual(doc.es_aeat_status, IDENTIFIED)
-		self.assertEqual(frappe.db.get_value("Customer", doc.name, "es_aeat_status"), IDENTIFIED)
-
-		doc.customer_name = "Empresa con otro nombre SL"
-		doc.save()
-		self.assertEqual(doc.es_aeat_status, NAME_MISMATCH)
-		self.assertEqual(doc.es_aeat_census_name, "EMPRESA AL GUARDAR, SL")
-
-		doc.website = "https://example.com"  # sin cambiar NIF ni nombre: no se consulta
-		frappe.flags.es_vnif_responses = {}
-		doc.save()
-		self.assertEqual(doc.es_aeat_status, NAME_MISMATCH)
-
-	def test_service_failure_does_not_block_save(self):
-		from unittest import mock
-
-		with mock.patch.object(aeat_census.SimulatedVNifClient, "check", side_effect=ConnectionError("AEAT")):
-			doc = frappe.get_doc(
-				{"doctype": "Customer", "customer_name": "Empresa sin red SL", "tax_id": COMPANY_NIF}
-			).insert()
-		self.assertTrue(frappe.db.exists("Customer", doc.name))
-		self.assertFalse(doc.es_aeat_status)
-
-	def test_tests_never_call_the_real_service(self):
-		frappe.flags.es_vnif_responses = None
-		doc = frappe.get_doc(
-			{"doctype": "Customer", "customer_name": "Empresa sin simular SL", "tax_id": COMPANY_NIF}
-		).insert()
-		self.assertFalse(doc.es_aeat_status)
+			self.check(COMPANY_NIF, "X")
