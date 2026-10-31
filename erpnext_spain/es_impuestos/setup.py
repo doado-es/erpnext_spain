@@ -137,7 +137,32 @@ ADVANCE_TAX_FIELDS = [
 	},
 ]
 
+# Clasificación efectiva de cada línea, congelada en la factura al validar desde
+# su Item Tax Template (spec 06): así el desglose no depende de la plantilla actual.
+ITEM_ROW_FIELDS = [
+	{
+		"fieldname": "es_vat_classification",
+		"label": "Calificación o exención (plantilla del artículo)",
+		"fieldtype": "Select",
+		"options": options(VAT_CLASSIFICATIONS),
+		"insert_after": "item_tax_template",
+		"read_only": 1,
+		"no_copy": 1,
+	},
+	{
+		"fieldname": "es_operation_type",
+		"label": "Tipo de operación (plantilla del artículo)",
+		"fieldtype": "Select",
+		"options": options(OPERATION_TYPES),
+		"insert_after": "es_vat_classification",
+		"read_only": 1,
+		"no_copy": 1,
+	},
+]
+
 CUSTOM_FIELDS = {
+	"Sales Invoice Item": ITEM_ROW_FIELDS,
+	"Purchase Invoice Item": ITEM_ROW_FIELDS,
 	"Sales Taxes and Charges": classification_fields("is_tax_withholding_account", purchase=False),
 	"Advance Taxes and Charges": ADVANCE_TAX_FIELDS,
 	"Purchase Taxes and Charges": classification_fields("column_break_odzz", purchase=True),

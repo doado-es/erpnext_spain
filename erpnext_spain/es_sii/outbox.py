@@ -387,25 +387,21 @@ def query_aeat(company: str, book: str, year: int, month: int, client=None) -> l
 
 
 def compare(company: str, book: str, year: int, month: int, registered: list[dict]) -> dict:
+	from frappe.utils import get_last_day
+
 	doctype = "Sales Invoice" if book == records.ISSUED else "Purchase Invoice"
-	rows = frappe.get_all(
-		"ES Vat Register",
+	start = getdate(f"{year}-{month:02d}-01")
+	fields = ["name", "base_grand_total"] + (["bill_no"] if book == records.RECEIVED else [])
+	invoices = frappe.get_all(
+		doctype,
 		filters={
 			"company": company,
-			"voucher_type": doctype,
-			"fiscal_year": year,
-			"month": month,
-			"cancelled": 0,
+			"docstatus": 1,
+			"posting_date": ["between", [start, get_last_day(start)]],
 		},
-		fields=["voucher_no", "supplier_invoice_no", "invoice_total"],
-		distinct=True,
+		fields=fields,
 	)
-	ours = {
-		(r.supplier_invoice_no if book == records.RECEIVED else r.voucher_no) or r.voucher_no: float(
-			r.invoice_total or 0
-		)
-		for r in rows
-	}
+	ours = {(r.get("bill_no") or r.name): float(r.base_grand_total or 0) for r in invoices}
 	theirs = {r["number"]: r["total"] for r in registered}
 	return {
 		"missing_in_aeat": sorted(set(ours) - set(theirs)),

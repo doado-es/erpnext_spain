@@ -48,7 +48,8 @@ Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `d
 
 ## Registro fiscal de IVA (spec 06)
 
-- **Hecho (31/10/2026)**: Registro Fiscal IVA, reconstrucción, libros de expedidas y recibidas, borrador de liquidación y desglose común para VeriFactu.
+- **Hecho (31/10/2026)**: desglose fiscal sobre la marcha desde la factura (sin doctype propio, revisión con el usuario), libros de expedidas y recibidas, borrador de liquidación y desglose común para VeriFactu, el SII y el 303.
+- Rendimiento de los libros anuales con mucho volumen (se recorren las facturas del periodo): si hiciera falta, informe preparado de ERPNext.
 - Confirmar con el usuario la autorrepercusión con dos filas en la plantilla de compra (implementada y probada con el registro y la liquidación) frente al regional override.
 - Importaciones con DUA (base del valor en aduana).
 - VeriFactu: comprobar contra el entorno de pruebas el desglose de N1/N2 (hoy se envía tipo y cuota 0) y el recargo de equivalencia.

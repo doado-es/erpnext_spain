@@ -15,7 +15,7 @@
  "name": "ES VAT Return Draft",
  "owner": "Administrator",
  "prepared_report": 0,
- "ref_doctype": "ES Vat Register",
+ "ref_doctype": "Sales Invoice",
  "report_name": "ES VAT Return Draft",
  "report_type": "Script Report",
  "roles": [

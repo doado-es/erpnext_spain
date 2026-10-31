@@ -28,15 +28,13 @@ doc_events = {
 	},
 	# Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3).
 	"Purchase Invoice": {
-		"validate": "erpnext_spain.es_retenciones.withholding.validate_purchase_invoice",
-		"on_submit": [
-			"erpnext_spain.es_iva.register.on_submit",
-			"erpnext_spain.es_sii.outbox.on_submit",
+		"validate": [
+			"erpnext_spain.es_retenciones.withholding.validate_purchase_invoice",
+			# Datos del desglose fiscal congelados en la factura (spec 06).
+			"erpnext_spain.es_iva.rows.validate",
 		],
-		"on_cancel": [
-			"erpnext_spain.es_iva.register.on_cancel",
-			"erpnext_spain.es_sii.outbox.on_cancel",
-		],
+		"on_submit": "erpnext_spain.es_sii.outbox.on_submit",
+		"on_cancel": "erpnext_spain.es_sii.outbox.on_cancel",
 	},
 	"Payment Entry": {
 		"validate": "erpnext_spain.es_retenciones.withholding.validate_payment_entry",
@@ -76,6 +74,8 @@ doc_events = {
 		"validate": [
 			# Numeración fiscal sin VeriFactu, amend y rectificativas (spec 05 §1-§2).
 			"erpnext_spain.es_facturacion.numbering.validate",
+			# Datos del desglose fiscal congelados en la factura (spec 06).
+			"erpnext_spain.es_iva.rows.validate",
 			"erpnext_spain.es_verifactu.emission.validate",
 		],
 		"before_submit": [
@@ -85,8 +85,7 @@ doc_events = {
 		],
 		"on_submit": [
 			"erpnext_spain.es_verifactu.emission.on_submit",
-			# Registro Fiscal IVA (spec 06) y, después, su envío al SII (spec 14).
-			"erpnext_spain.es_iva.register.on_submit",
+			# Envío al SII (spec 14).
 			"erpnext_spain.es_sii.outbox.on_submit",
 			# Factura electrónica B2B (spec 10 §5).
 			"erpnext_spain.es_efactura.b2b.on_submit",
@@ -95,10 +94,7 @@ doc_events = {
 			"erpnext_spain.es_efactura.api.block_cancel_if_presented",
 			"erpnext_spain.es_verifactu.emission.before_cancel",
 		],
-		"on_cancel": [
-			"erpnext_spain.es_iva.register.on_cancel",
-			"erpnext_spain.es_sii.outbox.on_cancel",
-		],
+		"on_cancel": "erpnext_spain.es_sii.outbox.on_cancel",
 	},
 }
 

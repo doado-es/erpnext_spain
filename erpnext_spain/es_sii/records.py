@@ -1,4 +1,4 @@
-# Registros del SII (spec 14 §2-§3) a partir del Registro Fiscal IVA (spec 06).
+# Registros del SII (spec 14 §2-§3) a partir del desglose fiscal de la factura (spec 06).
 #
 # Se construyen como diccionarios con los nombres del esquema de la AEAT
 # (SuministroLR.xsd / SuministroInformacion.xsd v1.1, en
@@ -94,15 +94,6 @@ def header(company: str, communication: str | None) -> dict:
 	if communication and communication != CANCEL:
 		head["TipoComunicacion"] = communication
 	return head
-
-
-def register_rows(doctype: str, name: str) -> list:
-	return frappe.get_all(
-		"ES Vat Register",
-		filters={"voucher_type": doctype, "voucher_no": name, "cancelled": 0},
-		fields=["*"],
-		order_by="tax_rate desc",
-	)
 
 
 def invoice_type(row) -> str:
@@ -280,9 +271,13 @@ def cancellation_record(book: str, content: dict) -> dict:
 
 
 def build_record(doc) -> dict:
-	rows = register_rows(doc.doctype, doc.name)
+	from erpnext_spain.es_iva.rows import VAT_TYPES, invoice_rows
+
+	rows = sorted(
+		(row for row in invoice_rows(doc) if row.tax_type in VAT_TYPES), key=lambda row: -flt(row.tax_rate)
+	)
 	if not rows:
-		frappe.throw(_("La factura {0} no tiene filas en el Registro Fiscal IVA.").format(doc.name))
+		frappe.throw(_("La factura {0} no tiene impuestos de IVA que comunicar al SII.").format(doc.name))
 	record = issued_record(doc, rows) if doc.doctype == "Sales Invoice" else received_record(doc, rows)
 	validate_records(doc.company, ISSUED if doc.doctype == "Sales Invoice" else RECEIVED, NEW, [record])
 	return record

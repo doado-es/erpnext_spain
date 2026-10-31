@@ -4903,10 +4903,6 @@ msgid "ES VAT Return Draft"
 msgstr "Borrador de liquidación de IVA"
 
 #. ERPNext Spain
-msgid "ES Vat Register"
-msgstr "Registro Fiscal IVA"
-
-#. ERPNext Spain
 msgid "ES Withholdings Made"
 msgstr "Retenciones practicadas"
 

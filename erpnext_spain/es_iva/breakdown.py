@@ -110,15 +110,27 @@ def is_classified(values: dict) -> bool:
 
 
 def item_tax_template_classification(doc) -> dict[str, dict]:
-	"""Clasificación del Item Tax Template de cada línea (por nombre de fila)."""
+	"""Clasificación del Item Tax Template de cada línea (por nombre de fila).
+
+	En las facturas validadas se usa la congelada en la línea al validar
+	(rows.freeze_item_classification); en borradores y facturas anteriores, la
+	de la plantilla actual."""
 	result = {}
 	for item in doc.get("items") or []:
-		template = item.get("item_tax_template")
-		if not template:
+		if doc.get("docstatus") == 1 and doc.get("es_party_country"):
+			values = frappe._dict(
+				es_vat_classification=item.get("es_vat_classification"),
+				es_operation_type=item.get("es_operation_type"),
+			)
+		elif item.get("item_tax_template"):
+			values = frappe.get_cached_value(
+				"Item Tax Template",
+				item.item_tax_template,
+				["es_vat_classification", "es_operation_type"],
+				as_dict=True,
+			)
+		else:
 			continue
-		values = frappe.get_cached_value(
-			"Item Tax Template", template, ["es_vat_classification", "es_operation_type"], as_dict=True
-		)
 		if values and (values.es_vat_classification or values.es_operation_type):
 			result[item.name] = {
 				"es_vat_classification": values.es_vat_classification,

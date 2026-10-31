@@ -2,7 +2,9 @@
 
 Fase 3 · Depende de: 01, 02, 03, 05 · Bloquea: modelos, SII y Verifactu (07)
 
-> **Estado (31/10/2026): implementado** en el módulo ES Iva (`es_iva/{breakdown,register,books,eu,setup}.py`, doctype `ES Vat Register`, informes `ES Issued Invoices Book`, `ES Received Invoices Book` y `ES VAT Return Draft`); tests en `es_iva/tests/test_vat_register.py` (criterios 1-9 y contrato con VeriFactu). Autorrepercusión con las dos filas de la plantilla (sin regional override). VeriFactu usa el desglose común cuando las filas están clasificadas. Pendiente: importaciones con DUA, criterio de caja, prorrata especial.
+> **Estado (31/10/2026): implementado**. **Revisión del 31/10/2026 con el usuario: sin doctype propio.** El desglose se calcula sobre la marcha desde la factura validada (`es_iva/rows.py`, con la función común `breakdown.vat_breakdown`), como los informes fiscales de ERPNext, para no duplicar datos. Al validar, la factura congela lo único que no guardaba ya: la clasificación del Item Tax Template en cada línea (`es_vat_classification`, `es_operation_type` de Sales/Purchase Invoice Item), el país y el tipo de identificación del tercero (`es_party_country`, `es_id_type`) y, en compras, la prorrata (`es_pro_rata`). El NIF y el nombre del tercero, la clasificación de las filas de impuestos y el detalle por artículo ya los guarda ERPNext. Informes `ES Issued Invoices Book`, `ES Received Invoices Book` y `ES VAT Return Draft`; el 303 y el SII leen las mismas filas. Tests en `es_iva/tests/test_vat_rows.py` (criterios 1-7 y 9, congelación de los datos y contrato con VeriFactu). El patch `remove_es_vat_register` borra el doctype de la primera versión. Pendiente: importaciones con DUA, criterio de caja, prorrata especial.
+
+> Lo que sigue en los §1, §2 y §4 describe el diseño original con doctype propio y se conserva como referencia: los campos de la tabla son ahora los de cada fila que devuelve `rows.invoice_rows`, y la reconstrucción (§4) ya no hace falta.
 
 ## Objetivo
 

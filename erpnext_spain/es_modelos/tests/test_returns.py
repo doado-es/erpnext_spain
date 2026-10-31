@@ -4,7 +4,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import getdate, nowdate
 
-from erpnext_spain.es_iva.tests.test_vat_register import VatTestCase
+from erpnext_spain.es_iva.tests.test_vat_rows import VatTestCase
 from erpnext_spain.es_modelos import returns
 
 

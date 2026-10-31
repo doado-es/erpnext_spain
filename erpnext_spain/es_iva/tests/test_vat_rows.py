@@ -1,4 +1,4 @@
-# Registro Fiscal IVA, libros y contrato con VeriFactu (spec 06, criterios 1-9).
+# Desglose fiscal sobre la marcha, libros y contrato con VeriFactu (spec 06, criterios 1-9).
 
 import frappe
 from frappe.tests import IntegrationTestCase
@@ -8,9 +8,7 @@ from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_contabilidad.tests.test_apply_pgc import make_company
 from erpnext_spain.es_impuestos import initial_data
 from erpnext_spain.es_impuestos.tests.test_initial_data import apply_template, ensure_item, ensure_party
-from erpnext_spain.es_iva import books, register
-
-REGISTER = "ES Vat Register"
+from erpnext_spain.es_iva import books, rows
 
 
 class VatTestCase(IntegrationTestCase):
@@ -96,12 +94,10 @@ class VatTestCase(IntegrationTestCase):
 		return pi
 
 	def rows(self, doc, **filters):
-		return frappe.get_all(
-			REGISTER,
-			filters={"voucher_type": doc.doctype, "voucher_no": doc.name, **filters},
-			fields=["*"],
-			order_by="tax_rate desc, self_assessed",
-		)
+		"""Filas del desglose de la factura (validada), filtradas por campo."""
+		doc = frappe.get_doc(doc.doctype, doc.name)
+		result = [r for r in rows.invoice_rows(doc) if all(r.get(k) == v for k, v in filters.items())]
+		return sorted(result, key=lambda r: (-r.tax_rate, r.self_assessed))
 
 	def gl(self, doc, number: str) -> float:
 		rows = frappe.get_all(
@@ -125,7 +121,7 @@ class VatTestCase(IntegrationTestCase):
 		)
 
 
-class TestVatRegister(VatTestCase):
+class TestVatRows(VatTestCase):
 	def test_two_rates(self):
 		"""Criterio 1: líneas al 21 % y al 10 % (Item Tax Template)."""
 		si = self.sale(lines=((None, 1000), (self.reduced_item, 500)))
@@ -158,15 +154,14 @@ class TestVatRegister(VatTestCase):
 		self.assertEqual(row.invoice_type, "R1")
 		self.assertEqual(row.rectified_invoice, si.name)
 
-	def test_cancel_marks_rows(self):
-		"""Criterio 4: anular marca las filas y el borrador deja de contarlas."""
+	def test_cancel_excluded(self):
+		"""Criterio 4: una factura cancelada deja de contar en libros y borrador."""
 		accrued_before = self.draft_totals()[0]
 		si = self.sale()
 		self.assertAlmostEqual(self.draft_totals()[0] - accrued_before, 210)
 		si.cancel()
-		rows = self.rows(si)
-		self.assertTrue(rows and all(r.cancelled for r in rows))
 		self.assertAlmostEqual(self.draft_totals()[0], accrued_before)
+		self.assertNotIn(si.name, {r.voucher_no for r in rows.period_rows(**self.period)})
 
 	def test_reverse_charge_purchase(self):
 		"""Criterio 5: ISP 1.000 € al 21 %: 210 en 4720 y 4770; autorrepercutida y soportada; resultado 0."""
@@ -205,18 +200,32 @@ class TestVatRegister(VatTestCase):
 		self.assertAlmostEqual(row.deductible_amount, 126)
 		self.assertEqual(row.pro_rata, 60)
 
-	def test_rebuild(self):
-		"""Criterio 8: dry_run no escribe; la reconstrucción deja el registro igual."""
-		si = self.sale()
-		fields = ("tax_type", "taxable_base", "tax_rate", "tax_amount", "vat_classification", "cancelled")
-		before = [tuple(r[f] for f in fields) for r in self.rows(si)]
-		count = frappe.db.count(REGISTER, {"company": self.company})
-		summary = register.rebuild_vat_register(self.company, dry_run=True)
-		self.assertGreaterEqual(summary["invoices"], 1)
-		self.assertEqual(frappe.db.count(REGISTER, {"company": self.company}), count)
-		register.rebuild(self.company)
-		after = [tuple(r[f] for f in fields) for r in self.rows(si)]
+	def test_declared_data_frozen(self):
+		"""Lo declarado no cambia con la configuración: prorrata, plantilla del artículo
+		y dirección del tercero quedan congelados en la factura al validar."""
+		frappe.db.set_value("Company", self.company, "es_vat_pro_rata", 60)
+		frappe.clear_document_cache("Company", self.company)
+		pi = self.purchase("IVA soportado 21 %")
+		si = self.sale(lines=((self.reduced_item, 500),))
+		before = (
+			self.rows(pi, tax_type="IVA")[0].deductible_amount,
+			self.rows(si, tax_type="IVA")[0].vat_classification,
+		)
+		frappe.db.set_value("Company", self.company, "es_vat_pro_rata", 0)
+		template = frappe.db.get_value("Sales Invoice Item", {"parent": si.name}, "item_tax_template")
+		previous = frappe.db.get_value("Item Tax Template", template, "es_vat_classification")
+		frappe.db.set_value("Item Tax Template", template, "es_vat_classification", "E1")
+		frappe.clear_cache()
+		try:
+			after = (
+				self.rows(pi, tax_type="IVA")[0].deductible_amount,
+				self.rows(si, tax_type="IVA")[0].vat_classification,
+			)
+		finally:
+			frappe.db.set_value("Item Tax Template", template, "es_vat_classification", previous)
 		self.assertEqual(before, after)
+		self.assertEqual(before[0], 126)
+		self.assertEqual(frappe.db.get_value("Purchase Invoice", pi.name, "es_pro_rata"), 60)
 
 	def test_books(self):
 		from erpnext_spain.es_iva.report.es_issued_invoices_book.es_issued_invoices_book import execute
@@ -252,10 +261,10 @@ class TestVatRegister(VatTestCase):
 		self.assertAlmostEqual(detail[0]["CuotaRecargoEquivalencia"], 52)
 
 
-class TestVatRegisterNonPgc(IntegrationTestCase):
-	def test_no_rows_without_pgc(self):
-		"""Criterio 9."""
+class TestVatRowsNonPgc(IntegrationTestCase):
+	def test_nothing_frozen_without_pgc(self):
+		"""Criterio 9: en una compañía sin PGC la validación no toca la factura."""
 		other = make_company("_Test ES Registro IVA sin PGC", "_TERS2")
-		doc = frappe._dict(doctype="Sales Invoice", company=other, name="X")
-		register.on_submit(doc)
-		self.assertFalse(frappe.db.exists(REGISTER, {"company": other}))
+		doc = frappe._dict(doctype="Sales Invoice", company=other, name="X", docstatus=1, items=[])
+		rows.validate(doc)
+		self.assertNotIn("es_party_country", doc)

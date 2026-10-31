@@ -1,5 +1,5 @@
-# Modelos 303 y 111 (spec 07, primera entrega): cálculo desde el Registro
-# Fiscal IVA (spec 06) y desde Tax Withholding Entry (spec 08), casillas
+# Modelos 303 y 111 (spec 07, primera entrega): cálculo desde el desglose
+# fiscal de las facturas (spec 06) y desde Tax Withholding Entry (spec 08), casillas
 # revisables y fichero en el formato de importación de la AEAT (diseños de
 # registro DR303e26v101 y DR111e16v18, publicados en la sede).
 
@@ -112,28 +112,9 @@ KEY_TO_111 = {
 
 
 def register_rows(company: str, start, end) -> list:
-	return frappe.get_all(
-		"ES Vat Register",
-		filters={
-			"company": company,
-			"cancelled": 0,
-			"posting_date": ["between", [start, end]],
-			"tax_type": ["in", [VAT, SURCHARGE]],
-		},
-		fields=[
-			"book",
-			"tax_type",
-			"vat_classification",
-			"operation_type",
-			"deductibility",
-			"self_assessed",
-			"invoice_type",
-			"taxable_base",
-			"tax_rate",
-			"tax_amount",
-			"deductible_amount",
-		],
-	)
+	from erpnext_spain.es_iva.rows import period_rows
+
+	return period_rows(company, start, end)
 
 
 def compute_303(company: str, year: int, period: str) -> dict[str, float]:
