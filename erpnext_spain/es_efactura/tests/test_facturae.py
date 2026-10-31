@@ -76,18 +76,16 @@ class TestFacturae(IntegrationTestCase):
 		p12, *_ = generate_p12(password=PASSWORD.encode())
 		cls.p12_url = write_private_p12("es_test_facturae.p12", p12)
 		cls.addClassCleanup(delete_private_file, cls.p12_url)
-		cls.addClassCleanup(clean_pem, COMPANY, "SII")
-		credential = frappe.get_doc(
+		cls.addClassCleanup(clean_pem, COMPANY)
+		frappe.get_doc(
 			{
 				"doctype": "ES AEAT Credential",
 				"company": COMPANY,
-				"purpose": "SII",
 				"cert_file": cls.p12_url,
 				"cert_password": PASSWORD,
 				"enabled": 1,
 			}
 		).insert(ignore_permissions=True)
-		frappe.db.set_value("Company", COMPANY, "es_einvoice_credential", credential.name)
 
 		if not frappe.db.exists("Customer", CUSTOMER):
 			frappe.get_doc(
@@ -261,7 +259,7 @@ class TestFacturae(IntegrationTestCase):
 
 		si = self.invoice()
 		_doc, content, _root = self.xml_of(api.generate_facturae(si.name))
-		cert_path, _key = pem_paths(COMPANY, "SII")
+		cert_path, _key = pem_paths(COMPANY)
 		with open(cert_path, "rb") as f:
 			cert = f.read()
 		results = XAdESVerifier().verify(content, x509_cert=cert, expect_references=3)

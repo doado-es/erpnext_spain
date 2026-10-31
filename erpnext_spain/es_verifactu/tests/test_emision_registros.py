@@ -77,7 +77,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		cls.p12 = generate_p12(password=PASSWORD.encode())[0]
 		_delete_test_p12s()  # restos de corridas abortadas
 		cls.addClassCleanup(_delete_test_p12s)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 		cls.tax_account = frappe.db.get_value(
 			"Account", {"company": cls.company, "account_type": "Tax", "is_group": 0}, "name"
 		)
@@ -116,7 +116,6 @@ class TestEmisionRegistros(IntegrationTestCase):
 			{
 				"es_verifactu_enabled": 0,
 				"es_verifactu_activation_date": None,
-				"es_verifactu_credential": None,
 				"es_draft_series": None,
 				"es_verifactu_remission_mode": None,
 				"es_verifactu_noi": None,
@@ -150,7 +149,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		para R1» — espejo exacto de cómo se añade el mapeo principal."""
 		for credential in frappe.get_all(
 			"ES AEAT Credential",
-			filters={"company": self.company, "purpose": "VeriFactu"},
+			filters={"company": self.company},
 			pluck="name",
 		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
@@ -169,7 +168,6 @@ class TestEmisionRegistros(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": self.company,
-				"purpose": "VeriFactu",
 				"cert_file": url,
 				"cert_password": PASSWORD,
 				"enabled": 1,

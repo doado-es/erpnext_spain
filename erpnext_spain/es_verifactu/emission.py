@@ -62,7 +62,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.model.naming import make_autoname
 
-from erpnext_spain.aeat.utils import format_aeat_datetime
+from erpnext_spain.aeat.utils import format_aeat_datetime, require_credential
 from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX, is_draft_name
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.locks import acquire_chain_lock, release_chain_lock
@@ -123,19 +123,8 @@ def before_submit(doc: Document, method: str | None = None) -> None:
 	if not is_verifactu_active(company):
 		return
 
-	# --- credencial (empresa, VeriFactu) habilitada, con remedio ---------
-	if not frappe.db.exists(
-		"ES AEAT Credential",
-		{"company": company, "purpose": VERIFACTU_PURPOSE, "enabled": 1},
-	):
-		frappe.throw(
-			f"No hay credencial AEAT habilitada de {company} para el propósito"
-			" VeriFactu: la emisión no puede continuar sin la autenticación TLS"
-			" mutua con la AEAT (spec 13 §2). Remedio: cree o habilite la"
-			f" credencial de {company} (AEAT → ES AEAT Credential, propósito"
-			" VeriFactu) y reintente el submit.",
-			frappe.ValidationError,
-		)
+	# --- certificado de la empresa habilitado, con remedio ----------------
+	require_credential(company, "emitir facturas con VeriFactu")
 
 	# --- configuración de la compañía (una lectura) -----------------------
 	conf = frappe.db.get_value(

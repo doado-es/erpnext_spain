@@ -130,7 +130,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		cls.p12 = generate_p12(password=PASSWORD.encode())[0]
 		_delete_test_p12()  # restos de corridas abortadas
 		cls.addClassCleanup(_delete_test_p12)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 		cls.vat_account = frappe.db.get_value(
 			"Account", {"company": cls.company, "account_type": "Tax", "is_group": 0}, "name"
 		)
@@ -148,7 +148,6 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 			{
 				"es_verifactu_enabled": 0,
 				"es_verifactu_activation_date": None,
-				"es_verifactu_credential": None,
 				"es_draft_series": None,
 				"es_verifactu_remission_mode": None,
 				"es_verifactu_noi": None,
@@ -176,7 +175,7 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		notificación de incidencias (canal in-app de los tests)."""
 		for credential in frappe.get_all(
 			"ES AEAT Credential",
-			filters={"company": self.company, "purpose": "VeriFactu"},
+			filters={"company": self.company},
 			pluck="name",
 		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
@@ -198,7 +197,6 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": self.company,
-				"purpose": "VeriFactu",
 				"cert_file": url,
 				"cert_password": PASSWORD,
 				"enabled": 1,
@@ -460,14 +458,8 @@ class TestCompleteVerifactuWorkflow(IntegrationTestCase):
 		# tests (comportamiento por operación que además CAPTURA el wire) —
 		# todo el camino de producción del AEATClient menos la TLS.
 		# --------------------------------------------------------------------
-		credential = frappe.get_all(
-			"ES AEAT Credential",
-			filters={"company": self.company, "purpose": "VeriFactu", "enabled": 1},
-			pluck="name",
-		)[0]
-		# la ficha de la compañía referencia su credencial: el doctype la toma
-		# por DEFAULT del campo es_verifactu_credential (la UI hace el fetch)
-		frappe.db.set_value("Company", self.company, "es_verifactu_credential", credential)
+		# el certificado de la consulta es el único de la empresa: se fija al guardar
+		credential = frappe.db.get_value("ES AEAT Credential", {"company": self.company, "enabled": 1})
 
 		query = frappe.get_doc(
 			{

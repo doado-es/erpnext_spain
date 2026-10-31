@@ -11,9 +11,8 @@
 # IMPLÍCITAMENTE (`frappe.db.get_list("Company").pop()` — ¡la primera del
 # site!) y el AEATClient se construía SIN empresa. Aquí NADA es implícito:
 # 1. `company` es un campo requerido del doctype.
-# 2. `credential` es EXPLÍCITA (default documentado del campo
-#    es_verifactu_credential de la Company) y se valida contra
-#    (empresa, VeriFactu, habilitada) ANTES de tocar la red.
+# 2. `credential` es la del certificado de la empresa (uno por empresa), se
+#    fija al guardar y se valida (de la empresa, habilitada) ANTES de tocar la red.
 # 3. Los filtros son los del formulario: empresa + credencial + filtros,
 #    nada del entorno se cuela en la petición.
 #
@@ -44,7 +43,13 @@ from frappe.model.document import Document
 
 from erpnext_spain.aeat.client import ENV_PRODUCTION, ENV_TEST
 from erpnext_spain.aeat.tests.mock_aeat_client import build_client
-from erpnext_spain.aeat.utils import format_aeat_date, has_aeat_permission, now_aeat
+from erpnext_spain.aeat.utils import (
+	company_credential,
+	format_aeat_date,
+	has_aeat_permission,
+	now_aeat,
+	require_credential,
+)
 
 DOCTYPE = "ES Verifactu Aeat Query"
 
@@ -72,15 +77,10 @@ class ESVerifactuAeatQuery(Document):
 		self._validate_date_range()
 
 	def _default_credential(self) -> None:
-		"""Credencial explícita con default documentado (spec 04 §10): si el
-		campo viene vacío se toma el configurado en la ficha de la compañía
-		(la UI además hace fetch_from del mismo campo). query_aeat valida
-		el RESULTADO — nada queda al azar del entorno."""
-		if self.credential or not self.company:
-			return
-		company_credential = frappe.db.get_value("Company", self.company, "es_verifactu_credential")
-		if company_credential:
-			self.credential = company_credential
+		"""El certificado es el de la empresa (uno por empresa): se fija siempre
+		desde «ES AEAT Credential»; query_aeat valida el resultado."""
+		if self.company:
+			self.credential = company_credential(self.company)
 
 	def _validate_date_range(self) -> None:
 		"""El rango de expedición es inclusivo y coherente (Desde ≤ Hasta)."""
@@ -113,12 +113,11 @@ def query_aeat(name: str) -> dict:
 	"""
 	doc = frappe.get_doc(DOCTYPE, name)
 
-	if not has_aeat_permission(frappe.session.user, doc.company, VERIFACTU_PURPOSE):
+	if not has_aeat_permission(frappe.session.user, doc.company):
 		frappe.throw(
-			f"El usuario {frappe.session.user} no tiene permiso AEAT de {doc.company}"
-			f" para el propósito {VERIFACTU_PURPOSE}: la consulta usa la credencial de"
-			" la empresa contra la AEAT y exige el chequeo explícito por"
-			" empresa+propósito (doc 12 §18). Remedio: conceda al usuario un rol con"
+			f"El usuario {frappe.session.user} no tiene permiso AEAT de {doc.company}:"
+			" la consulta usa el certificado de la empresa contra la AEAT y exige el"
+			" chequeo explícito por empresa (doc 12 §18). Remedio: conceda al usuario un rol con"
 			" permiso (roles de notificación de la compañía o, en su defecto,"
 			" Accounts Manager) y acceso de lectura a la compañía.",
 			frappe.PermissionError,
@@ -138,37 +137,14 @@ def query_aeat(name: str) -> dict:
 
 
 def _validate_credential(doc: Document) -> None:
-	"""Credencial EXPLÍCITA de la consulta (fix del v1, spec 04 §10): debe
-	existir, ser de ESTA compañía, del propósito VeriFactu y estar
-	habilitada. Sin credencial no hay TLS mutua y no hay consulta."""
-	if not doc.credential:
+	"""El certificado de la consulta debe ser el habilitado de ESTA compañía (fix
+	del v1, spec 04 §10). Sin certificado no hay TLS mutua y no hay consulta."""
+	expected = require_credential(doc.company, "consultar registros VeriFactu en la AEAT")
+	if doc.credential != expected:
 		frappe.throw(
-			f"La consulta de {doc.company} exige una credencial AEAT ({VERIFACTU_PURPOSE})"
-			" explícita: es la identidad TLS mutua con la que se firma la petición."
-			" Remedio: fije el campo «Credencial AEAT» — el formulario lo toma de"
-			" la ficha de la compañía — y reintente.",
-			frappe.ValidationError,
-		)
-
-	credential_data = frappe.db.get_value(
-		"ES AEAT Credential",
-		doc.credential,
-		["company", "purpose", "enabled"],
-		as_dict=True,
-	)
-	if (
-		not credential_data
-		or credential_data.company != doc.company
-		or credential_data.purpose != VERIFACTU_PURPOSE
-		or not credential_data.enabled
-	):
-		frappe.throw(
-			f"La credencial {doc.credential} no es una credencial {VERIFACTU_PURPOSE}"
-			f" habilitada de {doc.company}: la consulta usa la identidad TLS de la"
-			" EMPRESA que consulta (defecto v1 corregido: la compañía y la"
-			" credencial nunca se toman implícitamente del site). Remedio: fije"
-			" la credencial habilitada de la compañía en la consulta, o habilite"
-			" la credencial en «ES AEAT Credential» (propósito VeriFactu).",
+			f"La credencial {doc.credential} no es el certificado habilitado de {doc.company}"
+			f" ({expected}). Remedio: guarde de nuevo la consulta para tomar el certificado"
+			" de la empresa y reintente.",
 			frappe.ValidationError,
 		)
 

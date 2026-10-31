@@ -22,10 +22,11 @@ from typing import Any
 
 
 def sign(company: str, purpose: str, contenido: dict[str, Any]) -> dict[str, Any]:
-	"""Firma `contenido` según el perfil exigido por el servicio de `purpose`.
+	"""Firma `contenido` según el perfil exigido por el servicio `purpose`
+	(VeriFactu, SII).
 
 	Implementación actual: passthrough documentado (ver cabecera del módulo) —
-	devuelve el contenido sin modificar; la autenticación via TLS mutua con la
-	credencial de (empresa, propósito).
+	devuelve el contenido sin modificar; la autenticación va por TLS mutua con el
+	certificado de la empresa (uno por empresa).
 	"""
 	return contenido

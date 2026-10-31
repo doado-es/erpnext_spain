@@ -49,15 +49,6 @@ COMPANY_FIELDS = [
 		"insert_after": "es_sii_column",
 		"depends_on": "eval:doc.es_sii_enabled",
 	},
-	{
-		"fieldname": "es_sii_credential",
-		"label": "Credencial AEAT (SII)",
-		"fieldtype": "Link",
-		"options": "ES AEAT Credential",
-		"insert_after": "es_sii_activation_date",
-		"depends_on": "eval:doc.es_sii_enabled",
-		"description": "Certificado digital de la empresa con propósito SII.",
-	},
 ]
 
 CUSTOM_FIELDS = {"Company": COMPANY_FIELDS}

@@ -160,11 +160,11 @@ class SiiClient:
 	}
 
 	def __init__(self, company: str, environment: str):
-		from erpnext_spain.aeat.client import _enabled_credential_pem_paths
+		from erpnext_spain.aeat.client import enabled_credential_pem_paths
 
 		self.company = company
 		self.environment = environment
-		self.cert_pem, self.key_pem = _enabled_credential_pem_paths(company, SERVICE)
+		self.cert_pem, self.key_pem = enabled_credential_pem_paths(company, SERVICE)
 		self.clients = {}
 
 	def send(self, payload: dict) -> dict:

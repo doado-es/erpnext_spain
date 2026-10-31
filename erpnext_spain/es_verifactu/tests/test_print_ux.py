@@ -66,7 +66,6 @@ def _reset_company(company: str) -> None:
 		{
 			"es_verifactu_enabled": 0,
 			"es_verifactu_activation_date": None,
-			"es_verifactu_credential": None,
 			"es_draft_series": None,
 			"es_verifactu_remission_mode": None,
 			"es_verifactu_noi": None,
@@ -83,7 +82,7 @@ def _reset_company(company: str) -> None:
 def _activate_verifactu(company: str, test_mode: str = "Pruebas"):
 	"""Deja la compañía ACTIVA con mapeo F1 y el modo pedido (credencial
 	exigida por before_submit — mismo fixture que test_emision_registros)."""
-	clean_pem(company, "VeriFactu")
+	clean_pem(company)
 	doc = frappe.get_doc("Company", company)
 	doc.tax_id = VALID_NIF
 	doc.es_verifactu_enabled = 1
@@ -100,7 +99,6 @@ def _activate_verifactu(company: str, test_mode: str = "Pruebas"):
 		{
 			"doctype": "ES AEAT Credential",
 			"company": company,
-			"purpose": "VeriFactu",
 			"cert_file": url,
 			"cert_password": PASSWORD,
 			"enabled": 1,
@@ -154,7 +152,7 @@ class TestJinjaQR(IntegrationTestCase):
 		cls.vat_account = _vat_account(cls.company)
 		_delete_test_p12()  # restos de corridas abortadas
 		cls.addClassCleanup(_delete_test_p12)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 
 	def setUp(self):
 		_reset_company(self.company)
@@ -311,7 +309,7 @@ class TestPrintFormat(IntegrationTestCase):
 		cls.vat_account = _vat_account(cls.company)
 		_delete_test_p12()
 		cls.addClassCleanup(_delete_test_p12)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 		# el materializador es idempotente: correrlo AQUÍ deja la clase
 		# autocontenida (fresh site o site ya migrado — mismo resultado) y
 		# YA verifica la doble corrida sin duplicados

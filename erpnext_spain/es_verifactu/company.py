@@ -15,6 +15,7 @@ import hashlib
 import frappe
 from frappe.model.document import Document
 
+from erpnext_spain.aeat.utils import require_credential
 from erpnext_spain.nif import validator
 
 DOCTYPE = "Company"
@@ -119,20 +120,7 @@ def _validate_activation(doc: Document) -> None:
 			frappe.ValidationError,
 		)
 
-	if not doc.name or not frappe.db.exists(
-		"ES AEAT Credential",
-		{"company": doc.name, "purpose": VERIFACTU_PURPOSE, "enabled": 1},
-	):
-		company_label = doc.name or "(empresa aún sin guardar)"
-		frappe.throw(
-			f"No hay credencial AEAT habilitada de {company_label} para el propósito"
-			" VeriFactu: la remisión de registros exige autenticación TLS mutua"
-			" con el certificado digital de la empresa (spec 13 §2). Remedio:"
-			" guarde la empresa, cree su credencial (AEAT → ES AEAT Credential:"
-			f" compañía {doc.name or 'la empresa'}, propósito VeriFactu,"
-			" habilitada) y reintente la activación.",
-			frappe.ValidationError,
-		)
+	require_credential(doc.name, "activar VeriFactu (la remisión exige TLS mutua con la AEAT)")
 
 	if not doc.get("es_verifactu_activation_date"):
 		frappe.throw(

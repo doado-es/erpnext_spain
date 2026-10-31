@@ -1,5 +1,5 @@
 # Site tests de ES AEAT Credential (spec 13 §2): extracción p12→PEM al
-# validar, vigencia parseada, unicidad (empresa, propósito), limpieza al
+# validar, vigencia parseada, unicidad por empresa, limpieza al
 # desactivar/cambiar y password conservado.
 #
 # La integración corre en una transacción que se revierte al terminar la
@@ -38,7 +38,7 @@ class TestESAEATCredential(IntegrationTestCase):
 		cls.password = PASSWORD
 		cls.url_p12 = write_private_p12("es_test_cred.p12", generate_p12(password=cls.password.encode())[0])
 		cls.addClassCleanup(delete_private_file, cls.url_p12)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 
 	def setUp(self):
 		frappe.set_user("Administrator")
@@ -52,7 +52,6 @@ class TestESAEATCredential(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": self.company,
-				"purpose": "VeriFactu",
 				"cert_file": self.url_p12,
 				"cert_password": self.password,
 				"enabled": 1,
@@ -65,7 +64,7 @@ class TestESAEATCredential(IntegrationTestCase):
 	def _pems_exist(self) -> bool:
 		import os
 
-		return all(os.path.exists(path) for path in pem_paths(self.company, "VeriFactu"))
+		return all(os.path.exists(path) for path in pem_paths(self.company))
 
 	def test_insert_extracts_pem_and_parses_validity(self):
 		import os
@@ -77,10 +76,10 @@ class TestESAEATCredential(IntegrationTestCase):
 
 		doc = self._new_credential(cert_file=url)
 
-		# Nombre determinista claveado por (empresa, propósito)
-		self.assertEqual(doc.name, f"{frappe.scrub(self.company)}-verifactu")
+		# El nombre es la compañía (un certificado por empresa)
+		self.assertEqual(doc.name, self.company)
 		# PEM fuera de private/files, con permisos 0600 (H3)
-		for path in pem_paths(self.company, "VeriFactu"):
+		for path in pem_paths(self.company):
 			self.assertTrue(os.path.exists(path), path)
 			self.assertIn(os.path.join("private", "es_keys"), path)
 			self.assertNotIn(os.path.join("private", "files"), path)
@@ -90,11 +89,12 @@ class TestESAEATCredential(IntegrationTestCase):
 		self.assertEqual(frappe.utils.getdate(doc.valid_from), desde.date())
 		self.assertEqual(frappe.utils.getdate(doc.valid_until), hasta.date())
 
-	def test_duplicate_company_purpose_blocks(self):
+	def test_one_credential_per_company(self):
+		"""Un certificado por empresa: VeriFactu, el SII y Facturae lo comparten."""
 		self._new_credential()
 		with self.assertRaises(frappe.ValidationError) as ctx:
 			self._new_credential()
-		self.assertIn("Ya existe una credencial AEAT", str(ctx.exception))
+		self.assertIn("Ya existe la credencial AEAT", str(ctx.exception))
 		self.assertIn("Remedio", str(ctx.exception))
 
 	def test_duplicate_blocks_even_disabled(self):
@@ -146,20 +146,16 @@ class TestESAEATCredential(IntegrationTestCase):
 		doc.save(ignore_permissions=True)
 
 		self.assertEqual(frappe.utils.getdate(doc.valid_until), other_end.date())
-		self.assertTrue(all(os.path.exists(path) for path in pem_paths(self.company, "VeriFactu")))
+		self.assertTrue(all(os.path.exists(path) for path in pem_paths(self.company)))
 
-	def test_company_purpose_pair_immutable(self):
-		"""El par (empresa, propósito) es la identidad de la credencial (docname
-		y PEM claveados por él): cambiarlo en una existente se bloquea."""
-		import os
-
+	def test_named_after_company_and_company_set_only_once(self):
+		"""El docname es la compañía y la compañía no se puede cambiar (los PEM van
+		claveados por ella)."""
 		doc = self._new_credential()
-		doc.purpose = "SII"
-		with self.assertRaises(frappe.ValidationError) as ctx:
-			doc.save(ignore_permissions=True)
-		self.assertIn("Remedio", str(ctx.exception))
-		# Los PEM del par original siguen intactos
-		self.assertTrue(all(os.path.exists(path) for path in pem_paths(self.company, "VeriFactu")))
+		self.assertEqual(doc.name, self.company)
+		meta = frappe.get_meta("ES AEAT Credential")
+		self.assertTrue(meta.get_field("company").set_only_once)
+		self.assertFalse(meta.has_field("purpose"))
 
 	def test_get_days_remaining(self):
 		doc = self._new_credential()
@@ -177,7 +173,7 @@ class TestESAEATCredential(IntegrationTestCase):
 		doc = self._new_credential()
 		self.assertTrue(self._pems_exist())
 		doc.delete(ignore_permissions=True)
-		self.assertFalse(any(os.path.exists(path) for path in pem_paths(self.company, "VeriFactu")))
+		self.assertFalse(any(os.path.exists(path) for path in pem_paths(self.company)))
 
 	def test_pem_extracted_at_absolute_site_path(self):
 		"""Fix del drenaje en vivo (workers con CWDs mixtos): los PEM viven
@@ -190,19 +186,19 @@ class TestESAEATCredential(IntegrationTestCase):
 
 		doc = self._new_credential()
 		files_root = os.path.join(get_bench_path(), "sites", frappe.local.site, "private", "es_keys")
-		cert, key = pem_paths(self.company, "VeriFactu")
+		cert, key = pem_paths(self.company)
 		for path in (cert, key):
 			self.assertTrue(os.path.isabs(path), path)
 			self.assertTrue(path.startswith(files_root), path)
 			self.assertTrue(os.path.exists(path), path)
 		self.assertTrue(doc.name)  # el save no revienta: extracción ok
 
-	def test_pem_names_keyed_by_company_and_purpose(self):
-		# Mismo slug que el docname (autoname): frappe.scrub — espacios y
-		# guiones a «_», sin tocar puntos («S.L.» → «s.l.»).
-		cert, key = pem_names("Mi Empresa S.L.", "VeriFactu")
-		self.assertEqual(cert, "mi_empresa_s.l.-verifactu-cert.pem")
-		self.assertEqual(key, "mi_empresa_s.l.-verifactu-key.pem")
+	def test_pem_names_keyed_by_company(self):
+		# frappe.scrub de la compañía: espacios y guiones a «_», sin tocar
+		# puntos («S.L.» → «s.l.»).
+		cert, key = pem_names("Mi Empresa S.L.")
+		self.assertEqual(cert, "mi_empresa_s.l.-cert.pem")
+		self.assertEqual(key, "mi_empresa_s.l.-key.pem")
 
 	def test_pfx_accepted(self):
 		"""El PFX es el mismo contenedor PKCS#12 que el p12 (misma estructura
@@ -223,5 +219,5 @@ class TestESAEATCredential(IntegrationTestCase):
 		self.assertEqual(frappe.utils.getdate(doc.valid_from), desde.date())
 		self.assertEqual(frappe.utils.getdate(doc.valid_until), hasta.date())
 		# Los PEM extraídos del PFX son legibles como cualquier otro
-		for path in pem_paths(self.company, "VeriFactu"):
+		for path in pem_paths(self.company):
 			self.assertTrue(os.path.getsize(path) > 0)

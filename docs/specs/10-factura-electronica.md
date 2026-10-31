@@ -59,7 +59,7 @@ Inalterable una vez enviada. Una rectificación se hace con una factura rectific
 
 ## 3. Firma y certificados
 
-- Se reutiliza **`ES AEAT Credential`** del código base (certificado `.p12`/`.pfx` por empresa y propósito, contraseña cifrada, fechas de validez, aviso diario de caducidad a 30, 7 y 1 días). Se añaden los propósitos "Factura electrónica" y "FACe" a los existentes (VeriFactu, SII). Requiere antes la corrección H3 de la clave privada (spec 01 §8).
+- Se reutiliza **`ES AEAT Credential`** del código base (certificado `.p12`/`.pfx`, contraseña cifrada, fechas de validez, aviso diario de caducidad a 30, 7 y 1 días). **Revisión del 31/10/2026**: un único certificado por empresa, sin propósito, que firma Facturae y autentica VeriFactu y el SII; Company ya no tiene un campo de credencial por servicio. Requiere antes la corrección H3 de la clave privada (spec 01 §8).
 - Firma XAdES (Facturae) con una librería mantenida **[elegir y verificar: compatible con la política de firma de Facturae]**.
 - El aviso de caducidad y la protección de datos (`company_data_to_be_ignored`, `user_data_fields` con la contraseña redactada) ya existen en el código base.
 

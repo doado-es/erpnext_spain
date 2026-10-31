@@ -61,13 +61,12 @@ class TestAEATClient(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": cls.company,
-				"purpose": "VeriFactu",
 				"cert_file": cls.url_p12,
 				"cert_password": "es-test-pass",
 				"enabled": 1,
 			}
 		).insert(ignore_permissions=True)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 
 	def _production_wsdl(self, value: str | None):
 		"""Fija (y restaura al terminar el test) el WSDL de producción."""
@@ -173,7 +172,7 @@ class TestAEATClient(IntegrationTestCase):
 				company=self.company,
 				client_factory=mock_client_factory({}),
 			)
-		self.assertIn("credencial AEAT habilitada", str(ctx.exception))
+		self.assertIn("certificado AEAT habilitado", str(ctx.exception))
 
 	def test_send_returns_serializable_dict(self):
 		seed = load_seed("alta_aceptada_con_errores")

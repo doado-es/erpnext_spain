@@ -1,6 +1,6 @@
 # Utilidades transversales de la capa AEAT (spec 13 §7): huso horario
 # Europe/Madrid y formatos AEAT (único punto de verdad), permisos explícitos
-# por empresa+propósito para llamadas whitelisted (doc 12 §18) y notificaciones
+# por empresa para llamadas whitelisted (doc 12 §18) y notificaciones
 # a roles por los DOS canales de incidencias (spec 04 §9: Notification Log
 # in-app + email externo `es_incidents_email` de la Company).
 
@@ -129,19 +129,40 @@ def _roles_with_permission(company: str) -> set[str]:
 	return {"Accounts Manager"}
 
 
-def has_aeat_permission(
-	user: str | None = None, company: str | None = None, purpose: str | None = None
-) -> bool:
-	"""Permiso explícito por empresa+propósito para TODA llamada whitelisted que
-	dispare comunicación con la AEAT (doc 12 §18): el chequeo considera de qué
+def company_credential(company: str | None) -> str | None:
+	"""Credencial AEAT habilitada de la empresa (una por empresa), o None."""
+	if not company:
+		return None
+	return frappe.db.get_value("ES AEAT Credential", {"company": company, "enabled": 1}, "name")
+
+
+def require_credential(company: str | None, use: str) -> str:
+	"""Credencial habilitada de la empresa o error con remedio. `use` describe
+	para qué hace falta (p. ej. «remitir registros VeriFactu»)."""
+	credential = company_credential(company)
+	if credential:
+		return credential
+	label = company or "(empresa aún sin guardar)"
+	frappe.throw(
+		f"No hay certificado AEAT habilitado de {label} para {use}. Remedio: suba el"
+		" certificado digital de la empresa (PFX/P12) en «ES AEAT Credential» y márquelo"
+		" como habilitado. Es un único certificado por empresa: lo comparten VeriFactu,"
+		" el SII y la firma de Facturae.",
+		frappe.ValidationError,
+	)
+
+
+def has_aeat_permission(user: str | None = None, company: str | None = None) -> bool:
+	"""Permiso explícito por empresa para TODA llamada whitelisted que dispare
+	comunicación con la AEAT (doc 12 §18): el chequeo considera de qué
 	Company/certificado se trata, no solo un rol genérico.
 
 	Se concede si:
 	1. El usuario es Administrator o tiene rol System Manager; o
-	2. Existe credencial HABILITADA para (company, purpose) — sin certificado no
-	   hay nada que autorizar — y el usuario tiene un rol con permiso sobre esa
-	   empresa (roles de notificación configurados o, en su defecto, Accounts
-	   Manager) y acceso de lectura a la Company.
+	2. La empresa tiene credencial HABILITADA — sin certificado no hay nada que
+	   autorizar — y el usuario tiene un rol con permiso sobre esa empresa
+	   (roles de notificación configurados o, en su defecto, Accounts Manager)
+	   y acceso de lectura a la Company.
 	"""
 	user = user or frappe.session.user
 	if user == "Administrator":
@@ -151,10 +172,7 @@ def has_aeat_permission(
 	if "System Manager" in user_roles:
 		return True
 
-	if not company or not purpose:
-		return False
-
-	if not frappe.db.exists("ES AEAT Credential", {"company": company, "purpose": purpose, "enabled": 1}):
+	if not company_credential(company):
 		return False
 
 	if user_roles & _roles_with_permission(company):

@@ -29,14 +29,14 @@
    "search_index": 1
   },
   {
-   "description": "Credencial (propósito VeriFactu, habilitada) con la que la empresa firma la consulta — TLS mutua con la AEAT. Se toma por defecto de la ficha de la compañía y se valida antes de remitir.",
-   "fetch_from": "company.es_verifactu_credential",
+   "description": "Certificado de la empresa (uno por empresa) con el que se autentica la consulta por TLS mutua. Se toma al guardar de «ES AEAT Credential».",
    "fieldname": "credential",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Credencial AEAT",
-   "options": "ES AEAT Credential"
+   "options": "ES AEAT Credential",
+   "read_only": 1
   },
   {
    "fieldname": "section_filters",
@@ -94,7 +94,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-31 00:00:00.000000",
+ "modified": "2026-10-31 23:45:00.000000",
  "modified_by": "Administrator",
  "module": "ES Verifactu",
  "name": "ES Verifactu Aeat Query",

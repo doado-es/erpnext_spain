@@ -101,4 +101,4 @@ class TestMockAEATClient(IntegrationTestCase):
 
 		with self.assertRaises(frappe.ValidationError) as ctx:
 			mock_mod.build_client("VeriFactu", "pruebas", "ES Empresa Inexistente AEAT")
-		self.assertIn("credencial AEAT habilitada", str(ctx.exception))
+		self.assertIn("certificado AEAT habilitado", str(ctx.exception))

@@ -1,5 +1,5 @@
 # Tests de las utilidades AEAT (spec 13 §7): timestamps Europe/Madrid (caso
-# DST incluido), permisos explícitos por empresa+propósito y notificaciones a
+# DST incluido), permisos explícitos por empresa y notificaciones a
 # roles por los dos canales (Notification Log + es_incidents_email).
 
 from __future__ import annotations
@@ -101,7 +101,7 @@ class TestAbsoluteSitePaths(IntegrationTestCase):
 			pem_paths,
 		)
 
-		cert, key = pem_paths("Mi Empresa SL", "VeriFactu")
+		cert, key = pem_paths("Mi Empresa SL")
 		# H3: fuera de private/files (no entra en las copias de ficheros).
 		files_root = os.path.join(get_bench_path(), "sites", frappe.local.site, "private", "es_keys")
 		for path in (cert, key):
@@ -127,8 +127,8 @@ class TestAEATPermissions(IntegrationTestCase):
 		super().setUpClass()
 		cls.company = test_company()
 
-		# Credencial habilitada para (company, VeriFactu): los tests de permiso
-		# la comparten (el par es único por transacción de la clase).
+		# Credencial habilitada de la empresa (una por empresa): los tests de
+		# permiso la comparten dentro de la transacción de la clase.
 		from erpnext_spain.aeat.tests.helpers import clean_pem, generate_p12, write_private_p12
 
 		cls.url_p12 = write_private_p12("es_test_permisos.p12", generate_p12()[0])
@@ -136,13 +136,12 @@ class TestAEATPermissions(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": cls.company,
-				"purpose": "VeriFactu",
 				"cert_file": cls.url_p12,
 				"cert_password": "es-test-pass",
 				"enabled": 1,
 			}
 		).insert(ignore_permissions=True)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 
 		# Usuarios de prueba (rollback de la clase los devuelve a su sitio).
 		cls.user = "es_permisos_aeat@test.example.com"
@@ -163,30 +162,26 @@ class TestAEATPermissions(IntegrationTestCase):
 				).insert(ignore_permissions=True)
 
 	def test_administrator_and_system_manager_pass(self):
-		self.assertTrue(
-			utils.has_aeat_permission(user="Administrator", company=self.company, purpose="VeriFactu")
-		)
+		self.assertTrue(utils.has_aeat_permission(user="Administrator", company=self.company))
 		self.assertTrue(utils.has_aeat_permission(user="Administrator"))
 
-	def test_missing_company_or_purpose_denies(self):
+	def test_missing_company_denies(self):
 		self.assertFalse(utils.has_aeat_permission(user=self.user))
-		self.assertFalse(utils.has_aeat_permission(user=self.user, company=self.company))
-		self.assertFalse(utils.has_aeat_permission(user=self.user, purpose="VeriFactu"))
 
 	def test_without_enabled_credential_denies(self):
-		"""El permiso es por empresa+propósito: sin credencial habilitada NO
-		hay nada que autorizar (doc 12 §18)."""
-		self.assertFalse(utils.has_aeat_permission(user=self.user, company=self.company, purpose="SII"))
+		"""El permiso es por empresa: sin credencial habilitada NO hay nada que
+		autorizar (doc 12 §18)."""
+		frappe.db.set_value("ES AEAT Credential", self.company, "enabled", 0)
+		self.addCleanup(frappe.db.set_value, "ES AEAT Credential", self.company, "enabled", 1)
+		self.assertFalse(utils.has_aeat_permission(user=self.user, company=self.company))
 
 	def test_accounts_manager_with_enabled_credential_passes(self):
-		self.assertTrue(utils.has_aeat_permission(user=self.user, company=self.company, purpose="VeriFactu"))
+		self.assertTrue(utils.has_aeat_permission(user=self.user, company=self.company))
 
 	def test_user_without_relevant_role_denied_with_credential(self):
 		"""Un usuario sin System Manager ni Accounts Manager NO dispara
 		comunicaciones AEAT aunque exista la credencial."""
-		self.assertFalse(
-			utils.has_aeat_permission(user=self.user_without_role, company=self.company, purpose="VeriFactu")
-		)
+		self.assertFalse(utils.has_aeat_permission(user=self.user_without_role, company=self.company))
 
 
 class TestNotifyRoles(IntegrationTestCase):

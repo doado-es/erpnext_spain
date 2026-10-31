@@ -68,7 +68,7 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 		cls.p12 = generate_p12(password=PASSWORD.encode())[0]
 		_delete_test_p12s()  # restos de corridas abortadas
 		cls.addClassCleanup(_delete_test_p12s)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 
 		# Segunda empresa REAL (España, EUR, CIF propio): duplicado de NIF y
 		# compartición de series. El insert arrastra COA/almacenes/centros de
@@ -87,7 +87,7 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 			.insert(ignore_permissions=True)
 			.name
 		)
-		cls.addClassCleanup(clean_pem, cls.second_company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.second_company)
 
 	def setUp(self):
 		frappe.set_user("Administrator")
@@ -102,7 +102,6 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 				{
 					"es_verifactu_enabled": 0,
 					"es_verifactu_activation_date": None,
-					"es_verifactu_credential": None,
 					"es_draft_series": None,
 					"es_verifactu_noi": None,
 				},
@@ -137,7 +136,6 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": company,
-				"purpose": "VeriFactu",
 				"cert_file": url,
 				"cert_password": PASSWORD,
 				"enabled": 1,
@@ -212,7 +210,7 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 		doc.es_verifactu_enabled = 1
 		with self.assertRaises(frappe.ValidationError) as ctx:
 			doc.save(ignore_permissions=True)
-		self.assertIn("No hay credencial AEAT habilitada", str(ctx.exception))
+		self.assertIn("No hay certificado AEAT habilitado", str(ctx.exception))
 		self.assertIn("VeriFactu", str(ctx.exception))
 		self.assertIn("Remedio", str(ctx.exception))
 

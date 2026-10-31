@@ -67,7 +67,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		cls.p12 = generate_p12(password=PASSWORD.encode())[0]
 		_delete_test_p12s()  # restos de corridas abortadas
 		cls.addClassCleanup(_delete_test_p12s)
-		cls.addClassCleanup(clean_pem, cls.company, "VeriFactu")
+		cls.addClassCleanup(clean_pem, cls.company)
 		cls.tax_account = frappe.db.get_value(
 			"Account", {"company": cls.company, "account_type": "Tax", "is_group": 0}, "name"
 		)
@@ -83,7 +83,6 @@ class TestEmisionNaming(IntegrationTestCase):
 			{
 				"es_verifactu_enabled": 0,
 				"es_verifactu_activation_date": None,
-				"es_verifactu_credential": None,
 				"es_draft_series": None,
 				"es_verifactu_noi": None,
 				"tax_id": None,
@@ -108,12 +107,12 @@ class TestEmisionNaming(IntegrationTestCase):
 	):
 		"""Deja la compañía ACTIVA (compuerta completa: NIF, credencial,
 		fecha, serie de borradores) y devuelve el doc Company guardado."""
-		# Credenciales previas de (empresa, VeriFactu) fuera: el nombre del
-		# credential es determinista por (compañía, propósito) y una segunda
+		# Credencial previa de la empresa fuera: el nombre del credential es
+		# la compañía (una por empresa) y una segunda
 		# activación en el MISMO test colisionaría.
 		for credential in frappe.get_all(
 			"ES AEAT Credential",
-			filters={"company": self.company, "purpose": "VeriFactu"},
+			filters={"company": self.company},
 			pluck="name",
 		):
 			frappe.delete_doc("ES AEAT Credential", credential, ignore_permissions=True)
@@ -133,7 +132,6 @@ class TestEmisionNaming(IntegrationTestCase):
 			{
 				"doctype": "ES AEAT Credential",
 				"company": self.company,
-				"purpose": "VeriFactu",
 				"cert_file": url,
 				"cert_password": PASSWORD,
 				"enabled": 1,
@@ -401,7 +399,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		self._activate()
 		frappe.db.set_value(
 			"ES AEAT Credential",
-			{"company": self.company, "purpose": "VeriFactu"},
+			{"company": self.company},
 			"enabled",
 			0,
 		)
@@ -411,7 +409,7 @@ class TestEmisionNaming(IntegrationTestCase):
 		with self.assertRaises(frappe.ValidationError) as ctx:
 			a.submit()
 
-		self.assertIn("credencial AEAT habilitada", str(ctx.exception))
+		self.assertIn("certificado AEAT habilitado", str(ctx.exception))
 		self.assertIn("Remedio", str(ctx.exception))
 
 		# sin renombre, sin snapshot, sin GL: sigue siendo borrador:

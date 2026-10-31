@@ -91,7 +91,7 @@ Mismos patrones que 04 (doc_events n/a, scheduler_events para expiración + dren
 
 ## Dudas abiertas
 
-- ¿Un certificado por (company, purpose) o por company con propósitos múltiples? (Recomendación: por (company, purpose), mismos datos físicos.)
+- ¿Un certificado por (company, purpose) o por company con propósitos múltiples? (Recomendación: por (company, purpose), mismos datos físicos.) **Resuelto con el usuario el 31/10/2026: un certificado por empresa, sin `purpose`** (ver `docs/decisiones.md`).
 - Perfil de firma (hereda de la verificación de 04).
 
 ## Tareas para agentes

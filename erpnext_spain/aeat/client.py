@@ -66,18 +66,13 @@ def _wsdl_from_settings(service: str, environment: str) -> str:
 	)
 
 
-def _enabled_credential_pem_paths(company: str, service: str) -> tuple[str, str]:
-	"""Rutas de los PEM de la credencial HABILITADA de (empresa, propósito= servicio)."""
+def enabled_credential_pem_paths(company: str, service: str) -> tuple[str, str]:
+	"""Rutas de los PEM del certificado habilitado de la empresa (uno por empresa)."""
 	from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
+	from erpnext_spain.aeat.utils import require_credential
 
-	if not frappe.db.exists("ES AEAT Credential", {"company": company, "purpose": service, "enabled": 1}):
-		frappe.throw(
-			f"No hay credencial AEAT habilitada para {company} ({service})."
-			" Remedio: suba el certificado p12 en «ES AEAT Credential» y active la"
-			" credencial antes de comunicar con la AEAT.",
-			frappe.ValidationError,
-		)
-	return pem_paths(company, service)
+	require_credential(company, f"comunicar con la AEAT ({service})")
+	return pem_paths(company)
 
 
 class AEATClient:
@@ -116,7 +111,7 @@ class AEATClient:
 
 		cfg = SERVICES[service]
 		self.wsdl_url = _wsdl_from_settings(service, environment)
-		self.cert_pem, self.key_pem = _enabled_credential_pem_paths(company, service)
+		self.cert_pem, self.key_pem = enabled_credential_pem_paths(company, service)
 
 		factory = client_factory or _build_zeep_client
 		self.client = factory(

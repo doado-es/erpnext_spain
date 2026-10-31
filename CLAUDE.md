@@ -17,7 +17,7 @@ App de Frappe que localiza ERPNext para España. Solo ERPNext/Frappe **v16.50+**
 - Datos iniciales con funciones `ensure_*` idempotentes que crean lo que falta y no pisan lo que haya cambiado el usuario (spec 09).
 - `doc_events` con salida temprana barata como primera instrucción: `is_pgc_company(company)` o `is_feature_enabled(company, flag)` con `frappe.get_cached_value`. Nada de consultas por línea de documento.
 - Sin `frappe.db.sql` (usa `frappe.qb` o `frappe.get_all`) y sin `frappe.db.commit()`.
-- Todo `@frappe.whitelist()` con type hints y comprobación explícita de permisos o rol. Los que modifican datos, `methods=["POST"]`. Los que llaman a la AEAT, a un banco o a una plataforma comprueban el permiso por empresa y propósito.
+- Todo `@frappe.whitelist()` con type hints y comprobación explícita de permisos o rol. Los que modifican datos, `methods=["POST"]`. Los que llaman a la AEAT, a un banco o a una plataforma comprueban el permiso por empresa (un certificado por empresa).
 - Una compañía sin la activación correspondiente se comporta exactamente como ERPNext estándar.
 
 ## Convenciones

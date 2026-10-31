@@ -33,8 +33,8 @@ def notify_certificate_expiry() -> list[dict]:
 	credentials = frappe.get_all(
 		"ES AEAT Credential",
 		filters={"enabled": 1},
-		fields=["name", "company", "purpose", "valid_until"],
-		order_by="company asc, purpose asc",
+		fields=["name", "company", "valid_until"],
+		order_by="company asc",
 	)
 
 	for credential in credentials:
@@ -49,13 +49,13 @@ def notify_certificate_expiry() -> list[dict]:
 
 		notify_roles(
 			credential.company,
-			f"Certificado AEAT de {credential.company} ({credential.purpose}): {headline}",
-			f"El certificado AEAT de la empresa {credential.company} (propósito"
-			f" {credential.purpose}, credencial {credential.name}) {headline}"
+			f"Certificado AEAT de {credential.company}: {headline}",
+			f"El certificado AEAT de la empresa {credential.company} (credencial"
+			f" {credential.name}, usado por VeriFactu, el SII y Facturae) {headline}"
 			f" — vigente hasta el {format_aeat_date(credential.valid_until)}."
 			" Remedio: renueve el certificado con su proveedor y actualícelo en"
 			" «ES AEAT Credential» ANTES de esa fecha. Al caducar, las remisiones"
-			" a la AEAT dejarán de funcionar.",
+			" a la AEAT y la firma de facturas electrónicas dejarán de funcionar.",
 		)
 		notified.append({"credential": credential.name, "company": credential.company, "days": days})
 

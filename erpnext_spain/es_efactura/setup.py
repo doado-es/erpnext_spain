@@ -113,23 +113,15 @@ COMPANY_FIELDS = [
 		"fieldname": "es_einvoice_section",
 		"label": "Factura electrónica",
 		"fieldtype": "Section Break",
-		"insert_after": "es_sii_credential",
+		"insert_after": "es_sii_activation_date",
 	},
-	{
-		"fieldname": "es_einvoice_credential",
-		"label": "Certificado para firmar facturas electrónicas",
-		"fieldtype": "Link",
-		"options": "ES AEAT Credential",
-		"insert_after": "es_einvoice_section",
-		"description": "Credencial de la compañía (de cualquier propósito) cuyo certificado firma las facturas Facturae.",
-	},
-	*person_fields("es_einvoice_credential"),
+	*person_fields("es_einvoice_section"),
 	# Factura electrónica B2B (spec 10 §5): obligatoria desde 2027-2028 (RD 238/2026).
 	{
 		"fieldname": "es_einvoice_b2b",
 		"label": "Factura electrónica B2B",
 		"fieldtype": "Check",
-		"insert_after": "es_einvoice_section",
+		"insert_after": "es_second_surname",
 		"description": "Genera la factura electrónica UBL de las ventas a empresarios y profesionales españoles y recibe las de los proveedores.",
 	},
 	{

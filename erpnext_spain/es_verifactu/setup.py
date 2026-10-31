@@ -67,26 +67,13 @@ COMPANY_VERIFACTU_ACTIVATION_DATE_FIELD = {
 	),
 }
 
-COMPANY_VERIFACTU_CREDENTIAL_FIELD = {
-	"fieldname": "es_verifactu_credential",
-	"label": "Credencial AEAT (VeriFactu)",
-	"fieldtype": "Link",
-	"options": "ES AEAT Credential",
-	"insert_after": "es_verifactu_activation_date",
-	"depends_on": "eval:doc.es_verifactu_enabled",
-	"description": (
-		"Certificado digital de la empresa (propósito VeriFactu, habilitado) para la"
-		" autenticación TLS mutua con la AEAT."
-	),
-}
-
 COMPANY_VERIFACTU_REMISSION_MODE_FIELD = {
 	"fieldname": "es_verifactu_remission_mode",
 	"label": "Modalidad de remisión",
 	"fieldtype": "Select",
 	"options": "Inmediata\nDiferida",
 	"default": "Diferida",
-	"insert_after": "es_verifactu_credential",
+	"insert_after": "es_verifactu_activation_date",
 	"depends_on": "eval:doc.es_verifactu_enabled",
 	"description": (
 		"Inmediata: envío encolado al emitir la factura. Diferida: drenaje por"
@@ -184,7 +171,6 @@ COMPANY_FIELDS = [
 	COMPANY_VERIFACTU_ENABLED_FIELD,
 	COMPANY_VERIFACTU_TEST_MODE_FIELD,
 	COMPANY_VERIFACTU_ACTIVATION_DATE_FIELD,
-	COMPANY_VERIFACTU_CREDENTIAL_FIELD,
 	COMPANY_VERIFACTU_REMISSION_MODE_FIELD,
 	COMPANY_VERIFACTU_DRAFT_SERIES_FIELD,
 	COMPANY_VERIFACTU_TIMEOUT_FIELD,

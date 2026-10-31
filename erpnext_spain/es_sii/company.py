@@ -7,8 +7,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import cint
 
-SII_PURPOSE = "SII"
-
 
 def validate(doc: Document, method: str | None = None) -> None:
 	if cint(doc.get("es_sii_enabled")) and cint(doc.get("es_verifactu_enabled")):
@@ -28,13 +26,3 @@ def validate(doc: Document, method: str | None = None) -> None:
 			),
 			title=_("SII"),
 		)
-	credential = doc.get("es_sii_credential")
-	if credential:
-		values = frappe.db.get_value("ES AEAT Credential", credential, ["company", "purpose"], as_dict=True)
-		if not values or values.company != doc.name or values.purpose != SII_PURPOSE:
-			frappe.throw(
-				_("La credencial {0} debe ser de la compañía {1} y tener el propósito SII.").format(
-					frappe.bold(credential), frappe.bold(doc.name)
-				),
-				title=_("SII"),
-			)

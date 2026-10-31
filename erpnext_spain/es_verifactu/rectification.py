@@ -1,6 +1,6 @@
 # Subsanación MANUAL VeriFactu — lote 5b (spec 04 §9).
 #
-# `rectify` (whitelisted, permiso explícito por empresa+propósito — doc 12
+# `rectify` (whitelisted, permiso explícito por empresa — doc 12
 # §18): valida que el ÚLTIMO registro de la factura sea el marcado
 # «Subsanable» por la estrategia de errores (lote 5b/error_strategy.py),
 # respeta la SUBSANACIÓN EN ORDEN cuando la compañía la exige, y regenera
@@ -56,12 +56,11 @@ def rectify(invoice: str) -> str:
 		)
 	company = header.company
 
-	if not has_aeat_permission(frappe.session.user, company, VERIFACTU_PURPOSE):
+	if not has_aeat_permission(frappe.session.user, company):
 		frappe.throw(
-			f"El usuario {frappe.session.user} no tiene permiso AEAT de {company}"
-			" para el propósito VeriFactu: la subsanación reenvía el registro a"
-			" la AEAT y exige el chequeo explícito por empresa+propósito (doc 12"
-			" §18). Remedio: conceda al usuario un rol con permiso (roles de"
+			f"El usuario {frappe.session.user} no tiene permiso AEAT de {company}:"
+			" la subsanación reenvía el registro a la AEAT y exige el chequeo"
+			" explícito por empresa (doc 12 §18). Remedio: conceda al usuario un rol con permiso (roles de"
 			" notificación de la compañía o, en su defecto, Accounts Manager)"
 			" y acceso de lectura a la compañía.",
 			frappe.PermissionError,
