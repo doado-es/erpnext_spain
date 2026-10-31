@@ -20,6 +20,7 @@ from frappe.utils import flt, getdate
 from lxml import etree
 
 from erpnext_spain.es_impuestos.codes import TAX_TYPES
+from erpnext_spain.utils.company import legal_name
 
 NS = {
 	"Invoice": "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
@@ -228,7 +229,7 @@ def build(si) -> UblInvoice:
 		credit_note=bool(si.is_return),
 		currency=si.currency,
 		seller=party(
-			frappe.get_cached_value("Company", si.company, "company_name"),
+			legal_name(si.company),
 			company_tax,
 			company_address_name(si.company),
 		),

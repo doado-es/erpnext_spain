@@ -18,6 +18,7 @@ from frappe.utils import flt, getdate, strip_html
 from erpnext_spain.es_efactura import codes
 from erpnext_spain.es_impuestos.codes import VAT_CLASSIFICATIONS
 from erpnext_spain.nif import validator
+from erpnext_spain.utils.company import legal_name
 
 CENT = Decimal("0.01")
 VAT, IRPF = "01", "04"
@@ -386,7 +387,7 @@ def company_address(company) -> str | None:
 def company_party(company) -> Party:
 	nif = tax_id(company.tax_id, _("la compañía {0}").format(company.name))
 	address = address_of(company_address(company), _("la compañía {0}").format(company.name))
-	return make_party(company, nif, company.company_name, address, "R")
+	return make_party(company, nif, legal_name(company.name), address, "R")
 
 
 def customer_party(customer, address_name, company) -> Party:

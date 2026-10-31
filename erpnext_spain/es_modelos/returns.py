@@ -11,6 +11,7 @@ from frappe.query_builder.functions import Count, Sum
 from frappe.utils import flt, get_last_day, getdate
 
 from erpnext_spain.es_impuestos.codes import TAX_TYPES
+from erpnext_spain.utils.company import legal_name
 
 VAT, SURCHARGE = TAX_TYPES["IVA"], TAX_TYPES["RE"]
 ALLOWED_ROLES = ("Accounts Manager", "System Manager")
@@ -324,7 +325,7 @@ def envelope(model: str, year: int, period: str, pages: list[str]) -> str:
 
 def identification(doc) -> tuple[str, str]:
 	nif = (frappe.get_cached_value("Company", doc.company, "tax_id") or "").upper().replace("ES", "", 1)[:9]
-	name = frappe.get_cached_value("Company", doc.company, "company_name")
+	name = legal_name(doc.company)
 	return nif, name
 
 

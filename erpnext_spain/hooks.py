@@ -56,6 +56,8 @@ doc_events = {
 		# El NIF de la compañía lo valida primero el verificador (nif/party);
 		# la compuerta de activación de VeriFactu (spec 04 §2.1) corre después.
 		"validate": [
+			# Razón social por defecto: el nombre de la compañía.
+			"erpnext_spain.utils.company.set_default_legal_name",
 			"erpnext_spain.nif.party.validate",
 			# SII y VeriFactu excluyentes (spec 14 §1): antes que la compuerta de
 			# activación de VeriFactu, para que el error explique el conflicto.
@@ -175,6 +177,7 @@ jinja = {
 		"erpnext_spain.es_verifactu.utils.jinja.get_verifactu_qr_code",
 		"erpnext_spain.es_verifactu.utils.jinja.get_verifactu_breakup",
 		"erpnext_spain.es_verifactu.utils.jinja.get_es_display_name",
+		"erpnext_spain.es_verifactu.utils.jinja.get_es_legal_name",
 		# Desglose por clasificación y rectificada (spec 05 §5).
 		"erpnext_spain.es_facturacion.printing.get_es_tax_summary",
 		"erpnext_spain.es_facturacion.printing.get_es_rectified_reference",

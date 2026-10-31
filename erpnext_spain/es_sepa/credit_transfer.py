@@ -13,6 +13,7 @@ from erpnext_spain.es_sepa.utils import (
 	is_valid_iban,
 	party_address,
 )
+from erpnext_spain.utils.company import legal_name
 from erpnext_spain.utils.gating import is_pgc_company
 
 ALLOWED_ROLES = ("Accounts Manager", "System Manager")
@@ -130,7 +131,7 @@ def generate_credit_transfer(payment_order: str) -> str:
 		frappe.throw(_("Indique la cuenta bancaria de la compañía en la orden de pago."))
 
 	check_parties([("Supplier", row.supplier) for row in order.references])
-	company_name = frappe.get_cached_value("Company", order.company, "company_name")
+	company_name = legal_name(order.company)
 	account = bank_account_party(
 		order.company_bank_account,
 		company_name,

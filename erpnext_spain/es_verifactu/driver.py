@@ -50,6 +50,7 @@ from erpnext_spain.es_verifactu.emission import (
 	get_sif_data,
 )
 from erpnext_spain.es_verifactu.error_strategy import RESUBMITTABLE_STATES, apply_strategy
+from erpnext_spain.utils.company import legal_name
 
 # Operación SOAP de remisión de lotes de registros (WSDL VeriFactu).
 REGFACTU_OPERATION = "RegFactuSistemaFacturacion"
@@ -119,14 +120,14 @@ class VerifactuDriver(AEATDriver):
 		"""Payload estructurado del manager: {"operacion", "datos"} con la
 		Cabecera (ObligadoEmisión de la Company) y los RegistroFactura
 		anidados desde el record_json plano del libro."""
-		company_conf = frappe.db.get_value("Company", company, ["company_name", "tax_id"], as_dict=True)
+		company_conf = frappe.db.get_value("Company", company, ["tax_id"], as_dict=True)
 		predecessors = self._predecessors(company, records)
 		return {
 			"operacion": REGFACTU_OPERATION,
 			"datos": {
 				"Cabecera": {
 					"ObligadoEmision": {
-						"NombreRazon": company_conf.company_name,
+						"NombreRazon": legal_name(company),
 						"NIF": company_conf.tax_id,
 					}
 				},
@@ -193,7 +194,7 @@ class VerifactuDriver(AEATDriver):
 			interior["TipoRectificativa"] = data["TipoRectificativa"]
 		if "FacturasRectificadas" in data:
 			interior["FacturasRectificadas"] = data["FacturasRectificadas"]
-		interior["NombreRazonEmisor"] = data.get("NombreRazonEmisor") or company_conf.company_name
+		interior["NombreRazonEmisor"] = data.get("NombreRazonEmisor") or legal_name(company)
 		interior["Subsanacion"] = data.get("Subsanacion") or "N"
 		interior["RechazoPrevio"] = data.get("RechazoPrevio") or "N"
 		# OJO: SinRegistroPrevio es campo del tipo ANULACIÓN del WSDL

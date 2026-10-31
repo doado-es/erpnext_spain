@@ -67,6 +67,7 @@ from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX, is_draft_name
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.locks import acquire_chain_lock, release_chain_lock
 from erpnext_spain.nif import validator
+from erpnext_spain.utils.company import legal_name
 from erpnext_spain.utils.gating import is_verifactu_active
 
 VERIFACTU_PURPOSE = "VeriFactu"
@@ -325,7 +326,7 @@ def _register_issuance(doc: Document, flags: dict | None = None) -> str:
 	last = _last_record(company)
 	previous_hash = (last.hash or "") if last else ""
 	flags = flags or {}
-	conf = frappe.db.get_value("Company", company, ["tax_id", "company_name"], as_dict=True)
+	conf = frappe.db.get_value("Company", company, ["tax_id"], as_dict=True)
 
 	breakdown = data_adapter.get_spain_tax_breakup(doc)
 	total_tax, total_amount = data_adapter.invoice_totals(doc, breakdown)
@@ -339,7 +340,7 @@ def _register_issuance(doc: Document, flags: dict | None = None) -> str:
 		"total_amount": total_amount,
 		"previous_hash": previous_hash,
 		"generation_timestamp": format_aeat_datetime(),
-		"issuer_name": conf.company_name,
+		"issuer_name": legal_name(company),
 		"operation_description": f"Factura {doc.name} por cantidad {doc.get('base_total')}",
 		"correction": "S" if flags else "N",
 		"prior_rejection": _issuance_prior_rejection(doc, flags),

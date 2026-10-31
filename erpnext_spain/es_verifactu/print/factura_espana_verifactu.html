@@ -49,7 +49,7 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 
 	<div class="cabecera">
 		<div class="empresa">
-			<h2>{{ doc.company }}</h2>
+			<h2>{{ get_es_legal_name(doc.company) }}</h2>
 			<div class="nif">NIF: {{ frappe.db.get_value("Company", doc.company, "tax_id") or "—" }}</div>
 			{%- if doc.get("company_address_display") -%}
 				<div class="domicilio">{{ doc.company_address_display }}</div>
@@ -202,6 +202,6 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 	{%- endif -%}
 
 	<div class="pie">
-		<span>{{ doc.company }} · {{ _("Factura emitida conforme al Reglamento de facturación (RD 1619/2012)") }}{% if get_verifactu_qr_code(doc) %} {{ _("y al sistema VeriFactu (RD 1007/2023)") }}{% endif %}</span>
+		<span>{{ get_es_legal_name(doc.company) }} · {{ _("Factura emitida conforme al Reglamento de facturación (RD 1619/2012)") }}{% if get_verifactu_qr_code(doc) %} {{ _("y al sistema VeriFactu (RD 1007/2023)") }}{% endif %}</span>
 	</div>
 </div>

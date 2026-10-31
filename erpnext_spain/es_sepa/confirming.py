@@ -12,6 +12,7 @@ from frappe.utils import cint, flt, getdate, nowdate
 
 from erpnext_spain.es_sepa.credit_transfer import attach, check_role, company_address, company_tax_id
 from erpnext_spain.es_sepa.utils import clean_iban, country_code, is_valid_iban, party_address, sepa_text
+from erpnext_spain.utils.company import legal_name
 from erpnext_spain.utils.gating import is_pgc_company
 
 RECORD_LENGTH = 250
@@ -96,7 +97,7 @@ def supplier_problems(data: dict) -> list[str]:
 
 def build_file(batch) -> bytes:
 	contract = contract_of(batch)
-	company_name = frappe.get_cached_value("Company", batch.company, "company_name")
+	company_name = legal_name(batch.company)
 	iban = frappe.get_cached_value("Bank Account", batch.bank_account, "iban") or ""
 	lines = [
 		record(

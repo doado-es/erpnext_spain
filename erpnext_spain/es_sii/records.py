@@ -15,6 +15,7 @@ from frappe import _
 from frappe.utils import flt, getdate
 
 from erpnext_spain.es_impuestos.codes import TAX_TYPES
+from erpnext_spain.utils.company import legal_name
 
 SII_VERSION = "1.1"
 VAT = TAX_TYPES["IVA"]
@@ -87,7 +88,7 @@ def header(company: str, communication: str | None) -> dict:
 	head = {
 		"IDVersionSii": SII_VERSION,
 		"Titular": {
-			"NombreRazon": frappe.get_cached_value("Company", company, "company_name")[:120],
+			"NombreRazon": legal_name(company)[:120],
 			"NIF": clean_nif(frappe.get_cached_value("Company", company, "tax_id")),
 		},
 	}

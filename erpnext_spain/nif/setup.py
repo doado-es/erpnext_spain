@@ -3,8 +3,9 @@
 #
 # - es_trade_name (spec 14): nombre comercial/marca del tercero, transversal
 #   (es_, no es_verifactu_). Solo display — lo consumirán print formats vía
-#   jinja en un lote posterior. Company NO lleva el campo: company_name es la
-#   razón social y el branding lo cubre Letter Head.
+#   jinja en un lote posterior. Company no lleva nombre comercial; lleva la
+#   razón social (es_legal_name, por defecto el nombre de la compañía), que es
+#   la que va a la AEAT, a Facturae y a los ficheros bancarios.
 #
 # - Tab «Spain Compliance» en Company (spec 04 §2.1): hub de lo por-empresa.
 #   Sección «General» con es_incidents_email — email externo de incidencias
@@ -40,12 +41,24 @@ COMPANY_GENERAL_SECTION_FIELD = {
 	"insert_after": "es_tab",
 }
 
+COMPANY_LEGAL_NAME_FIELD = {
+	"fieldname": "es_legal_name",
+	"label": "Razón social",
+	"fieldtype": "Data",
+	"insert_after": "es_seccion_general",
+	"description": (
+		"Nombre fiscal de la empresa tal como figura en el censo de la AEAT (p. ej. «EMPRESA"
+		" EJEMPLO SL»). Se usa en VeriFactu, el SII, Facturae, los modelos y los ficheros"
+		" bancarios. Si se deja vacío, toma el nombre de la compañía."
+	),
+}
+
 COMPANY_INCIDENTS_EMAIL_FIELD = {
 	"fieldname": "es_incidents_email",
 	"label": "Email de incidencias (compliance)",
 	"fieldtype": "Data",
 	"options": "Email",
-	"insert_after": "es_seccion_general",
+	"insert_after": "es_legal_name",
 	"description": (
 		"Email externo (p. ej. asesor fiscal) al que se notifican las incidencias"
 		" de cumplimiento de la empresa: caducidad de certificados AEAT, rechazos"
@@ -91,6 +104,7 @@ CUSTOM_FIELDS = {
 	"Company": [
 		COMPANY_TAB_FIELD,
 		COMPANY_GENERAL_SECTION_FIELD,
+		COMPANY_LEGAL_NAME_FIELD,
 		COMPANY_INCIDENTS_EMAIL_FIELD,
 	],
 }
@@ -107,7 +121,10 @@ FIELDS_PER_DOCTYPE = {
 def setup_custom_fields() -> None:
 	from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
-	create_custom_fields(CUSTOM_FIELDS)
+	from erpnext_spain.utils.company import fill_missing_legal_names
+
+	create_custom_fields(CUSTOM_FIELDS, update=True)
+	fill_missing_legal_names()
 
 
 def cleanup_custom_fields() -> None:

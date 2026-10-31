@@ -116,6 +116,13 @@ def get_verifactu_breakup(doc) -> list[dict]:
 	]
 
 
+def get_es_legal_name(company: str) -> str:
+	"""Razón social de la compañía (es_legal_name o, si falta, su nombre)."""
+	from erpnext_spain.utils.company import legal_name
+
+	return legal_name(company)
+
+
 def get_es_display_name(doc, party_field: str = "customer") -> str:
 	"""Denominación del tercero para display (spec 14): «NombreComercial
 	(RazónSocial)» cuando el maestro trae `es_trade_name`, si no la

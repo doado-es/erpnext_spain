@@ -50,6 +50,7 @@ from erpnext_spain.aeat.utils import (
 	now_aeat,
 	require_credential,
 )
+from erpnext_spain.utils.company import legal_name
 
 DOCTYPE = "ES Verifactu Aeat Query"
 
@@ -152,7 +153,7 @@ def _validate_credential(doc: Document) -> None:
 def _header(company: str) -> dict:
 	"""CabeceraConsultaSf (WSDL): IDVersion + ObligadoEmision con la identidad
 	fiscal de la Company. El NIF es obligatorio (NIFType, 9 caracteres)."""
-	conf = frappe.db.get_value("Company", company, ["company_name", "tax_id"], as_dict=True)
+	conf = frappe.db.get_value("Company", company, ["tax_id"], as_dict=True)
 	if not conf.tax_id:
 		frappe.throw(
 			f"La compañía {company} no tiene N.I.F.: la cabecera de la consulta"
@@ -163,7 +164,7 @@ def _header(company: str) -> dict:
 		)
 	return {
 		"IDVersion": ID_VERSION,
-		"ObligadoEmision": {"NombreRazon": conf.company_name, "NIF": conf.tax_id},
+		"ObligadoEmision": {"NombreRazon": legal_name(company), "NIF": conf.tax_id},
 	}
 
 

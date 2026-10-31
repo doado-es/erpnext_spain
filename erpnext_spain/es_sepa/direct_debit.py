@@ -16,6 +16,7 @@ from erpnext_spain.es_sepa.credit_transfer import (
 	sepa_creditor_id,
 )
 from erpnext_spain.es_sepa.utils import check_parties, party_address
+from erpnext_spain.utils.company import legal_name
 from erpnext_spain.utils.gating import is_pgc_company
 
 DIRECT_DEBIT_MODE = "Domiciliación bancaria"
@@ -152,7 +153,7 @@ def validate_batch(doc) -> None:
 def submit_batch(doc) -> None:
 	check_role()
 	check_parties([("Customer", line.customer) for line in doc.lines])
-	company_name = frappe.get_cached_value("Company", doc.company, "company_name")
+	company_name = legal_name(doc.company)
 	account = bank_account_party(
 		doc.bank_account,
 		company_name,

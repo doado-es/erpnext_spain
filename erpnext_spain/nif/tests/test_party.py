@@ -134,6 +134,38 @@ class TestNifCustomFields(IntegrationTestCase):
 		self.assertIsNone(frappe.get_meta("Company").get_field("es_trade_name"))
 
 
+class TestCompanyLegalName(IntegrationTestCase):
+	"""Razón social de la compañía: por defecto, el nombre de la compañía."""
+
+	def test_defaults_to_company_name_and_keeps_user_value(self):
+		from erpnext_spain.utils.company import legal_name
+
+		company = ensure_test_company()
+		doc = frappe.get_doc("Company", company)
+		doc.es_legal_name = ""
+		doc.save()
+		self.assertEqual(doc.es_legal_name, doc.company_name)
+		self.assertEqual(legal_name(company), doc.company_name)
+
+		doc.es_legal_name = "EMPRESA DE PRUEBA SL"
+		doc.save()
+		self.assertEqual(legal_name(company), "EMPRESA DE PRUEBA SL")
+
+	def test_missing_values_filled_on_migrate(self):
+		from erpnext_spain.utils.company import fill_missing_legal_names, legal_name
+
+		company = ensure_test_company()
+		frappe.db.set_value("Company", company, "es_legal_name", None)
+		fill_missing_legal_names()
+		name = frappe.db.get_value("Company", company, "company_name")
+		self.assertEqual(frappe.db.get_value("Company", company, "es_legal_name"), name)
+		self.assertEqual(legal_name(company), name)
+
+	def test_field_in_spain_tab_general_section(self):
+		fields = [field.fieldname for field in frappe.get_meta("Company").fields]
+		self.assertEqual(fields.index("es_legal_name"), fields.index("es_seccion_general") + 1)
+
+
 class TestReportCheckup(IntegrationTestCase):
 	def test_report_detects_invalid_and_missing(self):
 		from erpnext_spain.nif.report.es_nif_checkup.es_nif_checkup import execute

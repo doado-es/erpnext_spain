@@ -312,6 +312,9 @@ class TestOutboxDispatch(IntegrationTestCase):
 		claves AEAT, RefExterna=docname del libro, Encadenamiento
 		PrimerRegistro/RegistroAnterior, y los campos del Alta."""
 		self._activate()
+		# La cabecera lleva la razón social, no el nombre corto de la compañía.
+		frappe.db.set_value("Company", self.company, "es_legal_name", "EMPRESA REMISION SL")
+		self.addCleanup(frappe.db.set_value, "Company", self.company, "es_legal_name", None)
 		a, b = self._draft(), self._draft()
 		a.submit()
 		b.submit()
@@ -326,7 +329,7 @@ class TestOutboxDispatch(IntegrationTestCase):
 			data["Cabecera"],
 			{
 				"ObligadoEmision": {
-					"NombreRazon": frappe.db.get_value("Company", self.company, "company_name"),
+					"NombreRazon": "EMPRESA REMISION SL",
 					"NIF": VALID_NIF,
 				}
 			},
