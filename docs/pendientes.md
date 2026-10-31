@@ -26,7 +26,6 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Impuestos (specs 03 y 09)
 
-- Spec 03 §5: copiar la clasificación de la plantilla si la fila está vacía y exigirla con `es_require_tax_classification`.
 - Verificar en la documentación de la AEAT los códigos E7, E8 y la clave de régimen 21, y los textos de las claves de régimen.
 - Revisión contable: IVA no deducible a la 6310.
 - Spec 09 pendientes: Tax Withholding Group y Category (spec 08), Holiday List de festivos nacionales, Payment Terms Template, Address Template de España, cuentas de retención por compañía, Bank Transaction Rule.

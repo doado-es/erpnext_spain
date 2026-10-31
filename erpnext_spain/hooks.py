@@ -57,6 +57,16 @@ doc_events = {
 }
 
 
+# Regional overrides de ERPNext: la región es el país de la compañía.
+regional_overrides = {
+	"Spain": {
+		# Clasificación fiscal de las filas de impuestos (spec 03 §5).
+		"erpnext.controllers.accounts_controller.validate_regional": (
+			"erpnext_spain.es_impuestos.invoice.validate_regional"
+		),
+	},
+}
+
 # Desk JS por DocType
 # ------------------
 # UX de Company (spec 04 §2.1/§15): avisos legales del toggle de VeriFactu,

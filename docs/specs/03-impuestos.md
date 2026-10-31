@@ -99,7 +99,7 @@ Usar lo nativo de ERPNext:
 > - El recargo de equivalencia repercutido va a la **4771**, que la app añade bajo la 477 al crear los datos iniciales.
 > - Item Tax Template con las cuentas de venta y de compra (4770, 4771, 4720): ERPNext solo añade filas desde la plantilla de artículo cuando la factura no tiene impuestos **[verificado v16]**; con la plantilla de la factura aplicada, el tipo del artículo sustituye al de las filas existentes.
 > - IVA no deducible a la 6310 (mayor gasto) **[revisión contable]**.
-> - Pendiente: §5 (copia y exigencia de la clasificación al validar la factura). Al elegir la plantilla en el formulario, ERPNext ya copia los campos de clasificación a las filas de la factura **[verificado v16]**.
+> - **§5 hecho (31/10/2026)**: `es_impuestos/invoice.py` como regional override de `validate_regional`; tests en `es_impuestos/tests/test_classification.py`. Al elegir la plantilla en el formulario, ERPNext ya copia los campos de clasificación a las filas de la factura **[verificado v16]**.
 
 1. Tras "Aplicar plan PGC", existen todas las plantillas del §3 con la clasificación rellena y apuntando a las cuentas del §2.
 2. Una factura de venta a un cliente de otro país de la UE con Tax Category Intracomunitario recibe la plantilla de entrega intracomunitaria sin intervención.
