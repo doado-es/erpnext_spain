@@ -182,6 +182,8 @@ class TestOutboxDispatch(IntegrationTestCase):
 			],
 		}
 		data.update(overrides)
+		if (data.get("es_invoice_type") or "").startswith("R") or data.get("is_return"):
+			data.setdefault("es_rectification_reason", "Rectificación de prueba")
 		return frappe.get_doc(data).insert(ignore_permissions=True)
 
 	def _invoice_records(self, invoice_name: str, **overrides):

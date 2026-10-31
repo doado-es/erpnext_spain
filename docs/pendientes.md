@@ -39,8 +39,11 @@ Peticiones del usuario del 30/10/2026. Cada una tendrá su spec antes de empezar
 
 ## Facturación (spec 05)
 
-- §1 Numeración fiscal al emitir sin VeriFactu (`es_fiscal_numbering`, hoy sin efecto): separar el renombrado a la serie fiscal del módulo VeriFactu.
-- §2 Rectificativas (método y motivo); §4 situación de cobro (dudoso cobro, pérdida); §5 formato de factura único.
+- **Hecho (31/10/2026)**: numeración fiscal sin VeriFactu, rectificativas (método y motivo), bloqueo de *amend*, situación de cobro y formato único.
+- Revisión contable del esquema de dudoso cobro, deterioro, pérdida y recuperación (4360, 4900, 6940, 6500, 7940); cobro posterior a una pérdida definitiva (hoy, asiento manual a la 778).
+- Rectificación por sustitución en VeriFactu (exige los importes de la rectificada; hoy se bloquea).
+- Formato: desglose en moneda de la compañía (el detalle por artículo de ERPNext va en esa moneda); facturas en moneda extranjera por revisar.
+- Decidir con el asesor si se bloquea emitir con fecha distinta de la de hoy (hoy, el borrador toma la fecha de emisión).
 
 ## Registro fiscal de IVA (spec 06)
 

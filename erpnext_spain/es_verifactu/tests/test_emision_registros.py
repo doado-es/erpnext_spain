@@ -202,6 +202,8 @@ class TestEmisionRegistros(IntegrationTestCase):
 			],
 		}
 		data.update(overrides)
+		if (data.get("es_invoice_type") or "").startswith("R") or data.get("is_return"):
+			data.setdefault("es_rectification_reason", "Rectificación de prueba")
 		return frappe.get_doc(data).insert(ignore_permissions=True)
 
 	def _rectification_invoice(self, original: str, **overrides):
@@ -217,6 +219,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 			"is_return": 1,
 			"return_against": original,
 			"es_invoice_type": "R1",
+			"es_rectification_reason": "Rectificación de prueba",
 			"items": [{"item_code": ITEM, "qty": -1, "rate": 100}],
 			"taxes": [
 				{
@@ -228,6 +231,8 @@ class TestEmisionRegistros(IntegrationTestCase):
 			],
 		}
 		data.update(overrides)
+		if (data.get("es_invoice_type") or "").startswith("R") or data.get("is_return"):
+			data.setdefault("es_rectification_reason", "Rectificación de prueba")
 		return frappe.get_doc(data).insert(ignore_permissions=True)
 
 	def _register(self, invoice_name: str, **overrides):

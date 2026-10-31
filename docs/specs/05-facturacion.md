@@ -2,6 +2,8 @@
 
 Fase 3 · Depende de: 01, 02, 03 · Relacionada con: Verifactu (código base), 06, 14
 
+> **Estado (31/10/2026): implementados §1, §2, §4 y §5** en el módulo ES Facturacion (`es_facturacion/{numbering,collection,printing,setup}.py`, `public/js/sales_invoice.js`); tests en `es_facturacion/tests/test_billing.py` (criterios 1-8). El formato conserva el nombre "Factura España VeriFactu". Pendiente **[revisar]**: esquema contable de dudoso cobro y pérdida, bloqueo de fechas distintas de hoy (asesor), rectificación por sustitución en VeriFactu.
+
 ## Objetivo
 
 Numeración y series conformes con el Reglamento de facturación (RD 1619/2012), rectificativas con los datos que piden Verifactu y SII, situación de cobro con sus asientos PGC, y un formato de factura con el contenido obligatorio. Todo con `doc_events` y hooks documentados (sin extensión de la clase de Sales Invoice, R2).

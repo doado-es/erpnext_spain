@@ -37,6 +37,8 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 		.es-factura .bloque-verifactu .estado { margin-top: 6px; }
 		.es-factura .rotulo-borrador { margin: 24px 0; padding: 14px 16px; border: 3px dashed #b00; color: #b00; font-size: 18px; font-weight: 700; text-align: center; text-transform: uppercase; }
 		.es-factura .nota-exencion { color: #555; font-size: 11px; margin-top: 4px; }
+		.es-factura .nota-rectificativa { margin: 12px 0; padding: 8px 10px; border-left: 3px solid #999; background: #f7f7f7; }
+		.es-factura .domicilio { font-size: 11px; color: #555; }
 		.es-factura .pie { margin-top: 32px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 10px; color: #777; display: flex; justify-content: space-between; }
 	</style>
 
@@ -49,11 +51,15 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 		<div class="empresa">
 			<h2>{{ doc.company }}</h2>
 			<div class="nif">NIF: {{ frappe.db.get_value("Company", doc.company, "tax_id") or "—" }}</div>
+			{%- if doc.get("company_address_display") -%}
+				<div class="domicilio">{{ doc.company_address_display }}</div>
+			{%- endif -%}
 		</div>
 		<div class="titulo-factura">
-			<h1>{{ _("Factura") }}</h1>
+			{%- set is_rectification = doc.get("is_return") or (doc.get("es_invoice_type") or "").startswith("R") -%}
+			<h1>{{ _("Factura rectificativa") if is_rectification else _("Factura") }}</h1>
 			<div class="meta"><strong>{{ doc.name }}</strong></div>
-			<div class="meta">{{ _("Fecha") }}: {{ doc.get_formatted("posting_date") }}</div>
+			<div class="meta">{{ _("Fecha de expedición") }}: {{ doc.get_formatted("posting_date") }}</div>
 			{%- if doc.get("due_date") -%}
 				<div class="meta">{{ _("Vencimiento") }}: {{ doc.get_formatted("due_date") }}</div>
 			{%- endif -%}
@@ -71,13 +77,22 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 		</div>
 		<div class="bloque-cliente" style="text-align:right">
 			{%- if doc.get("es_invoice_type") -%}
-				<div class="etiqueta">{{ _("Tipo de factura (VeriFactu)") }}</div>
+				<div class="etiqueta">{{ _("Tipo de factura") }}</div>
 				<div>{{ doc.get("es_invoice_type") }}</div>
 			{%- endif -%}
 			<div class="etiqueta" style="margin-top:6px">{{ _("Moneda") }}</div>
 			<div>{{ doc.get("currency") }}</div>
 		</div>
 	</div>
+
+	{%- set rectified = get_es_rectified_reference(doc) -%}
+	{%- if rectified -%}
+		<div class="nota-rectificativa">
+			{{ _("Rectifica la factura") }} <strong>{{ rectified.number }}</strong> {{ _("de fecha") }} {{ rectified.date }}.
+			{%- if doc.get("es_rectification_method") %} {{ _("Método") }}: {{ _(doc.es_rectification_method) }}.{% endif %}
+			{%- if doc.get("es_rectification_reason") %}<br>{{ _("Motivo") }}: {{ doc.es_rectification_reason }}{% endif %}
+		</div>
+	{%- endif -%}
 
 	<table>
 		<thead>
@@ -100,8 +115,8 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 		</tbody>
 	</table>
 
-	{% set breakup = get_verifactu_breakup(doc) %}
-	{%- if breakup -%}
+	{% set summary = get_es_tax_summary(doc) %}
+	{%- if summary.vat -%}
 		<table>
 			<thead>
 				<tr>
@@ -112,19 +127,23 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 				</tr>
 			</thead>
 			<tbody>
-				{%- for row in breakup -%}
+				{%- for row in summary.vat -%}
 					<tr>
-						<td>{{ row.tax }}</td>
-						<td class="numero">{{ row.rate }}</td>
-						<td class="numero">{{ row.base }}</td>
-						<td class="numero">{{ row.tax_amount }}</td>
+						<td>{{ _(row.tax_type) }}</td>
+						<td class="numero">{{ row.rate_formatted }}</td>
+						<td class="numero">{{ row.base_formatted }}</td>
+						<td class="numero">{{ row.amount_formatted }}</td>
 					</tr>
 				{%- endfor -%}
 			</tbody>
 		</table>
-	{%- elif doc.get("es_verifactu_exempt_cause") -%}
+	{%- endif -%}
+	{%- for mention in summary.mentions -%}
+		<div class="nota-exencion">{{ _(mention) }}</div>
+	{%- endfor -%}
+	{%- if not summary.mentions and doc.get("es_verifactu_exempt_cause") -%}
 		<div class="nota-exencion">
-			{{ _("Operación exenta de IVA — causa de exención") }}: {{ doc.get("es_verifactu_exempt_cause") }} ({{ _("Orden HAC/1177/2024, L10") }}).
+			{{ _("Operación exenta de IVA — causa de exención") }}: {{ doc.get("es_verifactu_exempt_cause") }}.
 		</div>
 	{%- endif -%}
 
@@ -133,13 +152,25 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 			<td>{{ _("Base imponible") }}</td>
 			<td class="numero">{{ doc.get_formatted("net_total") }}</td>
 		</tr>
+		{%- for row in summary.vat %}
 		<tr>
-			<td>{{ _("Total impuestos") }}</td>
-			<td class="numero">{{ doc.get_formatted("total_taxes_and_charges") }}</td>
+			<td>{{ _(row.tax_type) }} {{ row.rate_formatted }}</td>
+			<td class="numero">{{ row.amount_formatted }}</td>
 		</tr>
+		{%- endfor %}
+		<tr>
+			<td>{{ _("Total factura") }}</td>
+			<td class="numero">{{ frappe.utils.fmt_money(doc.net_total + (summary.vat | sum(attribute="amount")), currency=doc.currency) }}</td>
+		</tr>
+		{%- for row in summary.withholding %}
+		<tr>
+			<td>{{ _("Retención IRPF") }} {{ row.rate_formatted }}</td>
+			<td class="numero">{{ row.amount_formatted }}</td>
+		</tr>
+		{%- endfor %}
 		<tr class="grande">
-			<td>{{ _("Total") }} ({{ doc.get("currency") }})</td>
-			<td class="numero">{{ doc.get_formatted("rounded_total") }}</td>
+			<td>{{ _("Total a pagar") }} ({{ doc.get("currency") }})</td>
+			<td class="numero">{{ doc.get_formatted("rounded_total") if doc.get("rounded_total") else doc.get_formatted("grand_total") }}</td>
 		</tr>
 	</table>
 
@@ -171,6 +202,6 @@ Helpers: erpnext_spain/es_verifactu/utils/jinja.py (hook jinja.methods). -->
 	{%- endif -%}
 
 	<div class="pie">
-		<span>{{ doc.company }} · {{ _("Factura emitida conforme a la normativa de facturación española (RD 1619/2012, VeriFactu RD 1007/2023)") }}</span>
+		<span>{{ doc.company }} · {{ _("Factura emitida conforme al Reglamento de facturación (RD 1619/2012)") }}{% if get_verifactu_qr_code(doc) %} {{ _("y al sistema VeriFactu (RD 1007/2023)") }}{% endif %}</span>
 	</div>
 </div>

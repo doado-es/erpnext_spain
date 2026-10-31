@@ -52,9 +52,14 @@ doc_events = {
 		# Nombre temporal del borrador solo en compañías que numeran al emitir
 		# (H1); como doc_event y no como extensión de la clase (H2).
 		"autoname": "erpnext_spain.es_verifactu.invoice.autoname",
-		"validate": "erpnext_spain.es_verifactu.emission.validate",
+		"validate": [
+			# Numeración fiscal sin VeriFactu, amend y rectificativas (spec 05 §1-§2).
+			"erpnext_spain.es_facturacion.numbering.validate",
+			"erpnext_spain.es_verifactu.emission.validate",
+		],
 		"before_submit": [
 			"erpnext_spain.es_verifactu.invoice.release_draft_name",
+			"erpnext_spain.es_facturacion.numbering.before_submit",
 			"erpnext_spain.es_verifactu.emission.before_submit",
 		],
 		"on_submit": "erpnext_spain.es_verifactu.emission.on_submit",
@@ -96,6 +101,8 @@ doctype_js = {
 		"es_verifactu/public/js/sales_invoice.js",
 		# Botón «Generar Facturae» (spec 10).
 		"es_efactura/public/js/sales_invoice.js",
+		# Situación de cobro (spec 05 §4).
+		"es_facturacion/public/js/sales_invoice.js",
 	],
 }
 
@@ -118,6 +125,9 @@ jinja = {
 		"erpnext_spain.es_verifactu.utils.jinja.get_verifactu_qr_code",
 		"erpnext_spain.es_verifactu.utils.jinja.get_verifactu_breakup",
 		"erpnext_spain.es_verifactu.utils.jinja.get_es_display_name",
+		# Desglose por clasificación y rectificada (spec 05 §5).
+		"erpnext_spain.es_facturacion.printing.get_es_tax_summary",
+		"erpnext_spain.es_facturacion.printing.get_es_rectified_reference",
 	],
 }
 
@@ -149,6 +159,8 @@ scheduler_events = {
 	"daily": [
 		"erpnext_spain.aeat.tasks.daily",
 		"erpnext_spain.es_verifactu.tasks.daily",
+		# Aviso de facturas candidatas a dudoso cobro (spec 05 §4).
+		"erpnext_spain.es_facturacion.collection.flag_doubtful_candidates",
 	],
 	"cron": {
 		"* * * * *": ["erpnext_spain.es_verifactu.tasks.drain_outbox"],
