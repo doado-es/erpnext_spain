@@ -292,6 +292,8 @@ class SiiDriver(AEATDriver):
 				"aeat_response": getattr(response_doc, "name", None),
 			}
 			frappe.db.set_value("ES Sii Record", name, values, update_modified=False)
+			if status == OK:
+				_mark_counterparty_identified(record)
 
 	def rate_limit_seconds(self, company: str) -> int:
 		return 0
@@ -408,3 +410,20 @@ def compare(company: str, book: str, year: int, month: int, registered: list[dic
 		"not_in_books": sorted(set(theirs) - set(ours)),
 		"different": sorted(n for n in set(ours) & set(theirs) if abs(ours[n] - theirs[n]) > 0.005),
 	}
+
+
+def _mark_counterparty_identified(record) -> None:
+	"""Registro Correcto: el NIF y el nombre de la contraparte están en el censo
+	(indicador «Contraste con la AEAT», nif/aeat_census.py)."""
+	from erpnext_spain.nif.aeat_census import SOURCE_SII, mark_from_submission
+
+	content = json.loads(record.content or "{}")
+	invoice = content.get("FacturaExpedida") or content.get("FacturaRecibida") or {}
+	counterparty = invoice.get("Contraparte") or {}
+	if not counterparty.get("NIF"):
+		return
+	doctype, field = (
+		("Customer", "customer") if record.voucher_type == "Sales Invoice" else ("Supplier", "supplier")
+	)
+	party = frappe.db.get_value(record.voucher_type, record.voucher_no, field)
+	mark_from_submission(doctype, party, counterparty["NIF"], counterparty.get("NombreRazon"), SOURCE_SII)

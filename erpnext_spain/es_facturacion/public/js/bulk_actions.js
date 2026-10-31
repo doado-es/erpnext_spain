@@ -114,15 +114,37 @@ erpnext_spain.es_facturacion.check_tax_ids = function (listview) {
 	});
 };
 
-const ES_BULK_ACTIONS = {
-	"Delivery Note": [__("Facturar seleccionados"), "invoice_delivery_notes"],
-	"Purchase Receipt": [__("Registrar factura del proveedor"), "invoice_purchase_receipts"],
-	"Sales Invoice": [__("Enviar por correo"), "send_invoices"],
-	Customer: [__("Comprobar NIF"), "check_tax_ids"],
-	Supplier: [__("Comprobar NIF"), "check_tax_ids"],
+erpnext_spain.es_facturacion.check_census = function (listview) {
+	const names = erpnext_spain.es_facturacion.selected(listview);
+	if (!names.length) return frappe.msgprint(__("Seleccione terceros."));
+	frappe.call({
+		method: "erpnext_spain.nif.aeat_census.check_parties",
+		type: "POST",
+		args: { doctype: listview.doctype, names: names },
+		freeze: true,
+		freeze_message: __("Consultando el censo de la AEAT..."),
+		callback(r) {
+			if (r.message && r.message.queued) return erpnext_spain.es_facturacion.report(r);
+			listview.refresh();
+			frappe.show_alert({ message: __("NIF contrastados con la AEAT"), indicator: "green" });
+		},
+	});
 };
 
-for (const [doctype, [label, method]] of Object.entries(ES_BULK_ACTIONS)) {
+const ES_PARTY_ACTIONS = [
+	[__("Comprobar NIF"), "check_tax_ids"],
+	[__("Contrastar con la AEAT"), "check_census"],
+];
+
+const ES_BULK_ACTIONS = {
+	"Delivery Note": [[__("Facturar seleccionados"), "invoice_delivery_notes"]],
+	"Purchase Receipt": [[__("Registrar factura del proveedor"), "invoice_purchase_receipts"]],
+	"Sales Invoice": [[__("Enviar por correo"), "send_invoices"]],
+	Customer: ES_PARTY_ACTIONS,
+	Supplier: ES_PARTY_ACTIONS,
+};
+
+for (const [doctype, actions] of Object.entries(ES_BULK_ACTIONS)) {
 	frappe.listview_settings[doctype] = frappe.listview_settings[doctype] || {};
 	const settings = frappe.listview_settings[doctype];
 	// El fichero se carga con la lista de cada uno de estos doctypes: sin repetir acciones.
@@ -131,10 +153,12 @@ for (const [doctype, [label, method]] of Object.entries(ES_BULK_ACTIONS)) {
 	const previous = settings.onload;
 	settings.onload = function (listview) {
 		if (previous) previous(listview);
-		listview.page.add_actions_menu_item(
-			label,
-			() => erpnext_spain.es_facturacion[method](listview),
-			false
-		);
+		for (const [label, method] of actions) {
+			listview.page.add_actions_menu_item(
+				label,
+				() => erpnext_spain.es_facturacion[method](listview),
+				false
+			);
+		}
 	};
 }

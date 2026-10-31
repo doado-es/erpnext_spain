@@ -18,10 +18,17 @@ required_apps = ["frappe/erpnext"]
 doc_events = {
 	# Número y rama de las cuentas nuevas en compañías PGC (spec 02 §4).
 	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
-	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
+	"Customer": {
+		"validate": [
+			"erpnext_spain.nif.party.validate",
+			# Contraste con la AEAT caducado si cambian el NIF o el nombre.
+			"erpnext_spain.nif.aeat_census.reset_if_changed",
+		]
+	},
 	"Supplier": {
 		"validate": [
 			"erpnext_spain.nif.party.validate",
+			"erpnext_spain.nif.aeat_census.reset_if_changed",
 			# Grupo de retención con fila de tipo en su categoría (spec 08 §3).
 			"erpnext_spain.es_retenciones.withholding.validate_supplier",
 		]
@@ -143,8 +150,9 @@ doctype_js = {
 		"es_facturacion/public/js/fiscal_tab.js",
 	],
 	"Purchase Invoice": "es_facturacion/public/js/fiscal_tab.js",
-	# Aviso del formato de nombre de las personas físicas (APELLIDO APELLIDO NOMBRE).
-	"Customer": "nif/public/js/customer.js",
+	# Formato de nombre de las personas físicas e indicador del contraste con la AEAT.
+	"Customer": "nif/public/js/party.js",
+	"Supplier": "nif/public/js/party.js",
 }
 
 # Estilado de BORRADOR-* en el list view de Sales Invoice (spec 04 §15):
