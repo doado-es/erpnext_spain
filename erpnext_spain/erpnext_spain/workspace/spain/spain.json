@@ -245,7 +245,7 @@
    "type": "Link",
    "link_type": "DocType",
    "link_to": "ES Tax Return",
-   "label": "Modelos 303 y 111",
+   "label": "Modelos de la AEAT",
    "hidden": 0,
    "is_query_report": 0,
    "onboard": 0,
@@ -568,7 +568,7 @@
    "dependencies": ""
   }
  ],
- "modified": "2026-11-01 16:30:00.000000",
+ "modified": "2026-11-01 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "module_onboarding": "ES Onboarding",

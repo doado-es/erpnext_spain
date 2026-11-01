@@ -80,10 +80,15 @@ CATEGORIES = {
 TAX_MODELS = ("111", "115")
 WITHHOLDING_ACCOUNT = "4751"  # Hacienda Pública, acreedora por retenciones practicadas
 
-# Situación del inmueble en el modelo 180. **[revisar]** con el diseño de registro vigente.
+# Situación del inmueble arrendado. Los modelos usan claves distintas: el 180
+# separa País Vasco y Navarra; el 347, no, y tiene una para el extranjero
+# (diseños de registro del 180 de 2023 y del 347 de 2025).
 PROPERTY_SITUATIONS = (
 	"1 - Con referencia catastral en territorio común",
-	"2 - En el País Vasco o Navarra",
-	"3 - Sin referencia catastral",
-	"4 - En el extranjero",
+	"2 - Con referencia catastral en el País Vasco",
+	"3 - Con referencia catastral en Navarra",
+	"4 - Sin referencia catastral",
+	"5 - En el extranjero",
 )
+SITUATION_180 = {"1": "1", "2": "2", "3": "3", "4": "4"}
+SITUATION_347 = {"1": "1", "2": "2", "3": "2", "4": "3", "5": "4"}

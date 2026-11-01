@@ -21,6 +21,8 @@ PROGRAM_VERSION = "0100"
 
 
 def period_dates(year: int, period: str):
+	if period == "0A":
+		return getdate(f"{year}-01-01"), getdate(f"{year}-12-31")
 	if period.endswith("T"):
 		quarter = int(period[0])
 		start = getdate(f"{year}-{3 * quarter - 2:02d}-01")
@@ -218,13 +220,37 @@ def compute_111(company: str, year: int, period: str) -> dict[str, float]:
 # --- documento ----------------------------------------------------------------------------
 
 
+# Modelos con su propio módulo (model_<código>.py). Cada uno define LABELS,
+# PERIODS, compute(doc) -> (casillas, registros), totals(doc) y build(doc).
+MODULE_MODELS = ("115", "349", "347", "390", "180", "190")
+ANNUAL = ("0A",)
+MONTHLY_OR_QUARTERLY = (*(f"{m:02d}" for m in range(1, 13)), "1T", "2T", "3T", "4T")
+
+
+def model_module(tax_model: str):
+	if tax_model in MODULE_MODELS:
+		return frappe.get_module(f"erpnext_spain.es_modelos.model_{tax_model}")
+	return None
+
+
+def allowed_periods(tax_model: str) -> tuple:
+	module = model_module(tax_model)
+	return module.PERIODS if module else MONTHLY_OR_QUARTERLY
+
+
 def calculate(doc) -> None:
-	labels = LABELS_303 if doc.tax_model == "303" else LABELS_111
-	values = (
-		compute_303(doc.company, doc.fiscal_year, doc.period)
-		if doc.tax_model == "303"
-		else compute_111(doc.company, doc.fiscal_year, doc.period)
-	)
+	module = model_module(doc.tax_model)
+	if module:
+		labels = module.LABELS
+		values, lines = module.compute(doc)
+	else:
+		labels = LABELS_303 if doc.tax_model == "303" else LABELS_111
+		values = (
+			compute_303(doc.company, doc.fiscal_year, doc.period)
+			if doc.tax_model == "303"
+			else compute_111(doc.company, doc.fiscal_year, doc.period)
+		)
+		lines = None
 	manual = {row.box: row.amount for row in doc.boxes if row.manual}
 	doc.set("boxes", [])
 	for box, label in labels.items():
@@ -239,6 +265,41 @@ def calculate(doc) -> None:
 				"manual": 1 if box in manual else 0,
 			},
 		)
+	if lines is not None:
+		kept = [row.as_dict() for row in doc.lines if row.manual]
+		doc.set("lines", [])
+		for row in kept + lines:
+			row.pop("name", None)
+			row.pop("idx", None)
+			doc.append("lines", row)
+
+
+INFORMATIVE_MODELS = ("349", "347", "180", "190")
+# Las compañías del SII no presentan el 347 ni el 390.
+NOT_FOR_SII = ("347", "390")
+
+
+def validate_return(doc) -> None:
+	if doc.period not in allowed_periods(doc.tax_model):
+		frappe.throw(
+			_("El modelo {0} no admite el periodo {1}. Periodos válidos: {2}.").format(
+				doc.tax_model, doc.period, ", ".join(allowed_periods(doc.tax_model))
+			)
+		)
+	if doc.tax_model in NOT_FOR_SII and frappe.get_cached_value("Company", doc.company, "es_sii_enabled"):
+		frappe.throw(
+			_(
+				"La compañía {0} está en el SII y no presenta el modelo {1}: la AEAT ya tiene sus libros registro."
+			).format(frappe.bold(doc.company), doc.tax_model)
+		)
+	if doc.tax_model in INFORMATIVE_MODELS and doc.docstatus == 1:
+		if not (doc.contact_name and doc.contact_phone):
+			frappe.throw(
+				_("Indique la persona de contacto y su teléfono: van en el registro del declarante.")
+			)
+		if not doc.declaration_number:
+			# 13 dígitos que empiezan por el código del modelo.
+			doc.declaration_number = f"{doc.tax_model}{frappe.utils.now_datetime():%y%m%d%H%M}"
 
 
 def box(doc, code: str) -> float:
@@ -253,6 +314,10 @@ def set_box(doc, code: str, value: float) -> None:
 
 def compute_totals(doc) -> None:
 	"""Totales y resultado a partir de las casillas (también tras corregirlas a mano)."""
+	module = model_module(doc.tax_model)
+	if module:
+		module.totals(doc)
+		return
 	if doc.tax_model == "303":
 		set_box(
 			doc,
@@ -436,7 +501,11 @@ def build_111(doc) -> str:
 
 
 def attach_file(doc) -> None:
-	content = build_303(doc) if doc.tax_model == "303" else build_111(doc)
+	module = model_module(doc.tax_model)
+	if module:
+		content = module.build(doc)
+	else:
+		content = build_303(doc) if doc.tax_model == "303" else build_111(doc)
 	file = frappe.get_doc(
 		{
 			"doctype": "File",

@@ -13,3 +13,4 @@ erpnext_spain.patches.v16.split_fiscal_tab
 erpnext_spain.patches.v16.remove_person_type
 erpnext_spain.patches.v16.split_intra_eu_category
 erpnext_spain.patches.v16.prefix_module_names
+erpnext_spain.patches.v16.property_situation_keys

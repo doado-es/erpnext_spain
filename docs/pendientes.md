@@ -61,6 +61,8 @@ Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `d
 
 ## Retenciones (spec 08)
 
+- Modelos (01/11/2026): probar los ficheros del 115, 180, 190, 347, 349 y 390 en el formulario de la AEAT (importación); 190 con el diseño de 2026 cuando se publique; 347 hoja de inmuebles (arrendadores) y cobros en metálico; 349 claves T, M, H, R, D y C; 390 datos estadísticos y prorratas; 130.
+
 - **Hecho (31/10/2026)**: categorías, grupos, cuenta 4751, validación del proveedor, inmuebles arrendados, clasificación de la fila e informes de practicadas y soportadas.
 - A7: periodo de 111 y 115 por fecha de pago o de factura (hoy, fecha de la retención). Decidir con el asesor.
 - Revisar con el asesor los tipos, las claves y subclaves del 190 de cada categoría y los grupos con reducción del 60 % (art. 68.4 LIRPF).

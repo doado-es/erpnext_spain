@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-11-01 17:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Modelos",
  "name": "ES Tax Return",
@@ -74,7 +74,7 @@
    "fieldname": "tax_model",
    "fieldtype": "Select",
    "label": "Modelo",
-   "options": "303\n111",
+   "options": "303\n111\n115\n349\n347\n390\n180\n190",
    "reqd": 1,
    "in_list_view": 1,
    "in_standard_filter": 1
@@ -94,16 +94,75 @@
    "fieldname": "period",
    "fieldtype": "Select",
    "label": "Periodo",
-   "options": "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n1T\n2T\n3T\n4T",
+   "options": "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12\n1T\n2T\n3T\n4T\n0A",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "description": "0A = anual (347, 390, 180 y 190)."
   },
   {
    "fieldname": "declaration_type",
    "fieldtype": "Select",
    "label": "Tipo de declaración",
    "options": "I - Ingreso\nU - Domiciliación\nG - Cuenta corriente tributaria (ingreso)\nN - Sin actividad / resultado cero\nC - Compensación\nD - Devolución\nV - Cuenta corriente tributaria (devolución)\nX - Devolución por transferencia al extranjero",
-   "default": "I - Ingreso"
+   "default": "I - Ingreso",
+   "depends_on": "eval:['303','111','115'].includes(doc.tax_model)"
+  },
+  {
+   "fieldname": "section_declarant",
+   "fieldtype": "Section Break",
+   "label": "Declaración informativa",
+   "depends_on": "eval:['349','347','180','190'].includes(doc.tax_model)"
+  },
+  {
+   "fieldname": "contact_name",
+   "fieldtype": "Data",
+   "label": "Persona de contacto",
+   "depends_on": "eval:['349','347','180','190'].includes(doc.tax_model)"
+  },
+  {
+   "fieldname": "contact_phone",
+   "fieldtype": "Data",
+   "label": "Teléfono de contacto",
+   "options": "Phone",
+   "depends_on": "eval:['349','347','180','190'].includes(doc.tax_model)"
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Correo de contacto",
+   "options": "Email",
+   "depends_on": "eval:doc.tax_model=='190'"
+  },
+  {
+   "fieldname": "column_declarant",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "replacement",
+   "fieldtype": "Select",
+   "label": "Complementaria o sustitutiva",
+   "options": "\nComplementaria\nSustitutiva",
+   "depends_on": "eval:['349','347','180','190'].includes(doc.tax_model)"
+  },
+  {
+   "fieldname": "previous_declaration",
+   "fieldtype": "Data",
+   "label": "Número de la declaración anterior",
+   "depends_on": "eval:doc.replacement",
+   "mandatory_depends_on": "eval:doc.replacement"
+  },
+  {
+   "fieldname": "declaration_number",
+   "fieldtype": "Data",
+   "label": "Número identificativo de la declaración",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "change_of_periodicity",
+   "fieldtype": "Check",
+   "label": "Cambio de periodicidad (349: meses del trimestre)",
+   "depends_on": "eval:doc.tax_model=='349'"
   },
   {
    "fieldname": "section_boxes",
@@ -117,6 +176,18 @@
    "options": "ES Tax Return Box"
   },
   {
+   "fieldname": "section_lines",
+   "fieldtype": "Section Break",
+   "label": "Registros",
+   "depends_on": "eval:['349','347','180','190'].includes(doc.tax_model)"
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Table",
+   "label": "Registros",
+   "options": "ES Tax Return Line"
+  },
+  {
    "fieldname": "section_result",
    "fieldtype": "Section Break",
    "label": "Resultado"
@@ -124,8 +195,8 @@
   {
    "fieldname": "previous_compensation",
    "fieldtype": "Currency",
-   "label": "Cuotas a compensar de periodos anteriores [110]",
-   "depends_on": "eval:doc.tax_model=='303'"
+   "label": "Cuotas a compensar de periodos anteriores (303 [110], 390 [85])",
+   "depends_on": "eval:['303','390'].includes(doc.tax_model)"
   },
   {
    "fieldname": "applied_compensation",
@@ -168,8 +239,19 @@
   "fiscal_year",
   "period",
   "declaration_type",
+  "section_declarant",
+  "contact_name",
+  "contact_phone",
+  "contact_email",
+  "column_declarant",
+  "replacement",
+  "previous_declaration",
+  "declaration_number",
+  "change_of_periodicity",
   "section_boxes",
   "boxes",
+  "section_lines",
+  "lines",
   "section_result",
   "previous_compensation",
   "applied_compensation",

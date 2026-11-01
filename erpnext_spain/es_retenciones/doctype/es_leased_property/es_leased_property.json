@@ -54,7 +54,7 @@
    "fieldname": "situation",
    "fieldtype": "Select",
    "label": "Situación",
-   "options": "\n1 - Con referencia catastral en territorio común\n2 - En el País Vasco o Navarra\n3 - Sin referencia catastral\n4 - En el extranjero",
+   "options": "\n1 - Con referencia catastral en territorio común\n2 - Con referencia catastral en el País Vasco\n3 - Con referencia catastral en Navarra\n4 - Sin referencia catastral\n5 - En el extranjero",
    "reqd": 1,
    "default": "1 - Con referencia catastral en territorio común"
   },
@@ -106,7 +106,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-11-01 17:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Retenciones",
  "name": "ES Leased Property",

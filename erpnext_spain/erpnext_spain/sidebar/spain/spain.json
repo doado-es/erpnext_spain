@@ -352,7 +352,7 @@
   },
   {
    "type": "Link",
-   "label": "Modelos 303 y 111",
+   "label": "Modelos de la AEAT",
    "link_type": "DocType",
    "link_to": "ES Tax Return",
    "icon": null,
@@ -823,7 +823,7 @@
    "show_arrow": 0
   }
  ],
- "modified": "2026-11-01 16:30:00.000000",
+ "modified": "2026-11-01 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "name": "Spain",

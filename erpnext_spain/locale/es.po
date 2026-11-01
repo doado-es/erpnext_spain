@@ -79,11 +79,11 @@ msgid "ERPNext Spain"
 msgstr "ERPNext España"
 
 #. ERPNext Spain
-msgid "Nif"
+msgid "ES Nif"
 msgstr "NIF"
 
 #. ERPNext Spain
-msgid "Aeat"
+msgid "ES Aeat"
 msgstr "AEAT"
 
 #. Terminología es-ES (sustituye a la traducción de ERPNext/Frappe)
@@ -4885,6 +4885,14 @@ msgstr "Declaración de impuestos"
 #. ERPNext Spain
 msgid "ES Tax Return Box"
 msgstr "Casilla de la declaración"
+
+#. ERPNext Spain
+msgid "ES Tax Return Line"
+msgstr "Registro de la declaración"
+
+#. ERPNext Spain
+msgid "ES Tax Accounts"
+msgstr "Mapa de cuentas de impuestos"
 
 #. ERPNext Spain
 msgid "ES Trial Balance by Level"
