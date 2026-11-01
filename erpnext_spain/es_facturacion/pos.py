@@ -83,12 +83,6 @@ def validate_pos_profile(doc, method=None) -> None:
 	series = (doc.get("es_series") or "").strip()
 	if not series or not is_pgc_company(doc.company):
 		return
-	if "#" not in series:
-		frappe.throw(
-			_(
-				"La serie {0} del perfil de TPV necesita la parte numérica con «#» (por ejemplo «T1-.#####»)."
-			).format(frappe.bold(series))
-		)
 	invoice_type = doc.get(INVOICE_TYPE_FIELD) or POS_DEFAULT_TYPE
 	other_type = frappe.db.get_value(
 		"ES Invoice Series",

@@ -128,8 +128,5 @@ class TestPos(BillingTestCase):
 
 	def test_pos_profile_series_rules(self):
 		profile = frappe.get_doc("POS Profile", self.profile)
-		profile.es_series = "T1"
-		self.assertRaisesRegex(frappe.ValidationError, "#", profile.save)
-		profile.reload()
 		profile.es_series = SERIES_F1
 		self.assertRaisesRegex(frappe.ValidationError, "F1", profile.save)

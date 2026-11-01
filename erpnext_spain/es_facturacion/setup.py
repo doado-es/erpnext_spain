@@ -40,7 +40,7 @@ POS_FIELDS = [
 		"label": "Serie de facturación",
 		"fieldtype": "Data",
 		"insert_after": "es_invoice_type",
-		"description": "Opcional: serie propia de este TPV para su tipo de factura (p. ej. «T1-.#####»). Vacía ="
+		"description": "Opcional: serie propia de este TPV para su tipo de factura (p. ej. «T1»). Vacía ="
 		" la serie del tipo en la compañía. Las devoluciones usan la serie R5 de la compañía.",
 	},
 ]
