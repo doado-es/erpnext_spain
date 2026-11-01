@@ -8,9 +8,9 @@ App de Frappe para adaptar ERPNext a la contabilidad y la fiscalidad españolas.
 
 | Id | Decisión |
 |---|---|
-| D1 | Solo ERPNext/Frappe **v16.50 o posterior**. No se mantiene compatibilidad con v15. |
+| D1 | ERPNext/Frappe **v16** (cualquier versión `>=16.0.0,<17.0.0`; revisado el 01/11/2026, antes v16.50 o posterior). Lo que solo existe desde una v16 concreta necesita alternativa (p. ej. `frappe.ui.EmbeddedList`, desde Frappe v16.50). El CI prueba solo la última v16. No se mantiene compatibilidad con v15. |
 | D2 | La app se llama **`erpnext_spain`** (renombrada desde `spain_compliance`, nombre que ya usa una app pública de Xappiens con la que no hay relación). |
-| D3 | **No hay migración** de compañías, clientes ni de la app v1 (`spanish_compliance`): solo instalaciones nuevas sobre v16.50+. El plan PGC solo se aplica a compañías sin movimientos. |
+| D3 | **No hay migración** de compañías, clientes ni de la app v1 (`spanish_compliance`): solo instalaciones nuevas sobre v16. El plan PGC solo se aplica a compañías sin movimientos. |
 | D4 | El **árbol de cuentas es nativo de ERPNext**: cada rama tiene un único `root_type`. Las cuentas llevan numeración PGC; la estructura por grupos, subgrupos y epígrafes del PGC se reconstruye en la capa de informes a partir del número de cuenta. |
 | D5 | Balance y PyG del PGC se construyen como **`Financial Report Template` estándar** incluidas en la app y se ven con los informes nativos Balance Sheet / Profit and Loss, filtro `report_template` **[verificado v16]**. |
 | D6 | Se cumplen sin excepciones las **reglas de Frappe para apps de cumplimiento** (charla "Building Compliance Software", Frappe Build 2026, y guía de contribución regional). Ver §2. |

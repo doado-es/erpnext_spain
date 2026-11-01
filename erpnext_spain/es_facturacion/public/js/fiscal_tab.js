@@ -5,6 +5,8 @@
 // es_facturacion/fiscal_tab.py) y se pinta con frappe.ui.EmbeddedList (una lista
 // por bloque: registros VeriFactu, registros del SII, facturas electrónicas), sin
 // consultas extra. EmbeddedList va en un bundle aparte que se carga bajo demanda.
+// Frappe lo incluye desde v16.50; en versiones anteriores se pinta una tabla
+// sencilla con las mismas columnas (`simple_list`).
 // Sin VeriFactu ni SII en la compañía y sin historial, la pestaña no se muestra:
 // la factura se ve como en ERPNext estándar.
 
@@ -141,6 +143,51 @@ erpnext_spain.fiscal_tab.make_list = function ($parent, title, columns, rows) {
 	return list;
 };
 
+// Sustituto de EmbeddedList para Frappe < v16.50: tabla de solo lectura.
+erpnext_spain.fiscal_tab.simple_list = function ($parent, title, columns, rows) {
+	const escape = frappe.utils.escape_html;
+	const cell = (column, row) => {
+		const raw = row[column.fieldname];
+		const value = raw == null ? "" : String(raw);
+		if (column.type === "link") {
+			const route = column.route(row);
+			return `<a href="${escape(frappe.utils.get_form_link(route[1], route[2]))}">${escape(
+				value
+			)}</a>`;
+		}
+		if (column.type === "badge") {
+			const color = column.color ? column.color(row) : "gray";
+			return `<span class="indicator-pill ${escape(color)}">${escape(value)}</span>`;
+		}
+		return escape(value);
+	};
+	const $block = $("<div class='mb-4'></div>").appendTo($parent);
+	$("<h6 class='mb-2'></h6>").text(title).appendTo($block);
+	if (!rows.length) {
+		$("<p class='text-muted'></p>").text(__("Sin envíos todavía.")).appendTo($block);
+		return;
+	}
+	const head = columns.map((column) => `<th>${escape(column.label)}</th>`).join("");
+	const body = rows
+		.map(
+			(row) =>
+				`<tr>${columns.map((column) => `<td>${cell(column, row)}</td>`).join("")}</tr>`
+		)
+		.join("");
+	$block.append(
+		`<div class="table-responsive"><table class="table table-bordered table-sm">` +
+			`<thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`
+	);
+};
+
+// ¿Hay EmbeddedList en este Frappe (ya cargado o como bundle)?
+erpnext_spain.fiscal_tab.has_embedded_list = function () {
+	return (
+		!!frappe.ui.EmbeddedList ||
+		!!(frappe.boot.assets_json && frappe.boot.assets_json["embedded_list.bundle.js"])
+	);
+};
+
 erpnext_spain.fiscal_tab.render = function (frm, block, data) {
 	const field = frm.fields_dict[block.html];
 	if (!field) return;
@@ -150,7 +197,10 @@ erpnext_spain.fiscal_tab.render = function (frm, block, data) {
 			_status: erpnext_spain.fiscal_tab.label(row.status),
 		})
 	);
-	erpnext_spain.fiscal_tab.make_list(field.$wrapper, block.title, block.columns(), rows);
+	const make = frappe.ui.EmbeddedList
+		? erpnext_spain.fiscal_tab.make_list
+		: erpnext_spain.fiscal_tab.simple_list;
+	make(field.$wrapper, block.title, block.columns(), rows);
 };
 
 erpnext_spain.fiscal_tab.apply = function (frm, data) {
@@ -166,6 +216,10 @@ erpnext_spain.fiscal_tab.apply = function (frm, data) {
 	// Las listas solo con el documento guardado (el historial llega con él).
 	const lists = !frm.is_new() && data.loaded ? shown : [];
 	if (!lists.length) return;
+	if (!erpnext_spain.fiscal_tab.has_embedded_list()) {
+		lists.forEach((block) => erpnext_spain.fiscal_tab.render(frm, block, data));
+		return;
+	}
 	frappe
 		.require("embedded_list.bundle.js")
 		.then(() => lists.forEach((block) => erpnext_spain.fiscal_tab.render(frm, block, data)))

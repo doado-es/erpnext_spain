@@ -1,6 +1,6 @@
 # Instrucciones para agentes — erpnext_spain
 
-App de Frappe que localiza ERPNext para España. Solo ERPNext/Frappe **v16.50+**.
+App de Frappe que localiza ERPNext para España. ERPNext/Frappe **v16** (`>=16.0.0`). Si usas algo que solo existe desde una v16 concreta, añade una alternativa (maestro D1).
 
 ## Antes de escribir código
 

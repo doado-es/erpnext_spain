@@ -21,8 +21,10 @@ dependencies = [
 ]
 
 [tool.bench.frappe-dependencies]
-frappe = ">=16.50.0,<17.0.0"
-erpnext = ">=16.50.0,<17.0.0"
+# Cualquier v16 (D1). Lo que exige v16.50 o posterior tiene alternativa
+# (p. ej. la pestaña fiscal sin frappe.ui.EmbeddedList).
+frappe = ">=16.0.0,<17.0.0"
+erpnext = ">=16.0.0,<17.0.0"
 
 [project.urls]
 Repository = "https://github.com/ct-Galega/erpnext_spain"

@@ -15,6 +15,7 @@ Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `d
 
 ## Fase 0 — fundamentos (spec 01)
 
+- Compatibilidad con v16 anteriores a 16.50 (D1, 01/11/2026): sin probar. Posible job de CI con Frappe y ERPNext de una v16 antigua; la pestaña fiscal ya tiene alternativa sin `EmbeddedList`.
 - Avisos (WARNING) de `frappe/semgrep-rules`: textos sin `_()` en mensajes e informes (bloque 9) y `file-traversal` en rutas internas de la app. El CI solo falla con hallazgos ERROR.
 
 

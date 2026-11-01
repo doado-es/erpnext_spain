@@ -54,11 +54,11 @@ En sitios de desarrollo: desinstalar la app antigua e instalar `erpnext_spain` d
 
   ```toml
   [tool.bench.frappe-dependencies]
-  frappe = ">=16.50.0,<17.0.0"
-  erpnext = ">=16.50.0,<17.0.0"
+  frappe = ">=16.0.0,<17.0.0"
+  erpnext = ">=16.0.0,<17.0.0"
   ```
 
-  La línea de `frappe` sigue el formato que usa ERPNext v16 **[verificado v16]**. La de `erpnext` ya la usa el código base. Hoy declaran `>=16.0.0-dev`: se suben a `>=16.50.0` (maestro D1).
+  La línea de `frappe` sigue el formato que usa ERPNext v16 **[verificado v16]**. La de `erpnext` ya la usa el código base. Declaraban `>=16.0.0-dev`; se subieron a `>=16.50.0` y el 01/11/2026 se relajaron a `>=16.0.0` (maestro D1).
 - Ramas `version-16` y `develop`.
 
 ## 3. Estructura
