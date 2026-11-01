@@ -88,12 +88,29 @@ def vies_fields(insert_after: str) -> list[dict]:
 			"insert_after": "es_vies_status",
 		},
 		{
+			"fieldname": "es_vies_address",
+			"label": "Dirección registrada en VIES",
+			"fieldtype": "Small Text",
+			"read_only": 1,
+			"no_copy": 1,
+			"insert_after": "es_vies_name",
+		},
+		{
 			"fieldname": "es_vies_checked_on",
 			"label": "Fecha de la comprobación",
 			"fieldtype": "Datetime",
 			"read_only": 1,
 			"no_copy": 1,
-			"insert_after": "es_vies_name",
+			"insert_after": "es_vies_address",
+		},
+		{
+			"fieldname": "es_vies_request_id",
+			"label": "Número de consulta VIES",
+			"fieldtype": "Data",
+			"read_only": 1,
+			"no_copy": 1,
+			"insert_after": "es_vies_checked_on",
+			"description": "Justificante de la consulta para las operaciones intracomunitarias exentas.",
 		},
 	]
 

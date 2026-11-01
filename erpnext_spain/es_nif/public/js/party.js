@@ -154,12 +154,115 @@ erpnext_spain.es_nif.reset = function (frm) {
 	erpnext_spain.es_nif.set_mark(frm, "unchecked");
 };
 
+// --- datos de VIES ------------------------------------------------------------
+
+erpnext_spain.es_nif.EU_PREFIXES = [
+	"AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "EL", "FI", "FR", "HR", "HU", "IE",
+	"IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
+]; // prettier-ignore
+
+erpnext_spain.es_nif.is_eu_vat = function (tax_id) {
+	const value = erpnext_spain.es_nif.clean_nif(tax_id);
+	return value.length > 4 && erpnext_spain.es_nif.EU_PREFIXES.includes(value.slice(0, 2));
+};
+
+erpnext_spain.es_nif.vies_button = function (frm) {
+	if (frm.is_new() || !erpnext_spain.es_nif.is_eu_vat(frm.doc.tax_id)) return;
+	frm.add_custom_button(__("Completar con VIES"), () => {
+		const run = () => erpnext_spain.es_nif.vies_dialog(frm);
+		frm.is_dirty() ? frm.save().then(run) : run();
+	});
+};
+
+erpnext_spain.es_nif.vies_dialog = function (frm) {
+	frappe
+		.call({
+			method: "erpnext_spain.es_nif.vies.vies_details",
+			type: "POST",
+			freeze: true,
+			args: { doctype: frm.doctype, name: frm.doc.name },
+		})
+		.then((r) => {
+			const data = r.message || {};
+			if (data.status !== "Válido") {
+				frappe.msgprint(__("VIES: {0}", [data.status || __("sin respuesta")]));
+				frm.reload_doc();
+				return;
+			}
+			const name_field = erpnext_spain.es_nif.NAME_FIELDS[frm.doctype];
+			const parsed = data.parsed_address;
+			const dialog = new frappe.ui.Dialog({
+				title: __("Datos registrados en VIES"),
+				fields: [
+					{
+						fieldname: "name",
+						label: __("Nombre"),
+						fieldtype: "Data",
+						read_only: 1,
+						default: data.name,
+					},
+					{
+						fieldname: "address",
+						label: __("Dirección"),
+						fieldtype: "Small Text",
+						read_only: 1,
+						default: data.address,
+					},
+					{
+						fieldname: "request_identifier",
+						label: __("Número de consulta"),
+						fieldtype: "Data",
+						read_only: 1,
+						default: data.request_identifier,
+					},
+					{ fieldtype: "Section Break" },
+					{
+						fieldname: "update_name",
+						label: __("Usar este nombre en el tercero"),
+						fieldtype: "Check",
+						default: data.name && data.name !== frm.doc[name_field] ? 1 : 0,
+						hidden: data.name ? 0 : 1,
+					},
+					{
+						fieldname: "create_address",
+						label: __("Crear la dirección de facturación"),
+						fieldtype: "Check",
+						default: parsed ? 1 : 0,
+						hidden: parsed ? 0 : 1,
+					},
+				],
+				primary_action_label: __("Aplicar"),
+				primary_action: (values) =>
+					frappe
+						.call({
+							method: "erpnext_spain.es_nif.vies.apply_vies_details",
+							type: "POST",
+							freeze: true,
+							args: {
+								doctype: frm.doctype,
+								name: frm.doc.name,
+								update_name: values.update_name,
+								create_address: values.create_address,
+							},
+						})
+						.then(() => {
+							dialog.hide();
+							frm.reload_doc();
+						}),
+			});
+			dialog.show();
+		});
+};
+
 // El mismo fichero se carga con los dos formularios: eventos una sola vez.
 if (!erpnext_spain.nif_party_events) {
 	erpnext_spain.nif_party_events = true;
 	["Customer", "Supplier"].forEach((doctype) => {
 		frappe.ui.form.on(doctype, {
-			refresh: (frm) => erpnext_spain.es_nif.reset(frm),
+			refresh: (frm) => {
+				erpnext_spain.es_nif.reset(frm);
+				erpnext_spain.es_nif.vies_button(frm);
+			},
 			tax_id: (frm) => erpnext_spain.es_nif.reset(frm),
 			[erpnext_spain.es_nif.NAME_FIELDS[doctype]]: (frm) =>
 				erpnext_spain.es_nif.set_mark(frm, "unchecked"),
