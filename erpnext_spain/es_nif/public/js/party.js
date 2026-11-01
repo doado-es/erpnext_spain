@@ -66,7 +66,9 @@ erpnext_spain.es_nif.is_individual = function (doc) {
 	if (doc[erpnext_spain.es_nif.TYPE_FIELDS[doc.doctype]] === "Individual") {
 		return true;
 	}
-	return /^([0-9]{8}[A-Z]|[KLMXYZ][0-9]{7}[A-Z])$/.test(erpnext_spain.es_nif.clean_nif(doc.tax_id));
+	return /^([0-9]{8}[A-Z]|[KLMXYZ][0-9]{7}[A-Z])$/.test(
+		erpnext_spain.es_nif.clean_nif(doc.tax_id)
+	);
 };
 
 // Solo en sitios con alguna compañía con el plan PGC (los terceros no son de una
@@ -109,7 +111,8 @@ erpnext_spain.es_nif.set_mark = function (frm, state, detail) {
 	if (!$button) {
 		return;
 	}
-	const [icon, color, text] = erpnext_spain.es_nif.MARKS[state] || erpnext_spain.es_nif.MARKS.error;
+	const [icon, color, text] =
+		erpnext_spain.es_nif.MARKS[state] || erpnext_spain.es_nif.MARKS.error;
 	const title = detail ? `${text}: ${detail}` : text;
 	$button.find("a").attr("title", title).css("color", color).html(frappe.utils.icon(icon, "sm"));
 	$button.toggle(erpnext_spain.es_nif.is_spanish(frm.doc.tax_id));
