@@ -414,6 +414,22 @@
   },
   {
    "type": "Link",
+   "label": "Mapa de cuentas de impuestos",
+   "link_type": "Report",
+   "link_to": "ES Tax Accounts",
+   "icon": null,
+   "child": 1,
+   "indent": 0,
+   "collapsible": 1,
+   "keep_closed": 0,
+   "hidden": 0,
+   "added": 0,
+   "is_default_module": 0,
+   "open_in_new_tab": 0,
+   "show_arrow": 0
+  },
+  {
+   "type": "Link",
    "label": "Plantillas de impuestos de ventas",
    "link_type": "DocType",
    "link_to": "Sales Taxes and Charges Template",
@@ -807,7 +823,7 @@
    "show_arrow": 0
   }
  ],
- "modified": "2026-11-01 15:00:00.000000",
+ "modified": "2026-11-01 16:30:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "name": "Spain",
