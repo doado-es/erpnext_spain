@@ -269,6 +269,8 @@ company_data_to_be_ignored = [
 	"ES Invoice Series",
 	"ES Verifactu Notification Role",
 	"ES Verifactu Billing Record",
+	# Configuración del agregador bancario de cada compañía (R8).
+	"ES Bank Aggregator",
 ]
 
 # Las respuestas AEAT y los registros del libro VeriFactu son logs históricos:

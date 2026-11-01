@@ -43,7 +43,7 @@ def mirror_rows(doc: Document, method: str | None = None) -> bool:
 	]
 	if not blank:
 		return False
-	categories = [c for c in MIRRORED_CATEGORIES if frappe.db.exists("Tax Category", c)]
+	categories = [c for c in MIRRORED_CATEGORIES if frappe.get_cached_value("Tax Category", c, "name")]
 	present = {(_key(row), row.get("tax_category") or "") for row in rows}
 	added = False
 	for row in blank:

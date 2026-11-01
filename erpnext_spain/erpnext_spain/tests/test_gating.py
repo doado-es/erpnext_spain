@@ -156,3 +156,16 @@ class TestSiteGating(IntegrationTestCase):
 			doc.update({"company_name": "Empresa", "country": country})
 			set_default_legal_name(doc)
 			self.assertEqual(doc.get("es_legal_name") or None, expected, country)
+
+
+class TestCompanyDataKept(IntegrationTestCase):
+	def test_configuration_doctypes_survive_transaction_deletion(self):
+		"""La configuración con compañía no se borra con «Eliminar transacciones» (R8)."""
+		ignored = frappe.get_hooks("company_data_to_be_ignored")
+		for doctype in (
+			"ES AEAT Credential",
+			"ES Bank Aggregator",
+			"ES Leased Property",
+			"ES Invoice Series",
+		):
+			self.assertIn(doctype, ignored)
