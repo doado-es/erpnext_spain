@@ -4,8 +4,9 @@ CUSTOM_FIELDS = {
 	"Bank Account": [
 		{
 			"fieldname": "es_bank_aggregator",
-			"label": "Agregador bancario",
+			"label": "Agregador bancario (experimental)",
 			"fieldtype": "Link",
+			"description": "Función experimental: solo con el proveedor simulado para pruebas.",
 			"options": "ES Bank Aggregator",
 			"insert_after": "last_integration_date",
 			"depends_on": "eval:doc.is_company_account",

@@ -4,6 +4,8 @@ Lista única de lo que falta, para ir cerrándolo por orden. Cada punto remite a
 
 ## Funcionalidades nuevas (no son de cumplimiento)
 
+- Agregador bancario (spec 13 §3): experimental desde el 01/11/2026; falta un adaptador real (decisión A8) para quitarle la marca y volver a ponerlo en el workspace.
+
 Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `docs/specs/15-funcionalidades.md`: facturación masiva de albaranes de venta y de compra, envío masivo de facturas por correo y comprobación de NIF (formato) y NIF-IVA (VIES). Pendiente: probar VIES contra el servicio real. **Hecho (31/10/2026)**: contraste con el censo de la AEAT (VNifV2, `nif/aeat_census.py`). La tabla siguiente conserva la petición original.
 
 | Id | Funcionalidad | Notas |

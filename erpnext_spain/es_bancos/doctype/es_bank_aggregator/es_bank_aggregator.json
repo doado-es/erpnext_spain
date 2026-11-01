@@ -1,10 +1,11 @@
 {
  "actions": [],
  "creation": "2026-10-31 12:00:00.000000",
+ "description": "Experimental: conexión con agregadores de información de cuentas (PSD2). Solo existe el proveedor simulado para pruebas; no la use con cuentas reales.",
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 13:00:00.000000",
+ "modified": "2026-11-01 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Bancos",
  "name": "ES Bank Aggregator",

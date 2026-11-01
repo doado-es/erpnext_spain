@@ -369,7 +369,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Bancos",
-   "link_count": 6,
+   "link_count": 5,
    "onboard": 0,
    "type": "Card Break"
   },
@@ -416,16 +416,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Agregadores bancarios",
-   "link_count": 0,
-   "link_to": "ES Bank Aggregator",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Movimientos bancarios",
    "link_count": 0,
    "link_to": "Bank Transaction",
@@ -434,7 +424,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-31 23:30:00.000000",
+ "modified": "2026-11-01 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "module_onboarding": "ES Onboarding",
@@ -984,19 +974,6 @@
    "keep_closed": 0,
    "label": "Importar Norma 43",
    "link_to": "ES Norma43 Import",
-   "link_type": "DocType",
-   "open_in_new_tab": 0,
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "child": 1,
-   "collapsible": 1,
-   "default_workspace": 0,
-   "indent": 0,
-   "keep_closed": 0,
-   "label": "Agregadores bancarios",
-   "link_to": "ES Bank Aggregator",
    "link_type": "DocType",
    "open_in_new_tab": 0,
    "show_arrow": 0,
