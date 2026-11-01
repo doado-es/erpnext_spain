@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-11-01 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Sepa",
  "name": "ES Confirming Line",
@@ -22,7 +22,8 @@
    "label": "Factura",
    "options": "Purchase Invoice",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 2
   },
   {
    "fieldname": "supplier",
@@ -30,7 +31,17 @@
    "label": "Proveedor",
    "options": "Supplier",
    "read_only": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "payment_term",
+   "fieldtype": "Link",
+   "label": "Vencimiento",
+   "options": "Payment Term",
+   "in_list_view": 1,
+   "columns": 1,
+   "read_only": 1
   },
   {
    "fieldname": "bill_no",
@@ -46,7 +57,8 @@
    "fieldname": "due_date",
    "fieldtype": "Date",
    "label": "Vencimiento",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 2
   },
   {
    "fieldname": "amount",
@@ -54,7 +66,8 @@
    "label": "Importe",
    "reqd": 1,
    "in_list_view": 1,
-   "description": "Negativo en los abonos."
+   "description": "Negativo en los abonos.",
+   "columns": 2
   },
   {
    "fieldname": "payment_reference",
@@ -71,7 +84,8 @@
    "options": "\nGenerada\nEnviada\nAceptada\nRechazada\nAnticipada\nPagada",
    "allow_on_submit": 1,
    "no_copy": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "reason",
@@ -84,6 +98,7 @@
  "field_order": [
   "purchase_invoice",
   "supplier",
+  "payment_term",
   "bill_no",
   "bill_date",
   "due_date",

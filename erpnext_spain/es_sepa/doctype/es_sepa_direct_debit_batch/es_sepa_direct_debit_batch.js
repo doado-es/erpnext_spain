@@ -1,23 +1,11 @@
-// Remesa de adeudos SEPA (spec 11 §5-§6).
+// Remesa de adeudos SEPA.
 
 frappe.ui.form.on("ES Sepa Direct Debit Batch", {
 	refresh(frm) {
+		frm.set_df_property("lines", "cannot_add_rows", true);
 		if (frm.doc.docstatus === 0) {
-			frm.add_custom_button(__("Traer facturas domiciliadas"), () =>
-				frappe.call({
-					method: "erpnext_spain.es_sepa.direct_debit.get_invoices",
-					args: {
-						company: frm.doc.company,
-						scheme: frm.doc.scheme,
-						from_due_date: frm.doc.from_due_date,
-						to_due_date: frm.doc.to_due_date,
-					},
-					callback(r) {
-						frm.clear_table("lines");
-						for (const row of r.message || []) frm.add_child("lines", row);
-						frm.refresh_field("lines");
-					},
-				})
+			frm.add_custom_button(__("Añadir efectos"), () =>
+				erpnext_spain.es_sepa.add_effects(frm)
 			);
 		}
 		if (frm.doc.docstatus === 1) {
@@ -36,7 +24,48 @@ frappe.ui.form.on("ES Sepa Direct Debit Batch", {
 	},
 });
 
+frappe.ui.form.on("ES Sepa Direct Debit Line", {
+	lines_remove: (frm) => erpnext_spain.es_sepa.set_lines_total(frm),
+	amount: (frm) => erpnext_spain.es_sepa.set_lines_total(frm),
+});
+
 frappe.provide("erpnext_spain.es_sepa");
+
+erpnext_spain.es_sepa.add_effects = function (frm) {
+	if (!frm.doc.company) {
+		frappe.msgprint(__("Elija primero la compañía."));
+		return;
+	}
+	frappe.require("/assets/erpnext_spain/js/effects_dialog.js", () =>
+		erpnext_spain.effects_dialog.open(frm, {
+			method: "erpnext_spain.es_sepa.direct_debit.get_effects",
+			party: { fieldname: "customers", doctype: "Customer", label: __("Clientes") },
+			args: (frm) => ({ company: frm.doc.company, scheme: frm.doc.scheme || "CORE" }),
+			columns: [
+				{
+					fieldname: "sales_invoice",
+					label: __("Factura"),
+					fieldtype: "Link",
+					options: "Sales Invoice",
+				},
+				{ fieldname: "customer_name", label: __("Cliente"), fieldtype: "Data" },
+				{ fieldname: "payment_term", label: __("Vencimiento"), fieldtype: "Data" },
+				{ fieldname: "due_date", label: __("Fecha"), fieldtype: "Date" },
+				{ fieldname: "amount", label: __("Pendiente"), fieldtype: "Currency" },
+				{ fieldname: "iban", label: __("IBAN"), fieldtype: "Data" },
+			],
+			key: (row) => `${row.sales_invoice}|${row.payment_term || ""}`,
+			to_line: (row) => ({
+				sales_invoice: row.sales_invoice,
+				customer: row.customer,
+				payment_term: row.payment_term,
+				due_date: row.due_date,
+				bank_account: row.bank_account,
+				amount: row.amount,
+			}),
+		})
+	);
+};
 
 erpnext_spain.es_sepa.import_batch_status = function (frm) {
 	new frappe.ui.FileUploader({
@@ -108,4 +137,9 @@ erpnext_spain.es_sepa.register_return = function (frm) {
 		},
 	});
 	dialog.show();
+};
+
+erpnext_spain.es_sepa.set_lines_total = function (frm) {
+	const total = (frm.doc.lines || []).reduce((sum, row) => sum + flt(row.amount), 0);
+	frm.set_value("total_amount", total);
 };

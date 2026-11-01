@@ -8,7 +8,7 @@ from lxml import etree
 from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_contabilidad.tests.test_apply_pgc import make_company
 from erpnext_spain.es_impuestos.tests.test_initial_data import ensure_item
-from erpnext_spain.es_sepa import credit_transfer, status, xml
+from erpnext_spain.es_sepa import credit_transfer, direct_debit, status, xml
 from erpnext_spain.es_sepa.utils import creditor_identifier
 
 NS001 = {"p": f"urn:iso:std:iso:20022:tech:xsd:{xml.PAIN_001}"}
@@ -46,6 +46,36 @@ def ensure_address(link_doctype: str, link_name: str, city: str | None = "Madrid
 	if not city:
 		frappe.db.set_value("Address", address.name, "city", "")
 	return address.name
+
+
+def two_term_template() -> str:
+	"""Condiciones de pago con dos plazos del 50 % a 30 y 60 días."""
+	name = "_Test ES Dos plazos"
+	if frappe.db.exists("Payment Terms Template", name):
+		return name
+	terms = []
+	for days in (30, 60):
+		term = f"_Test ES 50 % a {days} días"
+		if not frappe.db.exists("Payment Term", term):
+			frappe.get_doc(
+				{
+					"doctype": "Payment Term",
+					"payment_term_name": term,
+					"invoice_portion": 50,
+					"due_date_based_on": "Day(s) after invoice date",
+					"credit_days": days,
+				}
+			).insert()
+		terms.append(
+			{
+				"payment_term": term,
+				"invoice_portion": 50,
+				"due_date_based_on": "Day(s) after invoice date",
+				"credit_days": days,
+			}
+		)
+	frappe.get_doc({"doctype": "Payment Terms Template", "template_name": name, "terms": terms}).insert()
+	return name
 
 
 class SepaTestCase(IntegrationTestCase):
@@ -268,7 +298,7 @@ class TestDirectDebit(SepaTestCase):
 		doc.save()
 		return account
 
-	def sale(self, customer: str, rate: float = 121):
+	def sale(self, customer: str, rate: float = 121, payment_terms_template: str | None = None):
 		si = frappe.get_doc(
 			{
 				"doctype": "Sales Invoice",
@@ -276,7 +306,11 @@ class TestDirectDebit(SepaTestCase):
 				"customer": customer,
 				"debit_to": pgc.account_by_number(self.company, "4300"),
 				"cost_center": self.cost_center,
-				"due_date": nowdate(),
+				**(
+					{"payment_terms_template": payment_terms_template}
+					if payment_terms_template
+					else {"due_date": nowdate()}
+				),
 				"items": [
 					{
 						"item_code": self.item,
@@ -340,6 +374,89 @@ class TestDirectDebit(SepaTestCase):
 			str(frappe.db.get_value("Bank Account", mandate, "es_sepa_last_debit")),
 			str(batch.collection_date),
 		)
+
+	def test_effects_per_installment(self):
+		"""Un efecto por vencimiento; el cobro de una remesa se aplica a su plazo."""
+		customer, account = self.party("Customer", "_Test ES Cliente Efectos", "21000418450200051500")
+		mandate = self.mandate(customer, account)
+		si = self.sale(customer, 121, payment_terms_template=two_term_template())
+		found = direct_debit.get_effects(self.company, customers=[customer])
+		self.assertEqual(
+			[(e["sales_invoice"], e["amount"]) for e in found], [(si.name, 60.5), (si.name, 60.5)]
+		)
+		first, second = found
+		self.assertEqual(first["bank_account"], mandate)
+		self.assertLess(str(first["due_date"]), str(second["due_date"]))
+
+		batch = frappe.get_doc(
+			{
+				"doctype": "ES Sepa Direct Debit Batch",
+				"company": self.company,
+				"bank_account": self.company_account,
+				"scheme": "CORE",
+				"collection_date": add_days(nowdate(), 3),
+				"lines": [first],
+			}
+		).insert()
+		# Mientras la remesa está en borrador, su efecto no se ofrece a otras.
+		remaining = direct_debit.get_effects(self.company, customers=[customer])
+		self.assertEqual([e["payment_term"] for e in remaining], [second["payment_term"]])
+		self.assertEqual(
+			len(direct_debit.get_effects(self.company, customers=[customer], batch=batch.name)), 2
+		)
+
+		batch.submit()
+		payment = frappe.get_doc("Payment Entry", batch.lines[0].payment_entry)
+		self.assertEqual(
+			[(r.reference_name, r.payment_term, r.allocated_amount) for r in payment.references],
+			[(si.name, first["payment_term"], 60.5)],
+		)
+		self.assertAlmostEqual(frappe.db.get_value("Sales Invoice", si.name, "outstanding_amount"), 60.5)
+		self.assertAlmostEqual(
+			frappe.db.get_value(
+				"Payment Schedule", {"parent": si.name, "payment_term": first["payment_term"]}, "outstanding"
+			),
+			0,
+		)
+		after = direct_debit.get_effects(self.company, customers=[customer])
+		self.assertEqual([(e["payment_term"], e["amount"]) for e in after], [(second["payment_term"], 60.5)])
+
+	def test_effect_repeated_or_over_outstanding(self):
+		customer, account = self.party("Customer", "_Test ES Cliente Efectos 2", "21000418450200051519")
+		mandate = self.mandate(customer, account)
+		si = self.sale(customer, 121, payment_terms_template=two_term_template())
+		first, second = direct_debit.get_effects(self.company, customers=[customer])
+		batch = frappe.get_doc(
+			{
+				"doctype": "ES Sepa Direct Debit Batch",
+				"company": self.company,
+				"bank_account": self.company_account,
+				"scheme": "CORE",
+				"collection_date": add_days(nowdate(), 3),
+				"lines": [first, first],
+			}
+		)
+		self.assertRaisesRegex(frappe.ValidationError, "repetido", batch.insert)
+		batch.lines = []
+		batch.append(
+			"lines",
+			{
+				"sales_invoice": si.name,
+				"bank_account": mandate,
+				"amount": 100,
+				"payment_term": first["payment_term"],
+			},
+		)
+		batch.append(
+			"lines",
+			{
+				"sales_invoice": si.name,
+				"bank_account": mandate,
+				"amount": 30,
+				"payment_term": second["payment_term"],
+			},
+		)
+		self.assertRaisesRegex(frappe.ValidationError, "pendiente", batch.insert)
 
 	def test_invalid_mandates_rejected(self):
 		"""Criterio 4: mandato cancelado o de otro esquema."""

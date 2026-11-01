@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "links": [],
- "modified": "2026-10-31 23:00:00.000000",
+ "modified": "2026-11-01 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Sepa",
  "name": "ES Sepa Direct Debit Line",
@@ -22,7 +22,8 @@
    "label": "Factura",
    "options": "Sales Invoice",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 2
   },
   {
    "fieldname": "customer",
@@ -30,7 +31,24 @@
    "label": "Cliente",
    "options": "Customer",
    "read_only": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "payment_term",
+   "fieldtype": "Link",
+   "label": "Vencimiento",
+   "options": "Payment Term",
+   "in_list_view": 1,
+   "columns": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Fecha de vencimiento",
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "bank_account",
@@ -38,14 +56,16 @@
    "label": "Cuenta del cliente (mandato)",
    "options": "Bank Account",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 2
   },
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
    "label": "Importe",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "sequence",
@@ -69,7 +89,8 @@
    "read_only": 1,
    "allow_on_submit": 1,
    "no_copy": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "columns": 1
   },
   {
    "fieldname": "reason_code",
@@ -100,6 +121,8 @@
  "field_order": [
   "sales_invoice",
   "customer",
+  "payment_term",
+  "due_date",
   "bank_account",
   "amount",
   "sequence",

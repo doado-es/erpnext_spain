@@ -3,9 +3,9 @@
 
 import frappe
 from frappe import _
-from frappe.utils import cint, flt, getdate
+from frappe.utils import cint, flt, formatdate, getdate
 
-from erpnext_spain.es_sepa import xml
+from erpnext_spain.es_sepa import effects, xml
 from erpnext_spain.es_sepa.bank_account import DIRECT_DEBITS, is_expired
 from erpnext_spain.es_sepa.credit_transfer import (
 	attach,
@@ -54,44 +54,89 @@ def mandate_account(customer: str, scheme: str) -> str | None:
 
 
 @frappe.whitelist()
-def get_invoices(
-	company: str, scheme: str = "CORE", from_due_date: str | None = None, to_due_date: str | None = None
+def get_effects(
+	company: str,
+	scheme: str = "CORE",
+	customers: list | str | None = None,
+	payment_terms_templates: list | str | None = None,
+	from_due_date: str | None = None,
+	to_due_date: str | None = None,
+	min_amount: float | None = None,
+	max_amount: float | None = None,
+	batch: str | None = None,
 ) -> list[dict]:
-	"""Facturas validadas pendientes con modo de pago «Domiciliación bancaria» y
-	mandato activo del esquema."""
+	"""Efectos pendientes que se pueden adeudar: vencimientos de facturas validadas
+	con forma de pago «Domiciliación bancaria» (o sin forma de pago) de clientes con
+	mandato activo del esquema, sin los que ya están en otras remesas en curso."""
 	frappe.has_permission("Sales Invoice", "read", throw=True)
-	filters = {"company": company, "docstatus": 1, "outstanding_amount": [">", 0], "is_return": 0}
-	if from_due_date:
-		filters["due_date"] = [">=", from_due_date]
-	if to_due_date:
-		filters.setdefault("due_date", [])
-		filters["due_date"] = (
-			["between", [from_due_date, to_due_date]] if from_due_date else ["<=", to_due_date]
-		)
-	rows = []
-	for invoice in frappe.get_all(
+	frappe.has_permission("ES Sepa Direct Debit Batch", "read", throw=True)
+	found = effects.pending_effects(
 		"Sales Invoice",
-		filters=filters,
-		fields=["name", "customer", "outstanding_amount", "due_date"],
-		order_by="due_date, name",
-	):
-		mode = frappe.db.get_value(
-			"Payment Schedule", {"parent": invoice.name, "mode_of_payment": DIRECT_DEBIT_MODE}, "name"
-		) or mandate_account(invoice.customer, scheme)
-		if not mode:
-			continue
-		mandate = mandate_account(invoice.customer, scheme)
-		if not mandate:
+		"customer",
+		company,
+		["customer_name"],
+		parties=effects.as_list(customers),
+		payment_terms_templates=effects.as_list(payment_terms_templates),
+	)
+	found = [e for e in found if e["mode_of_payment"] in (None, "", DIRECT_DEBIT_MODE)]
+	found = effects.in_range(
+		effects.subtract_reserved(found, reserved_effects(batch)),
+		from_due_date,
+		to_due_date,
+		min_amount,
+		max_amount,
+	)
+	mandates: dict[str, str | None] = {}
+	rows = []
+	for effect in found:
+		customer = effect["customer"]
+		if customer not in mandates:
+			mandates[customer] = mandate_account(customer, scheme)
+		if not mandates[customer]:
 			continue
 		rows.append(
 			{
-				"sales_invoice": invoice.name,
-				"customer": invoice.customer,
-				"bank_account": mandate,
-				"amount": invoice.outstanding_amount,
+				"sales_invoice": effect["invoice"],
+				"customer": customer,
+				"customer_name": effect["customer_name"],
+				"payment_term": effect["payment_term"],
+				"due_date": effect["due_date"],
+				"amount": effect["amount"],
+				"bank_account": mandates[customer],
+				"iban": frappe.get_cached_value("Bank Account", mandates[customer], "iban"),
 			}
 		)
 	return rows
+
+
+def reserved_effects(exclude_batch: str | None = None) -> dict[tuple, float]:
+	"""Importe de cada efecto (factura, vencimiento) que ya está en una remesa en
+	curso: en borrador, o validada con el cobro sin validar. Los rechazados y
+	devueltos vuelven a estar disponibles."""
+	batch = frappe.qb.DocType("ES Sepa Direct Debit Batch")
+	line = frappe.qb.DocType("ES Sepa Direct Debit Line")
+	payment = frappe.qb.DocType("Payment Entry")
+	query = (
+		frappe.qb.from_(line)
+		.join(batch)
+		.on(line.parent == batch.name)
+		.left_join(payment)
+		.on(line.payment_entry == payment.name)
+		.select(line.sales_invoice, line.payment_term, line.amount)
+		.where(
+			(line.parenttype == "ES Sepa Direct Debit Batch")
+			& (batch.docstatus < 2)
+			& (line.status.isnull() | line.status.notin(["Rechazada", "Devuelta"]))
+			& (payment.name.isnull() | (payment.docstatus == 0))
+		)
+	)
+	if exclude_batch:
+		query = query.where(batch.name != exclude_batch)
+	reserved: dict[tuple, float] = {}
+	for invoice, term, amount in query.run():
+		key = (invoice, term or "")
+		reserved[key] = reserved.get(key, 0) + flt(amount)
+	return reserved
 
 
 def validate_batch(doc) -> None:
@@ -102,6 +147,7 @@ def validate_batch(doc) -> None:
 			_("La cuenta de abono {0} no es una cuenta de la compañía.").format(frappe.bold(doc.bank_account))
 		)
 	seen = set()
+	per_invoice: dict[str, float] = {}
 	for line in doc.lines:
 		invoice = frappe.db.get_value(
 			"Sales Invoice",
@@ -115,15 +161,20 @@ def validate_batch(doc) -> None:
 					line.idx, line.sales_invoice
 				)
 			)
-		if line.sales_invoice in seen:
-			frappe.throw(_("Fila {0}: la factura {1} está repetida.").format(line.idx, line.sales_invoice))
-		seen.add(line.sales_invoice)
+		key = (line.sales_invoice, line.payment_term or "")
+		if key in seen:
+			frappe.throw(
+				_("Fila {0}: el efecto de la factura {1} está repetido.").format(line.idx, line.sales_invoice)
+			)
+		seen.add(key)
 		line.customer = invoice.customer
-		if flt(line.amount) <= 0 or flt(line.amount) > flt(invoice.outstanding_amount) + 0.005:
+		per_invoice[line.sales_invoice] = per_invoice.get(line.sales_invoice, 0) + flt(line.amount)
+		if flt(line.amount) <= 0 or per_invoice[line.sales_invoice] > flt(invoice.outstanding_amount) + 0.005:
 			frappe.throw(
 				_(
-					"Fila {0}: el importe debe ser positivo y no superar el pendiente de la factura ({1})."
-				).format(line.idx, invoice.outstanding_amount)
+					"Fila {0}: el importe debe ser positivo y los efectos de la factura {1} no pueden superar"
+					" su pendiente ({2})."
+				).format(line.idx, line.sales_invoice, invoice.outstanding_amount)
 			)
 		mandate = frappe.db.get_value("Bank Account", line.bank_account, MANDATE_FIELDS, as_dict=True)
 		problem = None
@@ -183,7 +234,11 @@ def submit_batch(doc) -> None:
 				end_to_end_id=end_to_end,
 				amount=xml.amount(line.amount),
 				party=debtor,
-				remittance=_("Factura {0}").format(line.sales_invoice),
+				remittance=(
+					_("Factura {0}, vencimiento {1}").format(line.sales_invoice, formatdate(line.due_date))
+					if line.due_date
+					else _("Factura {0}").format(line.sales_invoice)
+				),
 				mandate_id=mandate.es_sepa_mandate_reference,
 				mandate_date=getdate(mandate.es_sepa_mandate_date),
 				sequence=line.sequence,
@@ -219,6 +274,7 @@ def make_payment(doc, line):
 	payment = get_payment_entry(
 		"Sales Invoice", line.sales_invoice, party_amount=flt(line.amount), bank_account=ledger
 	)
+	allocate_to_effect(payment, line.sales_invoice, line.payment_term, flt(line.amount))
 	payment.update(
 		{
 			"posting_date": doc.collection_date,
@@ -233,6 +289,22 @@ def make_payment(doc, line):
 		payment.mode_of_payment = DIRECT_DEBIT_MODE
 	payment.insert()
 	return payment
+
+
+def allocate_to_effect(payment, invoice: str, payment_term: str | None, amount: float) -> None:
+	"""Deja una sola referencia: la factura y, si lo hay, el vencimiento del efecto.
+	Con el vencimiento, ERPNext descuenta el pago del pendiente de ese plazo."""
+	references = [r for r in payment.references if r.reference_name == invoice]
+	reference = next(
+		(r for r in references if payment_term and r.payment_term == payment_term),
+		references[0] if references else None,
+	)
+	if not reference:
+		return
+	reference.allocated_amount = amount
+	if payment_term:
+		reference.payment_term = payment_term
+	payment.set("references", [reference])
 
 
 def cancel_batch(doc) -> None:

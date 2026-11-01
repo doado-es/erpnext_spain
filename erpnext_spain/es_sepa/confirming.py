@@ -10,6 +10,7 @@ import frappe
 from frappe import _
 from frappe.utils import cint, flt, getdate, nowdate
 
+from erpnext_spain.es_sepa import effects
 from erpnext_spain.es_sepa.credit_transfer import attach, check_role, company_address, company_tax_id
 from erpnext_spain.es_sepa.utils import clean_iban, country_code, is_valid_iban, party_address, sepa_text
 from erpnext_spain.utils.company import legal_name
@@ -173,56 +174,81 @@ def contract_of(batch):
 
 
 @frappe.whitelist()
-def get_invoices(
-	company: str, from_due_date: str | None = None, to_due_date: str | None = None
+def get_effects(
+	company: str,
+	suppliers: list | str | None = None,
+	payment_terms_templates: list | str | None = None,
+	from_due_date: str | None = None,
+	to_due_date: str | None = None,
+	min_amount: float | None = None,
+	max_amount: float | None = None,
+	batch: str | None = None,
 ) -> list[dict]:
-	"""Facturas de compra pendientes con modo de pago «Confirming» y los abonos
-	pendientes de los mismos proveedores (con importe negativo)."""
+	"""Efectos pendientes de pago con forma de pago «Confirming» y los abonos
+	pendientes de los mismos proveedores (con importe negativo), sin los que ya
+	están en otras remesas en curso."""
 	frappe.has_permission("Purchase Invoice", "read", throw=True)
-	invoices = frappe.get_all(
-		"Purchase Invoice",
-		filters={"company": company, "docstatus": 1, "outstanding_amount": ["!=", 0]},
-		fields=[
-			"name",
+	frappe.has_permission("ES Confirming Batch", "read", throw=True)
+	found = effects.subtract_reserved(
+		effects.pending_effects(
+			"Purchase Invoice",
 			"supplier",
-			"bill_no",
-			"bill_date",
-			"posting_date",
-			"due_date",
-			"outstanding_amount",
-			"is_return",
-		],
-		order_by="supplier, due_date",
+			company,
+			["supplier_name", "bill_no", "bill_date", "posting_date"],
+			parties=effects.as_list(suppliers),
+			payment_terms_templates=effects.as_list(payment_terms_templates),
+			include_returns=True,
+		),
+		reserved_effects(batch),
 	)
-	confirming = {
-		row.parent
-		for row in frappe.get_all(
-			"Payment Schedule",
-			filters={"parenttype": "Purchase Invoice", "mode_of_payment": CONFIRMING_MODE},
-			fields=["parent"],
-		)
-	}
-	selected = [
-		i
-		for i in invoices
-		if not i.is_return
-		and i.name in confirming
-		and (not from_due_date or getdate(i.due_date) >= getdate(from_due_date))
-		and (not to_due_date or getdate(i.due_date) <= getdate(to_due_date))
-	]
-	suppliers = {i.supplier for i in selected}
-	selected += [i for i in invoices if i.is_return and i.supplier in suppliers]
+	selected = effects.in_range(
+		[e for e in found if flt(e["amount"]) > 0 and e["mode_of_payment"] == CONFIRMING_MODE],
+		from_due_date,
+		to_due_date,
+		min_amount,
+		max_amount,
+	)
+	suppliers_selected = {e["supplier"] for e in selected}
+	selected += [e for e in found if flt(e["amount"]) < 0 and e["supplier"] in suppliers_selected]
 	return [
 		{
-			"purchase_invoice": i.name,
-			"supplier": i.supplier,
-			"bill_no": i.bill_no or i.name,
-			"bill_date": i.bill_date or i.posting_date,
-			"due_date": i.due_date,
-			"amount": i.outstanding_amount,
+			"purchase_invoice": e["invoice"],
+			"supplier": e["supplier"],
+			"supplier_name": e["supplier_name"],
+			"payment_term": e["payment_term"],
+			"bill_no": e["bill_no"] or e["invoice"],
+			"bill_date": e["bill_date"] or e["posting_date"],
+			"due_date": e["due_date"],
+			"amount": e["amount"],
 		}
-		for i in selected
+		for e in sorted(selected, key=lambda e: (e["supplier"], str(e["due_date"]), e["invoice"]))
 	]
+
+
+def reserved_effects(exclude_batch: str | None = None) -> dict[tuple, float]:
+	"""Importe de cada efecto (factura, vencimiento) que ya está en una remesa de
+	confirming sin cancelar cuyo cargo al vencimiento no se ha registrado."""
+	batch = frappe.qb.DocType("ES Confirming Batch")
+	line = frappe.qb.DocType("ES Confirming Line")
+	query = (
+		frappe.qb.from_(line)
+		.join(batch)
+		.on(line.parent == batch.name)
+		.select(line.purchase_invoice, line.payment_term, line.amount)
+		.where(
+			(line.parenttype == "ES Confirming Batch")
+			& (batch.docstatus < 2)
+			& (batch.maturity_registered == 0)
+			& (line.status.isnull() | (line.status != "Rechazada"))
+		)
+	)
+	if exclude_batch:
+		query = query.where(batch.name != exclude_batch)
+	reserved: dict[tuple, float] = {}
+	for invoice, term, amount in query.run():
+		key = (invoice, term or "")
+		reserved[key] = reserved.get(key, 0) + flt(amount)
+	return reserved
 
 
 def validate_batch(doc) -> None:
@@ -237,6 +263,7 @@ def validate_batch(doc) -> None:
 		)
 	contract = contract_of(doc)
 	doc.remittance_type = doc.remittance_type or contract.remittance_type
+	per_invoice: dict[str, float] = {}
 	for line in doc.lines:
 		invoice = frappe.db.get_value(
 			"Purchase Invoice",
@@ -271,8 +298,13 @@ def validate_batch(doc) -> None:
 				).format(line.idx, line.purchase_invoice, frappe.utils.formatdate(line.due_date)),
 				title=_("Vencimiento anterior a la remesa"),
 			)
-		if abs(flt(line.amount)) > abs(flt(invoice.outstanding_amount)) + 0.005:
-			frappe.throw(_("Fila {0}: el importe supera el pendiente de la factura.").format(line.idx))
+		per_invoice[line.purchase_invoice] = per_invoice.get(line.purchase_invoice, 0) + flt(line.amount)
+		if abs(per_invoice[line.purchase_invoice]) > abs(flt(invoice.outstanding_amount)) + 0.005:
+			frappe.throw(
+				_("Fila {0}: los efectos de la factura {1} superan su pendiente.").format(
+					line.idx, line.purchase_invoice
+				)
+			)
 		line.payment_reference = line.payment_reference or f"{doc.name[-10:]}{line.idx:03d}"[-16:]
 	doc.total_amount = sum(flt(line.amount) for line in doc.lines)
 	if flt(contract.limit) and doc.total_amount > flt(contract.limit):
@@ -441,6 +473,7 @@ def supplier_payment(doc, supplier: str, rows: list, ledger: str, charge_date) -
 				"reference_doctype": "Purchase Invoice",
 				"reference_name": row.purchase_invoice,
 				"allocated_amount": flt(row.amount),
+				**({"payment_term": row.payment_term} if row.payment_term else {}),
 			},
 		)
 	payment.setup_party_account_field()

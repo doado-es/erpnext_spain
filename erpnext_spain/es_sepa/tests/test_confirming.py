@@ -6,7 +6,7 @@ from frappe.utils import add_days, flt, nowdate
 from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_contabilidad.closing import leaf
 from erpnext_spain.es_sepa import confirming
-from erpnext_spain.es_sepa.tests.test_sepa import SepaTestCase, make_iban
+from erpnext_spain.es_sepa.tests.test_sepa import SepaTestCase, make_iban, two_term_template
 
 
 class TestConfirming(SepaTestCase):
@@ -46,7 +46,9 @@ class TestConfirming(SepaTestCase):
 		frappe.clear_document_cache("Supplier", supplier)
 		return supplier
 
-	def invoice(self, supplier: str, rate: float, due_days: int = 30):
+	def invoice(
+		self, supplier: str, rate: float, due_days: int = 30, payment_terms_template: str | None = None
+	):
 		pi = frappe.get_doc(
 			{
 				"doctype": "Purchase Invoice",
@@ -54,7 +56,11 @@ class TestConfirming(SepaTestCase):
 				"supplier": supplier,
 				"bill_no": frappe.generate_hash(length=6).upper(),
 				"bill_date": nowdate(),
-				"due_date": add_days(nowdate(), due_days),
+				**(
+					{"payment_terms_template": payment_terms_template}
+					if payment_terms_template
+					else {"due_date": add_days(nowdate(), due_days)}
+				),
 				"credit_to": pgc.account_by_number(self.company, "4000"),
 				"cost_center": self.cost_center,
 				"items": [
@@ -91,7 +97,7 @@ class TestConfirming(SepaTestCase):
 				"company": self.company,
 				"bank_account": self.accounts[option],
 				"remittance_date": nowdate(),
-				"lines": rows or confirming.get_invoices(self.company),
+				"lines": rows or confirming.get_effects(self.company),
 			}
 		)
 		return doc
@@ -103,7 +109,7 @@ class TestConfirming(SepaTestCase):
 		invoice = self.invoice(first, 1000)
 		self.invoice(second, 500)
 		self.debit_note(invoice, 100)
-		rows = [r for r in confirming.get_invoices(self.company) if r["supplier"] in (first, second)]
+		rows = [r for r in confirming.get_effects(self.company) if r["supplier"] in (first, second)]
 		self.assertEqual(sorted(flt(r["amount"]) for r in rows), [-100, 500, 1000])
 		batch = self.batch(confirming.OPTION_A, rows).insert()
 		batch.submit()
@@ -126,7 +132,7 @@ class TestConfirming(SepaTestCase):
 			"_Test ES Proveedor Confirming sin CP", "21000418450200051450", address=False
 		)
 		pi = self.invoice(supplier, 50)
-		rows = [r for r in confirming.get_invoices(self.company) if r["purchase_invoice"] == pi.name]
+		rows = [r for r in confirming.get_effects(self.company) if r["purchase_invoice"] == pi.name]
 		batch = self.batch(confirming.OPTION_A, rows).insert()
 		with self.assertRaisesRegex(frappe.ValidationError, "_Test ES Proveedor Confirming sin CP"):
 			batch.submit()
@@ -147,7 +153,7 @@ class TestConfirming(SepaTestCase):
 
 		supplier = self.supplier("_Test ES Proveedor Confirming A", "21000418450200051478")
 		pi = self.invoice(supplier, 300)
-		rows = [r for r in confirming.get_invoices(self.company) if r["purchase_invoice"] == pi.name]
+		rows = [r for r in confirming.get_effects(self.company) if r["purchase_invoice"] == pi.name]
 		batch = self.batch(confirming.OPTION_A, rows).insert()
 		batch.submit()
 		payments = confirming.register_maturity(batch.name, nowdate())
@@ -167,7 +173,7 @@ class TestConfirming(SepaTestCase):
 		"""Criterio 5: con reclasificación, los asientos cuadran y llevan centro de coste."""
 		supplier = self.supplier("_Test ES Proveedor Confirming B", "21000418450200051487")
 		pi = self.invoice(supplier, 400)
-		rows = [r for r in confirming.get_invoices(self.company) if r["purchase_invoice"] == pi.name]
+		rows = [r for r in confirming.get_effects(self.company) if r["purchase_invoice"] == pi.name]
 		batch = self.batch(confirming.OPTION_B, rows).insert()
 		batch.submit()
 		batch.reload()
@@ -190,3 +196,35 @@ class TestConfirming(SepaTestCase):
 				confirming.register_maturity("CONF-X")
 		finally:
 			frappe.set_user("Administrator")
+
+	def test_effects_per_installment(self):
+		"""Un efecto por vencimiento con su forma de pago; el cargo se aplica a cada plazo."""
+		supplier = self.supplier("_Test ES Proveedor Plazos", "21000418450200051607")
+		pi = self.invoice(supplier, 1000, payment_terms_template=two_term_template())
+		rows = confirming.get_effects(self.company, suppliers=[supplier])
+		self.assertEqual(
+			[(r["purchase_invoice"], flt(r["amount"])) for r in rows], [(pi.name, 500), (pi.name, 500)]
+		)
+		self.assertTrue(all(r["payment_term"] for r in rows))
+		# Un vencimiento con otra forma de pago no es un efecto de confirming.
+		frappe.db.set_value(
+			"Payment Schedule",
+			{"parent": pi.name, "payment_term": rows[1]["payment_term"]},
+			"mode_of_payment",
+			None,
+		)
+		self.assertEqual(len(confirming.get_effects(self.company, suppliers=[supplier])), 1)
+
+		batch = self.batch(confirming.OPTION_A, rows[:1]).insert()
+		self.assertEqual(confirming.get_effects(self.company, suppliers=[supplier]), [])
+		batch.submit()
+		confirming.register_maturity(batch.name)
+		self.assertAlmostEqual(
+			frappe.db.get_value(
+				"Payment Schedule",
+				{"parent": pi.name, "payment_term": rows[0]["payment_term"]},
+				"outstanding",
+			),
+			0,
+		)
+		self.assertAlmostEqual(frappe.db.get_value("Purchase Invoice", pi.name, "outstanding_amount"), 500)
