@@ -14,7 +14,7 @@ from __future__ import annotations
 import frappe
 from frappe.model.document import Document
 
-from erpnext_spain.utils.gating import active_billing_system
+from erpnext_spain.utils.gating import active_billing_system, is_pgc_company
 
 SALES_INVOICE = "Sales Invoice"
 PURCHASE_INVOICE = "Purchase Invoice"
@@ -83,8 +83,8 @@ def onload(doc: Document, method: str | None = None) -> None:
 		return
 	system = active_billing_system(doc.company)
 	einvoice = doc.get("es_einvoice") if doc.doctype == SALES_INVOICE else doc.get("es_e_invoice")
-	if not system and not einvoice and not _has_billing_records(doc):
-		return
+	if not system and not einvoice and (not is_pgc_company(doc.company) or not _has_billing_records(doc)):
+		return  # compañías sin VeriFactu, SII ni PGC: sin consultas (R7)
 	doc.set_onload(ONLOAD_KEY, {"system": system, **history(doc.doctype, doc.name)})
 
 

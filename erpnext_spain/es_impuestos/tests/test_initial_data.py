@@ -210,6 +210,43 @@ class TestTaxInitialData(IntegrationTestCase):
 		self.assertAlmostEqual(gl["4000"], -1000)
 		self.assertEqual([t.es_self_assessed for t in pi.taxes], [0, 1])
 
+	def test_rows_of_non_pgc_companies_not_mirrored(self):
+		"""Solo se replican plantillas de compañías con PGC (R7)."""
+		other = make_company("_Test ES Impuestos sin PGC", "_TEISP")
+		group = frappe.db.get_value(
+			"Account", {"company": other, "is_group": 1, "account_type": "Tax"}
+		) or frappe.db.get_value("Account", {"company": other, "is_group": 1, "root_type": "Liability"})
+		account = frappe.db.get_value("Account", {"company": other, "account_name": "_Test IVA otro"}) or (
+			frappe.get_doc(
+				{
+					"doctype": "Account",
+					"company": other,
+					"account_name": "_Test IVA otro",
+					"parent_account": group,
+					"account_type": "Tax",
+				}
+			)
+			.insert()
+			.name
+		)
+		template = frappe.db.get_value(
+			"Item Tax Template", {"company": other, "title": "_Test IVA otro"}
+		) or (
+			frappe.get_doc(
+				{
+					"doctype": "Item Tax Template",
+					"company": other,
+					"title": "_Test IVA otro",
+					"taxes": [{"tax_type": account, "tax_rate": 10}],
+				}
+			)
+			.insert()
+			.name
+		)
+		item = frappe.get_doc("Item", ensure_item("_Test ES Artículo de otra compañía", template))
+		item.save()
+		self.assertEqual([row.tax_category or "" for row in item.taxes], [""])
+
 	def test_reduced_item_rows_mirrored(self):
 		"""La fila sin categoría del artículo se replica para recargo, retención y
 		adquisición intracomunitaria, sin duplicarse al volver a guardar."""

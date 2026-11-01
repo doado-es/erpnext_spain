@@ -67,8 +67,11 @@ def stored(category: str | None) -> str | None:
 
 
 def _categories_ready() -> bool:
-	"""Sin las categorías de la app (instalación a medias), comportamiento estándar."""
-	return bool(frappe.db.exists("Tax Category", NATIONAL))
+	"""Solo en sitios con alguna compañía con PGC (los terceros no son de una
+	compañía, R7) y con las categorías de la app creadas."""
+	from erpnext_spain.utils.gating import site_has_pgc_company
+
+	return site_has_pgc_company() and bool(frappe.db.exists("Tax Category", NATIONAL))
 
 
 def _apply(doc: Document, category: str | None, fields: tuple[str, ...]) -> None:

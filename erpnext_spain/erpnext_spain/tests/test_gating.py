@@ -102,3 +102,57 @@ class TestBaseModuleFields(IntegrationTestCase):
 		setup_custom_fields()
 		after = frappe.get_all("Custom Field", filters={"dt": "Company", "fieldname": ["like", "es\\_%"]})
 		self.assertEqual(len(before), len(after))
+
+
+class TestSiteGating(IntegrationTestCase):
+	"""Datos sin compañía (terceros, direcciones, artículos): solo en sitios con
+	alguna compañía con PGC (R7)."""
+
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		cls.spanish = make_company("_Test ES Gating España", "_TEGE", "Spain", "EUR")
+		cls.foreign = make_company("_Test ES Gating Alemania", "_TEGA", "Germany", "EUR")
+
+	def setUp(self):
+		from erpnext_spain.utils.gating import clear_site_pgc_cache
+
+		# Una compañía española con PGC en el sitio (la transacción de la clase la deshace).
+		frappe.db.set_value("Company", self.spanish, "es_pgc_applied", 1)
+		self.addCleanup(clear_site_pgc_cache)
+		clear_site_pgc_cache()
+
+	def test_site_without_pgc_companies(self):
+		from erpnext_spain.utils import gating
+
+		pgc = frappe.get_all("Company", filters={"es_pgc_applied": 1}, pluck="name")
+		for name in pgc:
+			frappe.db.set_value("Company", name, "es_pgc_applied", 0)
+		self.addCleanup(lambda: [frappe.db.set_value("Company", n, "es_pgc_applied", 1) for n in pgc])
+		gating.clear_site_pgc_cache()
+		self.assertFalse(gating.site_has_pgc_company())
+
+	def test_site_flag_cached_and_cleared_on_company_save(self):
+		from erpnext_spain.utils import gating
+
+		self.assertTrue(gating.site_has_pgc_company())
+		frappe.cache.set_value(gating.SITE_PGC_CACHE_KEY, 0)
+		self.assertFalse(gating.site_has_pgc_company())  # se lee de la caché
+		frappe.get_doc("Company", self.spanish).save()  # on_update la borra
+		self.assertTrue(gating.site_has_pgc_company())
+
+	def test_boot_session_flag(self):
+		from erpnext_spain.utils import gating
+
+		bootinfo = frappe._dict()
+		gating.boot_session(bootinfo)
+		self.assertTrue(bootinfo.erpnext_spain_pgc)
+
+	def test_legal_name_only_for_spanish_companies(self):
+		from erpnext_spain.utils.company import set_default_legal_name
+
+		for country, expected in (("Spain", "Empresa"), ("Germany", None)):
+			doc = frappe.new_doc("Company")
+			doc.update({"company_name": "Empresa", "country": country})
+			set_default_legal_name(doc)
+			self.assertEqual(doc.get("es_legal_name") or None, expected, country)

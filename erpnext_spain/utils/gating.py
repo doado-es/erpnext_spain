@@ -85,3 +85,38 @@ def is_verifactu_active(company: str | None) -> bool:
 
 def is_sii_active(company: str | None) -> bool:
 	return active_billing_system(company) == SII
+
+
+# --- Datos sin compañía (terceros, direcciones, artículos) ------------------------
+#
+# Los clientes, proveedores, direcciones y artículos no son de una compañía: su
+# comportamiento español (categoría de impuestos por país, avisos del NIF y del
+# nombre, filas de plantillas de impuestos) solo se activa si el sitio tiene alguna
+# compañía española con el plan PGC aplicado. Un sitio sin ellas se comporta como
+# ERPNext estándar.
+
+SITE_PGC_CACHE_KEY = "erpnext_spain:site_has_pgc_company"
+SITE_PGC_CACHE_SECONDS = 300
+
+
+def site_has_pgc_company() -> bool:
+	"""¿Hay en el sitio alguna compañía española con el plan PGC aplicado? En caché
+	(se borra al guardar una compañía y caduca a los 5 minutos)."""
+	cached = frappe.cache.get_value(SITE_PGC_CACHE_KEY)
+	if cached is not None:
+		return bool(cached)
+	if not frappe.db.has_column("Company", PGC_APPLIED_FIELD):
+		return False
+	value = bool(frappe.db.exists("Company", {"country": SPAIN, PGC_APPLIED_FIELD: 1}))
+	frappe.cache.set_value(SITE_PGC_CACHE_KEY, int(value), expires_in_sec=SITE_PGC_CACHE_SECONDS)
+	return value
+
+
+def clear_site_pgc_cache(doc=None, method: str | None = None) -> None:
+	"""doc_event on_update de Company (y al aplicar el plan PGC)."""
+	frappe.cache.delete_value(SITE_PGC_CACHE_KEY)
+
+
+def boot_session(bootinfo) -> None:
+	"""El formulario de terceros necesita saber si el sitio es «español»."""
+	bootinfo.erpnext_spain_pgc = site_has_pgc_company()

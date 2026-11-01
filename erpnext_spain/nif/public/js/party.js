@@ -69,7 +69,14 @@ erpnext_spain.nif.is_individual = function (doc) {
 	return /^([0-9]{8}[A-Z]|[KLMXYZ][0-9]{7}[A-Z])$/.test(erpnext_spain.nif.clean_nif(doc.tax_id));
 };
 
+// Solo en sitios con alguna compañía con el plan PGC (los terceros no son de una
+// compañía): en el resto, el formulario es el estándar de ERPNext.
+erpnext_spain.nif.active = function () {
+	return !!(frappe.boot && frappe.boot.erpnext_spain_pgc);
+};
+
 erpnext_spain.nif.toggle_name_hint = function (frm) {
+	if (!erpnext_spain.nif.active()) return;
 	const hint = erpnext_spain.nif.is_individual(frm.doc)
 		? erpnext_spain.nif.NAME_FORMAT_HINTS[frm.doctype]
 		: "";
@@ -97,6 +104,7 @@ erpnext_spain.nif.mark_button = function (frm) {
 };
 
 erpnext_spain.nif.set_mark = function (frm, state, detail) {
+	if (!erpnext_spain.nif.active()) return;
 	const $button = erpnext_spain.nif.mark_button(frm);
 	if (!$button) {
 		return;

@@ -70,7 +70,9 @@ doc_events = {
 			# activación de VeriFactu, para que el error explique el conflicto.
 			"erpnext_spain.es_sii.company.validate",
 			"erpnext_spain.es_verifactu.company.validate",
-		]
+		],
+		# ¿Hay en el sitio alguna compañía con PGC? (utils/gating.site_has_pgc_company)
+		"on_update": "erpnext_spain.utils.gating.clear_site_pgc_cache",
 	},
 	# Ciclo de EMISIÓN de Sales Invoice (spec 04 §4-6, lotes 4b/4c):
 	# validate aplica las compuertas (amend, desglose, simplificada↔POS,
@@ -136,6 +138,9 @@ regional_overrides = {
 # Avisos en el escritorio (evento realtime «erpnext_spain_notice»). Fichero
 # servido tal cual desde public/, sin bundle.
 app_include_js = ["/assets/erpnext_spain/js/notices.js"]
+
+# Indica al navegador si el sitio tiene alguna compañía con PGC (formularios de terceros).
+boot_session = "erpnext_spain.utils.gating.boot_session"
 
 doctype_js = {
 	"Company": [

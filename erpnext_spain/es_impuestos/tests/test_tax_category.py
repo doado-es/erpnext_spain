@@ -22,6 +22,14 @@ class TestTaxCategoryByCountry(IntegrationTestCase):
 		frappe.set_user("Administrator")
 		ensure_global_records()
 
+	def setUp(self):
+		from unittest import mock
+
+		# Sitio con alguna compañía con PGC (la regla no actúa en sitios sin ellas).
+		patcher = mock.patch("erpnext_spain.utils.gating.site_has_pgc_company", return_value=True)
+		patcher.start()
+		self.addCleanup(patcher.stop)
+
 	def test_rule(self):
 		self.assertEqual(tax_category.category_for("Spain", "15705"), NATIONAL)
 		for postcode in ("35001", "38001", "51001", "52001"):
@@ -106,3 +114,21 @@ class TestTaxCategoryByCountry(IntegrationTestCase):
 			}
 		).insert()
 		self.assertEqual(retailer.tax_category, NATIONAL_RE)
+
+
+class TestTaxCategoryWithoutPgc(IntegrationTestCase):
+	"""Sitio sin compañías con PGC: las direcciones y los proveedores no se tocan (R7)."""
+
+	def test_untouched_without_pgc_companies(self):
+		from unittest import mock
+
+		with mock.patch("erpnext_spain.utils.gating.site_has_pgc_company", return_value=False):
+			supplier = frappe.get_doc(
+				{
+					"doctype": "Supplier",
+					"supplier_name": "Lieferant ohne PGC GmbH",
+					"country": "Germany",
+					"tax_id": "DE136695976",
+				}
+			).insert()
+		self.assertFalse(supplier.tax_category)

@@ -24,8 +24,9 @@ def legal_name(company: str | None) -> str:
 
 
 def set_default_legal_name(doc: Document, method: str | None = None) -> None:
-	"""doc_event validate de Company: razón social vacía → nombre de la compañía."""
-	if not (doc.get(FIELD) or "").strip():
+	"""doc_event validate de Company: razón social vacía → nombre de la compañía
+	(solo compañías españolas, R7)."""
+	if doc.get("country") == "Spain" and not (doc.get(FIELD) or "").strip():
 		doc.set(FIELD, doc.company_name)
 
 
@@ -38,7 +39,7 @@ def fill_missing_legal_names() -> None:
 	(
 		frappe.qb.update(company)
 		.set(company[FIELD], company.company_name)
-		.where(company[FIELD].isnull() | (company[FIELD] == ""))
+		.where((company.country == "Spain") & (company[FIELD].isnull() | (company[FIELD] == "")))
 		.run()
 	)
 	for name in frappe.get_all("Company", pluck="name"):

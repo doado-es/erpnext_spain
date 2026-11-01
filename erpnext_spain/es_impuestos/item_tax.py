@@ -12,7 +12,8 @@
 # recargo de equivalencia, retención y adquisición intracomunitaria (la plantilla
 # del artículo ya trae el recargo y la autorrepercusión al mismo tipo). No se
 # añade para la entrega intracomunitaria ni la exportación: van exentas y la
-# plantilla les pondría el IVA. Solo añade filas, nunca borra.
+# plantilla les pondría el IVA. Solo añade filas, nunca borra. Solo se replican las
+# plantillas de compañías con el plan PGC aplicado (R7).
 
 import frappe
 from frappe.model.document import Document
@@ -30,13 +31,22 @@ def _key(row) -> tuple:
 
 def mirror_rows(doc: Document, method: str | None = None) -> bool:
 	"""doc_event validate de Item e Item Group. Devuelve si ha añadido filas."""
+	from erpnext_spain.utils.gating import is_pgc_company
+
 	rows = doc.get("taxes") or []
-	if not rows or not any(not row.get("tax_category") for row in rows):
+	blank = [
+		row
+		for row in rows
+		if not row.get("tax_category")
+		and row.get("item_tax_template")
+		and is_pgc_company(frappe.get_cached_value("Item Tax Template", row.item_tax_template, "company"))
+	]
+	if not blank:
 		return False
 	categories = [c for c in MIRRORED_CATEGORIES if frappe.db.exists("Tax Category", c)]
 	present = {(_key(row), row.get("tax_category") or "") for row in rows}
 	added = False
-	for row in [r for r in rows if not r.get("tax_category")]:
+	for row in blank:
 		for category in categories:
 			if (_key(row), category) in present:
 				continue
