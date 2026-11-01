@@ -26,7 +26,7 @@ def read_only_link(fieldname: str, label: str, insert_after: str, fieldtype: str
 
 POS_FIELDS = [
 	{
-		"fieldname": "es_invoice_type",
+		"fieldname": "es_pos_invoice_type",
 		"label": "Tipo de factura",
 		"fieldtype": "Link",
 		"options": "ES Invoice Type",
@@ -39,7 +39,7 @@ POS_FIELDS = [
 		"fieldname": "es_series",
 		"label": "Serie de facturación",
 		"fieldtype": "Data",
-		"insert_after": "es_invoice_type",
+		"insert_after": "es_pos_invoice_type",
 		"description": "Opcional: serie propia de este TPV para su tipo de factura (p. ej. «T1»). Vacía ="
 		" la serie del tipo en la compañía. Las devoluciones usan la serie R5 de la compañía.",
 	},
@@ -47,7 +47,7 @@ POS_FIELDS = [
 
 CUSTOMER_FIELDS = [
 	{
-		"fieldname": "es_invoice_type",
+		"fieldname": "es_default_invoice_type",
 		"label": "Tipo de factura por defecto",
 		"fieldtype": "Link",
 		"options": "ES Invoice Type",

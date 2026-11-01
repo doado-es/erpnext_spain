@@ -28,7 +28,7 @@ class TestPos(BillingTestCase):
 	@classmethod
 	def pos_profile(cls, name: str, series: str | None = None) -> str:
 		if frappe.db.exists("POS Profile", name):
-			frappe.db.set_value("POS Profile", name, {"es_series": series, "es_invoice_type": "F2"})
+			frappe.db.set_value("POS Profile", name, {"es_series": series, "es_pos_invoice_type": "F2"})
 			return name
 		warehouse = frappe.db.get_value("Warehouse", {"company": cls.company, "is_group": 0}, "name")
 		return (
@@ -44,7 +44,7 @@ class TestPos(BillingTestCase):
 					"write_off_cost_center": cls.cost_center,
 					"write_off_limit": 1,
 					"payments": [{"mode_of_payment": "Cash", "default": 1}],
-					"es_invoice_type": "F2",
+					"es_pos_invoice_type": "F2",
 					"es_series": series,
 				}
 			)
@@ -66,7 +66,7 @@ class TestPos(BillingTestCase):
 			doc.append("es_invoice_series", {"series": series, "invoice_type": invoice_type})
 		doc.save()
 		frappe.clear_document_cache("Company", self.company)
-		frappe.db.set_value("Customer", self.walk_in, "es_invoice_type", None)
+		frappe.db.set_value("Customer", self.walk_in, "es_default_invoice_type", None)
 		frappe.clear_document_cache("Customer", self.walk_in)
 
 	def pos_invoice(self, customer=None, **extra):
@@ -92,7 +92,7 @@ class TestPos(BillingTestCase):
 		self.assertEqual(si.localname, draft)
 
 	def test_customer_type_wins_in_pos(self):
-		frappe.db.set_value("Customer", self.walk_in, "es_invoice_type", "F1")
+		frappe.db.set_value("Customer", self.walk_in, "es_default_invoice_type", "F1")
 		frappe.clear_document_cache("Customer", self.walk_in)
 		si = self.pos_invoice()
 		self.assertEqual(si.es_invoice_type, "F1")
@@ -100,7 +100,7 @@ class TestPos(BillingTestCase):
 		self.assertTrue(si.name.startswith(f"FN-{self.abbr}-"), si.name)
 
 	def test_simplified_customer_type_only_in_pos(self):
-		frappe.db.set_value("Customer", self.walk_in, "es_invoice_type", "F2")
+		frappe.db.set_value("Customer", self.walk_in, "es_default_invoice_type", "F2")
 		frappe.clear_document_cache("Customer", self.walk_in)
 		si = self.invoice(customer=self.walk_in).insert()
 		self.assertEqual(si.es_invoice_type, "F1")

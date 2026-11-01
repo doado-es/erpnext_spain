@@ -23,6 +23,8 @@ from frappe import _
 from erpnext_spain.utils.gating import is_pgc_company
 
 INVOICE_TYPE_FIELD = "es_invoice_type"
+POS_TYPE_FIELD = "es_pos_invoice_type"
+CUSTOMER_TYPE_FIELD = "es_default_invoice_type"
 DEFAULT_TYPE = "F1"
 POS_DEFAULT_TYPE = "F2"
 SIMPLIFIED_RETURN_TYPE = "R5"
@@ -43,12 +45,12 @@ def default_invoice_type(doc) -> str | None:
 		)
 		return SIMPLIFIED_RETURN_TYPE if is_simplified(original) else None
 	customer_type = doc.get("customer") and frappe.get_cached_value(
-		"Customer", doc.customer, INVOICE_TYPE_FIELD
+		"Customer", doc.customer, CUSTOMER_TYPE_FIELD
 	)
 	if customer_type and (doc.get("is_pos") or not is_simplified(customer_type)):
 		return customer_type
 	if doc.get("is_pos") and doc.get("pos_profile"):
-		return frappe.get_cached_value("POS Profile", doc.pos_profile, INVOICE_TYPE_FIELD) or POS_DEFAULT_TYPE
+		return frappe.get_cached_value("POS Profile", doc.pos_profile, POS_TYPE_FIELD) or POS_DEFAULT_TYPE
 	return None
 
 
@@ -71,9 +73,9 @@ def pos_series(doc, invoice_type: str | None) -> str | None:
 	if not doc or not doc.get("is_pos") or not doc.get("pos_profile"):
 		return None
 	values = frappe.get_cached_value(
-		"POS Profile", doc.pos_profile, [INVOICE_TYPE_FIELD, "es_series"], as_dict=True
+		"POS Profile", doc.pos_profile, [POS_TYPE_FIELD, "es_series"], as_dict=True
 	)
-	if values and values.es_series and (values.get(INVOICE_TYPE_FIELD) or POS_DEFAULT_TYPE) == invoice_type:
+	if values and values.es_series and (values.get(POS_TYPE_FIELD) or POS_DEFAULT_TYPE) == invoice_type:
 		return values.es_series
 	return None
 
@@ -83,7 +85,7 @@ def validate_pos_profile(doc, method=None) -> None:
 	series = (doc.get("es_series") or "").strip()
 	if not series or not is_pgc_company(doc.company):
 		return
-	invoice_type = doc.get(INVOICE_TYPE_FIELD) or POS_DEFAULT_TYPE
+	invoice_type = doc.get(POS_TYPE_FIELD) or POS_DEFAULT_TYPE
 	other_type = frappe.db.get_value(
 		"ES Invoice Series",
 		{

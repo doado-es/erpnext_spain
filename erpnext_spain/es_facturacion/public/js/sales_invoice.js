@@ -96,9 +96,9 @@ frappe.ui.form.on("Sales Invoice", {
 		const { message } = await frappe.db.get_value(
 			"Customer",
 			frm.doc.customer,
-			"es_invoice_type"
+			"es_default_invoice_type"
 		);
-		const invoice_type = message && message.es_invoice_type;
+		const invoice_type = message && message.es_default_invoice_type;
 		if (!invoice_type || invoice_type === frm.doc.es_invoice_type) return;
 		const type = await frappe.db.get_value("ES Invoice Type", invoice_type, "is_simplified");
 		if (type.message && type.message.is_simplified && !frm.doc.is_pos) return;
