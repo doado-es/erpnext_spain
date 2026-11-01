@@ -73,6 +73,8 @@ doc_events = {
 		],
 		# ¿Hay en el sitio alguna compañía con PGC? (utils/gating.site_has_pgc_company)
 		"on_update": "erpnext_spain.utils.gating.clear_site_pgc_cache",
+		# Plan PGC automático para las compañías de España (es_contabilidad/onboarding.py).
+		"after_insert": "erpnext_spain.es_contabilidad.onboarding.after_insert",
 	},
 	# Ciclo de EMISIÓN de Sales Invoice (spec 04 §4-6, lotes 4b/4c):
 	# validate aplica las compuertas (amend, desglose, simplificada↔POS,
@@ -205,6 +207,11 @@ jinja = {
 		"erpnext_spain.es_facturacion.printing.get_es_rectified_reference",
 	],
 }
+
+# Asistente de configuración: pantalla «Plan General Contable» y etapa que
+# aplica el PGC a la compañía que crea ERPNext (es_contabilidad/onboarding.py).
+setup_wizard_requires = "assets/erpnext_spain/js/setup_wizard.js"
+setup_wizard_stages = "erpnext_spain.es_contabilidad.onboarding.get_setup_stages"
 
 # Installation / Migration
 # ------------------------

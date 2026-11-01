@@ -20,6 +20,7 @@ Peticiones del usuario del 30/10/2026. **Hecho (31/10/2026)**, con su spec en `d
 
 ## Plan contable (spec 02)
 
+- Plan PGC automático (01/11/2026): probar el asistente de configuración completo en un sitio nuevo y la aplicación en segundo plano con un worker real (los tests llaman a las funciones directamente).
 - §6 Subcuentas por tercero (decisión A1, opcional).
 - Revisión contable del reparto de ramas y de las cuentas por defecto (2819 como amortización acumulada, 406, 6590 para redondeos, 6680 para diferencias de cambio…).
 - Verificado (31/10/2026): con el inventario permanente desactivado, el Stock Ledger valora las existencias (test de regularización). Falta revisar compras y ventas de artículos de existencias de punta a punta.

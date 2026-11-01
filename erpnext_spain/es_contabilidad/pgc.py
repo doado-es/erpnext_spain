@@ -127,7 +127,7 @@ def check_permissions(company: str) -> None:
 	if not set(ALLOWED_ROLES) & set(frappe.get_roles()):
 		frappe.throw(
 			_("Solo un usuario con rol {0} puede aplicar el plan PGC.").format(
-				_(" o ").join(_(role) for role in ALLOWED_ROLES)
+				f" {_('o')} ".join(_(role) for role in ALLOWED_ROLES)
 			),
 			frappe.PermissionError,
 		)
@@ -139,6 +139,18 @@ def check_permissions(company: str) -> None:
 
 
 def validate_preconditions(company: str) -> None:
+	if not frappe.db.exists("Company", company):
+		frappe.throw(_("La compañía {0} no existe.").format(frappe.bold(company)), frappe.DoesNotExistError)
+	error = precondition_error(company)
+	if error:
+		frappe.throw(error, title=_("Plan PGC"))
+
+
+def precondition_error(company: str) -> str | None:
+	"""Motivo por el que no se puede aplicar el plan PGC a la compañía, o None.
+
+	No lanza: la aplicación automática al crear la compañía (onboarding.py)
+	solo avisa y deja la acción manual."""
 	values = frappe.db.get_value(
 		"Company",
 		company,
@@ -151,45 +163,29 @@ def validate_preconditions(company: str) -> None:
 		],
 		as_dict=True,
 	)
-	if not values:
-		frappe.throw(_("La compañía {0} no existe.").format(frappe.bold(company)), frappe.DoesNotExistError)
 	if values.country != SPAIN:
-		frappe.throw(
-			_(
-				"El plan PGC solo se aplica a compañías de España; {0} es de {1}. Cambie el país de la"
-				" compañía si es un error."
-			).format(frappe.bold(company), values.country or "-"),
-			title=_("Plan PGC"),
-		)
+		return _(
+			"El plan PGC solo se aplica a compañías de España; {0} es de {1}. Cambie el país de la"
+			" compañía si es un error."
+		).format(frappe.bold(company), values.country or "-")
 	if values.es_pgc_applied:
-		frappe.throw(
-			_("La compañía {0} ya tiene el plan PGC aplicado.").format(frappe.bold(company)),
-			title=_("Plan PGC"),
-		)
+		return _("La compañía {0} ya tiene el plan PGC aplicado.").format(frappe.bold(company))
 	if frappe.db.exists("GL Entry", {"company": company}):
-		frappe.throw(
-			_(
-				"La compañía {0} ya tiene movimientos contables: el plan PGC solo se aplica a compañías"
-				" sin movimientos. Cree una compañía nueva o adapte el plan actual a mano."
-			).format(frappe.bold(company)),
-			title=_("Plan PGC"),
-		)
+		return _(
+			"La compañía {0} ya tiene movimientos contables: el plan PGC solo se aplica a compañías"
+			" sin movimientos. Cree una compañía nueva o adapte el plan actual a mano."
+		).format(frappe.bold(company))
 	if values.parent_company and not values.allow_account_creation_against_child_company:
-		frappe.throw(
-			_(
-				"{0} es una compañía dependiente de {1} y su plan de cuentas viene de la matriz. Aplique"
-				" el plan PGC a la matriz o active «Allow Account Creation Against Child Company»."
-			).format(frappe.bold(company), frappe.bold(values.parent_company)),
-			title=_("Plan PGC"),
-		)
+		return _(
+			"{0} es una compañía dependiente de {1} y su plan de cuentas viene de la matriz. Aplique"
+			" el plan PGC a la matriz o active «Allow Account Creation Against Child Company»."
+		).format(frappe.bold(company), frappe.bold(values.parent_company))
 	if len(values.abbr or "") > MAX_COMPANY_ABBR:
-		frappe.throw(
-			_(
-				"La abreviatura de la compañía ({0}) tiene más de {1} caracteres y algunos nombres de"
-				" cuenta del PGC no cabrían. Acórtela y vuelva a intentarlo."
-			).format(values.abbr, MAX_COMPANY_ABBR),
-			title=_("Plan PGC"),
-		)
+		return _(
+			"La abreviatura de la compañía ({0}) tiene más de {1} caracteres y algunos nombres de"
+			" cuenta del PGC no cabrían. Acórtela y vuelva a intentarlo."
+		).format(values.abbr, MAX_COMPANY_ABBR)
+	return None
 
 
 def build_summary(company: str, chart_model: str, chart: dict) -> dict:
