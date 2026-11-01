@@ -79,7 +79,6 @@ def release_draft_name(doc: Document, method: str | None = None) -> None:
 	if not series:
 		field = frappe.get_meta("Sales Invoice").get_field("naming_series")
 		series = field.default or (field.options or "").split("\n")[0]
-	new_name = make_autoname(series, doc=doc)
-	frappe.rename_doc("Sales Invoice", doc.name, new_name, force=True, show_alert=False, rebuild_search=False)
-	doc.name = new_name
-	doc.set_parent_in_children()
+	from erpnext_spain.es_facturacion.numbering import rename_document
+
+	rename_document(doc, make_autoname(series, doc=doc))

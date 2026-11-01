@@ -105,7 +105,11 @@ def before_submit(doc: Document, method: str | None = None) -> None:
 	# La fecha de expedición es la de emisión: así la correlatividad número-fecha
 	# de cada serie queda garantizada por construcción (spec 05 §3).
 	doc.posting_date = frappe.utils.today()
-	rename_to_fiscal_series(doc, fiscal_series(doc.company, doc.es_invoice_type))
+	from erpnext_spain.es_facturacion.pos import pos_series
+
+	rename_to_fiscal_series(
+		doc, pos_series(doc, doc.es_invoice_type) or fiscal_series(doc.company, doc.es_invoice_type)
+	)
 
 
 def fiscal_series(company: str, invoice_type: str) -> str:
@@ -127,12 +131,22 @@ def fiscal_series(company: str, invoice_type: str) -> str:
 
 
 def rename_to_fiscal_series(doc: Document, series: str) -> str:
-	new_name = make_autoname(series, doc=doc)
+	return rename_document(doc, make_autoname(series, doc=doc))
+
+
+def rename_document(doc: Document, new_name: str) -> str:
+	"""Renombra la factura durante el submit (del nombre del borrador al fiscal).
+
+	rename_doc actualiza los hijos en la base de datos; los de memoria se re-enlazan
+	para que el resto del submit no los guarde con el nombre viejo. `localname` hace
+	que el formulario del navegador (también el del TPV) pase al nombre nuevo al
+	recibir la respuesta: sin él seguiría con el borrador, que ya no existe, y al
+	imprimir fallaría (frappe/desk/form/save.py → model/sync.js rename_after_save)."""
+	old_name = doc.name
 	frappe.rename_doc(
-		doctype=doc.doctype, old=doc.name, new=new_name, force=True, show_alert=False, rebuild_search=False
+		doctype=doc.doctype, old=old_name, new=new_name, force=True, show_alert=False, rebuild_search=False
 	)
 	doc.name = new_name
-	# rename_doc actualiza los hijos en la base de datos; los de memoria se
-	# re-enlazan para que el resto del submit no los guarde con el nombre viejo.
 	doc.set_parent_in_children()
+	doc.localname = old_name
 	return new_name

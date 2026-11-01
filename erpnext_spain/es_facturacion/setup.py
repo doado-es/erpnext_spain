@@ -24,7 +24,42 @@ def read_only_link(fieldname: str, label: str, insert_after: str, fieldtype: str
 	return field
 
 
+POS_FIELDS = [
+	{
+		"fieldname": "es_invoice_type",
+		"label": "Tipo de factura",
+		"fieldtype": "Link",
+		"options": "ES Invoice Type",
+		"default": "F2",
+		"insert_after": "customer",
+		"description": "Tipo de las ventas de este TPV: F2 (simplificada) para clientes sin NIF. Si el cliente tiene"
+		" un tipo por defecto, manda el del cliente.",
+	},
+	{
+		"fieldname": "es_series",
+		"label": "Serie de facturación",
+		"fieldtype": "Data",
+		"insert_after": "es_invoice_type",
+		"description": "Opcional: serie propia de este TPV para su tipo de factura (p. ej. «T1-.#####»). Vacía ="
+		" la serie del tipo en la compañía. Las devoluciones usan la serie R5 de la compañía.",
+	},
+]
+
+CUSTOMER_FIELDS = [
+	{
+		"fieldname": "es_invoice_type",
+		"label": "Tipo de factura por defecto",
+		"fieldtype": "Link",
+		"options": "ES Invoice Type",
+		"insert_after": "tax_category",
+		"description": "Tipo de las facturas nuevas de este cliente (p. ej. F2 para el cliente de mostrador). Un"
+		" tipo simplificado solo se aplica en ventas por TPV.",
+	},
+]
+
 CUSTOM_FIELDS = {
+	"POS Profile": POS_FIELDS,
+	"Customer": CUSTOMER_FIELDS,
 	"Sales Invoice": [
 		{
 			"fieldname": "es_rectification_method",

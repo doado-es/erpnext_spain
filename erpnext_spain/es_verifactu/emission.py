@@ -153,22 +153,12 @@ def before_submit(doc: Document, method: str | None = None) -> None:
 		if not _is_draft(doc.name, conf.es_draft_series):
 			return
 
-		series = _fiscal_series(company, doc.get("es_invoice_type"))
+		from erpnext_spain.es_facturacion.numbering import rename_document
+		from erpnext_spain.es_facturacion.pos import pos_series
 
-		new_name = make_autoname(series)
-		frappe.rename_doc(
-			doctype="Sales Invoice",
-			old=doc.name,
-			new=new_name,
-			force=True,
-			show_alert=False,
-			rebuild_search=False,
-		)
-		# rename_doc devuelve el (posible) nombre validado; doc.name pasa a
-		# ser el fiscal y los hijos en MEMORIA se re-padrean al nuevo nombre
-		# (en DB rename_doc ya los actualizó).
-		doc.name = new_name
-		doc.set_parent_in_children()
+		invoice_type = doc.get("es_invoice_type")
+		series = pos_series(doc, invoice_type) or _fiscal_series(company, invoice_type)
+		rename_document(doc, make_autoname(series))
 	except BaseException:
 		# before_submit revienta → on_submit jamás correrá: el cerrojo se
 		# libera AQUÍ (no puede esperar al finally de on_submit).

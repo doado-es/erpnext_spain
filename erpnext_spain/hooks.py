@@ -48,6 +48,7 @@ doc_events = {
 		"on_cancel": "erpnext_spain.es_efactura.b2b.payment_changed",
 	},
 	"Bank Account": {"validate": "erpnext_spain.es_sepa.bank_account.validate"},
+	"POS Profile": {"validate": "erpnext_spain.es_facturacion.pos.validate_pos_profile"},
 	# Pagos en borrador creados con «Añadir efectos»: se validan o se borran con la orden.
 	"Payment Order": {
 		"on_update": "erpnext_spain.es_sepa.payment_order.on_update",
@@ -70,6 +71,8 @@ doc_events = {
 		"autoname": "erpnext_spain.es_verifactu.invoice.autoname",
 		"onload": "erpnext_spain.es_facturacion.fiscal_tab.onload",
 		"validate": [
+			# Primero: el tipo de factura por defecto decide la serie y las compuertas.
+			"erpnext_spain.es_facturacion.pos.set_invoice_type",
 			"erpnext_spain.es_facturacion.numbering.validate",
 			"erpnext_spain.es_iva.rows.validate",
 			"erpnext_spain.es_verifactu.emission.validate",

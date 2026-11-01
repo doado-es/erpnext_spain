@@ -67,3 +67,41 @@ frappe.ui.form.on("Sales Invoice", {
 		}
 	},
 });
+
+// --- TPV y tipo de factura por defecto -------------------------------------
+//
+// Al validar, el borrador se renombra al número fiscal. Frappe avisa en tiempo
+// real del cambio de nombre a quien tenga abierto el borrador y ese aviso
+// llevaría al cajero del TPV al formulario de la factura. El TPV deja de
+// escuchar el borrador antes de validar y, al terminar, escucha el nombre nuevo
+// (el formulario ya lo tiene: el servidor devuelve el nombre anterior en
+// `localname`, es_facturacion/numbering.rename_document).
+
+erpnext_spain.es_facturacion.is_pos_form = (frm) => frm.doc.is_pos && !frm.in_form;
+
+frappe.ui.form.on("Sales Invoice", {
+	before_submit(frm) {
+		if (erpnext_spain.es_facturacion.is_pos_form(frm)) {
+			frappe.realtime.doc_unsubscribe(frm.doctype, frm.docname);
+		}
+	},
+	on_submit(frm) {
+		if (erpnext_spain.es_facturacion.is_pos_form(frm)) {
+			frappe.realtime.doc_subscribe(frm.doctype, frm.docname);
+		}
+	},
+	async customer(frm) {
+		// El servidor aplica el mismo criterio al guardar (es_facturacion/pos.py).
+		if (!frm.is_new() || !frm.doc.customer || !frm.fields_dict.es_invoice_type) return;
+		const { message } = await frappe.db.get_value(
+			"Customer",
+			frm.doc.customer,
+			"es_invoice_type"
+		);
+		const invoice_type = message && message.es_invoice_type;
+		if (!invoice_type || invoice_type === frm.doc.es_invoice_type) return;
+		const type = await frappe.db.get_value("ES Invoice Type", invoice_type, "is_simplified");
+		if (type.message && type.message.is_simplified && !frm.doc.is_pos) return;
+		frm.set_value("es_invoice_type", invoice_type);
+	},
+});
