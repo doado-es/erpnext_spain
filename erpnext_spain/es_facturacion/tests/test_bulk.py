@@ -7,7 +7,7 @@ from frappe.utils import add_months, nowdate
 from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_contabilidad.tests.test_apply_pgc import make_company
 from erpnext_spain.es_facturacion import bulk, mailing
-from erpnext_spain.nif import vies
+from erpnext_spain.es_nif import vies
 
 
 class TestBulk(IntegrationTestCase):

@@ -8,7 +8,7 @@ motivo de cada hook y la spec o decisión de la que viene.
 | Doctype | Evento | Handler | Motivo |
 |---|---|---|---|
 | Account | validate | `es_contabilidad.account.validate` | Número y rama de las cuentas nuevas en compañías PGC (spec 02 §4). |
-| Customer, Supplier, Company | validate | `nif.party.validate` | Validación del NIF español (spec 14 §2). Salida temprana barata dentro del handler (doc 12 §2). |
+| Customer, Supplier, Company | validate | `es_nif.party.validate` | Validación del NIF español (spec 14 §2). Salida temprana barata dentro del handler (doc 12 §2). |
 | Address | validate | `es_impuestos.tax_category.set_address_category` | Categoría de impuestos por país (España, UE, resto) (spec 03). |
 | Supplier | validate | `es_impuestos.tax_category.set_supplier_category` | Ídem, en el proveedor. |
 | Supplier | validate | `es_retenciones.withholding.validate_supplier` | Grupo de retención con fila de tipo en su categoría (spec 08 §3). |
@@ -43,13 +43,13 @@ motivo de cada hook y la spec o decisión de la que viene.
   - `es_verifactu/public/js/company.js`: avisos legales del interruptor de VeriFactu, aviso discreto de modo pruebas y fecha de activación de solo lectura (spec 04 §2.1/§15).
   - `es_contabilidad/public/js/company.js`: acción «Aplicar plan PGC» (spec 02 §2).
   - `es_sii/public/js/company.js`.
-  - `aeat/public/js/company_modes.js`: avisos al activar, pasar a producción, volver a pruebas o desactivar VeriFactu o el SII.
+  - `es_aeat/public/js/company_modes.js`: avisos al activar, pasar a producción, volver a pruebas o desactivar VeriFactu o el SII.
 - `doctype_js` de Sales Invoice:
   - `es_verifactu/public/js/sales_invoice.js`: aviso de modo pruebas (snapshot de la factura y modo de pruebas de la compañía en borradores) y diálogo de subsanación (spec 04 §15, lote 6a).
   - `es_efactura/public/js/sales_invoice.js`: botón «Generar Facturae» (spec 10).
   - `es_facturacion/public/js/sales_invoice.js`: situación de cobro (spec 05 §4).
   - `es_facturacion/public/js/fiscal_tab.js`: pestaña «VeriFactu / SII».
-- `doctype_js` de Customer y Supplier → `nif/public/js/party.js`: formato de nombre de las personas físicas y contraste del NIF con la AEAT.
+- `doctype_js` de Customer y Supplier → `es_nif/public/js/party.js`: formato de nombre de las personas físicas y contraste del NIF con la AEAT.
 - `doctype_js` de Payment Order → `es_sepa/public/js/payment_order.js`: fichero SEPA de transferencias (spec 11 §4).
 - `doctype_list_js`:
   - `es_verifactu/public/js/sales_invoice_list.js`: estilo de los BORRADOR-* en la lista de facturas (spec 04 §15).
@@ -70,7 +70,7 @@ Métodos para los formatos de impresión (doc 12 §14, patrón de India Complian
 
 ## scheduler_events
 
-- `aeat.tasks.daily`: aviso diario de caducidad de certificados a 30, 7 y 1 días del fin de vigencia, por los dos canales de incidencias de la compañía (spec 13 §2 y spec 04 §15).
+- `es_aeat.tasks.daily`: aviso diario de caducidad de certificados a 30, 7 y 1 días del fin de vigencia, por los dos canales de incidencias de la compañía (spec 13 §2 y spec 04 §15).
 - `es_verifactu.tasks.drain_outbox` (cada minuto): drenaje de la cola de VeriFactu (spec 13 §5 y spec 04 §8). Solo drena las empresas con registros pendientes (sin comprobar si están activadas) y aísla los errores por empresa.
 - `es_verifactu.tasks.daily` (lote 5b): alerta de cola estancada (spec 04 §8): registros en PendienteEnvio parados más de 24 h → incidencia por los dos canales.
 - `es_facturacion.collection.flag_doubtful_candidates`: aviso de facturas candidatas a dudoso cobro (spec 05 §4).

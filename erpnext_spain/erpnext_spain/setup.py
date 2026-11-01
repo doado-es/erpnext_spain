@@ -1,6 +1,6 @@
 # Custom fields del módulo base (spec 01 §5): sección «Contabilidad y
 # fiscalidad» en la pestaña de la app en Company (es_tab, creada por
-# nif/setup.py). Va antes de la sección VeriFactu.
+# es_nif/setup.py). Va antes de la sección VeriFactu.
 #
 # Nombres de las specs → fieldnames (maestro §3):
 #   pgc_aplicado → es_pgc_applied · numeracion_fiscal → es_fiscal_numbering

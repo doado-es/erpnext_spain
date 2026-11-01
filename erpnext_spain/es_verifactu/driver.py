@@ -36,9 +36,9 @@ from typing import Any
 import frappe
 from frappe.utils import cint
 
-from erpnext_spain.aeat.client import ENV_PRODUCTION, ENV_TEST
-from erpnext_spain.aeat.manager import AEATDriver
-from erpnext_spain.aeat.tests.mock_aeat_client import build_client
+from erpnext_spain.es_aeat.client import ENV_PRODUCTION, ENV_TEST
+from erpnext_spain.es_aeat.manager import AEATDriver
+from erpnext_spain.es_aeat.tests.mock_aeat_client import build_client
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	LEDGER_DOCTYPE,
 	PENDING_SEND_STATE,

@@ -37,7 +37,7 @@ from typing import Any
 
 import frappe
 
-from erpnext_spain.aeat.utils import notify_roles
+from erpnext_spain.es_aeat.utils import notify_roles
 from erpnext_spain.es_verifactu.emission import regenerate_issuance
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"

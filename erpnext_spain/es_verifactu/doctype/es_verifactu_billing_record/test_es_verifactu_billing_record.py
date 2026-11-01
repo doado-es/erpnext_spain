@@ -14,7 +14,7 @@ from __future__ import annotations
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext_spain.aeat.tests.helpers import test_company
+from erpnext_spain.es_aeat.tests.helpers import test_company
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	PENDING_SEND_STATE,
 	RESPONSE_PROCESSOR_FLAG,

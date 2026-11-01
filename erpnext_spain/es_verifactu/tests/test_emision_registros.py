@@ -30,13 +30,13 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
-from erpnext_spain.aeat.tests.helpers import (
+from erpnext_spain.es_aeat.tests.helpers import (
 	clean_pem,
 	generate_p12,
 	test_company,
 	write_private_p12,
 )
-from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date
+from erpnext_spain.es_aeat.utils import absolute_site_path, format_aeat_date
 from erpnext_spain.es_verifactu import emission
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	RESPONSE_PROCESSOR_FLAG,

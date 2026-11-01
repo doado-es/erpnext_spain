@@ -289,7 +289,7 @@ def build_record(doc) -> dict:
 
 @functools.cache
 def zeep_client(book: str):
-	from erpnext_spain.aeat.client import load_wsdl_client
+	from erpnext_spain.es_aeat.client import load_wsdl_client
 
 	return load_wsdl_client(
 		os.path.join(frappe.get_app_path("erpnext_spain", "schemas", "aeat", "sii"), WSDL[book])

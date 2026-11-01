@@ -28,7 +28,7 @@ from types import SimpleNamespace
 from lxml import etree
 from zeep import Client
 
-from erpnext_spain.aeat.client import load_wsdl_client
+from erpnext_spain.es_aeat.client import load_wsdl_client
 from erpnext_spain.schemas import VERIFACTU_WSDL
 
 SIF = {

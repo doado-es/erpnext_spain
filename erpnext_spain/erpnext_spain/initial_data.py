@@ -114,7 +114,7 @@ def ensure_service_urls() -> list[str]:
 	"""Direcciones oficiales de los servicios de la AEAT en ES Settings: rellena
 	solo las vacías (no pisa las que haya cambiado el usuario). Lo que decide si se
 	envía a producción es el modo «Producción» de cada compañía."""
-	from erpnext_spain.aeat.client import WSDL_PRODUCTION_OFFICIAL, WSDL_TEST_DEFAULT
+	from erpnext_spain.es_aeat.client import WSDL_PRODUCTION_OFFICIAL, WSDL_TEST_DEFAULT
 	from erpnext_spain.es_sii.outbox import ENDPOINTS
 
 	official = {

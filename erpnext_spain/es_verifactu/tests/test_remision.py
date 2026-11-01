@@ -1,6 +1,6 @@
 # Tests de REMISIÓN VeriFactu — lote 5a (spec 04 §8): el OUTBOX DRIVER
 # (VerifactuDriver) + el drenaje REAL vía AEATOutboxManager con el cliente
-# AEAT mockeado (grabar/reproducir de aeat/tests/mock_aeat_client.py).
+# AEAT mockeado (grabar/reproducir de es_aeat/tests/mock_aeat_client.py).
 #
 # Cubre: outbox (get_companies/get_pending ordenado y con límite de lote,
 # SIN gate de «activada»), la forma wire EXACTA del payload (Cabecera +
@@ -32,16 +32,16 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 from zeep.exceptions import Fault
 
-from erpnext_spain.aeat.client import _fault_to_synthetic_response
-from erpnext_spain.aeat.manager import AEATOutboxManager
-from erpnext_spain.aeat.tests.helpers import (
+from erpnext_spain.es_aeat.client import _fault_to_synthetic_response
+from erpnext_spain.es_aeat.manager import AEATOutboxManager
+from erpnext_spain.es_aeat.tests.helpers import (
 	clean_pem,
 	generate_p12,
 	test_company,
 	write_private_p12,
 )
-from erpnext_spain.aeat.tests.mock_aeat_client import MockAEATClient, load_seed
-from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date
+from erpnext_spain.es_aeat.tests.mock_aeat_client import MockAEATClient, load_seed
+from erpnext_spain.es_aeat.utils import absolute_site_path, format_aeat_date
 from erpnext_spain.es_verifactu import emission
 from erpnext_spain.es_verifactu.doctype.es_verifactu_billing_record.es_verifactu_billing_record import (
 	RESPONSE_PROCESSOR_FLAG,

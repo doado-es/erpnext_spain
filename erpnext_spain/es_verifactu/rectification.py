@@ -15,7 +15,7 @@
 
 import frappe
 
-from erpnext_spain.aeat.utils import has_aeat_permission
+from erpnext_spain.es_aeat.utils import has_aeat_permission
 from erpnext_spain.es_verifactu.emission import (
 	INVOICE_STATUS_PENDING_SEND,
 	VERIFACTU_PURPOSE,

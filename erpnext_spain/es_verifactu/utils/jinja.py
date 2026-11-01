@@ -24,7 +24,7 @@ import urllib.parse
 import frappe
 import segno
 
-from erpnext_spain.aeat.utils import format_aeat_date
+from erpnext_spain.es_aeat.utils import format_aeat_date
 from erpnext_spain.es_verifactu.emission import VERIFACTU_MODE, VERIFACTU_TEST_MODE
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.data_adapter import _format_amount

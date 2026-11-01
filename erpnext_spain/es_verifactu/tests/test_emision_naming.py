@@ -22,13 +22,13 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, cint, nowdate
 
-from erpnext_spain.aeat.tests.helpers import (
+from erpnext_spain.es_aeat.tests.helpers import (
 	clean_pem,
 	generate_p12,
 	test_company,
 	write_private_p12,
 )
-from erpnext_spain.aeat.utils import absolute_site_path
+from erpnext_spain.es_aeat.utils import absolute_site_path
 from erpnext_spain.es_verifactu import emission
 from erpnext_spain.es_verifactu.utils import locks
 from erpnext_spain.tests.fixtures import TEST_CUSTOMER, TEST_ITEM

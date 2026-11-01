@@ -8,7 +8,12 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from lxml import etree
 
-from erpnext_spain.aeat.tests.helpers import clean_pem, delete_private_file, generate_p12, write_private_p12
+from erpnext_spain.es_aeat.tests.helpers import (
+	clean_pem,
+	delete_private_file,
+	generate_p12,
+	write_private_p12,
+)
 from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_efactura import api, codes, facturae
 from erpnext_spain.es_impuestos.initial_data import template_name
@@ -271,7 +276,7 @@ class TestFacturae(IntegrationTestCase):
 		"""La firma XAdES es íntegra: se verifica con el certificado de la credencial."""
 		from signxml.xades import XAdESVerifier
 
-		from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
+		from erpnext_spain.es_aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
 
 		si = self.invoice()
 		_doc, content, _root = self.xml_of(api.generate_facturae(si.name))

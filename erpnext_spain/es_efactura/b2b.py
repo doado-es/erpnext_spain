@@ -100,7 +100,7 @@ def attach(doc, file_name: str, content: bytes) -> str:
 
 def is_b2b_customer(customer: str) -> bool:
 	"""Empresario o profesional en España: con NIF español y no Administración Pública."""
-	from erpnext_spain.nif import validator
+	from erpnext_spain.es_nif import validator
 
 	values = frappe.get_cached_value(
 		"Customer", customer, ["tax_id", "es_public_administration"], as_dict=True

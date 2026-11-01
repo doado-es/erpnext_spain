@@ -2,7 +2,7 @@
 #
 # Handler barato cuando no aplica (doc 12 §2): sin enabled solo se paga UNA
 # lectura indexada (fecha de activación + NOI persistidos) para los guards que
-# corren SIEMPRE. El NIF de la compañía ya lo valida nif/party.validate en el
+# corren SIEMPRE. El NIF de la compañía ya lo valida es_nif/party.validate en el
 # MISMO evento ( corre antes: doc_events en lista); aquí se cierra la compuerta
 # de ACTIVACIÓN: presente, válido y ÚNICO en el site (respuestas AEAT se
 # enrutan por NIF del emisor — sin unicidad llegan a la empresa equivocada).
@@ -15,8 +15,8 @@ import hashlib
 import frappe
 from frappe.model.document import Document
 
-from erpnext_spain.aeat.utils import require_credential
-from erpnext_spain.nif import validator
+from erpnext_spain.es_aeat.utils import require_credential
+from erpnext_spain.es_nif import validator
 
 DOCTYPE = "Company"
 SERIES_FIELD = "es_invoice_series"

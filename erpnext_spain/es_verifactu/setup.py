@@ -1,6 +1,6 @@
 # Custom Fields de VeriFactu declarados en código Python (doc 12 §11), con
 # limpieza en before_uninstall (doc 12 §12). Idempotentes: after_install +
-# after_migrate (mismo wiring que nif/setup.py).
+# after_migrate (mismo wiring que es_nif/setup.py).
 #
 # - Sección «VeriFactu» NUEVA dentro del tab «Spain Compliance» de Company
 #   (spec 04 §2.1): configuración por empresa. Los campos operativos dependen

@@ -1,6 +1,6 @@
 ERPNext Spain
-Nif
-Aeat
+ES Nif
+ES Aeat
 ES Verifactu
 ES Contabilidad
 ES Impuestos

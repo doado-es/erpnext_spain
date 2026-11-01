@@ -102,7 +102,7 @@ erpnext_spain.es_facturacion.check_tax_ids = function (listview) {
 	const names = erpnext_spain.es_facturacion.selected(listview);
 	if (!names.length) return frappe.msgprint(__("Seleccione terceros."));
 	frappe.call({
-		method: "erpnext_spain.nif.vies.check_parties",
+		method: "erpnext_spain.es_nif.vies.check_parties",
 		type: "POST",
 		args: { doctype: listview.doctype, names: names },
 		freeze: true,

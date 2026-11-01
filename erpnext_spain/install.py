@@ -64,7 +64,7 @@ def after_app_install(app_name: str) -> None:
 
 def before_uninstall() -> None:
 	# Orden inverso al de creación: VeriFactu y el módulo base cuelgan de la
-	# pestaña que crea y limpia nif/setup.
+	# pestaña que crea y limpia es_nif/setup.
 	from erpnext_spain.erpnext_spain.setup import cleanup_custom_fields as _cleanup_base
 	from erpnext_spain.es_bancos.setup import cleanup_custom_fields as _cleanup_banks
 	from erpnext_spain.es_contabilidad.setup import cleanup_custom_fields as _cleanup_accounting
@@ -72,11 +72,11 @@ def before_uninstall() -> None:
 	from erpnext_spain.es_facturacion.setup import cleanup_custom_fields as _cleanup_billing
 	from erpnext_spain.es_impuestos.setup import cleanup_custom_fields as _cleanup_taxes
 	from erpnext_spain.es_iva.setup import cleanup_custom_fields as _cleanup_vat
+	from erpnext_spain.es_nif.setup import cleanup_custom_fields as _cleanup_nif
 	from erpnext_spain.es_retenciones.setup import cleanup_custom_fields as _cleanup_withholding
 	from erpnext_spain.es_sepa.setup import cleanup_custom_fields as _cleanup_sepa
 	from erpnext_spain.es_sii.setup import cleanup_custom_fields as _cleanup_sii
 	from erpnext_spain.es_verifactu.setup import cleanup_custom_fields as _cleanup_verifactu
-	from erpnext_spain.nif.setup import cleanup_custom_fields as _cleanup_nif
 
 	_cleanup_banks()
 	_cleanup_sepa()
@@ -93,7 +93,7 @@ def before_uninstall() -> None:
 
 
 def setup_custom_fields() -> None:
-	# El orden importa: la pestaña (nif) antes que sus secciones, y la sección
+	# El orden importa: la pestaña (es_nif) antes que sus secciones, y la sección
 	# del módulo base antes que la de VeriFactu, que se inserta detrás.
 	from erpnext_spain.erpnext_spain.setup import setup_custom_fields as _setup_base
 	from erpnext_spain.es_bancos.setup import setup_custom_fields as _setup_banks
@@ -103,11 +103,11 @@ def setup_custom_fields() -> None:
 	from erpnext_spain.es_facturacion.setup import setup_custom_fields as _setup_billing
 	from erpnext_spain.es_impuestos.setup import setup_custom_fields as _setup_taxes
 	from erpnext_spain.es_iva.setup import setup_custom_fields as _setup_vat
+	from erpnext_spain.es_nif.setup import setup_custom_fields as _setup_nif
 	from erpnext_spain.es_retenciones.setup import setup_custom_fields as _setup_withholding
 	from erpnext_spain.es_sepa.setup import setup_custom_fields as _setup_sepa
 	from erpnext_spain.es_sii.setup import setup_custom_fields as _setup_sii
 	from erpnext_spain.es_verifactu.setup import setup_custom_fields as _setup_verifactu
-	from erpnext_spain.nif.setup import setup_custom_fields as _setup_nif
 
 	_setup_nif()
 	_setup_base()

@@ -34,16 +34,16 @@
 # El cliente se construye con la factory conmutada por el flag del site
 # `es_aeat_mock` (mismo patrón que el driver de remisión): producción = TLS
 # mutua con los PEM de la credencial de la empresa; tests = mock inyectable
-# (mock_client_factory de aeat/tests/mock_aeat_client.py).
+# (mock_client_factory de es_aeat/tests/mock_aeat_client.py).
 
 from typing import Any
 
 import frappe
 from frappe.model.document import Document
 
-from erpnext_spain.aeat.client import ENV_PRODUCTION, ENV_TEST
-from erpnext_spain.aeat.tests.mock_aeat_client import build_client
-from erpnext_spain.aeat.utils import (
+from erpnext_spain.es_aeat.client import ENV_PRODUCTION, ENV_TEST
+from erpnext_spain.es_aeat.tests.mock_aeat_client import build_client
+from erpnext_spain.es_aeat.utils import (
 	company_credential,
 	format_aeat_date,
 	has_aeat_permission,

@@ -1,5 +1,5 @@
 # Site tests de la puerta de activación de VeriFactu en Company (spec 04
-# §2.1): doc_events «validate» (nif/party corre primero; esta compuerta
+# §2.1): doc_events «validate» (es_nif/party corre primero; esta compuerta
 # cierra después), biyección de series y no compartición entre empresas,
 # colisión de la serie de borradores, NOI derivado UNA vez e inmutable,
 # congelación de la fecha de activación con registros emitidos y límite de
@@ -22,13 +22,13 @@ import frappe
 from frappe.model.document import Document
 from frappe.tests import IntegrationTestCase
 
-from erpnext_spain.aeat.tests.helpers import (
+from erpnext_spain.es_aeat.tests.helpers import (
 	clean_pem,
 	generate_p12,
 	test_company,
 	write_private_p12,
 )
-from erpnext_spain.aeat.utils import absolute_site_path
+from erpnext_spain.es_aeat.utils import absolute_site_path
 from erpnext_spain.es_verifactu import company as company_module
 
 P12_PATTERN = "es_test_company_*.p12"
@@ -170,7 +170,7 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 		self.assertIn("Remedio", str(ctx.exception))
 
 	def test_activate_invalid_nif_blocks_and_suggests(self):
-		# Capa nif/party (doc_event que corre PRIMERO): el save rebota con la
+		# Capa es_nif/party (doc_event que corre PRIMERO): el save rebota con la
 		# sugerencia del verificador (la letra de control correcta es Z).
 		doc = self._company_doc()
 		doc.tax_id = INVALID_NIF
@@ -251,7 +251,7 @@ class TestVerifactuActivationGate(IntegrationTestCase):
 
 	def test_not_active_no_validations(self):
 		"""Early exit del interruptor: desactivada, la compuerta no valida
-		NIF (el verificador nif/party sigue aplicando por su cuenta), ni
+		NIF (el verificador es_nif/party sigue aplicando por su cuenta), ni
 		exige credencial, fecha, series... y no deriva NOI."""
 		doc = self._company_doc()
 		doc.tax_id = INVALID_NIF

@@ -17,7 +17,7 @@ from frappe.utils import flt, getdate, strip_html
 
 from erpnext_spain.es_efactura import codes
 from erpnext_spain.es_impuestos.codes import VAT_CLASSIFICATIONS
-from erpnext_spain.nif import validator
+from erpnext_spain.es_nif import validator
 from erpnext_spain.utils.company import legal_name
 
 CENT = Decimal("0.01")

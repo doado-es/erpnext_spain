@@ -12,8 +12,8 @@ from __future__ import annotations
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext_spain.aeat import utils
-from erpnext_spain.aeat.tests.helpers import test_company
+from erpnext_spain.es_aeat import utils
+from erpnext_spain.es_aeat.tests.helpers import test_company
 
 NOTIFIER_ROLE = "ES VeriFactu Notificador"
 NOTIFIED_USER = "es_notifica_verifactu@test.example.com"

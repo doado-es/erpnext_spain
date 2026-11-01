@@ -18,13 +18,13 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
-from erpnext_spain.aeat.tests.helpers import (
+from erpnext_spain.es_aeat.tests.helpers import (
 	clean_pem,
 	generate_p12,
 	test_company,
 	write_private_p12,
 )
-from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date
+from erpnext_spain.es_aeat.utils import absolute_site_path, format_aeat_date
 from erpnext_spain.es_verifactu.emission import VERIFACTU_MODE, VERIFACTU_TEST_MODE
 from erpnext_spain.es_verifactu.printing import FORMAT_NAME, setup_printing
 from erpnext_spain.es_verifactu.utils.jinja import (

@@ -25,7 +25,7 @@ from pathlib import Path
 import frappe
 from filelock import FileLock, Timeout
 
-from erpnext_spain.aeat.utils import absolute_site_path
+from erpnext_spain.es_aeat.utils import absolute_site_path
 
 PREFIX = "verifactu:chain:"
 

@@ -33,20 +33,20 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
-from erpnext_spain.aeat.client import AEATClient
-from erpnext_spain.aeat.manager import AEATOutboxManager
-from erpnext_spain.aeat.tests.helpers import (
+from erpnext_spain.es_aeat.client import AEATClient
+from erpnext_spain.es_aeat.manager import AEATOutboxManager
+from erpnext_spain.es_aeat.tests.helpers import (
 	clean_pem,
 	generate_p12,
 	test_company,
 	write_private_p12,
 )
-from erpnext_spain.aeat.tests.mock_aeat_client import (
+from erpnext_spain.es_aeat.tests.mock_aeat_client import (
 	MockAEATClient,
 	load_seed,
 	mock_client_factory,
 )
-from erpnext_spain.aeat.utils import absolute_site_path, format_aeat_date, format_aeat_datetime
+from erpnext_spain.es_aeat.utils import absolute_site_path, format_aeat_date, format_aeat_datetime
 from erpnext_spain.es_verifactu import emission, rectification
 from erpnext_spain.es_verifactu.doctype.es_verifactu_aeat_query.es_verifactu_aeat_query import (
 	query_aeat,

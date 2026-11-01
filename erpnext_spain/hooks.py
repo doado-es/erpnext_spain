@@ -16,7 +16,7 @@ required_apps = ["frappe/erpnext"]
 
 doc_events = {
 	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
-	"Customer": {"validate": "erpnext_spain.nif.party.validate"},
+	"Customer": {"validate": "erpnext_spain.es_nif.party.validate"},
 	"Address": {"validate": "erpnext_spain.es_impuestos.tax_category.set_address_category"},
 	# Filas de la plantilla del artículo replicadas para recargo, retención y
 	# adquisición intracomunitaria.
@@ -24,7 +24,7 @@ doc_events = {
 	"Item Group": {"validate": "erpnext_spain.es_impuestos.item_tax.mirror_rows"},
 	"Supplier": {
 		"validate": [
-			"erpnext_spain.nif.party.validate",
+			"erpnext_spain.es_nif.party.validate",
 			"erpnext_spain.es_impuestos.tax_category.set_supplier_category",
 			"erpnext_spain.es_retenciones.withholding.validate_supplier",
 		]
@@ -53,7 +53,7 @@ doc_events = {
 		# El orden importa: NIF, conflicto SII/VeriFactu y activación de VeriFactu.
 		"validate": [
 			"erpnext_spain.utils.company.set_default_legal_name",
-			"erpnext_spain.nif.party.validate",
+			"erpnext_spain.es_nif.party.validate",
 			"erpnext_spain.es_sii.company.validate",
 			"erpnext_spain.es_verifactu.company.validate",
 		],
@@ -109,7 +109,7 @@ doctype_js = {
 		"es_verifactu/public/js/company.js",
 		"es_contabilidad/public/js/company.js",
 		"es_sii/public/js/company.js",
-		"aeat/public/js/company_modes.js",
+		"es_aeat/public/js/company_modes.js",
 	],
 	"Sales Invoice": [
 		"es_verifactu/public/js/sales_invoice.js",
@@ -118,8 +118,8 @@ doctype_js = {
 		"es_facturacion/public/js/fiscal_tab.js",
 	],
 	"Purchase Invoice": "es_facturacion/public/js/fiscal_tab.js",
-	"Customer": "nif/public/js/party.js",
-	"Supplier": "nif/public/js/party.js",
+	"Customer": "es_nif/public/js/party.js",
+	"Supplier": "es_nif/public/js/party.js",
 	"Payment Order": "es_sepa/public/js/payment_order.js",
 }
 
@@ -168,7 +168,7 @@ scheduler_events = {
 		"erpnext_spain.es_efactura.b2b.communicate_payments",
 	],
 	"daily": [
-		"erpnext_spain.aeat.tasks.daily",
+		"erpnext_spain.es_aeat.tasks.daily",
 		"erpnext_spain.es_verifactu.tasks.daily",
 		"erpnext_spain.es_facturacion.collection.flag_doubtful_candidates",
 		"erpnext_spain.es_bancos.aggregator.warn_expiring_consents",

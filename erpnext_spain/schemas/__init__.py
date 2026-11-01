@@ -5,11 +5,11 @@
 # validar XML. Los ficheros se guardan tal como los publica su autor; las
 # referencias remotas que contienen (p. ej. el import de xmldsig en
 # SuministroInformacion.xsd) se redirigen a la copia local al cargarlos
-# (`REMOTE_SCHEMAS` y `erpnext_spain.aeat.wsdl.LocalSchemaTransport`).
+# (`REMOTE_SCHEMAS` y `erpnext_spain.es_aeat.wsdl.LocalSchemaTransport`).
 #
 # Al actualizar un fichero por un cambio del publicador, se sustituye entero y
 # se ejecutan los tests de contrato (es_verifactu/tests/test_contrato_wsdl.py,
-# aeat/tests/test_wsdl.py, es_efactura/tests/test_facturae.py).
+# es_aeat/tests/test_wsdl.py, es_efactura/tests/test_facturae.py).
 
 from __future__ import annotations
 

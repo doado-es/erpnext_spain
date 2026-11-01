@@ -19,7 +19,7 @@ SIGNER_ROLE = "emisor"
 
 
 def credential_for(company: str) -> str:
-	from erpnext_spain.aeat.utils import require_credential
+	from erpnext_spain.es_aeat.utils import require_credential
 
 	return require_credential(company, "firmar facturas electrónicas")
 
@@ -31,7 +31,7 @@ def sign(root, company: str):
 	from signxml import CanonicalizationMethod, DigestAlgorithm
 	from signxml.xades import XAdESDataObjectFormat, XAdESSignaturePolicy, XAdESSigner
 
-	from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
+	from erpnext_spain.es_aeat.doctype.es_aeat_credential.es_aeat_credential import pem_paths
 
 	credential = frappe.get_doc("ES AEAT Credential", credential_for(company))
 	cert_path, key_path = pem_paths(credential.name)

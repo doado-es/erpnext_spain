@@ -62,11 +62,11 @@ import frappe
 from frappe.model.document import Document
 from frappe.model.naming import make_autoname
 
-from erpnext_spain.aeat.utils import format_aeat_datetime, require_credential
+from erpnext_spain.es_aeat.utils import format_aeat_datetime, require_credential
+from erpnext_spain.es_nif import validator
 from erpnext_spain.es_verifactu.invoice import DRAFT_PREFIX, is_draft_name
 from erpnext_spain.es_verifactu.utils import data_adapter
 from erpnext_spain.es_verifactu.utils.locks import acquire_chain_lock, release_chain_lock
-from erpnext_spain.nif import validator
 from erpnext_spain.utils.company import legal_name
 from erpnext_spain.utils.gating import is_verifactu_active
 
@@ -515,7 +515,7 @@ def _validate_simplified(doc: Document) -> None:
 def _validate_tax_ids(doc: Document) -> None:
 	"""Última compuerta NIF (spec 04 §4.2 + spec 14 §2): emisor SIEMPRE
 	presente y válido; destinatario presente y válido cuando es español
-	(patrón de NIF o país España — mismo criterio que nif/party.py). Los
+	(patrón de NIF o país España — mismo criterio que es_nif/party.py). Los
 	tickets POS van a nombre de «contado»: sin compuerta de destinatario
 	(tabla de spec 14 §2, fila no-POS)."""
 	issuer_nif = (frappe.db.get_value("Company", doc.company, "tax_id") or "").strip()
@@ -567,7 +567,7 @@ def _validate_tax_ids(doc: Document) -> None:
 
 
 def _customer_country(doc: Document) -> str | None:
-	"""País del cliente (patrón de nif/party.py): Customer no lleva columna
+	"""País del cliente (patrón de es_nif/party.py): Customer no lleva columna
 	país (verificado en v16) — se resuelve por su dirección principal."""
 	from frappe.contacts.doctype.address.address import get_default_address
 

@@ -14,7 +14,7 @@ GREEN, ORANGE, RED = "green", "orange", "red"
 
 
 def notify(company: str, subject: str, message: str, indicator: str = ORANGE) -> None:
-	from erpnext_spain.aeat.utils import notification_users
+	from erpnext_spain.es_aeat.utils import notification_users
 
 	users = notification_users(company)
 	if not users:

@@ -28,8 +28,8 @@ def execute():
 
 
 def _merge_credentials() -> None:
-	from erpnext_spain.aeat.doctype.es_aeat_credential.es_aeat_credential import KEYS_DIR
-	from erpnext_spain.aeat.utils import absolute_site_path
+	from erpnext_spain.es_aeat.doctype.es_aeat_credential.es_aeat_credential import KEYS_DIR
+	from erpnext_spain.es_aeat.utils import absolute_site_path
 
 	table = frappe.qb.DocType(DOCTYPE)
 	rows = (

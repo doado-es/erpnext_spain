@@ -31,7 +31,7 @@ class TestESSettings(IntegrationTestCase):
 		"""Barrido global de la misma lección: todo doctype de la app que no
 		sea child table (istable) debe tener al menos una fila DocPerm —
 		sinónimo de «existe pero inaccesible» (404 en el Desk para todos)."""
-		modulos = {"ERPNext Spain", "Nif", "Aeat", "ES Verifactu"}
+		modulos = {"ERPNext Spain", "ES Nif", "ES Aeat", "ES Verifactu"}
 		doctypes = frappe.get_all(
 			"DocType",
 			filters={"module": ("in", sorted(modulos)), "istable": 0},

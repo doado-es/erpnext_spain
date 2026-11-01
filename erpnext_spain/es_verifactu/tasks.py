@@ -18,8 +18,8 @@ from __future__ import annotations
 
 import frappe
 
-from erpnext_spain.aeat.manager import AEATOutboxManager
-from erpnext_spain.aeat.utils import notify_roles
+from erpnext_spain.es_aeat.manager import AEATOutboxManager
+from erpnext_spain.es_aeat.utils import notify_roles
 from erpnext_spain.es_verifactu.driver import VerifactuDriver
 
 LEDGER_DOCTYPE = "ES Verifactu Billing Record"

@@ -126,7 +126,7 @@ class TestSii(IntegrationTestCase):
 		return frappe.get_last_doc("ES Sii Record", filters={"voucher_no": doc.name, **filters})
 
 	def drain(self, client):
-		from erpnext_spain.aeat.manager import AEATOutboxManager
+		from erpnext_spain.es_aeat.manager import AEATOutboxManager
 
 		AEATOutboxManager().drain([outbox.SiiDriver(client)])
 

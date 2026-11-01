@@ -9,7 +9,7 @@ import frappe
 from frappe import _
 from frappe.utils import add_days, add_months, cint, get_first_day, getdate, now_datetime, nowdate
 
-from erpnext_spain.aeat.manager import AEATDriver
+from erpnext_spain.es_aeat.manager import AEATDriver
 from erpnext_spain.es_sii import records
 from erpnext_spain.es_sii.setup import MANUAL
 from erpnext_spain.utils.gating import is_sii_active
@@ -238,7 +238,7 @@ class SiiClient:
 	}
 
 	def __init__(self, company: str, environment: str):
-		from erpnext_spain.aeat.client import enabled_credential_pem_paths
+		from erpnext_spain.es_aeat.client import enabled_credential_pem_paths
 
 		self.company = company
 		self.environment = environment
@@ -249,7 +249,7 @@ class SiiClient:
 		import requests
 		from zeep import helpers
 
-		from erpnext_spain.aeat.client import load_wsdl_client
+		from erpnext_spain.es_aeat.client import load_wsdl_client
 
 		book = payload["book"]
 		if book not in self.clients:
@@ -412,7 +412,7 @@ class SiiDriver(AEATDriver):
 def drain_outbox() -> None:
 	"""Job programado: envía los registros pendientes de las compañías con envío
 	automático cuya fecha de envío ya ha llegado."""
-	from erpnext_spain.aeat.manager import AEATOutboxManager
+	from erpnext_spain.es_aeat.manager import AEATOutboxManager
 
 	AEATOutboxManager().drain([SiiDriver()])
 
@@ -456,7 +456,7 @@ def send_invoices(doctype: str, names: list | str) -> dict:
 def send_records(records_to_send: list[str]) -> dict:
 	"""Envía esos registros pendientes, por lotes de un mismo libro y tipo de
 	comunicación, y devuelve el estado final de cada uno."""
-	from erpnext_spain.aeat.manager import AEATOutboxManager
+	from erpnext_spain.es_aeat.manager import AEATOutboxManager
 
 	manager, driver = AEATOutboxManager(), SiiDriver(selected=list(records_to_send))
 	# Cada pasada envía un lote por compañía; como mucho, uno por cada registro.
