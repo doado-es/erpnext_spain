@@ -21,7 +21,7 @@ concurrency:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # ubuntu-latest (26.04) ya no trae wkhtmltopdf
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -42,7 +42,7 @@ jobs:
 
   semgrep:
     name: Semgrep
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # ubuntu-latest (26.04) ya no trae wkhtmltopdf
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -70,7 +70,7 @@ jobs:
 
   tests:
     name: Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # ubuntu-latest (26.04) ya no trae wkhtmltopdf
     timeout-minutes: 60
     services:
       redis-cache:
