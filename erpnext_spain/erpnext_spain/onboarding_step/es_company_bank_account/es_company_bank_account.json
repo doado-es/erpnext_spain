@@ -1,0 +1,22 @@
+{
+ "action": "Create Entry",
+ "action_label": "Crear cuenta bancaria",
+ "creation": "2026-11-01 15:00:00.000000",
+ "description": "Cree la cuenta con su **IBAN** y, en la sección *Normas bancarias*, los sufijos de transferencias, adeudos SEPA y confirming que le haya dado el banco. Sirve para remesas, órdenes de pago y la importación de extractos Norma 43.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-11-01 15:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "ES Company Bank Account",
+ "owner": "Administrator",
+ "reference_document": "Bank Account",
+ "route_options": "{\"is_company_account\": 1}",
+ "show_form_tour": 0,
+ "show_full_form": 1,
+ "title": "Cuenta bancaria de la compañía",
+ "validate_action": 1
+}

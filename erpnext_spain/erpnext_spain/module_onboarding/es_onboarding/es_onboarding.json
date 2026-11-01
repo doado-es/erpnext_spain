@@ -12,7 +12,7 @@
  "doctype": "Module Onboarding",
  "idx": 0,
  "is_complete": 0,
- "modified": "2026-10-31 12:00:00.000000",
+ "modified": "2026-11-01 15:00:00.000000",
  "modified_by": "Administrator",
  "module": "ERPNext Spain",
  "name": "ES Onboarding",
@@ -28,7 +28,15 @@
   },
   {
    "is_optional": 0,
-   "step": "ES Review Tax Templates"
+   "step": "ES AEAT Certificate"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES Billing System"
+  },
+  {
+   "is_optional": 1,
+   "step": "ES Software Data"
   },
   {
    "is_optional": 0,
@@ -36,8 +44,24 @@
   },
   {
    "is_optional": 0,
+   "step": "ES Review Tax Templates"
+  },
+  {
+   "is_optional": 1,
+   "step": "ES Company Bank Account"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES First Sales Invoice"
+  },
+  {
+   "is_optional": 0,
+   "step": "ES VAT Return Draft"
+  },
+  {
+   "is_optional": 0,
    "step": "ES First Balance Sheet"
   }
  ],
- "title": "Prepare la contabilidad española"
+ "title": "Configure la localización española"
 }

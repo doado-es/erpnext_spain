@@ -1,0 +1,21 @@
+{
+ "action": "Go to Page",
+ "action_label": "Abrir compañías",
+ "creation": "2026-11-01 15:00:00.000000",
+ "description": "En la pestaña *Spain Compliance* de la compañía, active **VeriFactu** o el **SII** (son excluyentes: el SII es obligatorio para grandes empresas, grupos de IVA y el REDEME). Empiece siempre en modo **pruebas**.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-11-01 15:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "ES Billing System",
+ "owner": "Administrator",
+ "path": "company",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "VeriFactu o SII",
+ "validate_action": 0
+}

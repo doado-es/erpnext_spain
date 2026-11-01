@@ -1,0 +1,23 @@
+{
+ "action": "Update Settings",
+ "action_label": "Abrir ajustes de España",
+ "creation": "2026-11-01 15:00:00.000000",
+ "description": "VeriFactu identifica el programa de facturación en cada registro: complete en **ES Settings** el nombre y el NIF del productor del sistema, su nombre y su versión.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "field": "sif_nif",
+ "idx": 0,
+ "is_complete": 0,
+ "is_single": 1,
+ "is_skipped": 0,
+ "modified": "2026-11-01 15:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "ES Software Data",
+ "owner": "Administrator",
+ "reference_document": "ES Settings",
+ "show_form_tour": 0,
+ "show_full_form": 1,
+ "title": "Datos del sistema informático",
+ "validate_action": 1,
+ "value_to_validate": "%"
+}

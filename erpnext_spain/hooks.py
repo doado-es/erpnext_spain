@@ -146,6 +146,23 @@ jinja = {
 	],
 }
 
+# Los módulos de la app se navegan desde la barra lateral «Spain» del módulo principal.
+code_only_modules = {
+	"ES Nif": ["ERPNext Spain"],
+	"ES Aeat": ["ERPNext Spain"],
+	"ES Verifactu": ["ERPNext Spain"],
+	"ES Contabilidad": ["ERPNext Spain"],
+	"ES Impuestos": ["ERPNext Spain"],
+	"ES Sii": ["ERPNext Spain"],
+	"ES Efactura": ["ERPNext Spain"],
+	"ES Retenciones": ["ERPNext Spain"],
+	"ES Facturacion": ["ERPNext Spain"],
+	"ES Iva": ["ERPNext Spain"],
+	"ES Sepa": ["ERPNext Spain"],
+	"ES Bancos": ["ERPNext Spain"],
+	"ES Modelos": ["ERPNext Spain"],
+}
+
 # Asistente de configuración: pantalla y etapa del Plan General Contable.
 setup_wizard_requires = "assets/erpnext_spain/js/setup_wizard.js"
 setup_wizard_stages = "erpnext_spain.es_contabilidad.onboarding.get_setup_stages"
