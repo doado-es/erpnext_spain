@@ -9,6 +9,7 @@ from erpnext_spain.es_contabilidad import pgc
 from erpnext_spain.es_contabilidad.tests.test_apply_pgc import make_company
 from erpnext_spain.es_impuestos.tests.test_initial_data import ensure_item
 from erpnext_spain.es_sepa import credit_transfer, direct_debit, status, xml
+from erpnext_spain.es_sepa import payment_order as payment_order_effects
 from erpnext_spain.es_sepa.utils import creditor_identifier
 
 NS001 = {"p": f"urn:iso:std:iso:20022:tech:xsd:{xml.PAIN_001}"}
@@ -173,13 +174,14 @@ class SepaTestCase(IntegrationTestCase):
 
 
 class TestCreditTransfer(SepaTestCase):
-	def purchase(self, supplier: str, rate: float):
+	def purchase(self, supplier: str, rate: float, payment_terms_template: str | None = None):
 		pi = frappe.get_doc(
 			{
 				"doctype": "Purchase Invoice",
 				"company": self.company,
 				"supplier": supplier,
 				"bill_no": frappe.generate_hash(length=6),
+				**({"payment_terms_template": payment_terms_template} if payment_terms_template else {}),
 				"credit_to": pgc.account_by_number(self.company, "4000"),
 				"cost_center": self.cost_center,
 				"items": [
@@ -257,6 +259,115 @@ class TestCreditTransfer(SepaTestCase):
 		self.assertEqual(
 			root.findtext(".//p:InitgPty/p:Id/p:OrgId/p:Othr/p:Id", namespaces=NS001), "B12345674000"
 		)
+
+	def add_effects(self, rows, payment_order=None) -> str:
+		return payment_order_effects.add_effects(
+			[{k: r[k] for k in ("purchase_invoice", "supplier", "payment_term", "amount")} for r in rows],
+			payment_order=payment_order,
+			company=self.company,
+			company_bank_account=self.company_account,
+			posting_date=nowdate(),
+			execution_date=add_days(nowdate(), 2),
+		)
+
+	def test_payment_order_by_effects(self):
+		"""Efectos por vencimiento: pago en borrador por proveedor, validado con la orden."""
+		supplier, account = self.party("Supplier", "_Test ES Proveedor Efectos", "21000418450200051705")
+		pi = self.purchase(supplier, 200, payment_terms_template=two_term_template())
+		found = payment_order_effects.get_effects(self.company, suppliers=[supplier])
+		self.assertEqual(
+			[(r["purchase_invoice"], r["amount"], r["bank_account"]) for r in found],
+			[(pi.name, 100, account)] * 2,
+		)
+
+		order = self.add_effects(found)
+		payment = frappe.get_doc("Payment Entry", {"payment_order": order})
+		self.assertEqual(payment.docstatus, 0)
+		self.assertEqual(
+			sorted(r.payment_term for r in payment.references), sorted(r["payment_term"] for r in found)
+		)
+		# Los efectos en un pago en borrador no se ofrecen a otra orden.
+		self.assertEqual(payment_order_effects.get_effects(self.company, suppliers=[supplier]), [])
+
+		# Quitar el pago de la orden lo borra y deja los efectos libres.
+		doc = frappe.get_doc("Payment Order", order)
+		doc.references = []
+		doc.append("references", self.other_reference())
+		doc.save()
+		self.assertFalse(frappe.db.exists("Payment Entry", payment.name))
+		found = payment_order_effects.get_effects(self.company, suppliers=[supplier])
+		self.assertEqual(len(found), 2)
+
+		self.add_effects(found[:1], payment_order=order)
+		doc = frappe.get_doc("Payment Order", order)
+		doc.submit()
+		payment = frappe.get_doc("Payment Entry", {"payment_order": order})
+		self.assertEqual(payment.docstatus, 1)
+		self.assertEqual(str(payment.posting_date), add_days(nowdate(), 2))
+		self.assertAlmostEqual(frappe.db.get_value("Purchase Invoice", pi.name, "outstanding_amount"), 100)
+		self.assertAlmostEqual(
+			frappe.db.get_value(
+				"Payment Schedule",
+				{"parent": pi.name, "payment_term": found[0]["payment_term"]},
+				"outstanding",
+			),
+			0,
+		)
+		url = credit_transfer.generate_credit_transfer(order)
+		content = frappe.get_doc("File", {"file_url": url}).get_content()
+		root = etree.fromstring(content if isinstance(content, bytes) else content.encode())
+		self.assertTrue(xml.schema(xml.PAIN_001).validate(root))
+
+	def other_reference(self) -> dict:
+		"""Fila de otra orden para que la tabla (obligatoria) no quede vacía."""
+		supplier, account = self.party("Supplier", "_Test ES Proveedor Efectos Otro", "21000418450200051714")
+		pi = self.purchase(supplier, 10)
+		from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+
+		payment = get_payment_entry(
+			"Purchase Invoice", pi.name, bank_account=pgc.account_by_number(self.company, "5720")
+		)
+		payment.reference_no = pi.name
+		payment.reference_date = nowdate()
+		payment.insert()
+		return {
+			"reference_doctype": "Payment Entry",
+			"reference_name": payment.name,
+			"amount": payment.paid_amount,
+			"supplier": supplier,
+			"bank_account": account,
+		}
+
+	def test_payment_order_effects_rules(self):
+		supplier, _account = self.party(
+			"Supplier", "_Test ES Proveedor Efectos Reglas", "21000418450200051723"
+		)
+		pi = self.purchase(supplier, 100)
+		[effect] = payment_order_effects.get_effects(self.company, suppliers=[supplier])
+		with self.assertRaisesRegex(frappe.ValidationError, "ya no está pendiente"):
+			self.add_effects([{**effect, "amount": 150}])
+		# Vencimientos de confirming o domiciliados van en sus propias remesas.
+		frappe.db.set_value("Payment Schedule", {"parent": pi.name}, "mode_of_payment", "Confirming")
+		self.assertEqual(payment_order_effects.get_effects(self.company, suppliers=[supplier]), [])
+
+	def test_payment_order_effects_need_supplier_account(self):
+		supplier, account = self.party("Supplier", "_Test ES Proveedor Sin IBAN", "21000418450200051732")
+		frappe.db.set_value("Bank Account", account, "disabled", 1)
+		self.purchase(supplier, 100)
+		found = payment_order_effects.get_effects(self.company, suppliers=[supplier])
+		self.assertIsNone(found[0]["bank_account"])
+		with self.assertRaisesRegex(frappe.ValidationError, "_Test ES Proveedor Sin IBAN"):
+			self.add_effects(found)
+
+	def test_deleting_draft_order_deletes_its_payments(self):
+		supplier, _account = self.party(
+			"Supplier", "_Test ES Proveedor Efectos Borrar", "21000418450200051741"
+		)
+		self.purchase(supplier, 100)
+		order = self.add_effects(payment_order_effects.get_effects(self.company, suppliers=[supplier]))
+		payment = frappe.db.get_value("Payment Entry", {"payment_order": order})
+		frappe.delete_doc("Payment Order", order)
+		self.assertFalse(frappe.db.exists("Payment Entry", payment))
 
 	def test_unstructured_address_blocks(self):
 		"""Criterio 3."""

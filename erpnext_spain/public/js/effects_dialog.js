@@ -9,7 +9,7 @@
 //   erpnext_spain.effects_dialog.open(frm, {
 //     method, party: { fieldname, doctype, label }, args: (frm) => ({...}),
 //     columns: [{ fieldname, label, fieldtype, options }], key: (row) => "...",
-//     to_line: (row) => ({...}),
+//     to_line: (row) => ({...}),   // o on_add: (rows) => promesa, para tratarlos en el servidor
 //   });
 
 frappe.provide("erpnext_spain.effects_dialog");
@@ -140,6 +140,11 @@ erpnext_spain.effects_dialog.open = function (frm, options) {
 		const rows = selected();
 		if (!rows.length) {
 			frappe.msgprint(__("Marque al menos un efecto."));
+			return;
+		}
+		// La orden de pago crea sus pagos en el servidor.
+		if (options.on_add) {
+			Promise.resolve(options.on_add(rows)).then(() => dialog.hide());
 			return;
 		}
 		// Fuera la fila vacía que trae la remesa nueva.

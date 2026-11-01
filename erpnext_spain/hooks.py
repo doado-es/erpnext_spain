@@ -48,6 +48,12 @@ doc_events = {
 		"on_cancel": "erpnext_spain.es_efactura.b2b.payment_changed",
 	},
 	"Bank Account": {"validate": "erpnext_spain.es_sepa.bank_account.validate"},
+	# Pagos en borrador creados con «Añadir efectos»: se validan o se borran con la orden.
+	"Payment Order": {
+		"on_update": "erpnext_spain.es_sepa.payment_order.on_update",
+		"on_submit": "erpnext_spain.es_sepa.payment_order.on_submit",
+		"on_trash": "erpnext_spain.es_sepa.payment_order.on_trash",
+	},
 	"Bank Transaction": {"validate": "erpnext_spain.es_bancos.importer.validate_bank_transaction"},
 	"Company": {
 		# El orden importa: NIF, conflicto SII/VeriFactu y activación de VeriFactu.
