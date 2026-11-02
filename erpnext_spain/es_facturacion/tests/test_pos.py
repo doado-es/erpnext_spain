@@ -126,6 +126,18 @@ class TestPos(BillingTestCase):
 		si.submit()
 		self.assertEqual(si.localname, draft)
 
+	def test_rename_refreshes_whole_list(self):
+		"""Tras renombrar, las listas abiertas se recargan enteras (list_update sin
+		nombre): con solo el nombre nuevo quedaría también la fila del borrador."""
+		from unittest.mock import patch
+
+		si = self.invoice().insert()
+		with patch.object(frappe, "publish_realtime") as publish:
+			si.submit()
+		publish.assert_any_call(
+			"list_update", {"doctype": "Sales Invoice"}, doctype="Sales Invoice", after_commit=True
+		)
+
 	def test_pos_profile_series_rules(self):
 		profile = frappe.get_doc("POS Profile", self.profile)
 		profile.es_series = SERIES_F1

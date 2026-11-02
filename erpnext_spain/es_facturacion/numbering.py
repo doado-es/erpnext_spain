@@ -141,7 +141,12 @@ def rename_document(doc: Document, new_name: str) -> str:
 	para que el resto del submit no los guarde con el nombre viejo. `localname` hace
 	que el formulario del navegador (también el del TPV) pase al nombre nuevo al
 	recibir la respuesta: sin él seguiría con el borrador, que ya no existe, y al
-	imprimir fallaría (frappe/desk/form/save.py → model/sync.js rename_after_save)."""
+	imprimir fallaría (frappe/desk/form/save.py → model/sync.js rename_after_save).
+
+	El `list_update` sin nombre hace que las listas abiertas del doctype se recarguen
+	enteras. El `list_update` normal del submit lleva solo el nombre nuevo: la lista
+	lo añade y deja la fila del borrador, que solo quita si la consulta por nombres
+	vuelve vacía (frappe list_view.js, process_document_refreshes)."""
 	old_name = doc.name
 	frappe.rename_doc(
 		doctype=doc.doctype, old=old_name, new=new_name, force=True, show_alert=False, rebuild_search=False
@@ -149,4 +154,5 @@ def rename_document(doc: Document, new_name: str) -> str:
 	doc.name = new_name
 	doc.set_parent_in_children()
 	doc.localname = old_name
+	frappe.publish_realtime("list_update", {"doctype": doc.doctype}, doctype=doc.doctype, after_commit=True)
 	return new_name
