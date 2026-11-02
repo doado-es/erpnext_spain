@@ -119,7 +119,7 @@ def set_party_from_iban(doc) -> None:
 
 
 def match_end_to_end(doc) -> None:
-	text = " ".join(filter(None, (doc.reference_number, doc.description)))
+	text = " ".join(part for part in (doc.reference_number, doc.description) if part)
 	tokens = set(TOKEN.findall(text))
 	if not tokens:
 		return
