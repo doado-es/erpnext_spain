@@ -16,7 +16,7 @@ motivo de cada hook y la spec o decisión de la que viene.
 | Purchase Invoice | validate | `es_retenciones.withholding.validate_purchase_invoice` | Retenciones practicadas: clasificación de la fila e inmueble arrendado (spec 08 §3). |
 | Purchase Invoice, Sales Invoice | validate | `es_iva.rows.validate` | Datos del desglose fiscal congelados en la factura (spec 06). |
 | Purchase Invoice, Sales Invoice | on_submit / on_cancel | `es_sii.outbox.*` | Envío al SII (spec 14). |
-| Purchase Invoice, Sales Invoice | onload | `es_facturacion.fiscal_tab.onload` | Historial de la pestaña «VeriFactu / SII» o «SII / Factura electrónica». |
+| Purchase Invoice, Sales Invoice | onload | `es_facturacion.fiscal_tab.onload` | Historial de la pestaña «AEAT» o «SII / Factura electrónica». |
 | Payment Entry | validate | `es_retenciones.withholding.validate_payment_entry` | Retenciones en pagos (spec 08). |
 | Payment Entry, Journal Entry | on_submit / on_cancel | `es_efactura.b2b.payment_changed` | Pago efectivo completo de facturas electrónicas recibidas (spec 10 §5). |
 | Bank Account | validate | `es_sepa.bank_account.validate` | Normas bancarias y mandato SEPA en la cuenta (specs 11-12). |
@@ -48,7 +48,7 @@ motivo de cada hook y la spec o decisión de la que viene.
   - `es_verifactu/public/js/sales_invoice.js`: aviso de modo pruebas (snapshot de la factura y modo de pruebas de la compañía en borradores) y diálogo de subsanación (spec 04 §15, lote 6a).
   - `es_efactura/public/js/sales_invoice.js`: botón «Generar Facturae» (spec 10).
   - `es_facturacion/public/js/sales_invoice.js`: situación de cobro (spec 05 §4).
-  - `es_facturacion/public/js/fiscal_tab.js`: pestaña «VeriFactu / SII».
+  - `es_facturacion/public/js/fiscal_tab.js`: pestaña «AEAT».
 - `doctype_js` de Customer y Supplier → `es_nif/public/js/party.js`: formato de nombre de las personas físicas y contraste del NIF con la AEAT.
 - `doctype_js` de Payment Order → `es_sepa/public/js/payment_order.js`: fichero SEPA de transferencias (spec 11 §4).
 - `doctype_list_js`:

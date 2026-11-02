@@ -186,7 +186,7 @@ SI_SECTION_FIELD = {
 	"fieldname": "es_verifactu_seccion",
 	"label": "VeriFactu",
 	"fieldtype": "Section Break",
-	# Primera sección de la pestaña «VeriFactu / SII» (es_facturacion/fiscal_tab.py).
+	# Primera sección de la pestaña «AEAT» (es_facturacion/fiscal_tab.py).
 	"insert_after": "es_fiscal_tab",
 }
 

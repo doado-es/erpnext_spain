@@ -312,7 +312,7 @@ class TestPrintFormat(BillingTestCase):
 
 
 class TestFiscalTab(BillingTestCase):
-	"""Pestaña «VeriFactu / SII» (revisión del 31/10/2026)."""
+	"""Pestaña «AEAT» (revisión del 31/10/2026)."""
 
 	def tab_of(self, doctype: str) -> dict[str, str]:
 		tab, tabs = None, {}

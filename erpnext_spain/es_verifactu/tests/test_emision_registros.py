@@ -350,7 +350,7 @@ class TestEmisionRegistros(IntegrationTestCase):
 		)
 
 	def test_history_in_fiscal_tab(self):
-		"""Pestaña «VeriFactu / SII»: el registro de alta llega con la factura."""
+		"""Pestaña «AEAT»: el registro de alta llega con la factura."""
 		from erpnext_spain.es_facturacion.fiscal_tab import ONLOAD_KEY
 
 		self._activate()

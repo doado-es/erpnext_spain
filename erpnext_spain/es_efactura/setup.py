@@ -165,7 +165,7 @@ SALES_INVOICE_FIELDS = [
 		"read_only": 1,
 		"allow_on_submit": 1,
 		"no_copy": 1,
-		# Pestaña «VeriFactu / SII» (es_facturacion/fiscal_tab.py).
+		# Pestaña «AEAT» (es_facturacion/fiscal_tab.py).
 		"insert_after": "es_einvoice_history_section",
 	},
 	{

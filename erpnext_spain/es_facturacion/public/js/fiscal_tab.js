@@ -1,4 +1,4 @@
-// Pestaña «VeriFactu / SII» de Sales Invoice y «SII / Factura electrónica» de
+// Pestaña «AEAT» de Sales Invoice y «SII / Factura electrónica» de
 // Purchase Invoice (revisión del 31/10/2026).
 //
 // El historial llega con el documento (`__onload.es_fiscal`, ver

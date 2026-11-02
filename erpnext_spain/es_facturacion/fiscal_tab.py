@@ -1,4 +1,4 @@
-# Pestaña «VeriFactu / SII» de las facturas (revisión del 31/10/2026).
+# Pestaña «AEAT» de las facturas (revisión del 31/10/2026).
 #
 # Reúne en una pestaña propia, con una sección por sistema, los datos de VeriFactu
 # de la factura de venta y el historial de cada uno: registros VeriFactu,
@@ -48,7 +48,7 @@ CUSTOM_FIELDS = {
 	SALES_INVOICE: [
 		{
 			"fieldname": TAB,
-			"label": "VeriFactu / SII",
+			"label": "AEAT",
 			"fieldtype": "Tab Break",
 			"insert_after": "is_discounted",
 		},
