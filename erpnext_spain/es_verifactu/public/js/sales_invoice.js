@@ -28,12 +28,7 @@ erpnext_spain.es_verifactu.invoice_test_mode_banner = function (frm) {
 		frm.doc.docstatus === 1 &&
 		frm.doc.es_verifactu_mode === erpnext_spain.es_verifactu.TEST_MODE
 	) {
-		frm.set_intro(
-			__(
-				"⚠ Modo VeriFactu EN PRUEBAS — las remisiones van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
-			),
-			"orange"
-		);
+		frm.set_intro(__("Verifactu en modo pruebas"), "red");
 		return;
 	}
 
@@ -52,12 +47,7 @@ erpnext_spain.es_verifactu.invoice_test_mode_banner = function (frm) {
 				if (company.es_verifactu_enabled && company.es_verifactu_test_mode === "Pruebas") {
 					// solo si el intro no lo puso ya otra vía (carrera refresh/company)
 					frm.set_intro("");
-					frm.set_intro(
-						__(
-							"⚠ Modo VeriFactu EN PRUEBAS — las remisiones van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
-						),
-						"orange"
-					);
+					frm.set_intro(__("Verifactu en modo pruebas"), "red");
 				}
 			});
 	}

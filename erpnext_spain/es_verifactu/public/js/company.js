@@ -71,12 +71,7 @@ erpnext_spain.es_verifactu.deactivation_message = function (pending) {
 
 erpnext_spain.es_verifactu.test_mode_banner = function (frm) {
 	if (frm.doc.es_verifactu_enabled && frm.doc.es_verifactu_test_mode === "Pruebas") {
-		frm.dashboard.set_headline(
-			__(
-				"Modo VeriFactu EN PRUEBAS: las remisiones van al entorno de pruebas de la AEAT y NO tienen validez fiscal."
-			),
-			"yellow"
-		);
+		frm.set_intro(__("Verifactu en modo pruebas"), "red");
 	}
 };
 
