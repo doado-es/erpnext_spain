@@ -310,3 +310,41 @@ class TestESAEATCredential(IntegrationTestCase):
 		frappe.db.set_value("ES AEAT Credential", doc.name, "cert_file", f"/files/{name}")
 		execute()
 		self.assertEqual(frappe.db.get_value("ES AEAT Credential", doc.name, "cert_file"), private.file_url)
+
+	# --- nombres de los PEM sin salir de private/es_keys ---
+
+	def test_pem_names_without_path_separators(self):
+		for name in ("../../sites/x", "A/B", "C\\D"):
+			for pem in pem_names(name):
+				self.assertNotIn("/", pem)
+				self.assertNotIn("\\", pem)
+		# Sustituir el separador no hace coincidir dos compañías distintas.
+		self.assertNotEqual(pem_names("A/B"), pem_names("A_B"))
+		# Los nombres que ya eran seguros no cambian (los PEM existentes siguen valiendo).
+		self.assertEqual(pem_names("A_B"), ("a_b-cert.pem", "a_b-key.pem"))
+
+	def test_pem_paths_stay_in_keys_dir(self):
+		import os
+
+		from erpnext_spain.es_aeat.doctype.es_aeat_credential.es_aeat_credential import KEYS_DIR
+		from erpnext_spain.es_aeat.utils import absolute_site_path
+
+		keys = absolute_site_path(*KEYS_DIR)
+		for path in pem_paths("../../../tmp/es_test"):
+			self.assertEqual(os.path.dirname(os.path.normpath(path)), keys)
+
+	def test_write_secret_refuses_symlink(self):
+		import os
+		import tempfile
+
+		from erpnext_spain.es_aeat.doctype.es_aeat_credential.es_aeat_credential import write_secret
+
+		with tempfile.TemporaryDirectory() as folder:
+			target = os.path.join(folder, "target")
+			link = os.path.join(folder, "link")
+			with open(target, "w") as f:
+				f.write("intacto")
+			os.symlink(target, link)
+			self.assertRaises(OSError, write_secret, link, b"clave")
+			with open(target) as f:
+				self.assertEqual(f.read(), "intacto")

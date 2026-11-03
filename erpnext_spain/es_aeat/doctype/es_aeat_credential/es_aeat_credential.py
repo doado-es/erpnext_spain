@@ -22,20 +22,33 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
+import re
 
 import frappe
 from frappe.model.document import Document
 
 from erpnext_spain.es_aeat.utils import absolute_site_path, get_days_remaining
 
+# Separadores de ruta (también el de Windows) y el byte nulo.
+UNSAFE_NAME = re.compile(r"[/\\\x00]")
+
 
 def pem_names(credential: str) -> tuple[str, str]:
 	"""Nombres de los PEM extraídos, claveados por el nombre de la credencial.
 
 	No por la compañía: el nombre de la credencial se fija al crearla y no cambia
-	si después se renombra la compañía (el enlace `company` sí cambia)."""
+	si después se renombra la compañía (el enlace `company` sí cambia).
+
+	La credencial se llama como la compañía y Frappe solo prohíbe «<» y «>» en los
+	nombres: un separador de ruta llevaría el PEM fuera de private/es_keys. Esos
+	caracteres se sustituyen y se añade un hash del nombre, para que «A/B» y «A_B»
+	no compartan archivo. Los nombres sin ellos no cambian."""
 	base = frappe.scrub(credential)
+	if UNSAFE_NAME.search(base):
+		digest = hashlib.sha256(credential.encode()).hexdigest()[:8]
+		base = f"{UNSAFE_NAME.sub('_', base)}_{digest}"
 	return f"{base}-cert.pem", f"{base}-key.pem"
 
 
@@ -52,8 +65,9 @@ def keys_dir() -> str:
 
 def write_secret(path: str, content: bytes) -> None:
 	"""Escribe un fichero con permisos 0600 desde su creación (sin ventana en la
-	que otro usuario del sistema pueda leerlo)."""
-	fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+	que otro usuario del sistema pueda leerlo). O_NOFOLLOW: si en su lugar hay un
+	enlace simbólico, falla en vez de escribir la clave donde apunte."""
+	fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
 	try:
 		os.write(fd, content)
 	finally:
@@ -69,11 +83,12 @@ def pem_paths(credential: str) -> tuple[str, str]:
 	(raíz del bench y sites/) y una ruta relativa haría que la TLS mutua
 	resolviera el PEM distinto (o no lo encontrara) según quién drenara.
 	"""
-	cert, key = pem_names(credential)
-	return (
-		absolute_site_path(*KEYS_DIR, cert),
-		absolute_site_path(*KEYS_DIR, key),
-	)
+	keys = absolute_site_path(*KEYS_DIR)
+	paths = tuple(os.path.join(keys, name) for name in pem_names(credential))
+	# Defensa en profundidad: pem_names ya no deja salir de la carpeta.
+	if any(os.path.dirname(os.path.normpath(path)) != os.path.normpath(keys) for path in paths):
+		frappe.throw(f"Nombre de credencial no válido para los PEM: {credential}.")
+	return paths
 
 
 DOCTYPE = "ES AEAT Credential"
