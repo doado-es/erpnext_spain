@@ -16,6 +16,12 @@ required_apps = ["frappe/erpnext"]
 
 doc_events = {
 	"Account": {"validate": "erpnext_spain.es_contabilidad.account.validate"},
+	# El certificado de la credencial AEAT no puede ser un archivo público.
+	"File": {
+		"before_validate": (
+			"erpnext_spain.es_aeat.doctype.es_aeat_credential.es_aeat_credential.validate_attached_file"
+		)
+	},
 	"Customer": {"validate": "erpnext_spain.es_nif.party.validate"},
 	"Address": {"validate": "erpnext_spain.es_impuestos.tax_category.set_address_category"},
 	# Filas de la plantilla del artículo replicadas para recargo, retención y

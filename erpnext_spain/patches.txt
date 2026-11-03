@@ -15,3 +15,4 @@ erpnext_spain.patches.v16.split_intra_eu_category
 erpnext_spain.patches.v16.prefix_module_names
 erpnext_spain.patches.v16.property_situation_keys
 erpnext_spain.patches.v16.rename_pos_customer_invoice_type
+erpnext_spain.patches.v16.private_aeat_certificate

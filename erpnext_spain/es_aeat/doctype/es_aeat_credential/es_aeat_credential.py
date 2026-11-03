@@ -76,12 +76,31 @@ def pem_paths(credential: str) -> tuple[str, str]:
 	)
 
 
+DOCTYPE = "ES AEAT Credential"
+PRIVATE_FILES = "/private/files/"
+
+
+def validate_attached_file(doc: Document, method: str | None = None) -> None:
+	"""doc_event `before_validate` de File: el certificado de una credencial no
+	puede ser público, ni al subirlo ni después (antes de que File mueva el
+	archivo a public/files al cambiar `is_private`)."""
+	if doc.attached_to_doctype != DOCTYPE or doc.is_private:
+		return
+	frappe.throw(
+		"El certificado de la credencial AEAT tiene que ser un archivo privado: contiene la"
+		" clave de firma de la empresa. Remedio: súbalo de nuevo desde la credencial"
+		" (se guarda como privado) y no lo marque como público.",
+		frappe.PermissionError,
+	)
+
+
 class ESAEATCredential(Document):
 	def validate(self):
 		self._validate_unique_company()
+		if self.cert_file:
+			self._validate_private_file()
 		if self.enabled and self.cert_file:
 			self._extract_pem()
-			self._ensure_private_file()
 		else:
 			self._clean_pem()
 
@@ -176,16 +195,18 @@ class ESAEATCredential(Document):
 			return frappe.get_doc("File", file_doc).get_full_path()
 		return absolute_site_path("private", "files", os.path.basename(file_url))
 
-	def _ensure_private_file(self) -> None:
-		"""El certificado PFX/P12 subido debe ser privado: si se subió público,
-		se privatiza (contiene la identidad fiscal de la empresa)."""
-		file_doc = frappe.db.get_value("File", {"file_url": self.cert_file}, "name")
-		if not file_doc:
+	def _validate_private_file(self) -> None:
+		"""El certificado PFX/P12 tiene que estar en private/files. No se privatiza
+		en silencio: un archivo subido como público ya ha estado accesible sin
+		sesión, y hay que saberlo (y renovar el certificado si procede)."""
+		if self.cert_file.startswith(PRIVATE_FILES):
 			return
-		file_doc = frappe.get_doc("File", file_doc)
-		if not file_doc.is_private:
-			file_doc.is_private = 1
-			file_doc.save(ignore_permissions=True)
+		frappe.throw(
+			f"El certificado {self.cert_file} es un archivo público. Remedio: bórrelo de"
+			" Archivos y súbalo de nuevo desde la credencial (se guarda como privado). Si"
+			" ha estado público, valore pedir a la entidad emisora un certificado nuevo.",
+			frappe.ValidationError,
+		)
 
 	def _clean_pem(self) -> None:
 		_delete_pem(self.name)

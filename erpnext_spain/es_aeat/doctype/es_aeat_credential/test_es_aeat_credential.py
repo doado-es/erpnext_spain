@@ -238,3 +238,75 @@ class TestESAEATCredential(IntegrationTestCase):
 		# Los PEM extraídos del PFX son legibles como cualquier otro
 		for path in pem_paths(self.company):
 			self.assertTrue(os.path.getsize(path) > 0)
+
+	# --- el certificado siempre privado ---
+
+	def _attach(self, credential: str, name: str, is_private: int):
+		return frappe.get_doc(
+			{
+				"doctype": "File",
+				"file_name": name,
+				"content": generate_p12(password=self.password.encode())[0],
+				"is_private": is_private,
+				"attached_to_doctype": "ES AEAT Credential",
+				"attached_to_name": credential,
+				"attached_to_field": "cert_file",
+			}
+		)
+
+	def _remove_from_disk(self, name: str) -> None:
+		import os
+
+		for folder in ("public", "private"):
+			path = frappe.get_site_path(folder, "files", name)
+			if os.path.exists(path):
+				os.remove(path)
+
+	def test_public_certificate_rejected(self):
+		"""Una URL pública (/files/…) no se privatiza en silencio: se rechaza."""
+		self.assertRaisesRegex(
+			frappe.ValidationError, "archivo público", self._new_credential, cert_file="/files/es_test.p12"
+		)
+
+	def test_certificate_cannot_be_uploaded_public(self):
+		doc = self._new_credential()
+		name = "es_test_publico.p12"
+		self.addCleanup(self._remove_from_disk, name)
+		self.assertRaisesRegex(
+			frappe.PermissionError, "archivo privado", self._attach(doc.name, name, 0).insert
+		)
+
+	def test_certificate_cannot_be_made_public(self):
+		"""El rechazo va antes de que File mueva el archivo a public/files."""
+		import os
+
+		doc = self._new_credential()
+		name = "es_test_privado.p12"
+		self.addCleanup(self._remove_from_disk, name)
+		attached = self._attach(doc.name, name, 1).insert(ignore_permissions=True)
+		attached.is_private = 0
+		self.assertRaisesRegex(frappe.PermissionError, "archivo privado", attached.save)
+		self.assertTrue(os.path.exists(frappe.get_site_path("private", "files", name)))
+		self.assertFalse(os.path.exists(frappe.get_site_path("public", "files", name)))
+
+	def test_other_public_files_untouched(self):
+		"""Los archivos de otros documentos siguen pudiendo ser públicos (R7)."""
+		name = "es_test_otro_publico.txt"
+		self.addCleanup(self._remove_from_disk, name)
+		file_doc = frappe.get_doc(
+			{"doctype": "File", "file_name": name, "content": b"x", "is_private": 0}
+		).insert(ignore_permissions=True)
+		self.assertFalse(file_doc.is_private)
+
+	def test_patch_points_to_private_file(self):
+		"""Credenciales anteriores con /files/…: la versión previa privatizaba el
+		archivo pero dejaba la URL pública en el campo."""
+		from erpnext_spain.patches.v16.private_aeat_certificate import execute
+
+		doc = self._new_credential()
+		name = "es_test_migrado.p12"
+		self.addCleanup(self._remove_from_disk, name)
+		private = self._attach(doc.name, name, 1).insert(ignore_permissions=True)
+		frappe.db.set_value("ES AEAT Credential", doc.name, "cert_file", f"/files/{name}")
+		execute()
+		self.assertEqual(frappe.db.get_value("ES AEAT Credential", doc.name, "cert_file"), private.file_url)
