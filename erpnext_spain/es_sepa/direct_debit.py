@@ -142,7 +142,10 @@ def reserved_effects(exclude_batch: str | None = None) -> dict[tuple, float]:
 def validate_batch(doc) -> None:
 	if not is_pgc_company(doc.company):
 		frappe.throw(_("La compañía {0} no tiene el plan PGC aplicado.").format(frappe.bold(doc.company)))
-	if not frappe.db.get_value("Bank Account", doc.bank_account, "is_company_account"):
+	account = frappe.db.get_value(
+		"Bank Account", doc.bank_account, ["company", "is_company_account"], as_dict=True
+	)
+	if not account or not account.is_company_account or account.company != doc.company:
 		frappe.throw(
 			_("La cuenta de abono {0} no es una cuenta de la compañía.").format(frappe.bold(doc.bank_account))
 		)

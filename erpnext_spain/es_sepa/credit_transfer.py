@@ -27,10 +27,16 @@ def check_role() -> None:
 
 
 def company_address(company: str) -> dict | None:
+	"""Dirección de la compañía, priorizando la marcada como dirección de la compañía."""
 	links = frappe.get_all(
-		"Dynamic Link",
-		filters={"link_doctype": "Company", "link_name": company, "parenttype": "Address"},
-		pluck="parent",
+		"Address",
+		filters=[
+			["Dynamic Link", "link_doctype", "=", "Company"],
+			["Dynamic Link", "link_name", "=", company],
+			["disabled", "=", 0],
+		],
+		pluck="name",
+		order_by="is_your_company_address desc, is_primary_address desc",
 		limit=1,
 	)
 	if not links:

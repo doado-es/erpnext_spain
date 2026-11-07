@@ -569,6 +569,49 @@ class TestDirectDebit(SepaTestCase):
 		)
 		self.assertRaisesRegex(frappe.ValidationError, "pendiente", batch.insert)
 
+	def test_bank_account_of_other_company_rejected(self):
+		"""La cuenta de abono tiene que ser de la compañía de la remesa, no de otra."""
+		other = make_company("_Test ES SEPA Otra", "_TESO")
+		ledger = frappe.db.get_value(
+			"Account", {"company": other, "account_type": "Bank", "is_group": 0}, "name"
+		) or (
+			frappe.get_doc(
+				{
+					"doctype": "Account",
+					"company": other,
+					"account_name": "Banco Otra",
+					"parent_account": frappe.db.get_value(
+						"Account", {"company": other, "is_group": 1, "root_type": "Asset"}, "name"
+					),
+					"account_type": "Bank",
+				}
+			)
+			.insert()
+			.name
+		)
+		other_account = frappe.db.get_value(
+			"Bank Account", {"account_name": "Cuenta SEPA Otra", "bank": self.bank}, "name"
+		) or (
+			frappe.get_doc(
+				{
+					"doctype": "Bank Account",
+					"account_name": "Cuenta SEPA Otra",
+					"bank": self.bank,
+					"iban": make_iban("20800114003040035004"),
+					"is_company_account": 1,
+					"company": other,
+					"account": ledger,
+				}
+			)
+			.insert()
+			.name
+		)
+		customer, account = self.party("Customer", "_Test ES Cliente SEPA Otra", "21000418450200051396")
+		mandate = self.mandate(customer, account)
+		batch = self.batch([(self.sale(customer), mandate)])
+		batch.bank_account = other_account
+		self.assertRaisesRegex(frappe.ValidationError, "no es una cuenta de la compañía", batch.insert)
+
 	def test_invalid_mandates_rejected(self):
 		"""Criterio 4: mandato cancelado o de otro esquema."""
 		customer, account = self.party("Customer", "_Test ES Cliente SEPA 2", "21000418450200051387")
