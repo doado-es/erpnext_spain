@@ -467,7 +467,8 @@ class TestDirectDebit(SepaTestCase):
 			creditor_identifier("B12345674", "001"),  # sufijo de la norma de adeudos, no el de transferencias
 		)
 		self.assertEqual(
-			root.findtext(".//p:GrpHdr/p:InitgPty/p:Id/p:OrgId/p:Othr/p:Id", namespaces=NS008), "B12345674001"
+			root.findtext(".//p:GrpHdr/p:InitgPty/p:Id/p:OrgId/p:Othr/p:Id", namespaces=NS008),
+			creditor_identifier("B12345674", "001"),  # presentador = acreedor en adeudos
 		)
 		self.assertEqual(
 			root.findtext(".//p:MndtRltdInf/p:MndtId", namespaces=NS008),

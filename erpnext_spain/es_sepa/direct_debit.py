@@ -6,13 +6,12 @@ from frappe import _
 from frappe.utils import cint, flt, formatdate, getdate
 
 from erpnext_spain.es_sepa import effects, xml
-from erpnext_spain.es_sepa.bank_account import DIRECT_DEBITS, is_expired
+from erpnext_spain.es_sepa.bank_account import is_expired
 from erpnext_spain.es_sepa.credit_transfer import (
 	attach,
 	bank_account_party,
 	check_role,
 	company_address,
-	presenter_id,
 	sepa_creditor_id,
 )
 from erpnext_spain.es_sepa.utils import check_parties, party_address
@@ -214,11 +213,9 @@ def submit_batch(doc) -> None:
 		company_address(doc.company),
 		sepa_creditor_id(doc.company, doc.bank_account),
 	)
-	initiating = xml.Party(
-		name=company_name,
-		iban=account.iban,
-		identifier=presenter_id(doc.company, doc.bank_account, DIRECT_DEBITS),
-	)
+	# En adeudos (AEB 19.14) el presentador se identifica con el identificador de acreedor
+	# (ES + control + sufijo + NIF), igual que en CdtrSchmeId y en los ficheros que aceptan las entidades.
+	initiating = xml.Party(name=company_name, iban=account.iban, identifier=account.identifier)
 	message_id = f"{doc.name}-{frappe.generate_hash(length=6).upper()}"
 	batch = xml.Batch(
 		message_id=message_id,

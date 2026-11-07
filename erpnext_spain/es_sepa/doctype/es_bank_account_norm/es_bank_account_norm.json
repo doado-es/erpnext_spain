@@ -34,7 +34,7 @@
    "reqd": 1,
    "in_list_view": 1,
    "columns": 1,
-   "description": "Lo asigna el banco para esta norma. Presentador = NIF + sufijo; en adeudos, también forma el identificador de acreedor."
+   "description": "Lo asigna el banco para esta norma. En transferencias, presentador = NIF + sufijo; en adeudos forma el identificador de acreedor (ES + control + sufijo + NIF), que identifica también al presentador."
   },
   {
    "fieldname": "contract_number",
@@ -83,7 +83,7 @@
   }
  ],
  "links": [],
- "modified": "2026-10-31 23:00:00.000000",
+ "modified": "2026-11-07 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "ES Sepa",
  "name": "ES Bank Account Norm",

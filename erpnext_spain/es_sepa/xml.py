@@ -26,7 +26,7 @@ class Party:
 	iban: str
 	bic: str | None = None
 	address: dict | None = None
-	identifier: str | None = None  # presentador (NIF + sufijo) o identificador de acreedor
+	identifier: str | None = None  # transferencias: NIF + sufijo; adeudos: identificador de acreedor
 
 
 @dataclass
